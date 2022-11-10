@@ -1,7 +1,7 @@
 defmodule BafaWeb.GoogleAuthController do
   use BafaWeb, :controller
 
-  def index(conn, %{"code" => code}) do
+  def callback(conn, %{"code" => code}) do
     {:ok, token} = ElixirAuthGoogle.get_token(code, conn)
     {:ok, profile} = ElixirAuthGoogle.get_user_profile(token.access_token)
 

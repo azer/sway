@@ -1,4 +1,4 @@
-defmodule BafaWeb.PageController do
+defmodule BafaWeb.AppController do
   use BafaWeb, :controller
 
   def index(conn, _params) do

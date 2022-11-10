@@ -1,5 +1,6 @@
 defmodule BafaWeb.Router do
   use BafaWeb, :router
+  import BafaWeb.UserAuth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -18,7 +19,12 @@ defmodule BafaWeb.Router do
     pipe_through :browser
 
     get "/login", LoginController, :index
-    get "/auth/google/callback", GoogleAuthController, :index
+    get "/auth/google/callback", GoogleAuthController, :callback
+  end
+
+  scope "/", BafaWeb do
+    pipe_through [:browser]
+    get "/", AppController, :index
   end
 
   # Other scopes may use custom stacks.
