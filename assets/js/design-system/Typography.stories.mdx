@@ -1,0 +1,28 @@
+import { theme } from '../themes'
+import { Section, TypoToken, Examples } from './elements'
+import { Meta, ColorPalette, ColorItem, Canvas } from '@storybook/addon-docs';
+
+<Meta title="Design Tokens/Typography" />
+
+# Typography
+
+<Section title="Fonts" desc='Tokens for controlling font size of an element.'>
+	 {Object.keys(theme.fonts).map((key) => <TypoToken token={key} value={theme.fonts[key].value} cssProp="fontFamily">The quick brown fox jumps over the lazy dog.</TypoToken>)}
+</Section>
+
+
+<Section title="Font Sizes" desc='Tokens for controlling font size of an element.'>
+	 {Object.keys(theme.fontSizes).filter(k => k !== 'emoji').reverse().map((key) => <TypoToken token={key} value={theme.fontSizes[key].value} cssProp="fontSize">The quick brown fox jumps over the lazy dog.</TypoToken>)}
+</Section>
+
+<Section title="Font Weights" desc='Tokens for controlling font weight of an element.'>
+	 {Object.keys(theme.fontWeights).reverse().map((key) => <TypoToken token={key} value={theme.fontWeights[key].value} cssProp="fontWeight">The quick brown fox jumps over the lazy dog.</TypoToken>)}
+</Section>
+
+<Section title="Letter Spacings" desc='Tokens for controlling letter spacing of an element.'>
+	 {Object.keys(theme.letterSpacings).reverse().map((key) => <TypoToken token={key} value={theme.letterSpacings[key].value} cssProp="letterSpacing">The quick brown fox jumps over the lazy dog.</TypoToken>)}
+</Section>
+
+<Section title="Line Heights" desc='Tokens for controlling line height of an element.'>
+	 {Object.keys(theme.lineHeights).reverse().map((key) => <TypoToken token={key} value={theme.lineHeights[key].value} cssProp="lineHeight">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ornare quam viverra orci sagittis eu volutpat. Amet consectetur adipiscing elit ut aliquam. Nunc pulvinar sapien et ligula ullamcorper malesuada. Nisi est sit amet facilisis magna etiam tempor orci eu. Erat velit scelerisque in dictum. Aliquet enim tortor at auctor. In fermentum posuere urna nec tincidunt praesent semper feugiat nibh. Morbi tempus iaculis urna id. Massa id neque aliquam vestibulum. Pulvinar neque laoreet suspendisse interdum consectetur libero id. Suscipit tellus mauris a diam maecenas. In eu mi bibendum neque egestas. Enim sit amet venenatis urna cursus eget.</TypoToken>)}
+</Section>
