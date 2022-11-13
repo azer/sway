@@ -1,4 +1,16 @@
-welcome <%= @profile[:email] %>
 <div id="root"></div>
-
 <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
+<script type="text/javascript">
+  window.__initialData__ = {
+    currentUser: {
+      id: <%= @user.id %>,
+      name: "<%= @user.name %>",
+      email: "<%= @user.email %>"
+      photo_url: "<%= @user.profile_photo_url %>",
+      org_id: <%= @user.org_id %>,
+    },
+    orgs: [
+      { id: <%= @org.id %>, name: "<%= @org.name %>", domain: "<%= @org.domain %>" }
+    ]
+  }
+</script>

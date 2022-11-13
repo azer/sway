@@ -28,4 +28,19 @@ defmodule Bafa.AccountsFixtures do
     [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
   end
+
+  @doc """
+  Generate a org.
+  """
+  def org_fixture(attrs \\ %{}) do
+    {:ok, org} =
+      attrs
+      |> Enum.into(%{
+        domain: "some domain",
+        name: "some name"
+      })
+      |> Bafa.Accounts.create_org()
+
+    org
+  end
 end

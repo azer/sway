@@ -50,7 +50,9 @@ defmodule Bafa.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:elixir_auth_google, "~> 1.6.3"}
+      {:elixir_auth_google, "~> 1.6.3"},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_google, "~> 0.10"}
     ]
   end
 
@@ -66,7 +68,7 @@ defmodule Bafa.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["esbuild default --minify", "phx.digest"],
     ]
   end
 end

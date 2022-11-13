@@ -26,7 +26,7 @@ config :bafa, BafaWeb.Endpoint,
   secret_key_base: "V/CIUyx1X4jvy95+jLTJGRwlaySs/swdMEkQ0HgXKANR5OFSYXW+0o1D1N6ASn4s",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch --loader:.ttf=file --loader:.woff=file --loader:.woff2=file --loader:.eot=file --loader:.svg=file)]}
   ]
 
 # ## SSL Support
@@ -74,6 +74,6 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :elixir_auth_google,
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: "713143641841-4c1dq7qvegpd1a8d6t6q0g3qjrbe3vfd.apps.googleusercontent.com",
   client_secret: "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"

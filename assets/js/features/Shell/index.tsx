@@ -12,19 +12,25 @@ export default function Shell(props: Props) {
     selectors.session.isLoggedIn(state),
   ])
 
-  console.log(isLoggedIn)
-
   return (
     <Container>
-      shell
-      {isLoggedIn ? 'asd' : 'xxx'} {props.children}
+      <Sidebar />
     </Container>
   )
 }
 
 const Container = styled('main', {
-  background: '$gray1',
-  color: '$white',
+  background: '$shellBg',
+  color: '$shellFg',
   width: '100vw',
   height: '100vh',
+  display: 'flex',
+})
+
+const Sidebar = styled('nav', {
+  borderRight: '1px solid $shellBorderColor',
+  width: '220px',
+  height: '100%',
+  color: '$white',
+  display: 'flex',
 })

@@ -18,14 +18,14 @@ defmodule BafaWeb.Router do
   end
 
   scope "/", BafaWeb do
-    pipe_through :browser
-
-    get "/login", LoginController, :index
-    get "/auth/google/callback", GoogleAuthController, :callback
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+    
+    get "/auth/:provider", UserOauthController, :request
+    get "/auth/:provider/callback", UserOauthController, :callback
   end
 
   scope "/", BafaWeb do
-    pipe_through [:browser]
+    pipe_through [:browser, :require_authenticated_user]
     get "/", AppController, :index
   end
 

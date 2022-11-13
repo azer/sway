@@ -7,6 +7,10 @@ defmodule Bafa.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :name, :string
+    field :profile_photo_url, :string
+
+    belongs_to :org, Bafa.Accounts.Org
 
     timestamps()
   end
@@ -30,7 +34,7 @@ defmodule Bafa.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :name, :profile_photo_url, :password, :org_id])
     |> validate_email()
     |> validate_password(opts)
   end
