@@ -26,6 +26,7 @@ import ReactDOM from 'react-dom'
 import Routing from 'features/Routing'
 import { Provider } from 'react-redux'
 import { store } from 'state/store'
+import './user_socket.js'
 
 import 'phoenix_html'
 // Establish Phoenix Socket and LiveView configuration.

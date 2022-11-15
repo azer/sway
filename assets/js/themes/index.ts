@@ -6,9 +6,8 @@ export const { styled, css, theme } = createStitches({
   theme: {
     colors: {
       black: 'rgba(0,0,0,0.95)',
-      gray1: 'rgb(20, 20, 20)',
-
-      gray2: 'rgb(33, 37, 44)', //'rgb(36, 36, 44)',
+      gray1: 'rgb(20, 22, 26)',
+      gray2: 'rgb(30, 34, 41)', //'rgb(36, 36, 44)',
       gray3: 'rgb(65, 65, 65)',
       gray4: 'rgb(72, 83, 94)',
       gray9: 'rgb(145, 145, 149)',
@@ -26,7 +25,7 @@ export const { styled, css, theme } = createStitches({
       green: 'rgb(15, 120, 60)',
       darkGreen: 'rgb(76, 183, 130)',
       yellow: 'rgb(242, 201, 76)',
-      shellBg: '$gray2',
+      shellBg: '$gray1',
       shellFg: 'rgb(255, 255, 255)',
       shellBorderColor: 'rgba(255, 255, 255, 0.075)',
     },

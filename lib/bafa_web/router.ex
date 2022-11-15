@@ -11,6 +11,7 @@ defmodule BafaWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :put_user_token
   end
 
   pipeline :api do
@@ -19,7 +20,7 @@ defmodule BafaWeb.Router do
 
   scope "/", BafaWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
-    
+
     get "/auth/:provider", UserOauthController, :request
     get "/auth/:provider/callback", UserOauthController, :callback
   end
@@ -95,4 +96,5 @@ defmodule BafaWeb.Router do
     get "/users/confirm/:token", UserConfirmationController, :edit
     post "/users/confirm/:token", UserConfirmationController, :update
   end
+
 end

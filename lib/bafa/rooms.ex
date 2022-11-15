@@ -37,6 +37,28 @@ defmodule Bafa.Rooms do
   """
   def get_room!(id), do: Repo.get!(Room, id)
 
+  def get_room_by_name(org_id, name) when is_binary(name) do
+    Repo.get_by(Room, org_id: org_id, name: name)
+  end
+
+  def get_default_room(user_id, org_id) do
+    lobby = %{
+      "name" => "lobby",
+      "org_id" => org_id,
+      "user_id" => user_id
+    }
+
+    case get_room_by_name(org_id, lobby["name"]) do
+      %Room{} = room ->
+        {:ok, room}
+      _ ->
+        %Room{}
+        |> Room.changeset(lobby)
+        |> Repo.insert()
+    end
+  end
+
+
   @doc """
   Creates a room.
 

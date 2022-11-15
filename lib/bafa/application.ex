@@ -15,7 +15,8 @@ defmodule Bafa.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Bafa.PubSub},
       # Start the Endpoint (http/https)
-      BafaWeb.Endpoint
+      BafaWeb.Endpoint,
+      BafaWeb.UserPresence
       # Start a worker by calling: Bafa.Worker.start_link(arg)
       # {Bafa.Worker, arg}
     ]

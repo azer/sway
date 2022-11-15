@@ -1,21 +1,54 @@
 <div id="root"></div>
-<script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
 <script type="text/javascript">
-  window.__initialData__ = {
-    currentUser: {
-      id: <%= @user.id %>,
-      name: "<%= @user.name %>",
-      email: "<%= @user.email %>"
-      photo_url: "<%= @user.profile_photo_url %>",
-      org_id: <%= @user.org_id %>,
+  window.initialState = {
+    session: {
+      userId: "<%= @user.id %>",
+      token: "<%= assigns[:user_token] %>",
+    },
+    chat: {
+      roomId: "<%= @room.id %>",
+      <%= if @status != nil do %>
+      statusId: "<%= @status.id %>",
+      <% end %>
     },
     orgs: [
       {
-	id: <%= @org.id %>,
+	id: "<%= @org.id %>",
 	name: "<%= @org.name %>",
 	domain: "<%= @org.domain %>",
 	logo_url: "<%= @org.logo_url %>"
       }
+    ],
+    users: [
+      {
+	id: "<%= @user.id %>",
+	name: "<%= @user.name %>",
+	email: "<%= @user.email %>",
+	photo_url: "<%= @user.profile_photo_url %>",
+	org_id: <%= @user.org_id %>
+      }
+    ],
+    rooms: [
+      {
+	id: "<%= @room.id %>",
+	name: "<%= @room.name %>",
+	org_id: "<%= @room.org_id %>",
+	user_id: "<%= @room.user_id %>",
+      }
+    ],
+    statuses: [
+	<%= if @status != nil do %>
+	{
+	  id: "<%= @status.id %>",
+	  user_id: "<%= @status.user_id %>",
+	  org_id: "<%= @status.org_id %>",
+	  status: "<%= @status.status %>",
+	  message: "<%= @status.message %>",
+	  started_at: "<%= @status.started_at %>",
+	  ended_at: "<%= @status.ended_at %>"
+	}
+	<%= end %>
     ]
   }
 </script>
+<script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
