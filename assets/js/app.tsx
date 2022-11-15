@@ -24,9 +24,10 @@ import '../css/fonts.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Routing from 'features/Routing'
+import UserSocketProvider from 'features/UserSocket'
 import { Provider } from 'react-redux'
 import { store } from 'state/store'
-import './user_socket.js'
+// import './user_socket.js'
 
 import 'phoenix_html'
 // Establish Phoenix Socket and LiveView configuration.
@@ -59,7 +60,9 @@ window.liveSocket = liveSocket
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Routing />
+      <UserSocketProvider>
+        <Routing />
+      </UserSocketProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -11,44 +11,46 @@
       statusId: "<%= @status.id %>",
       <% end %>
     },
-    orgs: [
-      {
-	id: "<%= @org.id %>",
-	name: "<%= @org.name %>",
-	domain: "<%= @org.domain %>",
-	logo_url: "<%= @org.logo_url %>"
-      }
-    ],
-    users: [
-      {
-	id: "<%= @user.id %>",
-	name: "<%= @user.name %>",
-	email: "<%= @user.email %>",
-	photo_url: "<%= @user.profile_photo_url %>",
-	org_id: <%= @user.org_id %>
-      }
-    ],
-    rooms: [
-      {
-	id: "<%= @room.id %>",
-	name: "<%= @room.name %>",
-	org_id: "<%= @room.org_id %>",
-	user_id: "<%= @room.user_id %>",
-      }
-    ],
-    statuses: [
-	<%= if @status != nil do %>
+    entities: {
+      orgs: [
 	{
-	  id: "<%= @status.id %>",
-	  user_id: "<%= @status.user_id %>",
-	  org_id: "<%= @status.org_id %>",
-	  status: "<%= @status.status %>",
-	  message: "<%= @status.message %>",
-	  started_at: "<%= @status.started_at %>",
-	  ended_at: "<%= @status.ended_at %>"
+	  id: "<%= @org.id %>",
+	  name: "<%= @org.name %>",
+	  domain: "<%= @org.domain %>",
+	  logo_url: "<%= @org.logo_url %>"
 	}
-	<%= end %>
-    ]
+      ],
+      users: [
+	{
+	  id: "<%= @user.id %>",
+	  name: "<%= @user.name %>",
+	  email: "<%= @user.email %>",
+	  photo_url: "<%= @user.profile_photo_url %>",
+	  org_id: <%= @user.org_id %>
+	}
+      ],
+      rooms: [
+	{
+	  id: "<%= @room.id %>",
+	  name: "<%= @room.name %>",
+	  org_id: "<%= @room.org_id %>",
+	  user_id: "<%= @room.user_id %>",
+	}
+      ],
+      statuses: [
+	  <%= if @status != nil do %>
+	  {
+	    id: "<%= @status.id %>",
+	    user_id: "<%= @status.user_id %>",
+	    org_id: "<%= @status.org_id %>",
+	    status: "<%= @status.status %>",
+	    message: "<%= @status.message %>",
+	    started_at: "<%= @status.started_at %>",
+	    ended_at: "<%= @status.ended_at %>"
+	  }
+	  <%= end %>
+      ]
+    }
   }
 </script>
 <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
