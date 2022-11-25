@@ -7,8 +7,9 @@ defmodule Bafa.Statuses.Status do
     field :message, :string
     field :started_at, :naive_datetime
     field :status, Ecto.Enum, values: [:focus, :active, :away]
-    field :user_id, :id
-    field :org_id, :id
+
+    belongs_to :user, Bafa.Accounts.User
+    belongs_to :org, Bafa.Accounts.Org
 
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule Bafa.Statuses.Status do
   @doc false
   def changeset(status, attrs) do
     status
-    |> cast(attrs, [:status, :message, :started_at, :ended_at])
+    |> cast(attrs, [:status, :message, :started_at, :ended_at, :user_id, :org_id])
     |> validate_required([:status, :message, :started_at, :ended_at])
   end
 end

@@ -4,8 +4,8 @@ defmodule BafaWeb.ChatChannel do
   alias BafaWeb.UserPresence
 
   @impl true
-  def join("chat:lobby", payload, socket) do
-    if authorized?(payload) do
+  def join("org:" <> org_id, payload, socket) do
+    if authorized?(socket.assigns.user, String.to_integer(org_id)) do
       send(self(), :after_join)
       {:ok, socket}
     else
@@ -17,7 +17,7 @@ defmodule BafaWeb.ChatChannel do
     user = Bafa.Accounts.get_user!(socket.assigns[:user])
 
     {:ok, _} =
-      UserPresence.track(socket, "user:#{user.id}", %{
+      UserPresence.track(socket, "users:#{user.id}", %{
         user_id: user.id,
         online_at: inspect(System.system_time(:second))
       })
@@ -29,11 +29,35 @@ defmodule BafaWeb.ChatChannel do
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
-  @impl true
-  @spec handle_in(<<_::32, _::_*8>>, any, any) ::
-          {:noreply, Phoenix.Socket.t()} | {:reply, {:ok, any}, any}
   def handle_in("ping", payload, socket) do
     {:reply, {:ok, payload}, socket}
+  end
+
+  def handle_in("entities:fetch", %{"id" => id, "entity" => entity }, socket) do
+    user = Bafa.Accounts.get_user!(String.to_integer(id))
+
+    resp = %{
+      "id" => id,
+      "name" => user.name,
+      "email" => user.email,
+      "org_id" => user.org_id,
+      "profile_photo_url" => user.profile_photo_url
+    }
+
+    {:reply, {:ok, resp}, socket}
+  end
+
+  def handle_in("rooms:join", %{"id" => id}, socket) do
+    broadcast(socket, "rooms:join", %{"id" => id, "user_id" => socket.assigns.user})
+
+    {:ok, _} =
+      UserPresence.update(socket, "users:#{socket.assigns.user}", %{
+        user_id: socket.assigns.user,
+        online_at: inspect(System.system_time(:second)),
+        room_id: id
+      })
+
+    {:noreply, socket}
   end
 
   # It is also common to receive messages from the client and
@@ -44,18 +68,9 @@ defmodule BafaWeb.ChatChannel do
     {:noreply, socket}
   end
 
-  def handle_info(:after_join, socket) do
-    {:ok, _} =
-      Presence.track(socket, socket.assigns.user_id, %{
-        online_at: inspect(System.system_time(:second))
-      })
-
-    push(socket, "presence_state", Presence.list(socket))
-    {:noreply, socket}
-  end
-
   # Add authorization logic here as required.
-  defp authorized?(_payload) do
-    true
+  defp authorized?(userId, orgId) do
+    user = Bafa.Accounts.get_user!(userId)
+    user.org_id == orgId
   end
 end

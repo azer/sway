@@ -5,11 +5,11 @@
       userId: "<%= @user.id %>",
       token: "<%= assigns[:user_token] %>",
     },
-    chat: {
-      roomId: "<%= @room.id %>",
-      <%= if @status != nil do %>
-      statusId: "<%= @status.id %>",
-      <% end %>
+    room: {
+      orgRoomIds: [<%= Enum.join(Enum.map(@rooms, fn (r) -> r.id end), ", ") %>],
+      focus: {
+	id: "<%= @selected_room_id %>"
+      }
     },
     entities: {
       orgs: [
@@ -17,7 +17,7 @@
 	  id: "<%= @org.id %>",
 	  name: "<%= @org.name %>",
 	  domain: "<%= @org.domain %>",
-	  logo_url: "<%= @org.logo_url %>"
+	  logoUrl: "<%= @org.logo_url %>",
 	}
       ],
       users: [
@@ -25,28 +25,32 @@
 	  id: "<%= @user.id %>",
 	  name: "<%= @user.name %>",
 	  email: "<%= @user.email %>",
-	  photo_url: "<%= @user.profile_photo_url %>",
-	  org_id: <%= @user.org_id %>
+	  photoUrl: "<%= @user.profile_photo_url %>",
+	  orgId: <%= @user.org_id %>
 	}
       ],
       rooms: [
+	<%= for room <- @rooms do %>
 	{
-	  id: "<%= @room.id %>",
-	  name: "<%= @room.name %>",
-	  org_id: "<%= @room.org_id %>",
-	  user_id: "<%= @room.user_id %>",
-	}
+	  id: "<%= room.id %>",
+	  name: "<%= room.name %>",
+	  slug: "<%= room.slug %>",
+	  isDefault: <%= room.is_default %>,
+	  orgId: "<%= room.org_id %>",
+	  userId: "<%= room.user_id %>",
+	},
+	<%= end %>
       ],
       statuses: [
 	  <%= if @status != nil do %>
 	  {
 	    id: "<%= @status.id %>",
-	    user_id: "<%= @status.user_id %>",
-	    org_id: "<%= @status.org_id %>",
+	    userId: "<%= @status.user_id %>",
+	    orgId: "<%= @status.org_id %>",
 	    status: "<%= @status.status %>",
 	    message: "<%= @status.message %>",
-	    started_at: "<%= @status.started_at %>",
-	    ended_at: "<%= @status.ended_at %>"
+	    startedAt: "<%= @status.started_at %>",
+	    endedAt: "<%= @status.ended_at %>"
 	  }
 	  <%= end %>
       ]

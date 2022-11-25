@@ -7,8 +7,7 @@ defmodule BafaWeb.UserSocket do
   # assign values that can be accessed by your channel topics.
 
   ## Channels
-
-  channel "chat:*", BafaWeb.ChatChannel
+  channel "org:*", BafaWeb.ChatChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

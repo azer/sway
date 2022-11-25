@@ -14,7 +14,10 @@ interface State {
   token?: string
 }
 
-export const initialState: State = {}
+export const initialState: State = {
+  id: (window as any).initialState.session.userId,
+  token: (window as any).initialState.session.token,
+}
 
 export const slice = createSlice({
   name,

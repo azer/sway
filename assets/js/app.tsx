@@ -25,6 +25,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Routing from 'features/Routing'
 import UserSocketProvider from 'features/UserSocket'
+import CommandRegistryProvider from 'features/CommandRegistry'
 import { Provider } from 'react-redux'
 import { store } from 'state/store'
 // import './user_socket.js'
@@ -34,6 +35,7 @@ import 'phoenix_html'
 import { Socket } from 'phoenix'
 import { LiveSocket } from 'phoenix_live_view'
 import topbar from '../vendor/topbar'
+import CommandPaletteProvider from 'features/CommandPalette'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -61,7 +63,11 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <UserSocketProvider>
-        <Routing />
+        <CommandRegistryProvider>
+          <CommandPaletteProvider>
+            <Routing />
+          </CommandPaletteProvider>
+        </CommandRegistryProvider>
       </UserSocketProvider>
     </Provider>
   </React.StrictMode>,

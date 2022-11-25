@@ -1,6 +1,9 @@
-import { RootState } from 'app/state'
+import { RootState } from 'state'
+
+export function getUserId(state: RootState): string | undefined {
+  return state.session.id
+}
 
 export function isLoggedIn(state: RootState): boolean {
-  //return state.session.loading === Loading.Succeeded && !!state.session.id
-  return false
+  return !!state.session.token
 }

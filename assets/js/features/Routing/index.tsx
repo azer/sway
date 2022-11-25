@@ -1,21 +1,18 @@
+import { useCommandPalette } from 'features/CommandPalette'
+import { useCommandRegistry } from 'features/CommandRegistry'
 import React, { useEffect } from 'react'
-import { useDispatch } from 'state'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { addInitialState } from '../../state/entities'
 import Main from './Main'
 
 export default function Routing(): JSX.Element {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    console.log('Adding initial state...')
-    dispatch(addInitialState())
-  }, [])
+  const reg = useCommandRegistry()
+  const cmd = useCommandPalette()
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/rooms/:slug" element={<Main />} />
       </Routes>
     </BrowserRouter>
   )

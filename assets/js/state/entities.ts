@@ -1,7 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { AppDispatch } from './store'
 
-export type Entity = User | Org | Room | Status
-export type Table = typeof Users | typeof Orgs | typeof Rooms | typeof Statuses
+export type Entity = User | Org | Room | Status | Participant
+export type Table =
+  | typeof Users
+  | typeof Orgs
+  | typeof Rooms
+  | typeof Statuses
+  | typeof Participants
 
 export interface Update {
   table: Table
@@ -13,6 +19,7 @@ export const Users = 'users'
 export interface User {
   id: string
   orgId: string
+  email: string
   name: string
   photoUrl?: string
 }
@@ -22,15 +29,17 @@ export interface Org {
   id: string
   name: string
   domain: string
-  logo_url: string
+  logoUrl: string
 }
 
 export const Rooms = 'rooms'
 export interface Room {
   id: string
-  org_id: string
-  user_id: string
+  orgId: string
+  userId: string
   name: string
+  slug: string
+  isDefault: boolean
 }
 
 export const Statuses = 'statuses'
@@ -52,11 +61,21 @@ export interface Presence {
   last_seen_at: string
 }
 
+export const Participants = 'daily_participants'
+export interface Participant {
+  id: string
+  sessionId: string
+  audio: boolean
+  video: boolean
+  screen: boolean
+}
+
 const initialState = {
   [Users]: {} as Record<string, User>,
   [Orgs]: {} as Record<string, Org>,
   [Rooms]: {} as Record<string, Room>,
   [Statuses]: {} as Record<string, Status>,
+  [Participants]: {} as Record<string, Participant>,
 }
 
 export const slice = createSlice({
@@ -82,6 +101,7 @@ export const slice = createSlice({
 
       for (const table in entities) {
         for (const row of entities[table]) {
+          // @ts-ignore
           state[table][row.id] = row
         }
       }
@@ -100,3 +120,27 @@ export const slice = createSlice({
 export const { add, addBatch, addInitialState, removeBatch } = slice.actions
 
 export default slice.reducer
+
+export function toStateEntity(table: Table, record: any): Entity {
+  if (table === Users) {
+    return {
+      id: record.id,
+      orgId: record.org_id,
+      email: record.email,
+      name: record.name,
+      photoUrl: record.profile_photo_url,
+    }
+  }
+
+  if (table === Participants) {
+    return {
+      id: record.user_id as string,
+      sessionId: record.session_id as string,
+      audio: record.audio as boolean,
+      video: record.video as boolean,
+      screen: record.screen as boolean,
+    }
+  }
+
+  return record
+}

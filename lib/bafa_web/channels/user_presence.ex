@@ -8,4 +8,5 @@ defmodule BafaWeb.UserPresence do
   use Phoenix.Presence, otp_app: :bafa,
                         pubsub_server: Bafa.PubSub
 
+
 end

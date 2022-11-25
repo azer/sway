@@ -28,6 +28,7 @@ defmodule BafaWeb.Router do
   scope "/", BafaWeb do
     pipe_through [:browser, :require_authenticated_user]
     get "/", AppController, :index
+    get "/rooms/:slug", AppController, :room
   end
 
   # Other scopes may use custom stacks.
