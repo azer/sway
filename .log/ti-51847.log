@@ -1,0 +1,81 @@
+[16:51:24.962] Global cache location '/Users/azer/Library/Caches/typescript/4.8', safe file path '/users/azer/library/application support/fnm/node-versions/v16.14.2/installation/lib/node_modules/typescript/lib/typingsafelist.json', types map path /users/azer/library/application support/fnm/node-versions/v16.14.2/installation/lib/node_modules/typescript/lib/typesmap.json
+[16:51:24.963] Processing cache location '/Users/azer/Library/Caches/typescript/4.8'
+[16:51:24.963] Trying to find '/Users/azer/Library/Caches/typescript/4.8/package.json'...
+[16:51:24.965] Loaded content of '/Users/azer/Library/Caches/typescript/4.8/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.619"},"devDependencies":{"@types/aria-query":"^5.0.0","@types/babel__core":"^7.1.19","@types/brace-expansion":"^1.1.0","@types/customize-cra":"^1.0.3","@types/debug":"^4.1.7","@types/electron-devtools-installer":"^2.2.2","@types/express":"^4.17.14","@types/fs-extra":"^9.0.13","@types/minimatch":"^5.1.2","@types/npmlog":"^4.1.4","@types/phoenix":"^1.5.4","@types/phoenix_live_view":"^0.15.1","@types/prettier":"^2.7.1","@types/prop-types":"^15.7.5","@types/react":"^18.0.25","@types/react-dom":"^18.0.9","@types/react-redux":"^7.1.24","@types/react-router-dom":"^5.3.3","@types/redux-logger":"^3.0.9","@types/semver":"^7.3.12","@types/testing-library__jest-dom":"^5.14.5","@types/unist":"^2.0.6","@types/uuid":"^8.3.4","@types/wait-on":"^5.3.1","@types/webpack":"^5.28.0"}}
+[16:51:24.965] Loaded content of '/Users/azer/Library/Caches/typescript/4.8/package-lock.json'
+[16:51:24.971] Adding entry into typings cache: 'aria-query' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/aria-query/index.d.ts'
+[16:51:24.973] Adding entry into typings cache: 'babel__core' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/babel__core/index.d.ts'
+[16:51:24.974] Adding entry into typings cache: 'brace-expansion' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/brace-expansion/index.d.ts'
+[16:51:24.974] Adding entry into typings cache: 'customize-cra' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/customize-cra/index.d.ts'
+[16:51:24.975] Adding entry into typings cache: 'debug' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/debug/index.d.ts'
+[16:51:24.976] Adding entry into typings cache: 'electron-devtools-installer' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/electron-devtools-installer/index.d.ts'
+[16:51:24.977] Adding entry into typings cache: 'express' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/express/index.d.ts'
+[16:51:24.978] Adding entry into typings cache: 'fs-extra' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/fs-extra/index.d.ts'
+[16:51:24.979] Adding entry into typings cache: 'minimatch' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/minimatch/index.d.ts'
+[16:51:24.979] Adding entry into typings cache: 'npmlog' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/npmlog/index.d.ts'
+[16:51:24.980] Adding entry into typings cache: 'phoenix' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/phoenix/index.d.ts'
+[16:51:24.981] Adding entry into typings cache: 'phoenix_live_view' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/phoenix_live_view/index.d.ts'
+[16:51:24.982] Adding entry into typings cache: 'prettier' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/prettier/index.d.ts'
+[16:51:24.983] Adding entry into typings cache: 'prop-types' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/prop-types/index.d.ts'
+[16:51:24.984] Adding entry into typings cache: 'react' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/react/index.d.ts'
+[16:51:24.985] Adding entry into typings cache: 'react-dom' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/react-dom/index.d.ts'
+[16:51:24.987] Adding entry into typings cache: 'react-redux' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/react-redux/index.d.ts'
+[16:51:24.987] Adding entry into typings cache: 'react-router-dom' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/react-router-dom/index.d.ts'
+[16:51:24.988] Adding entry into typings cache: 'redux-logger' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/redux-logger/index.d.ts'
+[16:51:24.989] Adding entry into typings cache: 'semver' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/semver/index.d.ts'
+[16:51:24.989] Adding entry into typings cache: 'testing-library__jest-dom' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/testing-library__jest-dom/index.d.ts'
+[16:51:24.990] Adding entry into typings cache: 'unist' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/unist/index.d.ts'
+[16:51:24.990] Adding entry into typings cache: 'uuid' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/uuid/index.d.ts'
+[16:51:24.991] Adding entry into typings cache: 'wait-on' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/@types/wait-on/index.d.ts'
+[16:51:24.993] Adding entry into typings cache: 'webpack' => '/Users/azer/Library/Caches/typescript/4.8/node_modules/webpack/types.d.ts'
+[16:51:24.993] Finished processing cache location '/Users/azer/Library/Caches/typescript/4.8'
+[16:51:24.993] Process id: 51848
+[16:51:24.993] NPM location: "/Users/azer/Library/Application Support/fnm/node-versions/v16.14.2/installation/bin/npm" (explicit '--npmLocation' not  provided)
+[16:51:24.993] validateDefaultNpmLocation: false
+[16:51:24.993] Npm config file: /Users/azer/Library/Caches/typescript/4.8/package.json
+[16:51:24.993] Updating types-registry npm package...
+[16:51:24.993] Exec: "/Users/azer/Library/Application Support/fnm/node-versions/v16.14.2/installation/bin/npm" install --ignore-scripts types-registry@latest
+[16:51:25.732]     Succeeded. stdout:
+    
+    up to date, audited 187 packages in 617ms
+
+13 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+[16:51:25.732] Updated types-registry npm package
+[11:01:51.655] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":[],"compilerOptions":{"module":1,"target":3,"jsx":1,"allowJs":true,"allowSyntheticDefaultImports":true,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/Users/azer/code/bafa/assets/js/components/Icon","kind":"discover"}
+[11:01:51.682] Loaded safelist from types map file '/users/azer/library/application support/fnm/node-versions/v16.14.2/installation/lib/node_modules/typescript/lib/typesmap.json'
+[11:01:51.683] Explicitly included types: []
+[11:01:51.683] Inferred typings from unresolved imports: []
+[11:01:51.684] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/azer/code/bafa/assets/js/components/Icon/bower_components","/Users/azer/code/bafa/assets/js/components/Icon/node_modules"]}
+[11:01:51.684] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/azer/code/bafa/assets/js/components/Icon/bower_components","/Users/azer/code/bafa/assets/js/components/Icon/node_modules"]}
+[11:01:51.684] DirectoryWatcher:: Added:: WatchInfo: /Users/azer/code/bafa/assets/js/components/Icon/bower_components
+[11:01:51.685] DirectoryWatcher:: Added:: WatchInfo: /Users/azer/code/bafa/assets/js/components/Icon/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+[11:01:51.686] Elapsed:: 0.9361677169799805ms DirectoryWatcher:: Added:: WatchInfo: /Users/azer/code/bafa/assets/js/components/Icon/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+[11:01:51.686] DirectoryWatcher:: Added:: WatchInfo: /Users/azer/code/bafa/assets/js/components/Icon/node_modules
+[11:01:51.686] DirectoryWatcher:: Added:: WatchInfo: /Users/azer/code/bafa/assets/js/components/Icon/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+[11:01:51.686] Elapsed:: 0.04970741271972656ms DirectoryWatcher:: Added:: WatchInfo: /Users/azer/code/bafa/assets/js/components/Icon/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+[11:01:51.686] Sending response:
+    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"module":1,"target":3,"jsx":1,"allowJs":true,"allowSyntheticDefaultImports":true,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+[11:01:51.687] Response has been sent.
+[11:01:51.687] No new typings were requested as a result of typings discovery
+[11:03:07.297] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":[],"compilerOptions":{"module":1,"target":3,"jsx":1,"allowJs":true,"allowSyntheticDefaultImports":true,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/Users/azer/code/bafa/assets/js/components/Icon","kind":"discover"}
+[11:03:07.298] Explicitly included types: []
+[11:03:07.298] Inferred typings from unresolved imports: []
+[11:03:07.299] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/azer/code/bafa/assets/js/components/Icon/bower_components","/Users/azer/code/bafa/assets/js/components/Icon/node_modules"]}
+[11:03:07.299] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/azer/code/bafa/assets/js/components/Icon/bower_components","/Users/azer/code/bafa/assets/js/components/Icon/node_modules"]}
+[11:03:07.300] Sending response:
+    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"module":1,"target":3,"jsx":1,"allowJs":true,"allowSyntheticDefaultImports":true,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+[11:03:07.300] Response has been sent.
+[11:03:07.300] No new typings were requested as a result of typings discovery
+[11:04:03.139] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":[],"compilerOptions":{"module":1,"target":3,"jsx":1,"allowJs":true,"allowSyntheticDefaultImports":true,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/Users/azer/code/bafa/assets/js/components/Icon","kind":"discover"}
+[11:04:03.139] Explicitly included types: []
+[11:04:03.140] Inferred typings from unresolved imports: []
+[11:04:03.140] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/azer/code/bafa/assets/js/components/Icon/bower_components","/Users/azer/code/bafa/assets/js/components/Icon/node_modules"]}
+[11:04:03.140] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/azer/code/bafa/assets/js/components/Icon/bower_components","/Users/azer/code/bafa/assets/js/components/Icon/node_modules"]}
+[11:04:03.140] Sending response:
+    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"module":1,"target":3,"jsx":1,"allowJs":true,"allowSyntheticDefaultImports":true,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+[11:04:03.141] Response has been sent.
+[11:04:03.141] No new typings were requested as a result of typings discovery
