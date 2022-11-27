@@ -4,7 +4,13 @@ import selectors from 'selectors'
 import logger from 'lib/log'
 import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
-import { PresenceMode, setPresenceAsFocus } from './slice'
+import {
+  PresenceMode,
+  setPresenceAsActive,
+  setPresenceAsAway,
+  setPresenceAsDoNotDisturb,
+  setPresenceAsFocus,
+} from './slice'
 import { Container, Label } from './Button'
 import { useCommandRegistry } from 'features/CommandRegistry'
 
@@ -30,12 +36,42 @@ export default function PresenceModeView(props: Props) {
         },
         {
           icon: 'headphones',
+          shortcut: ['⎇', 'f'],
         }
       )
 
-      register('Active mode', () => {})
-      register('Away mode', () => {})
-      register('Do not disturb mode', () => {})
+      register(
+        'Active mode',
+        () => {
+          if (userId) dispatch(setPresenceAsActive(userId))
+        },
+        {
+          icon: 'phoneCall',
+          shortcut: ['⎇', 'a'],
+        }
+      )
+
+      register(
+        'Away mode',
+        () => {
+          if (userId) dispatch(setPresenceAsAway(userId))
+        },
+        {
+          icon: 'coffee',
+          shortcut: ['⎇', 'w'],
+        }
+      )
+
+      register(
+        'Do not disturb mode',
+        () => {
+          if (userId) dispatch(setPresenceAsDoNotDisturb(userId))
+        },
+        {
+          icon: 'night',
+          shortcut: ['⎇', 'd'],
+        }
+      )
     },
     [userId, presence]
   )

@@ -39,13 +39,14 @@ export default function Call(props: Props) {
   const localParticipant = useLocalParticipant()
   const { screens } = useScreenShare()
 
-  /*const localVideo = useVideoTrack(localParticipant?.session_id)
-  const localAudio = useAudioTrack(localParticipant?.session_id)
-
   useEffect(() => {
-    if (!localParticipant) return
+    if (!localParticipant || !callObject) return
 
-    callObject.setLocalVideo(localVideo)
+    //const localVideo = useVideoTrack(localParticipant?.session_id)
+    //const localAudio = useAudioTrack(localParticipant?.session_id)
+
+    callObject.setLocalVideo(true)
+    callObject.join({ url: roomUrl })
   }, [localParticipant?.session_id])
 
   useDailyEvent(
@@ -54,7 +55,7 @@ export default function Call(props: Props) {
       log.error('Camera error', event)
       dispatch(setCameraError(true))
     }, [])
-  )*/
+  )
 
   useEffect(() => {
     dispatch(setRemoteParticipantIds(remoteParticipantIds))
@@ -73,19 +74,25 @@ export default function Call(props: Props) {
     dispatch(setLocalParticipantId(localParticipant.user_id))
   }, [localParticipant?.user_id])
 
-  return (
-    <Container>
-      {localParticipant && (
-        <Participant id={localParticipant.session_id} muted />
-      )}
+  const tiling: { [k: string]: string } = {}
+  if (remoteParticipantIds.length > 1) {
+    tiling['gridTemplateColumns'] = `repeat(${Math.min(
+      remoteParticipantIds.length,
+      2
+    )}, 1fr)`
+  }
 
+  return (
+    <Container css={tiling}>
       {remoteParticipantIds.length > 0 &&
-        remoteParticipantIds.map((id) => <Participant id={id} />)}
+        remoteParticipantIds.map((id) => <Participant key={id} id={id} />)}
     </Container>
   )
 }
 
 const Container = styled('section', {
+  display: 'grid',
   space: { inner: [4] },
-  height: '100%',
+  gap: '8px',
+  height: 'calc(100vh - 200px)',
 })

@@ -203,7 +203,7 @@ function calculateMatchingScore(a: Command, query: string): number {
 
 function performKeywordSearch(query: string, data: string[]) {
   for (const d of data) {
-    if (fuzzysearch(query, d)) {
+    if (fuzzysearch(query.toLowerCase(), d.toLowerCase())) {
       return true
     }
   }

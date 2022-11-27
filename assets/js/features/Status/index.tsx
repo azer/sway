@@ -4,8 +4,9 @@ import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import logger from 'lib/log'
 import Mirror from './Mirror'
-import PresenceMode from './PresenceMode'
+import PresenceModeView from './PresenceMode'
 import Button from './Button'
+import { PresenceMode } from './slice'
 
 interface Props {
   roomId: string
@@ -15,13 +16,24 @@ const log = logger('status-tray')
 
 export default function StatusTray(props: Props) {
   // const dispatch = useDispatch()
+
+  const [isActive] = useSelector((state) => [
+    selectors.status.getSelfPresenceStatus(state)?.mode === PresenceMode.Active,
+  ])
+
   return (
     <Container>
       <Mirror />
       <Separator />
-      <PresenceMode />
+      <PresenceModeView />
+      <Separator group={!isActive} />
+      {isActive ? <Button icon="mic" label="Microphone" /> : null}
       <Separator group />
-      <Button icon="sliders" label="Options" />
+      {isActive ? <Button icon="cam" label="Camera" /> : null}
+      <Separator group />
+      {isActive ? <Button icon="monitor" label="Share screen" /> : null}
+      <Separator group />
+      {!isActive ? <Button icon="sliders" label="Options" /> : null}
     </Container>
   )
 }

@@ -6,6 +6,9 @@ import Night from './Night'
 import Sliders from './Sliders'
 import Terminal from './Terminal'
 import Command from './Command'
+import MicIcon from './Mic'
+import CamIcon from './Cam'
+import MonitorIcon from './Monitor'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -17,6 +20,9 @@ const icons: {
   sliders: Sliders,
   terminal: Terminal,
   command: Command,
+  mic: MicIcon,
+  cam: CamIcon,
+  monitor: MonitorIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {

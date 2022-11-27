@@ -16,9 +16,9 @@ export default function Participant(props: Props) {
   const audioTrack = useMediaTrack(props.id, 'audio')
   const audioElement = useRef<HTMLAudioElement>()
 
-  return <Container>Participant #{props.id}</Container>
+  //  return <Container>Participant #{props.id}</Container>
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (audioTrack?.state === 'playable') {
       if (audioElement?.current) {
         audioElement.current.srcObject =
@@ -28,7 +28,7 @@ export default function Participant(props: Props) {
   }, [audioTrack])
 
   return (
-    <Container>
+    <Container data-participant-id={props.id}>
       <Video id={props.id} />
       {!props.muted && audioTrack && (
         <audio
@@ -38,7 +38,15 @@ export default function Participant(props: Props) {
         />
       )}
     </Container>
-  )*/
+  )
 }
 
-const Container = styled('div', {})
+const Container = styled('div', {
+  round: 'large',
+  overflow: 'hidden',
+  center: true,
+  '& video': {
+    height: '100%',
+    'object-fit': 'cover',
+  },
+})

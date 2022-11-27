@@ -67,6 +67,9 @@ export default function CommandPaletteModal(props: Props) {
                 data-id={cmd.id}
                 selected={props.selectedId == cmd.id}
               >
+                <CommandIcon selected={props.selectedId == cmd.id}>
+                  <Icon name={cmd.icon || 'command'} />
+                </CommandIcon>
                 <Name>{cmd.name}</Name>
                 {cmd.hint ? <Hint>{cmd.hint}</Hint> : null}
                 {cmd.shortcut ? (
@@ -207,13 +210,40 @@ const Command = styled('div', {
   },
 })
 
+const CommandIcon = styled('div', {
+  width: '14px',
+  height: '14px',
+  marginRight: '12px',
+  color: '$commandPaletteCommandIconFg',
+  variants: {
+    selected: {
+      true: {
+        color: '$commandPaletteSelectedCommandIconFg',
+      },
+    },
+  },
+})
+
 const Name = styled('div', {})
 const Hint = styled('div', {
   marginLeft: 'auto',
   textAlign: 'right',
 })
 
-const Kbd = styled('kbd', {})
+const Kbd = styled('kbd', {
+  display: 'inline-block',
+  textAlign: 'center',
+  fontWeight: '500',
+  minWidth: '20px',
+  marginRight: '3px',
+  fontSize: '11px',
+  padding: '4px 3px 4px 4px',
+  background: '$commandPaletteShortcutBg',
+  round: 'small',
+  textTransform: 'uppercase',
+  label: true,
+  fontFamily: '$sans',
+})
 
 export function getScrollPosition(
   listEl: React.RefObject<HTMLDivElement>,
