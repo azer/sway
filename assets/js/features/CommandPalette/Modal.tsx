@@ -134,9 +134,7 @@ const Modal = styled('main', {
 const IconWrapper = styled('aside', {
   width: '16px',
   height: '16px',
-  '& svg': {
-    fill: '$commandPaletteHeaderFg',
-  },
+  '& svg': {},
 })
 
 const Title = styled('div', {

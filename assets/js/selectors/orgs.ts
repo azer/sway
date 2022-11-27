@@ -13,3 +13,7 @@ export function getSelfOrg(state: RootState): entities.Org | undefined {
   const user = selectors.users.getSelf(state)
   return user && getById(state, user.orgId)
 }
+
+export function getUsersByOrgId(state: RootState): entities.User[] {
+  return Object.values(state.entities[entities.Users])
+}

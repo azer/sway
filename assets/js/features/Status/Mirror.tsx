@@ -50,7 +50,14 @@ export default function Mirror(props: Props) {
           fill
         />
       )}
-      <Icon status={status} title={'connection ' + status} />
+      <ConnectionIcon
+        status={status}
+        title={'Connection:' + status}
+        small={
+          presence?.mode === PresenceMode.Active &&
+          status === ConnectionState.Successful
+        }
+      />
     </Container>
   )
 }
@@ -73,7 +80,7 @@ const SelfVideo = styled('div', {
   },
 })
 
-const Icon = styled('div', {
+const ConnectionIcon = styled('div', {
   position: 'absolute',
   bottom: '0',
   right: '0',
@@ -84,6 +91,11 @@ const Icon = styled('div', {
   round: 'circle',
   borderBox: '',
   variants: {
+    small: {
+      true: {
+        width: '14px',
+      },
+    },
     status: {
       ready: {
         background: '$statusTrayIconReadyBg',

@@ -58,7 +58,7 @@ export const { styled, css, theme } = createStitches({
       presenceModelineDndBlur: 'rgba(235, 87, 87, 0.15)',
       presenceModelineActiveFg: 'rgb(24, 255, 167)',
       presenceModelineActiveBlur: 'rgba(24, 255, 167, 0.08)',
-      commandPaletteBg: 'rgba(29, 30, 43, 0.498)',
+      commandPaletteBg: 'rgba(30, 34, 41, 0.6)', //rgba(29, 30, 43, 0.498)',
       commandPaletteFg: '$white',
       commandPaletteTitleFg: 'rgba(255, 255, 255, 0.6)',
       commandPaletteTitleBg: 'rgba(255, 255, 255, 0.08)',
@@ -74,6 +74,8 @@ export const { styled, css, theme } = createStitches({
       commandPaletteSelectedCommandBorder: 'rgba(38, 181, 206, 0.9)',
       commandPaletteShortcutBg: 'rgba(149, 149, 189, 0.125)',
       commandPaletteSeparatorBg: 'rgba(255, 255, 255, 0.06)',
+      participantUsernameFg: '$white',
+      participantUsernameBg: 'rgba(29, 30, 43, 0.498)',
       roomTitleFg: '$white',
     },
     space: {

@@ -4,16 +4,18 @@ import selectors from 'selectors'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'state'
 import RoomButton from './RoomButton'
+import UserButton from './UserButton'
 
 interface Props {}
 
 export default function Navigation(props: Props) {
   // const dispatch = useDispatch()
 
-  const [org, rooms, selectedRoomId] = useSelector((state) => [
+  const [org, rooms, selectedRoomId, allUsers] = useSelector((state) => [
     selectors.orgs.getSelfOrg(state),
     selectors.rooms.listAllRooms(state),
     selectors.rooms.getFocusedRoomId(state),
+    selectors.orgs.getUsersByOrgId(state),
   ])
 
   return (
@@ -30,6 +32,12 @@ export default function Navigation(props: Props) {
         <Title>Your Rooms</Title>
         {rooms.map((id) => (
           <RoomButton key={id} id={id} selected={id === selectedRoomId} />
+        ))}
+      </Rooms>
+      <Rooms>
+        <Title>People</Title>
+        {allUsers.map((u) => (
+          <UserButton key={u.id} id={u.id} />
         ))}
       </Rooms>
     </Container>

@@ -1,20 +1,32 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
-import { useMediaTrack } from '@daily-co/daily-react-hooks'
+import { useMediaTrack, useParticipant } from '@daily-co/daily-react-hooks'
 import Video from './Video'
-// import { useSelector, useDispatch } from 'state'
+import logger from 'lib/log'
+import { useSelector } from 'state'
+import Avatar from 'components/Avatar'
 
 interface Props {
   id: string
   muted?: boolean
 }
 
+const log = logger('call/participant')
+
 export default function Participant(props: Props) {
   // const dispatch = useDispatch()
-  // const [] = useSelector((state) => [])
+
   const audioTrack = useMediaTrack(props.id, 'audio')
   const audioElement = useRef<HTMLAudioElement>()
+
+  const participant = useParticipant(props.id)
+  const [user] = useSelector((state) => [
+    participant?.userData
+      ? // @ts-ignore
+        selectors.users.getById(state, participant.userData.id)
+      : undefined,
+  ])
 
   //  return <Container>Participant #{props.id}</Container>
 
@@ -29,6 +41,15 @@ export default function Participant(props: Props) {
 
   return (
     <Container data-participant-id={props.id}>
+      <User>
+        <Avatar
+          photoUrl={user?.photoUrl}
+          name={user?.name}
+          round="circle"
+          fill
+        />
+        <Name>{user?.name}</Name>
+      </User>
       <Video id={props.id} />
       {!props.muted && audioTrack && (
         <audio
@@ -41,7 +62,7 @@ export default function Participant(props: Props) {
   )
 }
 
-const Container = styled('div', {
+const Container = styled('figure', {
   round: 'large',
   overflow: 'hidden',
   center: true,
@@ -49,4 +70,22 @@ const Container = styled('div', {
     height: '100%',
     'object-fit': 'cover',
   },
+  position: 'relative',
 })
+
+const User = styled('figcaption', {
+  position: 'absolute',
+  bottom: '8px',
+  marginLeft: 'auto',
+  height: '24px',
+  vcenter: true,
+  gap: '4px',
+  background: '$participantUsernameBg',
+  color: '$participantUsernameFg',
+  padding: '4px 6px',
+  round: 'small',
+  fontSize: '$small',
+  fontWeight: '$medium',
+})
+
+const Name = styled('label', {})
