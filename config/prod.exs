@@ -47,3 +47,7 @@ config :logger, level: :info
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: "713143641841-4c1dq7qvegpd1a8d6t6q0g3qjrbe3vfd.apps.googleusercontent.com",
+  client_secret: "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"

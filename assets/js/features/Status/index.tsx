@@ -21,19 +21,20 @@ export default function StatusTray(props: Props) {
     selectors.status.getSelfPresenceStatus(state)?.mode === PresenceMode.Active,
   ])
 
+  /*
+    {isActive ? <Button icon="mic" label="Microphone" /> : null}
+      {isActive ? <Button icon="cam" label="Camera" /> : null}
+      {isActive ? <Button icon="monitor" label="Share screen" /> : null}
+      */
+
   return (
     <Container>
       <Mirror />
       <Separator />
       <PresenceModeView />
-      <Separator group={!isActive} />
-      {isActive ? <Button icon="mic" label="Microphone" /> : null}
       <Separator group />
-      {isActive ? <Button icon="cam" label="Camera" /> : null}
-      <Separator group />
-      {isActive ? <Button icon="monitor" label="Share screen" /> : null}
-      <Separator group />
-      {!isActive ? <Button icon="sliders" label="Options" /> : null}
+
+      <Button icon="sliders" label="Options" />
     </Container>
   )
 }

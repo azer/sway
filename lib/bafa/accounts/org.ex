@@ -7,6 +7,8 @@ defmodule Bafa.Accounts.Org do
     field :name, :string
     field :logo_url, :string
 
+    has_many :users, Bafa.Accounts.User
+
     timestamps()
   end
 
