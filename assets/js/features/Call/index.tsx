@@ -16,8 +16,6 @@ import {
 } from './slice'
 import { add, Participants, toStateEntity } from 'state/entities'
 import Participant from './Participant'
-import { useVideoTrack } from '@daily-co/daily-react-hooks'
-import { useAudioTrack } from '@daily-co/daily-react-hooks'
 import { useDaily } from '@daily-co/daily-react-hooks'
 
 interface Props {

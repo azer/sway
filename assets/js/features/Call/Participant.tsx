@@ -39,6 +39,8 @@ export default function Participant(props: Props) {
     }
   }, [audioTrack])
 
+  if (!participant?.video) return null
+
   return (
     <Container data-participant-id={props.id}>
       <User>

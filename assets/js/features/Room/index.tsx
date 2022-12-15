@@ -80,6 +80,8 @@ export default function Room(props: Props) {
     const newCallObject = DailyIframe.createCallObject({
       audioSource: false,
       videoSource: false,
+      startVideoOff: true,
+      startAudioOff: true,
     })
       .on('loading', logEvent)
       .on('loaded', logEvent)
@@ -133,6 +135,8 @@ export default function Room(props: Props) {
     if (!callObject) return
     callObject.leave()
   }, [callObject])
+
+  log.info('call object', callObject)
 
   return (
     <DailyProvider callObject={callObject}>

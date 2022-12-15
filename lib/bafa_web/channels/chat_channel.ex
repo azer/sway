@@ -60,6 +60,11 @@ defmodule BafaWeb.ChatChannel do
     {:noreply, socket}
   end
 
+  def handle_in("user:status", %{ "presence_mode" => presence_mode }, socket) do
+    broadcast(socket, "user:status", %{"presence_mode" => presence_mode, "user_id" => socket.assigns.user})
+    {:noreply, socket}
+  end
+
   # It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (chat:lobby).
   @impl true

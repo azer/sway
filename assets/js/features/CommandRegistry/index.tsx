@@ -139,9 +139,6 @@ export function useCommandRegistry() {
 
   function search(rawQuery: string): Command[] {
     const query = rawQuery.trim()
-    if (query.length === 0) {
-      return Object.values(commands).sort(sortByMatchingScore(query))
-    }
 
     const result: Command[] = []
     for (const [_, cmd] of Object.entries(commands)) {
@@ -176,7 +173,7 @@ function sortByMatchingScore(query: string) {
 }
 
 const ContextMatchScores = {
-  [CommandType.AlterMode]: 30,
+  [CommandType.AlterMode]: 40,
   [CommandType.Settings]: 20,
   [CommandType.AlterSession]: 1,
   [CommandType.Misc]: 0,

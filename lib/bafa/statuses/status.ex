@@ -6,7 +6,7 @@ defmodule Bafa.Statuses.Status do
     field :ended_at, :naive_datetime
     field :message, :string
     field :started_at, :naive_datetime
-    field :status, Ecto.Enum, values: [:focus, :active, :away]
+    field :status, Ecto.Enum, values: [:focus, :active, :away, :dnd]
 
     belongs_to :user, Bafa.Accounts.User
     belongs_to :org, Bafa.Accounts.Org

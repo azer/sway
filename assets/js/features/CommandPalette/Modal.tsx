@@ -67,6 +67,7 @@ export default function CommandPaletteModal(props: Props) {
                 data-id={cmd.id}
                 selected={props.selectedId == cmd.id}
               >
+                <Border selected={props.selectedId == cmd.id} />
                 <CommandIcon selected={props.selectedId == cmd.id}>
                   <Icon name={cmd.icon || 'command'} />
                 </CommandIcon>
@@ -137,7 +138,7 @@ const IconWrapper = styled('aside', {
   '& svg': {},
 })
 
-const Title = styled('div', {
+const Title = styled('header', {
   display: 'inline-flex',
   space: { outer: [5, 5, 2, 5], inner: [0, 2], gap: 2 },
   round: 'small',
@@ -173,6 +174,7 @@ const Input = styled('input', {
 })
 
 const Separator = styled('div', {
+  position: 'absolute',
   height: '1px',
   space: { outer: [0, 5] },
   background: '$commandPaletteSeparatorBg',
@@ -185,23 +187,38 @@ const Separator = styled('div', {
   },
 })
 
-const Commands = styled('div', {
+const Commands = styled('nav', {
   maxHeight: '33vh',
   overflowY: 'scroll',
 })
 
+const Border = styled('mark', {
+  width: '3px',
+  height: '100%',
+  position: 'absolute',
+  top: '0',
+  left: '0',
+  background: 'transparent',
+  variants: {
+    selected: {
+      true: {
+        background: `radial-gradient(60px at 0px 0px, rgba(50, 100, 222, 0.8), transparent), radial-gradient(60px at 0px 50%, rgba(126, 33, 50, 0.8), transparent)`,
+      },
+    },
+  },
+})
+
 const Command = styled('div', {
+  position: 'relative',
   vcenter: true,
   height: 60,
   space: { inner: [0, 5] },
   color: '$commandPaletteCommandFg',
-  borderLeft: '3px solid transparent',
   label: true,
   variants: {
     selected: {
       true: {
         color: '$commandPaletteSelectedCommandFg',
-        borderColor: '$commandPaletteSelectedCommandBorder',
         background: '$commandPaletteSelectedCommandBg',
       },
     },

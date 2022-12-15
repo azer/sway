@@ -12,7 +12,7 @@ export function getPresenceStatusByUserId(
   state: RootState,
   userId: string
 ): PresenceStatus {
-  return state.status.presence[userId] || { userId, mode: PresenceMode.Active }
+  return state.status.presence[userId] || { userId, mode: PresenceMode.Focus }
 }
 
 export function getCallStatusByUserId(

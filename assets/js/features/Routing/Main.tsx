@@ -55,10 +55,12 @@ export default function Main(): JSX.Element {
   function onPressCommandK() {
     if (isOpen) close()
 
+    log.info('Opening command palette')
+
     open({
       title: 'Bafa Command',
       icon: 'command',
-      placeholder: 'Enter a command',
+      placeholder: 'Search commands',
       search,
       callback: (selectedCommandId: string | undefined, query: string) => {
         if (!selectedCommandId) return

@@ -114,6 +114,7 @@ export default function CommandPaletteProvider(props: Props) {
 
   function close() {
     setIsOpen(false)
+    setQuery('')
   }
 
   function previous() {

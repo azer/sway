@@ -26,6 +26,7 @@ export const Container = styled('div', {
   minWidth: '64px',
   round: 'large',
   space: { inner: [0, 2], gap: 1 },
+  border: '1px solid rgba(255, 255, 255, 0.01)',
   colors: {
     bg: '$statusTrayButtonBg',
     fg: '$statusTrayButtonFg',
@@ -46,6 +47,7 @@ export const Container = styled('div', {
   '&:hover': {
     background: '$statusTrayButtonHoverBg',
     color: '$statusTrayButtonHoverFg',
+    borderColor: 'rgba(255, 255, 255, 0.03),',
   },
 })
 
