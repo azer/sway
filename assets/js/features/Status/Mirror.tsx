@@ -19,7 +19,7 @@ export default function Mirror(props: Props) {
 
   const localParticipant = useLocalParticipant()
 
-  const items = [conn?.bafaSocket, conn?.bafaRoom, conn?.dailyRoom]
+  const items = [conn?.bafaSocket, conn?.bafaRoom, conn?.dailyCall]
   let status: string = ConnectionState.Ready
 
   if (conn && items.some((c) => !c || c === ConnectionState.Ready)) {

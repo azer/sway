@@ -5,6 +5,19 @@ export const name = 'call'
 interface State {
   remoteParticipantIds: string[]
   localParticipantId?: string
+  participantStatus: { [userId: string]: CallParticipantStatus }
+  cameraError?: boolean
+  micError?: boolean
+  soundError?: boolean
+}
+
+export interface CallParticipantStatus {
+  bafaUserId: string
+  dailyUserId?: string
+  sessionId?: string
+  cameraOn?: boolean
+  screenOn?: boolean
+  micOn?: boolean
   cameraError?: boolean
   micError?: boolean
   soundError?: boolean
@@ -12,6 +25,7 @@ interface State {
 
 export const initialState: State = {
   remoteParticipantIds: [],
+  participantStatus: {},
 }
 
 export const slice = createSlice({
@@ -27,6 +41,12 @@ export const slice = createSlice({
     setCameraError: (state, action: PayloadAction<boolean>) => {
       state.cameraError = action.payload
     },
+    setParticipantStatus: (
+      state,
+      action: PayloadAction<{ userId: string; status: CallParticipantStatus }>
+    ) => {
+      state.participantStatus[action.payload.userId] = action.payload.status
+    },
   },
 })
 
@@ -34,5 +54,6 @@ export const {
   setLocalParticipantId,
   setRemoteParticipantIds,
   setCameraError,
+  setParticipantStatus,
 } = slice.actions
 export default slice.reducer

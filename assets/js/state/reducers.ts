@@ -4,6 +4,7 @@ import session from './session'
 import rooms from 'features/Room/slice'
 import focus from 'features/Focus/slice'
 import status from 'features/Status/slice'
+import call from 'features/Call/slice'
 
 export default {
   //undotree,
@@ -12,4 +13,5 @@ export default {
   rooms,
   focus,
   status,
+  call,
 }

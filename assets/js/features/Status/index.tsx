@@ -8,7 +8,13 @@ import PresenceModeView from './PresenceMode'
 import Button from './Button'
 import { PresenceMode } from './slice'
 import { CommandType, useCommandRegistry } from 'features/CommandRegistry'
-import { useDevices } from '@daily-co/daily-react-hooks'
+import {
+  useAudioTrack,
+  useDaily,
+  useDevices,
+  useLocalParticipant,
+  useVideoTrack,
+} from '@daily-co/daily-react-hooks'
 
 interface Props {
   roomId: string
@@ -20,20 +26,50 @@ export default function StatusTray(props: Props) {
   // const dispatch = useDispatch()
 
   const { useRegister } = useCommandRegistry()
-  const { cameras, setCamera, microphones, setMicrophone } = useDevices()
+  const {
+    cameras,
+    setCamera,
+    microphones,
+    setMicrophone,
+    speakers,
+    setSpeaker,
+  } = useDevices()
+
+  const callObject = useDaily()
+  const localParticipant = useLocalParticipant()
+  const localVideo = useVideoTrack(localParticipant?.session_id || '')
+  const localAudio = useAudioTrack(localParticipant?.session_id || '')
 
   const [isActive] = useSelector((state) => [
     selectors.status.getSelfPresenceStatus(state)?.mode === PresenceMode.Active,
   ])
 
-  /*
-    {isActive ? <Button icon="mic" label="Microphone" /> : null}
-      {isActive ? <Button icon="cam" label="Camera" /> : null}
-      {isActive ? <Button icon="monitor" label="Share screen" /> : null}
-  */
-
   useRegister(
     (register) => {
+      register(`Turn off camera`, () => callObject?.setLocalVideo(false), {
+        icon: 'video-off',
+        type: CommandType.Settings,
+        when: !localVideo.isOff,
+      })
+
+      register(`Turn on camera`, () => callObject?.setLocalVideo(true), {
+        icon: 'video',
+        type: CommandType.Settings,
+        when: localVideo.isOff,
+      })
+
+      register(`Turn on microphone`, () => callObject?.setLocalAudio(true), {
+        icon: 'mic',
+        type: CommandType.Settings,
+        when: localAudio.isOff,
+      })
+
+      register(`Turn off microphone"`, () => callObject?.setLocalAudio(false), {
+        icon: 'mic-off',
+        type: CommandType.Settings,
+        when: !localAudio.isOff,
+      })
+
       for (const cam of cameras) {
         cameraCmd(cam.device.deviceId, cam.device.label, cam.selected)
       }
@@ -42,10 +78,18 @@ export default function StatusTray(props: Props) {
         micCmd(mic.device.deviceId, mic.device.label, mic.selected)
       }
 
+      for (const speaker of speakers) {
+        speakerCmd(
+          speaker.device.deviceId,
+          speaker.device.label,
+          speaker.selected
+        )
+      }
+
       function cameraCmd(id: string, label: string, selected: boolean) {
         register(`Switch camera to "${label}"`, () => setCamera(id), {
           id: 'switch-camera-' + id,
-          icon: 'cam',
+          icon: 'video',
           type: CommandType.Settings,
           when: selected !== true,
         })
@@ -54,13 +98,22 @@ export default function StatusTray(props: Props) {
       function micCmd(id: string, label: string, selected: boolean) {
         register(`Switch microphone to "${label}"`, () => setMicrophone(id), {
           id: 'switch-mic-' + id,
-          icon: 'mic',
+          icon: label.toLowerCase().includes('airpods') ? 'airpods' : 'mic',
+          type: CommandType.Settings,
+          when: selected !== true,
+        })
+      }
+
+      function speakerCmd(id: string, label: string, selected: boolean) {
+        register(`Switch speaker to "${label}"`, () => setSpeaker(id), {
+          id: 'switch-speaker-' + id,
+          icon: label.toLowerCase().includes('airpods') ? 'airpods' : 'speaker',
           type: CommandType.Settings,
           when: selected !== true,
         })
       }
     },
-    [cameras, setCamera, microphones, setMicrophone]
+    [cameras, setCamera, microphones, setMicrophone, callObject]
   )
 
   return (

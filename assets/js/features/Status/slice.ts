@@ -15,18 +15,6 @@ export interface PresenceStatus {
   mode: PresenceMode
 }
 
-export interface CallStatus {
-  bafaUserId: string
-  dailyUserId?: string
-  sessionId?: string
-  cameraOn?: boolean
-  screenOn?: boolean
-  micOn?: boolean
-  cameraError?: boolean
-  micError?: boolean
-  soundError?: boolean
-}
-
 export enum ConnectionState {
   Ready = 'ready',
   Connecting = 'connecting',
@@ -39,17 +27,15 @@ export interface ConnectionStatus {
   userId: string
   bafaSocket?: ConnectionState
   bafaRoom?: ConnectionState
-  dailyRoom?: ConnectionState
+  dailyCall?: ConnectionState
 }
 
 interface State {
-  call: { [userId: string]: CallStatus }
   presence: { [userId: string]: PresenceStatus }
   connection: { [userId: string]: ConnectionStatus }
 }
 
 export const initialState: State = {
-  call: {},
   presence: {},
   connection: {},
 }
@@ -58,12 +44,6 @@ export const slice = createSlice({
   name,
   initialState,
   reducers: {
-    setCallStatus: (
-      state,
-      action: PayloadAction<{ userId: string; status: CallStatus }>
-    ) => {
-      state.call[action.payload.userId] = action.payload.status
-    },
     setBafaSocketConnectionStatus: (
       state,
       action: PayloadAction<{ userId: string; state: ConnectionState }>
@@ -84,14 +64,14 @@ export const slice = createSlice({
         bafaRoom: action.payload.state,
       }
     },
-    setDailyRoomConnectionStatus: (
+    setDailyCallConnectionStatus: (
       state,
       action: PayloadAction<{ userId: string; state: ConnectionState }>
     ) => {
       state.connection[action.payload.userId] = {
         ...state.connection[action.payload.userId],
         userId: action.payload.userId,
-        dailyRoom: action.payload.state,
+        dailyCall: action.payload.state,
       }
     },
     setPresenceStatus: (
@@ -132,10 +112,9 @@ export const {
   setPresenceAsAway,
   setPresenceAsDoNotDisturb,
   setPresenceAsFocus,
-  setCallStatus,
   setPresenceStatus,
   setBafaRoomConnectionStatus,
   setBafaSocketConnectionStatus,
-  setDailyRoomConnectionStatus,
+  setDailyCallConnectionStatus,
 } = slice.actions
 export default slice.reducer

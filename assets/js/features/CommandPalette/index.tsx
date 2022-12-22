@@ -61,11 +61,14 @@ export default function CommandPaletteProvider(props: Props) {
     previous,
     {
       enableOnFormTags: true,
+      preventDefault: true,
     },
     [selectedId]
   )
 
-  useHotkeys('down', next, { enableOnFormTags: true }, [selectedId])
+  useHotkeys('down', next, { enableOnFormTags: true, preventDefault: true }, [
+    selectedId,
+  ])
 
   useHotkeys(
     'enter',

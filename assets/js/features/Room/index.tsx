@@ -14,16 +14,13 @@ import StatusTray from 'features/Status'
 import {
   ConnectionState,
   setBafaRoomConnectionStatus,
-  setCallStatus,
-  setDailyRoomConnectionStatus,
+  setDailyCallConnectionStatus,
 } from 'features/Status/slice'
 // import { useSelector, useDispatch } from 'app/state'
 
 interface Props {
   id: string
 }
-
-const roomUrl = 'https://shtest.daily.co/bafapublic'
 
 const log = logger('room')
 
@@ -60,18 +57,18 @@ export default function Room(props: Props) {
     channel.on('rooms:join', handleJoin)
   }, [channel])
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!room || !localUser) return
     log.info('start joining', room, localUser)
 
     dispatch(
-      setDailyRoomConnectionStatus({
+      setDailyCallConnectionStatus({
         userId: localUser.id,
         state: ConnectionState.Connecting,
       })
     )
 
-    startJoiningCall()
+    //startJoiningCall()
   }, [room, localUser])
 
   const startJoiningCall = useCallback(async () => {
@@ -99,13 +96,13 @@ export default function Room(props: Props) {
     // await newCallObject.preAuth({ url })
 
     const joined = await newCallObject.join({
-      userData: { id: localUser?.id, roomId: props.id },
+      userData: { id: localUser?.id },
       url: roomUrl,
     })
 
     if (joined && localUser) {
       dispatch(
-        setDailyRoomConnectionStatus({
+        setDailyCallConnectionStatus({
           userId: localUser.id,
           state: ConnectionState.Successful,
         })
@@ -136,28 +133,26 @@ export default function Room(props: Props) {
     callObject.leave()
   }, [callObject])
 
-  log.info('call object', callObject)
+  log.info('call object', callObject)*/
 
   return (
-    <DailyProvider callObject={callObject}>
-      <Container>
-        <Header>
-          <Title>
-            <Hash>#</Hash>
-            {room?.name}
-          </Title>
-          <UsersInRoom>
-            <AvatarStack>
-              {usersInRoom.map((id) => (
-                <Avatar key={id} id={id} />
-              ))}
-            </AvatarStack>
-          </UsersInRoom>
-        </Header>
-        <Call roomId={props.id}></Call>
-        <StatusTray roomId={props.id} />
-      </Container>
-    </DailyProvider>
+    <Container>
+      <Header>
+        <Title>
+          <Hash>#</Hash>
+          {room?.name}
+        </Title>
+        <UsersInRoom>
+          <AvatarStack>
+            {usersInRoom.map((id) => (
+              <Avatar key={id} id={id} />
+            ))}
+          </AvatarStack>
+        </UsersInRoom>
+      </Header>
+      <Call roomId={props.id}></Call>
+      <StatusTray roomId={props.id} />
+    </Container>
   )
 
   function handleJoin(payload: { id: string; user_id: string }) {

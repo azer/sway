@@ -3,7 +3,6 @@ import { RootState } from 'state'
 import {
   PresenceMode,
   PresenceStatus,
-  CallStatus,
   ConnectionStatus,
   ConnectionState,
 } from './slice'
@@ -13,13 +12,6 @@ export function getPresenceStatusByUserId(
   userId: string
 ): PresenceStatus {
   return state.status.presence[userId] || { userId, mode: PresenceMode.Focus }
-}
-
-export function getCallStatusByUserId(
-  state: RootState,
-  userId: string
-): CallStatus | undefined {
-  return state.status.call[userId]
 }
 
 export function getConnectionStatusByUserId(

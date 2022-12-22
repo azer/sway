@@ -76,7 +76,7 @@ export default function CommandPaletteModal(props: Props) {
                 {cmd.shortcut ? (
                   <Hint>
                     {cmd.shortcut.map((s) => (
-                      <Kbd>{s}</Kbd>
+                      <Kbd selected={props.selectedId === cmd.id}>{s}</Kbd>
                     ))}
                   </Hint>
                 ) : null}
@@ -133,8 +133,8 @@ const Modal = styled('main', {
 })
 
 const IconWrapper = styled('aside', {
-  width: '16px',
-  height: '16px',
+  width: '12px',
+  height: '12px',
   '& svg': {},
 })
 
@@ -174,26 +174,35 @@ const Input = styled('input', {
 })
 
 const Separator = styled('div', {
-  position: 'absolute',
+  width: 'calc(100%)',
   height: '1px',
-  space: { outer: [0, 5] },
   background: '$commandPaletteSeparatorBg',
   variants: {
     hidden: {
       true: {
-        background: 'transparent',
+        // background: 'transparent',
       },
     },
   },
 })
 
 const Commands = styled('nav', {
-  maxHeight: '33vh',
-  overflowY: 'scroll',
+  maxHeight: '40vh',
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    width: '7.5px',
+  },
+  '&::-webkit-scrollbar-track': {
+    background: '$scrollTrackBg',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    background: '$scrollThumbBg',
+    borderRadius: '2px',
+  },
 })
 
 const Border = styled('mark', {
-  width: '3px',
+  width: '3.5px',
   height: '100%',
   position: 'absolute',
   top: '0',
@@ -202,7 +211,7 @@ const Border = styled('mark', {
   variants: {
     selected: {
       true: {
-        background: `radial-gradient(60px at 0px 0px, rgba(50, 100, 222, 0.8), transparent), radial-gradient(60px at 0px 50%, rgba(126, 33, 50, 0.8), transparent)`,
+        background: `radial-gradient(60px at 0px 0px, $lightPurple, transparent), radial-gradient(60px at 0px 50%, $candy, transparent)`,
       },
     },
   },
@@ -258,6 +267,13 @@ const Kbd = styled('kbd', {
   textTransform: 'uppercase',
   label: true,
   fontFamily: '$sans',
+  variants: {
+    selected: {
+      true: {
+        background: '$commandPaletteSelectedShortcutBg',
+      },
+    },
+  },
 })
 
 export function getScrollPosition(

@@ -11,6 +11,7 @@ import logger from 'lib/log'
 import { useCommandPalette } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { CallProvider } from 'features/Call/Provider'
 
 const log = logger('main-route')
 
@@ -48,7 +49,9 @@ export default function Main(): JSX.Element {
 
   return (
     <Shell>
-      <Room id={room?.id || ''} />
+      <CallProvider>
+        <Room id={room?.id || ''} />
+      </CallProvider>
     </Shell>
   )
 
@@ -60,7 +63,7 @@ export default function Main(): JSX.Element {
     open({
       title: 'Bafa Command',
       icon: 'command',
-      placeholder: 'Search commands',
+      placeholder: '',
       search,
       callback: (selectedCommandId: string | undefined, query: string) => {
         if (!selectedCommandId) return

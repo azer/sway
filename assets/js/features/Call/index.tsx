@@ -35,7 +35,7 @@ export default function Call(props: Props) {
 
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' })
   const localParticipant = useLocalParticipant()
-  const { screens } = useScreenShare()
+  // const { screens } = useScreenShare()
 
   useEffect(() => {
     if (!localParticipant || !callObject) return

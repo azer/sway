@@ -2,18 +2,14 @@ import * as React from 'react'
 
 export default function MicOffIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      width="100%"
-      height="100%"
-      stroke="currentColor"
-      strokeWidth={2}
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m1 1 22 22M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
-      <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23M12 19v4M8 23h8" />
+    <svg viewBox="4 4 16 16" width="100%" height="100%" fill="none" {...props}>
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M15.25 8.5V8a3.25 3.25 0 0 0-6.5 0v3.18c0 .047 0 .092.004.139.024.378.2 2.212 1.277 2.478M18.25 12.75s-.25 4.5-6.25 4.5c-.342 0-.666-.015-.972-.042M5.75 12.75s.105 1.891 1.814 3.222M12 17.75v1.5M18.25 5.75l-12.5 12.5"
+      />
     </svg>
   )
 }

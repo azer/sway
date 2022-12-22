@@ -6,7 +6,7 @@ interface Logger {
 let c = 0
 const colors = ['red', 'blue', 'green', 'purple', 'orange']
 
-export default function logger(name: string): Logger {
+export function logger(name: string): Logger {
   const color = colors[c++ % colors.length]
 
   return {
@@ -44,3 +44,5 @@ export default function logger(name: string): Logger {
     fn.apply(console, args)
   }
 }
+
+export default logger
