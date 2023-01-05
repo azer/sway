@@ -4,14 +4,14 @@ import selectors from 'selectors'
 import { useSelector, useDispatch, entities } from 'state'
 import { useUserSocket } from 'features/UserSocket'
 import { Users } from 'state/entities'
-import AvatarView from 'components/Avatar'
+import { AvatarView } from './AvatarView'
 
 interface Props {
   id: string
   small?: boolean
 }
 
-export default function AvatarFeature(props: Props) {
+export function Avatar(props: Props) {
   const socket = useUserSocket()
   const [user] = useSelector((state) => [
     selectors.users.getById(state, props.id),

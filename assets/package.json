@@ -4,6 +4,7 @@
     "@daily-co/daily-react-hooks": "^0.5.0",
     "@reduxjs/toolkit": "^1.9.0",
     "@stitches/react": "^1.2.8",
+    "debounce-fn": "github:azer/debounce-fn",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^4.0.4",

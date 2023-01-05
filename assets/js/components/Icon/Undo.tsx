@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export default function SlidersIcon(props: React.SVGProps<SVGSVGElement>) {
+export default function Undo(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="4 4 16 16"
@@ -15,25 +15,14 @@ export default function SlidersIcon(props: React.SVGProps<SVGSVGElement>) {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}
-        d="M4.75 8h2.5M12.75 8h6.5M4.75 16h7.5M17.75 16h1.5"
+        d="M9.25 4.75 4.75 9l4.5 4.25"
       />
-      <circle
-        cx={10}
-        cy={8}
-        r={2.25}
+      <path
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}
-      />
-      <circle
-        cx={15}
-        cy={16}
-        r={2.25}
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
+        d="M5.5 9h9.75a4 4 0 0 1 4 4v6.25"
       />
     </svg>
   )

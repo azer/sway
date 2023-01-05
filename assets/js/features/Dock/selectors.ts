@@ -11,14 +11,14 @@ export function getPresenceStatusByUserId(
   state: RootState,
   userId: string
 ): PresenceStatus {
-  return state.status.presence[userId] || { userId, mode: PresenceMode.Focus }
+  return state.dock.presence[userId] || { userId, mode: PresenceMode.Focus }
 }
 
 export function getConnectionStatusByUserId(
   state: RootState,
   userId: string
 ): ConnectionStatus | undefined {
-  return state.status.connection[userId]
+  return state.dock.connection[userId]
 }
 
 export function getSelfPresenceStatus(
@@ -44,21 +44,14 @@ export function getBafaSocketConnectionStatus(
   state: RootState,
   userId: string
 ): ConnectionState {
-  return state.status.connection[userId]?.bafaSocket || ConnectionState.Ready
+  return state.dock.connection[userId]?.bafaSocket || ConnectionState.Ready
 }
 
 export function getBafaRoomConnectionStatus(
   state: RootState,
   userId: string
 ): ConnectionState {
-  return state.status.connection[userId]?.bafaRoom || ConnectionState.Ready
-}
-
-export function getDailyRoomConnectionStatus(
-  state: RootState,
-  userId: string
-): ConnectionState {
-  return state.status.connection[userId]?.dailyRoom || ConnectionState.Ready
+  return state.dock.connection[userId]?.bafaRoom || ConnectionState.Ready
 }
 
 export function isBafaSocketConnected(state: RootState): boolean {

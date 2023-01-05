@@ -3,20 +3,20 @@ import React from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import Icon from 'components/Icon'
-import { modeProps } from 'features/Status/PresenceMode'
+import { getIcon } from 'components/PresenceModeIcon'
 
 interface Props {
   id: string
 }
 
-export default function UserButton(props: Props) {
+export function UserButton(props: Props) {
   // const dispatch = useDispatch()
   const [user, presence] = useSelector((state) => [
     selectors.users.getById(state, props.id),
-    selectors.status.getPresenceStatusByUserId(state, props.id),
+    selectors.dock.getPresenceStatusByUserId(state, props.id),
   ])
 
-  const [icon, caption] = modeProps(presence.mode)
+  const icon = getIcon(presence.mode)
 
   return (
     <Container>

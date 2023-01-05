@@ -1,7 +1,7 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
-import { Command } from 'features/CommandRegistry'
+import { Command } from 'features/CommandPalette'
 import Icon from 'components/Icon'
 import logger from 'lib/log'
 // import { useSelector, useDispatch } from 'state'
@@ -11,14 +11,18 @@ export interface Props {
   icon: string
   placeholder: string
   commands: Command[]
+  preview?: (_: { selectedValue: unknown }) => JSX.Element
   query: string
   setQuery: (q: string) => void
   selectedId?: string
-  select: (id: string) => void
+  selectedValue?: unknown
+  initiallySelectedId?: string
+  setSelectedId: (id: string) => void
+  selectAndProceed: (id: string) => void
   close: () => void
 }
 
-const log = logger('command-palette')
+const log = logger('command-palette/modal')
 
 export default function CommandPaletteModal(props: Props) {
   const inputEl = useRef<HTMLInputElement>(null)
@@ -35,8 +39,14 @@ export default function CommandPaletteModal(props: Props) {
     }
   }, [props.selectedId])
 
+  let Preview: ((_: { selectedValue: unknown }) => JSX.Element) | null = null
+  if (props.preview) Preview = props.preview
+
   return (
-    <Overlay onClick={handleClickOutside}>
+    <Overlay
+      onClick={handleClickOutside}
+      data-selected-id={props.selectedId || ''}
+    >
       <Outer>
         <Modal>
           <Title>
@@ -59,30 +69,55 @@ export default function CommandPaletteModal(props: Props) {
               props.commands[0].id == props.selectedId
             }
           />
-          <Commands ref={listEl}>
-            {props.commands.map((cmd, ind) => (
-              <Command
-                key={cmd.id}
-                onClick={() => handleClick(cmd.id)}
-                data-id={cmd.id}
-                selected={props.selectedId == cmd.id}
-              >
-                <Border selected={props.selectedId == cmd.id} />
-                <CommandIcon selected={props.selectedId == cmd.id}>
-                  <Icon name={cmd.icon || 'command'} />
-                </CommandIcon>
-                <Name>{cmd.name}</Name>
-                {cmd.hint ? <Hint>{cmd.hint}</Hint> : null}
-                {cmd.shortcut ? (
-                  <Hint>
-                    {cmd.shortcut.map((s) => (
-                      <Kbd selected={props.selectedId === cmd.id}>{s}</Kbd>
-                    ))}
-                  </Hint>
-                ) : null}
-              </Command>
-            ))}
-          </Commands>
+          <Grid preview={!!props.preview}>
+            <Navigation>
+              <Commands ref={listEl} pin={props.commands.some((c) => c.pin)}>
+                {props.commands.map((cmd, ind) => (
+                  <Command
+                    key={ind}
+                    onClick={() => handleClick(cmd.id)}
+                    data-id={cmd.id}
+                    selected={props.selectedId == cmd.id}
+                    title={cmd.hint}
+                    highlighted={props.initiallySelectedId == cmd.id}
+                    onMouseMove={() => props.setSelectedId(cmd.id)}
+                    pin={cmd.pin}
+                  >
+                    <Border selected={props.selectedId == cmd.id} />
+                    <CommandIcon
+                      selected={
+                        props.selectedId == cmd.id ||
+                        props.initiallySelectedId == cmd.id
+                      }
+                    >
+                      {cmd.icon ? <Icon name={cmd.icon} /> : null}
+                    </CommandIcon>
+                    <Name>{cmd.name}</Name>
+                    {cmd.hint ? (
+                      <Hint selected={props.selectedId == cmd.id}>
+                        {cmd.hint}
+                      </Hint>
+                    ) : null}
+                    {cmd.shortcut ? (
+                      <Hint>
+                        {cmd.shortcut.map((s) => (
+                          <Kbd selected={props.selectedId === cmd.id}>{s}</Kbd>
+                        ))}
+                      </Hint>
+                    ) : null}
+                  </Command>
+                ))}
+              </Commands>
+            </Navigation>
+            {Preview ? (
+              <>
+                <PreviewSeparator />
+                <Preview
+                  selectedValue={props.selectedValue || props.selectedId}
+                />
+              </>
+            ) : null}
+          </Grid>
         </Modal>
       </Outer>
     </Overlay>
@@ -93,11 +128,13 @@ export default function CommandPaletteModal(props: Props) {
   }
 
   function handleClick(id: string) {
-    props.select(id)
+    props.selectAndProceed(id)
   }
 
-  function handleClickOutside() {
-    props.close()
+  function handleClickOutside(event: MouseEvent) {
+    if (event.currentTarget === event.target) {
+      props.close()
+    }
   }
 
   function bringBackFocus() {
@@ -109,15 +146,15 @@ const Overlay = styled('div', {
   position: 'absolute',
   width: '100vw',
   height: '100vh',
-  center: true,
   top: 0,
   left: 0,
   zIndex: '$modal',
+  hcenter: true,
 })
 
 const Outer = styled('div', {
   position: 'relative',
-  height: '400px',
+  top: '20vh',
 })
 
 const Modal = styled('main', {
@@ -130,6 +167,18 @@ const Modal = styled('main', {
   border: '0.5px solid rgba(82, 82, 111, 0.44)',
   backdropFilter: 'blur(20px) saturate(190%) contrast(70%) brightness(80%)',
   overflow: 'hidden',
+})
+
+const Grid = styled('div', {
+  height: '330px',
+  variants: {
+    preview: {
+      true: {
+        display: 'grid',
+        gridTemplateColumns: '45% 1px calc(55% - 1px)',
+      },
+    },
+  },
 })
 
 const IconWrapper = styled('aside', {
@@ -187,7 +236,7 @@ const Separator = styled('div', {
 })
 
 const Commands = styled('nav', {
-  maxHeight: '40vh',
+  height: '100%',
   overflowY: 'auto',
   '&::-webkit-scrollbar': {
     width: '7.5px',
@@ -198,6 +247,14 @@ const Commands = styled('nav', {
   '&::-webkit-scrollbar-thumb': {
     background: '$scrollThumbBg',
     borderRadius: '2px',
+    width: '6px',
+  },
+  variants: {
+    pin: {
+      true: {
+        height: 'calc(100% - 60px)',
+      },
+    },
   },
 })
 
@@ -231,6 +288,19 @@ const Command = styled('div', {
         background: '$commandPaletteSelectedCommandBg',
       },
     },
+    highlighted: {
+      true: {
+        color: '$commandPaletteHighlightedCommandFg',
+      },
+    },
+    pin: {
+      true: {
+        width: '100%',
+        position: 'absolute',
+        bottom: '0',
+        borderTop: '1px solid $commandPaletteSeparatorBg',
+      },
+    },
   },
 })
 
@@ -248,10 +318,25 @@ const CommandIcon = styled('div', {
   },
 })
 
-const Name = styled('div', {})
+const Name = styled('div', {
+  ellipsis: true,
+})
+
 const Hint = styled('div', {
-  marginLeft: 'auto',
+  position: 'absolute',
+  maxWidth: '30%',
+  fontSize: '$small',
+  right: '20px',
   textAlign: 'right',
+  ellipsis: true,
+  color: '$commandPaletteHintFg',
+  variants: {
+    selected: {
+      true: {
+        color: '$commandPaletteSelectedHintFg',
+      },
+    },
+  },
 })
 
 const Kbd = styled('kbd', {
@@ -271,9 +356,21 @@ const Kbd = styled('kbd', {
     selected: {
       true: {
         background: '$commandPaletteSelectedShortcutBg',
+        color: '$commandPaletteSelectedShortcutFg',
       },
     },
   },
+})
+
+const Navigation = styled('div', {
+  position: 'relative',
+  height: '100%',
+})
+
+const PreviewSeparator = styled('div', {
+  width: '1px',
+  height: '100%',
+  background: '$commandPaletteSeparatorBg',
 })
 
 export function getScrollPosition(

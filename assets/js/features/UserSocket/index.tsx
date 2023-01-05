@@ -11,7 +11,7 @@ import logger from 'lib/log'
 import {
   ConnectionState,
   setBafaSocketConnectionStatus,
-} from 'features/Status/slice'
+} from 'features/Dock/slice'
 // import useUserSocket, { context, initialState } from './use-user-socket'
 // import { useSelector, useDispatch } from 'app/state'
 

@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export const name = 'status'
 
 export enum PresenceMode {
+  Offline = 'offline',
   Focus = 'focus',
   Active = 'active',
   Away = 'away',

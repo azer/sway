@@ -2,15 +2,15 @@ import { styled } from 'themes'
 import React from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
-import RoomButton from './RoomButton'
-import UserButton from './UserButton'
 import logger from 'lib/log'
+import { RoomButton } from './RoomButton'
+import { UserButton } from './UserButton'
 
 interface Props {}
 
 const log = logger('navigation')
 
-export default function Navigation(props: Props) {
+export function Navigation(props: Props) {
   // const dispatch = useDispatch()
 
   const [org, rooms, selectedRoomId, allUsers] = useSelector((state) => [
@@ -52,12 +52,12 @@ const Container = styled('nav', {
   height: '100%',
   color: '$navigationFg',
   background: `radial-gradient(
-      95vh at -250px 10%,
+      60vh at 0 0,
       $navigationBlur1,
       transparent
     ),
     radial-gradient(
-      350px at calc(100% + 100px) 65%,
+      40vh at calc(100% + 100px) 65%,
       $navigationBlur2,
       transparent
     )`,

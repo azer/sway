@@ -1,8 +1,6 @@
-import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import logger from 'lib/log'
-import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
 import {
   PresenceMode,
@@ -12,21 +10,17 @@ import {
   setPresenceAsFocus,
 } from './slice'
 import { Container, Label } from './Button'
-import { CommandType, useCommandRegistry } from 'features/CommandRegistry'
-import {
-  useAudioTrack,
-  useDaily,
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
+import { useCommandRegistry } from 'features/CommandRegistry'
+import { useDaily, useDevices } from '@daily-co/daily-react-hooks'
 import { useUserSocket } from 'features/UserSocket'
+import { getLabel, PresenceModeIcon } from 'components/PresenceModeIcon'
+import { CommandType } from 'features/CommandPalette'
 
 interface Props {}
 
 const log = logger('status/presence')
 
-export default function PresenceModeView(props: Props) {
+export function PresenceModeView(props: Props) {
   const dispatch = useDispatch()
   const { useRegister } = useCommandRegistry()
 
@@ -35,7 +29,7 @@ export default function PresenceModeView(props: Props) {
 
   const [userId, presence] = useSelector((state) => [
     selectors.users.getSelf(state)?.id,
-    selectors.status.getSelfPresenceStatus(state),
+    selectors.dock.getSelfPresenceStatus(state),
   ])
 
   const { channel } = useUserSocket()
@@ -148,61 +142,12 @@ export default function PresenceModeView(props: Props) {
     [userId, presence, callObject]
   )
 
-  const [icon, label] = modeProps(presence?.mode)
+  const mode = presence?.mode || PresenceMode.Focus
+  //const label = getLabel(mode)
 
   return (
     <Container highlighted>
-      <IconWrapper mode={presence?.mode}>
-        <Icon name={icon} />
-      </IconWrapper>
-      <Label>{label}</Label>
+      <PresenceModeIcon mode={mode} />
     </Container>
   )
-}
-
-const IconWrapper = styled('div', {
-  variants: {
-    mode: {
-      away: {
-        '& svg': {
-          color: '$presenceModelineAwayFg',
-        },
-        '& svg path': {
-          filter: 'drop-shadow(0px 0px 4px rgba(255, 93, 224, 0.7))',
-        },
-      },
-      focus: {
-        '& svg': {
-          color: '$presenceModelineFocusFg',
-        },
-        '& svg path': {
-          filter: 'drop-shadow(0px 0px 4px rgba(242, 201, 76, 0.9))',
-        },
-      },
-      active: {
-        '& svg': {
-          color: '$presenceModelineActiveFg',
-        },
-        '& svg path': {
-          filter: 'drop-shadow(0px 0px 4px rgba(38, 181, 206, 0.9))',
-        },
-      },
-      do_not_disturb: {
-        '& svg': {
-          color: '$presenceModelineDndFg',
-        },
-        '& svg path': {
-          filter: 'drop-shadow(0px 0px 4px rgba(235, 87, 87, 0.9))',
-        },
-      },
-    },
-  },
-})
-
-export function modeProps(mode?: string): [string, string] {
-  if (mode === PresenceMode.Active) return ['phoneCall', 'Active']
-  if (mode === PresenceMode.DoNotDisturb) return ['night', 'Do Not Disturb']
-  if (mode === PresenceMode.Away) return ['coffee', 'Away']
-
-  return ['headphones', 'Focus']
 }

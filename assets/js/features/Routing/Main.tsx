@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import Shell from 'features/Shell'
 import { useSelector } from 'state'
 import { addInitialState } from 'state/entities'
 import { useDispatch } from 'state'
@@ -11,13 +10,13 @@ import logger from 'lib/log'
 import { useCommandPalette } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { CallProvider } from 'features/Call/Provider'
+import { Shell } from 'features/Shell'
 
 const log = logger('main-route')
 
 export default function Main(): JSX.Element {
-  const { search, commands } = useCommandRegistry()
-  const { open, isOpen, close } = useCommandPalette()
+  const { commands, add } = useCommandRegistry()
+  const commandPalette = useCommandPalette()
 
   const dispatch = useDispatch()
   const params = useParams()
@@ -38,41 +37,36 @@ export default function Main(): JSX.Element {
     }
   }, [room?.id, params.slug])
 
+  useEffect(() => {
+    if (!commandPalette.isOpen || commandPalette.id !== 'cmdk') return
+    commandPalette.setCommands(Object.values(commands))
+  }, [commandPalette.isOpen, commandPalette.id, commands])
+
   useHotkeys(
     'meta+k',
     onPressCommandK,
     {
       enableOnFormTags: true,
     },
-    [isOpen, search, commands]
+    [commandPalette.isOpen]
   )
 
   return (
     <Shell>
-      <CallProvider>
-        <Room id={room?.id || ''} />
-      </CallProvider>
+      <Room id={room?.id || ''} />
     </Shell>
   )
 
   function onPressCommandK() {
-    if (isOpen) close()
+    if (commandPalette.isOpen) commandPalette.close()
 
     log.info('Opening command palette')
 
-    open({
+    commandPalette.open([], {
+      id: 'cmdk',
       title: 'Bafa Command',
       icon: 'command',
       placeholder: '',
-      search,
-      callback: (selectedCommandId: string | undefined, query: string) => {
-        if (!selectedCommandId) return
-
-        const cmd = commands[selectedCommandId]
-        if (!cmd || !cmd.callback) return
-
-        cmd.callback(query)
-      },
     })
   }
 }

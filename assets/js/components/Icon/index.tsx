@@ -14,6 +14,10 @@ import AirpodsIcon from './Airpods'
 import MicOffIcon from './Mic-off'
 import VideoOffIcon from './Video-off'
 import logger from 'lib/log'
+import CheckmarkIcon from './Checkmark'
+import Undo from './Undo'
+import SpeakerVolumeHigh from './SpeakerVolumeHigh'
+import SpeakerOff from './SpeakerOff'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -24,6 +28,7 @@ const icons: {
   night: Night,
   sliders: Sliders,
   terminal: Terminal,
+  checkmark: CheckmarkIcon,
   command: Command,
   mic: MicIcon,
   video: VideoIcon,
@@ -31,7 +36,10 @@ const icons: {
   videoOff: VideoOffIcon,
   monitor: MonitorIcon,
   speaker: SpeakerIcon,
+  speakerVolumeHigh: SpeakerVolumeHigh,
+  speakerOff: SpeakerOff,
   airpods: AirpodsIcon,
+  undo: Undo,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {
@@ -41,6 +49,8 @@ interface Props extends React.SVGProps<SVGSVGElement> {
 const log = logger('icons')
 
 export default function Icon(props: Props) {
+  if (!props.name) return <></>
+
   const IconComponent =
     icons[props.name] ||
     icons[
@@ -54,5 +64,5 @@ export default function Icon(props: Props) {
     log.error('Can not find icon', props.name, Object.keys(icons))
   }
 
-  return null
+  return <></>
 }

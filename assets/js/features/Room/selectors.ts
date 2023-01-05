@@ -1,7 +1,8 @@
 import { ShellFocusRegion } from 'features/Shell/focus'
+import { PresenceMode } from 'features/Dock/slice'
 import selectors from 'selectors'
 import { RootState } from 'state'
-import { Room, Rooms, User } from 'state/entities'
+import { Room, Rooms } from 'state/entities'
 
 export function getRoomById(state: RootState, id: string): Room {
   return state.entities[Rooms][id]
@@ -17,6 +18,10 @@ export function getFocusedRoomId(state: RootState): string {
 
 export function getFocusedRoom(state: RootState): Room {
   return getRoomById(state, getFocusedRoomId(state))
+}
+
+export function getFocusedRoomByUserId(state: RootState, userId: string): Room {
+  //selectors.rooms.getUsersInRoom
 }
 
 export function getUsersInRoom(state: RootState, roomId: string): string[] {
@@ -43,4 +48,22 @@ export function isFocusOnRoom(state: RootState): boolean {
     selectors.shell.isFocusOnShell(state) &&
     selectors.shell.getFocus(state).region === ShellFocusRegion.Center
   )
+}
+
+export function getRoomPresenceMode(
+  state: RootState,
+  roomId: string
+): PresenceMode | undefined {
+  const modes = getUsersInRoom(state, roomId).map(
+    (userId: string) =>
+      selectors.dock.getPresenceStatusByUserId(state, userId).mode
+  )
+
+  if (modes.length === 0) {
+    return PresenceMode.Offline
+  }
+
+  if (modes.find((m) => m === PresenceMode.Active)) return PresenceMode.Active
+
+  return PresenceMode.Focus
 }

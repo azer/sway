@@ -2,19 +2,20 @@ import { styled } from 'themes'
 import React from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import Avatar from 'components/Avatar'
 import { ConnectionState, PresenceMode } from './slice'
 import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import Video from 'features/Call/Video'
+import { AvatarView } from 'features/Avatar/AvatarView'
 
 interface Props {}
 
-export default function Mirror(props: Props) {
+export function Mirror(props: Props) {
   // const dispatch = useDispatch()
-  const [user, presence, conn] = useSelector((state) => [
+  const [user, presence, conn, isCameraOff] = useSelector((state) => [
     selectors.users.getSelf(state),
-    selectors.status.getSelfPresenceStatus(state),
-    selectors.status.getSelfConnectionStatus(state),
+    selectors.dock.getSelfPresenceStatus(state),
+    selectors.dock.getSelfConnectionStatus(state),
+    selectors.settings.isVideoInputOff(state),
   ])
 
   const localParticipant = useLocalParticipant()
@@ -38,12 +39,14 @@ export default function Mirror(props: Props) {
 
   return (
     <Container>
-      {localParticipant && presence?.mode === PresenceMode.Active ? (
+      {localParticipant &&
+      presence?.mode === PresenceMode.Active &&
+      !isCameraOff ? (
         <SelfVideo>
           <Video id={localParticipant.session_id} />
         </SelfVideo>
       ) : (
-        <Avatar
+        <AvatarView
           photoUrl={user?.photoUrl}
           name={user?.name}
           round="large"
@@ -86,8 +89,8 @@ const ConnectionIcon = styled('div', {
   right: '0',
   width: '18px',
   aspectRatio: '1 / 1',
-  background: '$statusTrayIconReadyBg',
-  border: '2px solid $statusTrayIconBorderColor',
+  background: '$dockIconReadyBg',
+  border: '2px solid $dockIconBorderColor',
   round: 'circle',
   borderBox: '',
   variants: {
@@ -98,16 +101,16 @@ const ConnectionIcon = styled('div', {
     },
     status: {
       ready: {
-        background: '$statusTrayIconReadyBg',
+        background: '$dockIconReadyBg',
       },
       connecting: {
-        background: '$statusTrayIconConnectingBg',
+        background: '$dockIconConnectingBg',
       },
       failed: {
-        background: '$statusTrayIconFailedBg',
+        background: '$dockIconFailedBg',
       },
       successful: {
-        background: '$statusTrayIconConnectedBg',
+        background: '$dockIconConnectedBg',
       },
     },
   },

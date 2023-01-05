@@ -1,4 +1,4 @@
-import { removeListener } from '@reduxjs/toolkit'
+import { Command, CommandType } from 'features/CommandPalette'
 import logger from 'lib/log'
 import React, { useContext, useEffect, useState } from 'react'
 // import { useSelector, useDispatch } from 'state'
@@ -7,18 +7,6 @@ const log = logger('command-registry')
 
 interface Props {
   children: React.ReactNode
-}
-
-export interface Command {
-  icon?: string
-  id: string
-  name: string
-  hint?: string
-  keywords?: string[]
-  when?: boolean
-  type?: CommandType
-  shortcut?: string[]
-  callback?: (_: string) => void
 }
 
 const context = React.createContext<{
@@ -38,23 +26,11 @@ export default function CommandRegistryProvider(props: Props) {
   )
 }
 
-export enum CommandType {
-  Settings = 'settings',
-  AlterMode = 'alter-mode',
-  AlterSession = 'alter-session',
-  Misc = 'misc',
-}
-
-interface Params {
-  id?: string
-  name?: string
-}
-
 type RegisterFn = (
   name: string,
   callback: (input: string) => void,
   options?: Partial<Omit<Command, 'name' | 'callback'>>
-) => string
+) => Command
 
 // useCommandRegistry({ set } => {
 //   set()
@@ -71,14 +47,13 @@ export function useCommandRegistry() {
   return {
     add,
     commands,
-    search,
     useRegister,
   }
 
   function add(
     name: string,
     callback: (input: string) => void,
-    options?: Omit<Command, 'name' | 'callback'>
+    options?: Partial<Omit<Command, 'name' | 'callback'>>
   ): string {
     const id = options?.id || slug(name)
     const command = {
@@ -129,34 +104,12 @@ export function useCommandRegistry() {
     function register(
       name: string,
       callback: (input: string) => void,
-      options?: Omit<Command, 'name' | 'callback'>
+      options?: Partial<Omit<Command, 'name' | 'callback'>>
     ) {
       const id = add(name, callback, options)
       registered.push(id)
-      return id
+      return commands[id]
     }
-  }
-
-  function search(rawQuery: string): Command[] {
-    const query = rawQuery.trim()
-
-    const result: Command[] = []
-    for (const [_, cmd] of Object.entries(commands)) {
-      if (
-        query.length > 0 &&
-        !performKeywordSearch(query, [cmd.name, ...(cmd.keywords || [])])
-      ) {
-        continue
-      }
-
-      if (cmd.when === false) {
-        continue
-      }
-
-      result.push(cmd)
-    }
-
-    return result.sort(sortByMatchingScore(query))
   }
 }
 
@@ -173,29 +126,77 @@ function sortByMatchingScore(query: string) {
 }
 
 const ContextMatchScores = {
-  [CommandType.AlterMode]: 40,
+  [CommandType.AlterMode]: 30,
   [CommandType.Settings]: 20,
   [CommandType.AlterSession]: 1,
   [CommandType.Misc]: 0,
 }
 
-function calculateMatchingScore(a: Command, query: string): number {
+function calculateMatchingScore(a: Command, rawQuery: string): number {
+  const name = a.name.toLowerCase()
+  const query = rawQuery.toLowerCase().toLowerCase()
+
   let score = 0
 
-  if (a.name === query) {
+  if (name === query) {
+    score += 15
+  } else if (name.startsWith(query)) {
     score += 10
-  } else if (a.name.startsWith(query)) {
+  } else if (name.includes(' ' + query)) {
     score += 7.5
-  } else if (a.name.includes(query)) {
+  } else if (name.includes(query)) {
     score += 5
   } else if (a.keywords && a.keywords.find((k) => k.startsWith(query))) {
     score += 3
   }
 
-  if (a.when !== undefined && a.when) score += 20
+  //if (a.when !== undefined && a.when) score += 20
   if (a.type !== undefined) score += ContextMatchScores[a.type]
 
   return score
+}
+
+export function performSearch(
+  commands: Command[],
+  rawQuery: string,
+  options?: { tolerant: boolean }
+): Command[] {
+  const query = rawQuery.trim()
+  const pinned: Command[] = []
+
+  const result: Command[] = []
+  for (const [_, cmd] of Object.entries(commands)) {
+    if (cmd.pin === true) {
+      pinned.push(cmd)
+      continue
+    }
+
+    if (
+      query.length > 0 &&
+      !performKeywordSearch(query, [cmd.name, ...(cmd.keywords || [])])
+    ) {
+      continue
+    }
+
+    if (cmd.when === false) {
+      continue
+    }
+
+    result.push(cmd)
+  }
+
+  if (result.length === 0 && options?.tolerant) {
+    return commands
+  }
+
+  return result.sort(sortByMatchingScore(query)).concat(pinned)
+}
+
+export function findCommandById(
+  commands: Command[],
+  id: string
+): Command | undefined {
+  return commands.find((c) => c.id === id)
 }
 
 function performKeywordSearch(query: string, data: string[]) {

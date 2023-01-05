@@ -2,9 +2,10 @@ import { styled } from 'themes'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import selectors from 'selectors'
-import { useSelector, useDispatch } from 'state'
-import { AvatarStack } from 'components/Avatar'
-import Avatar from 'features/Avatar'
+import { useSelector } from 'state'
+import { Avatar } from 'features/Avatar'
+import { PresenceMode } from 'features/Dock/slice'
+import { AvatarStack } from 'features/Avatar/AvatarView'
 // import { useSelector, useDispatch } from 'state'
 
 interface Props {
@@ -12,12 +13,13 @@ interface Props {
   selected?: boolean
 }
 
-export default function RoomButton(props: Props) {
+export function RoomButton(props: Props) {
   const navigate = useNavigate()
 
-  const [room, usersInRoom] = useSelector((state) => [
+  const [room, usersInRoom, roomPresenceMode] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.id),
     selectors.rooms.getUsersInRoom(state, props.id),
+    selectors.rooms.getRoomPresenceMode(state, props.id),
   ])
 
   return (
@@ -26,9 +28,8 @@ export default function RoomButton(props: Props) {
       hasUsers={!props.selected && usersInRoom.length > 0}
       onClick={handleClick}
     >
-      <Name>
-        <Hash>#</Hash> {room?.name || ''}
-      </Name>
+      <PresenceIcon mode={roomPresenceMode} />
+      <Name>{room?.name || ''}</Name>
       {!props.selected && usersInRoom.length > 0 ? (
         <Users>
           <AvatarStack>
@@ -50,6 +51,7 @@ const Container = styled('div', {
   display: 'flex',
   alignItems: 'center',
   fontSize: '$small',
+  gap: '8px',
   unitHeight: 8,
   space: { inner: [2, 3], outer: [0, -3] },
   color: '$navigationFg',
@@ -66,7 +68,7 @@ const Container = styled('div', {
     hasUsers: {
       true: {
         display: 'grid',
-        gridTemplateColumns: '65% auto',
+        gridTemplateColumns: '8px 65% auto',
       },
     },
   },
@@ -78,10 +80,6 @@ const Name = styled('div', {
   letterSpacing: 'inherit',
 })
 
-const Hash = styled('label', {
-  space: { outer: [0, 2, 0, 0] },
-})
-
 const Users = styled('div', {
   height: '12px',
   position: 'relative',
@@ -90,5 +88,24 @@ const Users = styled('div', {
     width: '100%',
     top: '-4px',
     height: '12px',
+  },
+})
+
+const PresenceIcon = styled('div', {
+  width: '8px',
+  height: '8px',
+  round: true,
+  variants: {
+    mode: {
+      [PresenceMode.Offline]: {
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      },
+      [PresenceMode.Focus]: {
+        backgroundColor: '$yellow',
+      },
+      [PresenceMode.Active]: {
+        backgroundColor: '$green',
+      },
+    },
   },
 })

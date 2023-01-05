@@ -1,21 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { DailyProvider } from '@daily-co/daily-react-hooks'
+import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { useUserSocket } from 'features/UserSocket'
 import { useDispatch, useSelector } from 'state'
 import { styled } from 'themes'
-import { add, Users } from 'state/entities'
-import { AvatarStack } from 'components/Avatar'
-import Avatar from 'features/Avatar'
 import logger from 'lib/log'
-import Call from 'features/Call'
-import DailyIframe, { DailyCall } from '@daily-co/daily-js'
-import StatusTray from 'features/Status'
 import {
   ConnectionState,
   setBafaRoomConnectionStatus,
-  setDailyCallConnectionStatus,
-} from 'features/Status/slice'
+} from 'features/Dock/slice'
+import { ParticipantGrid } from './ParticipantGrid'
+import { CallProvider } from 'features/Call/Provider'
+import { Dock } from 'features/Dock'
 // import { useSelector, useDispatch } from 'app/state'
 
 interface Props {
@@ -26,18 +21,15 @@ const log = logger('room')
 
 export default function Room(props: Props) {
   const dispatch = useDispatch()
-  const [callObject, setCallObject] = useState<DailyCall>()
   // const [] = useSelector((state) => [])
   const { channel } = useUserSocket()
 
-  const [localUser, room, usersInRoom, isSocketConnected] = useSelector(
-    (state) => [
-      selectors.users.getSelf(state),
-      selectors.rooms.getRoomById(state, props.id),
-      selectors.rooms.getUsersInRoom(state, props.id),
-      selectors.status.isBafaSocketConnected(state),
-    ]
-  )
+  const [localUser, room, isSocketConnected] = useSelector((state) => [
+    selectors.users.getSelf(state),
+    selectors.rooms.getRoomById(state, props.id),
+    selectors.rooms.getUsersInRoom(state, props.id),
+    selectors.dock.isBafaSocketConnected(state),
+  ])
 
   useEffect(() => {
     if (!room || !channel || !localUser || !isSocketConnected) return
@@ -57,102 +49,19 @@ export default function Room(props: Props) {
     channel.on('rooms:join', handleJoin)
   }, [channel])
 
-  /*useEffect(() => {
-    if (!room || !localUser) return
-    log.info('start joining', room, localUser)
-
-    dispatch(
-      setDailyCallConnectionStatus({
-        userId: localUser.id,
-        state: ConnectionState.Connecting,
-      })
-    )
-
-    //startJoiningCall()
-  }, [room, localUser])
-
-  const startJoiningCall = useCallback(async () => {
-    await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-
-    const newCallObject = DailyIframe.createCallObject({
-      audioSource: false,
-      videoSource: false,
-      startVideoOff: true,
-      startAudioOff: true,
-    })
-      .on('loading', logEvent)
-      .on('loaded', logEvent)
-      .on('left-meeting', logEvent)
-      .on('started-camera', logEvent)
-      .on('camera-error', logEvent)
-      .on('joining-meeting', logEvent)
-      .on('joined-meeting', logEvent)
-      .on('participant-updated', logEvent)
-      .on('participant-joined', logEvent)
-      .on('participant-left', logEvent)
-      .on('error', logEvent)
-      .on('network-connection', logEvent)
-
-    // await newCallObject.preAuth({ url })
-
-    const joined = await newCallObject.join({
-      userData: { id: localUser?.id },
-      url: roomUrl,
-    })
-
-    if (joined && localUser) {
-      dispatch(
-        setDailyCallConnectionStatus({
-          userId: localUser.id,
-          state: ConnectionState.Successful,
-        })
-      )
-
-      dispatch(
-        setCallStatus({
-          userId: localUser.id,
-          status: {
-            dailyUserId: joined.local.user_id,
-            bafaUserId: localUser.id,
-            sessionId: joined.local.session_id,
-            cameraOn: joined.local.video,
-            screenOn: joined.local.screen,
-            micOn: joined.local.audio,
-          },
-        })
-      )
-    }
-
-    log.info('joined', joined)
-
-    setCallObject(newCallObject)
-  }, [localUser])
-
-  const startLeavingCall = useCallback(() => {
-    if (!callObject) return
-    callObject.leave()
-  }, [callObject])
-
-  log.info('call object', callObject)*/
-
   return (
-    <Container>
-      <Header>
-        <Title>
-          <Hash>#</Hash>
-          {room?.name}
-        </Title>
-        <UsersInRoom>
-          <AvatarStack>
-            {usersInRoom.map((id) => (
-              <Avatar key={id} id={id} />
-            ))}
-          </AvatarStack>
-        </UsersInRoom>
-      </Header>
-      <Call roomId={props.id}></Call>
-      <StatusTray roomId={props.id} />
-    </Container>
+    <CallProvider>
+      <Container>
+        <Header>
+          <Title>
+            <Hash>#</Hash>
+            {room?.name}
+          </Title>
+        </Header>
+        <ParticipantGrid roomId={props.id} />
+        <Dock roomId={props.id} />
+      </Container>
+    </CallProvider>
   )
 
   function handleJoin(payload: { id: string; user_id: string }) {
@@ -167,10 +76,14 @@ export default function Room(props: Props) {
   }
 }
 
+const topBlurEffect =
+  'radial-gradient(1000px at 200px -700px, $shellBlur1, transparent)'
+
 const Container = styled('main', {
   width: '100%',
   display: 'grid',
   gridTemplateRows: 'calc(16 * 4px) auto calc(28 * 4px)',
+  backgroundImage: topBlurEffect,
 })
 
 const Header = styled('header', {
@@ -194,12 +107,3 @@ const Hash = styled('label', {
   fontSize: '$base',
   label: true,
 })
-
-const UsersInRoom = styled('aside', {
-  baselineBlock: 12,
-  justifyContent: 'end',
-})
-
-function logEvent(e: any) {
-  log.info('Daily event. Action: %s', e.action, e)
-}

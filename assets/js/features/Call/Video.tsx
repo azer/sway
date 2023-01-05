@@ -34,6 +34,7 @@ export default function Video(props: Props) {
 
 const Player = styled('video', {
   width: '100%',
+  background: 'rgba(0, 0, 0, 0.2)',
 })
 
 const Blank = styled('div', {})

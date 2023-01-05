@@ -1,19 +1,18 @@
 import React from 'react'
 import { styled } from 'themes'
-import Room from 'features/Room'
-import Navigation from 'features/Navigation'
 import Sidebar from 'features/Sidebar'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { PresenceMode } from 'features/Status/slice'
+import { PresenceMode } from 'features/Dock/slice'
+import { Navigation } from 'features/Navigation'
 
 interface Props {
   children?: React.ReactNode
 }
 
-export default function Shell(props: Props) {
+export function Shell(props: Props) {
   const [presenceMode] = useSelector((state) => [
-    selectors.status.getSelfPresenceStatus(state),
+    selectors.dock.getSelfPresenceStatus(state),
   ])
 
   return (
@@ -25,15 +24,11 @@ export default function Shell(props: Props) {
   )
 }
 
-const topBlurEffect =
-  'radial-gradient(440px at 300px -300px, $shellBlur1, transparent)'
-
 const bottomBlurEffect = (color: string) =>
   `radial-gradient(440px at 50% calc(100vh + 300px), ${color}, transparent)`
 
 const Container = styled('main', {
   backgroundColor: '$shellBg',
-  backgroundImage: topBlurEffect,
   color: '$shellFg',
   width: '100vw',
   minHeight: '100vh',
@@ -43,24 +38,16 @@ const Container = styled('main', {
   variants: {
     mode: {
       [PresenceMode.Active]: {
-        backgroundImage: `${topBlurEffect}, ${bottomBlurEffect(
-          '$presenceModelineActiveBlur'
-        )}`,
+        backgroundImage: `${bottomBlurEffect('$presenceModelineActiveBlur')}`,
       },
       [PresenceMode.Away]: {
-        backgroundImage: `${topBlurEffect}, ${bottomBlurEffect(
-          '$presenceModelineAwayBlur'
-        )}`,
+        backgroundImage: `${bottomBlurEffect('$presenceModelineAwayBlur')}`,
       },
       [PresenceMode.DoNotDisturb]: {
-        backgroundImage: `${topBlurEffect}, ${bottomBlurEffect(
-          '$presenceModelineDndBlur'
-        )}`,
+        backgroundImage: `${bottomBlurEffect('$presenceModelineDndBlur')}`,
       },
       [PresenceMode.Focus]: {
-        backgroundImage: `${topBlurEffect}, ${bottomBlurEffect(
-          '$presenceModelineFocusBlur'
-        )}`,
+        backgroundImage: `${bottomBlurEffect('$presenceModelineFocusBlur')}`,
       },
     },
   },

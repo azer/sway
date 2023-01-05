@@ -7,53 +7,48 @@ import Icon from 'components/Icon'
 interface Props {
   icon: string
   label: string
+  onClick: () => void
+  off?: boolean
 }
 
-export default function Button(props: Props) {
+export function Button(props: Props) {
   // const dispatch = useDispatch()
   // const [] = useSelector((state) => [])
 
   return (
-    <Container>
+    <Container onClick={props.onClick} off={props.off}>
       <Icon name={props.icon} />
-      <Label>{props.label}</Label>
     </Container>
   )
 }
 
 export const Container = styled('div', {
+  height: '100%',
+  aspectRatio: '1',
   center: true,
-  minWidth: '64px',
   round: 'large',
   space: { inner: [0, 2], gap: 1 },
-  border: '1px solid rgba(255, 255, 255, 0.01)',
+  //  border: '1px solid rgba(255, 255, 255, 0.01)',
   colors: {
-    bg: '$statusTrayButtonBg',
-    fg: '$statusTrayButtonFg',
+    //    bg: '$dockButtonBg',
+    fg: '$dockButtonFg',
   },
   '& svg': {
-    color: '$statusTrayButtonIconFg',
-    round: 'circle',
-    width: '24px',
-    height: '24px',
+    width: '20px',
+    height: '20px',
     margin: '0 auto',
     overflow: 'visible',
   },
-  variants: {
-    highlighted: {
-      true: {},
-    },
-  },
   '&:hover': {
-    background: '$statusTrayButtonHoverBg',
-    color: '$statusTrayButtonHoverFg',
+    background: '$dockButtonHoverBg',
+    color: '$dockButtonHoverFg',
     borderColor: 'rgba(255, 255, 255, 0.03),',
   },
-})
-
-export const Label = styled('label', {
-  vcenter: true,
-  fontSize: '$small',
-  fontWeight: '$medium',
-  label: true,
+  variants: {
+    off: {
+      true: {
+        color: '$dockButtonOffFg',
+      },
+    },
+  },
 })

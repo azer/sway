@@ -1,4 +1,5 @@
-import React from 'react'
+import logger from 'lib/log'
+import React, { useEffect, useRef, useState } from 'react'
 import { styled } from 'themes'
 
 const colors = [
@@ -9,7 +10,7 @@ const colors = [
   'purple',
   'green',
   'orange',
-  'darkRed',
+  'candy',
   'darkGreen',
   'gray3',
 ]
@@ -22,13 +23,34 @@ interface Props {
   round?: string
 }
 
-export default function Avatar(props: Props) {
+const log = logger('avatar/view')
+
+export function AvatarView(props: Props) {
+  const [photoLoaded, setPhotoLoaded] = useState(false)
   const color = props.name
     ? colors[(props.name.toLowerCase().charCodeAt(0) - 97) % colors.length]
     : 'gray4'
 
-  return props.photoUrl ? (
-    <Image
+  useEffect(() => {
+    if (photoLoaded || !props.photoUrl) return
+
+    log.info('preload:', props.name, props.photoUrl)
+
+    setPhotoLoaded(true)
+
+    const img = new Image()
+    img.src = props.photoUrl
+    img.referrerPolicy = 'no-referrer'
+    img.onload = function () {
+      setPhotoLoaded(true)
+    }
+    img.onerror = function (ev) {
+      log.info('Can not load image', props.name, props.photoUrl)
+    }
+  }, [props.photoUrl])
+
+  return props.photoUrl && photoLoaded ? (
+    <ImageAvatar
       referrerPolicy="no-referrer"
       src={props.photoUrl}
       title={props.name}
@@ -38,10 +60,13 @@ export default function Avatar(props: Props) {
     />
   ) : (
     <Text
-      css={{ backgroundColor: '$' + color }}
+      data-name={props.name}
+      css={{
+        backgroundColor: '$' + color,
+        round: `${props.round || 'circle'}`,
+      }}
       small={props.small}
       fill={props.fill}
-      css={{ round: `${props.round || 'circle'}` }}
     >
       {props.name ? props.name.slice(0, 1) : '?'}
     </Text>
@@ -60,7 +85,7 @@ export const AvatarStack = styled('div', {
   },
 })
 
-export const Image = styled('img', {
+export const ImageAvatar = styled('img', {
   unitWidth: 6,
   unitHeight: 6,
   round: 'circle',
