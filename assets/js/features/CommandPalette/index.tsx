@@ -170,8 +170,6 @@ export default function CommandPaletteProvider(props: Props) {
   )
 
   function backOrClose() {
-    log.info('modalProps', modalProps)
-
     if (modalProps.parentModal) {
       switchModal(modalProps.parentModal())
     } else {

@@ -14,7 +14,7 @@ import { useCommandRegistry } from 'features/CommandRegistry'
 import { useDaily, useDevices } from '@daily-co/daily-react-hooks'
 import { useUserSocket } from 'features/UserSocket'
 import { getLabel, PresenceModeIcon } from 'components/PresenceModeIcon'
-import { CommandType } from 'features/CommandPalette'
+import { CommandType, useCommandPalette } from 'features/CommandPalette'
 
 interface Props {}
 
@@ -23,6 +23,8 @@ const log = logger('status/presence')
 export function PresenceModeView(props: Props) {
   const dispatch = useDispatch()
   const { useRegister } = useCommandRegistry()
+
+  const commandPalette = useCommandPalette()
 
   const callObject = useDaily()
   const { cameras, setCamera, microphones, setMicrophone } = useDevices()
@@ -147,7 +149,17 @@ export function PresenceModeView(props: Props) {
 
   return (
     <Container highlighted>
-      <PresenceModeIcon mode={mode} />
+      <PresenceModeIcon mode={mode} onClick={openSettings} />
     </Container>
   )
+
+  function openSettings() {
+    if (!commandPalette.isOpen)
+      commandPalette.open([], {
+        id: 'cmdk',
+        title: 'Bafa Command',
+        icon: 'command',
+        placeholder: '',
+      })
+  }
 }

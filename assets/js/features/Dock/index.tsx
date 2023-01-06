@@ -80,26 +80,29 @@ export function Dock(props: Props) {
       <PresenceModeView />
       <Separator group />
       {isActive ? (
-        <Buttonset>
-          <Button
-            icon={isVideoOff ? 'video-off' : 'video'}
-            label="Camera"
-            onClick={cameraSettings.open}
-            off={isVideoOff}
-          />
-          <Button
-            icon={isMicOff ? 'mic-off' : isOnAirpods ? 'airpods' : 'mic'}
-            label="Microphone"
-            onClick={micSettings.open}
-            off={isMicOff}
-          />
-          <Button
-            icon={isSpeakerOff ? 'speaker-off' : 'speaker-volume-high'}
-            label="Speaker"
-            onClick={speakerSettings.open}
-            off={isSpeakerOff}
-          />
-        </Buttonset>
+        <>
+          <Buttonset>
+            <Button
+              icon={isVideoOff ? 'video-off' : 'video'}
+              label="Camera"
+              onClick={cameraSettings.open}
+              off={isVideoOff}
+            />
+            <Button
+              icon={isMicOff ? 'mic-off' : isOnAirpods ? 'airpods' : 'mic'}
+              label="Microphone"
+              onClick={micSettings.open}
+              off={isMicOff}
+            />
+            <Button
+              icon={isSpeakerOff ? 'speaker-off' : 'speaker-volume-high'}
+              label="Speaker"
+              onClick={speakerSettings.open}
+              off={isSpeakerOff}
+            />
+          </Buttonset>
+          <Separator group />
+        </>
       ) : null}
       <Button icon="sliders" label="Options" onClick={settings.open} />
     </Container>

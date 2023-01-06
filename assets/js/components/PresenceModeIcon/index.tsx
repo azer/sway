@@ -5,6 +5,7 @@ import Icon from 'components/Icon'
 
 interface Props {
   mode: PresenceMode
+  onClick: () => void
 }
 
 export function PresenceModeIcon(props: Props) {
@@ -12,7 +13,7 @@ export function PresenceModeIcon(props: Props) {
   // const [] = useSelector((state) => [])
 
   return (
-    <Container mode={props.mode}>
+    <Container mode={props.mode} onClick={props.onClick}>
       <Icon name={getIcon(props.mode)} />
     </Container>
   )

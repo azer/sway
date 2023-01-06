@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
-import { findCommandById, performSearch } from 'features/CommandRegistry'
+import {
+  findCommandById,
+  performSearch,
+  useCommandRegistry,
+} from 'features/CommandRegistry'
 import {
   DailyProvider,
   useAudioTrack,
@@ -9,7 +13,12 @@ import {
   useLocalParticipant,
   useVideoTrack,
 } from '@daily-co/daily-react-hooks'
-import { Command, ModalProps, useCommandPalette } from 'features/CommandPalette'
+import {
+  Command,
+  CommandType,
+  ModalProps,
+  useCommandPalette,
+} from 'features/CommandPalette'
 import logger from 'lib/log'
 import { setVideoInputDeviceId, setVideoInputOff } from './slice'
 import { useSelector, useDispatch } from 'state'
@@ -28,18 +37,55 @@ export function useVideoSettings() {
 
   const currentSelectedId = isOff ? 'off' : selectedDeviceId
   const commandPalette = useCommandPalette()
+  const { useRegister } = useCommandRegistry()
 
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== dialogId) return
     commandPalette.setCommands(buildCommandList())
   }, [commandPalette.isOpen, commandPalette.id, allDevices])
 
+  useRegister(
+    (register) => {
+      register(`Camera Settings`, open, {
+        icon: 'video',
+        type: CommandType.Settings,
+        palette: {
+          modal: modalProps,
+          commands: buildCommandList,
+        },
+      })
+
+      register(`Turn off the camera`, turnCamOff, {
+        icon: 'video-off',
+        type: CommandType.Settings,
+        when: !isOff,
+      })
+
+      register(`Turn on the camera`, turnCamOff, {
+        icon: 'video',
+        type: CommandType.Settings,
+        when: isOff,
+      })
+
+      for (const device of allDevices) {
+        register(`Switch camera to ${device.label}`, switchDevice(device.id), {
+          icon: 'video',
+          type: CommandType.Settings,
+          when: selectedDeviceId !== device.id,
+        })
+      }
+    },
+    [isOff, selectedDeviceId, allDevices]
+  )
+
   return {
     modal: modalProps,
     commands: buildCommandList,
-    open: () => {
-      commandPalette.open(buildCommandList(), modalProps())
-    },
+    open,
+  }
+
+  function open() {
+    commandPalette.open(buildCommandList(), modalProps())
   }
 
   function modalProps(parentModal?: () => ModalProps) {
@@ -75,7 +121,7 @@ export function useVideoSettings() {
         value: device.id,
         icon: currentSelectedId == device.id ? 'checkmark' : '',
         name: device.label,
-        callback: () => setDevice(device.id),
+        callback: switchDevice(device.id),
       })
     }
 
@@ -84,14 +130,20 @@ export function useVideoSettings() {
       value: 'off',
       icon: isOff ? 'checkmark' : '',
       name: 'Off',
-      callback: () => dispatch(setVideoInputOff(true)),
+      callback: turnCamOff,
     })
 
     return commands
   }
 
-  function setDevice(id: string) {
-    dispatch(setVideoInputDeviceId(id))
-    dispatch(setVideoInputOff(false))
+  function turnCamOff() {
+    dispatch(setVideoInputOff(true))
+  }
+
+  function switchDevice(deviceId: string) {
+    return function () {
+      dispatch(setVideoInputDeviceId(deviceId))
+      dispatch(setVideoInputOff(false))
+    }
   }
 }

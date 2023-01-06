@@ -27,9 +27,7 @@ export function ParticipantGrid(props: Props) {
 
   if (usersInRoom.length === 0) {
     return (
-      <InviteForm>
-        {"You're the only user in the room. Invite others to join you?"}
-      </InviteForm>
+      <InviteForm>{"It's just you right now. Invite some others!"}</InviteForm>
     )
   }
 
