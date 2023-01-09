@@ -18,6 +18,7 @@ import CheckmarkIcon from './Checkmark'
 import Undo from './Undo'
 import SpeakerVolumeHigh from './SpeakerVolumeHigh'
 import SpeakerOff from './SpeakerOff'
+import ProjectorIcon from './Projector'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -39,6 +40,7 @@ const icons: {
   speakerVolumeHigh: SpeakerVolumeHigh,
   speakerOff: SpeakerOff,
   airpods: AirpodsIcon,
+  projector: ProjectorIcon,
   undo: Undo,
 }
 

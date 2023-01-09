@@ -9,6 +9,7 @@ interface Props {
   label: string
   onClick: () => void
   off?: boolean
+  on?: boolean
 }
 
 export function Button(props: Props) {
@@ -16,7 +17,12 @@ export function Button(props: Props) {
   // const [] = useSelector((state) => [])
 
   return (
-    <Container onClick={props.onClick} off={props.off}>
+    <Container
+      title={props.label}
+      onClick={props.onClick}
+      off={props.off}
+      on={props.on}
+    >
       <Icon name={props.icon} />
     </Container>
   )
@@ -48,6 +54,11 @@ export const Container = styled('div', {
     off: {
       true: {
         color: '$dockButtonOffFg',
+      },
+    },
+    on: {
+      true: {
+        color: '$dockButtonOnFg',
       },
     },
   },

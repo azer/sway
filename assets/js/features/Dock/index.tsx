@@ -4,15 +4,20 @@ import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
 import { Mirror } from './Mirror'
-import { PresenceModeView } from './PresenceMode'
+import { PresenceModeButton } from './PresenceMode'
 import { Button } from './Button'
-import { useDevices, useLocalParticipant } from '@daily-co/daily-react-hooks'
+import {
+  useDevices,
+  useLocalParticipant,
+  useScreenShare,
+} from '@daily-co/daily-react-hooks'
 import { setParticipantStatus } from 'features/Call/slice'
 import { useSettings } from 'features/Settings'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
 import { useMicSettings } from 'features/Settings/MicSettings'
 import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
 import { PresenceMode } from './slice'
+import { ScreenshareButton } from 'features/Screenshare/Provider'
 
 interface Props {
   roomId: string
@@ -77,7 +82,7 @@ export function Dock(props: Props) {
     <Container>
       <Mirror />
       <Separator />
-      <PresenceModeView />
+      <PresenceModeButton />
       <Separator group />
       {isActive ? (
         <>
@@ -94,6 +99,7 @@ export function Dock(props: Props) {
               onClick={micSettings.open}
               off={isMicOff}
             />
+            <ScreenshareButton />
             <Button
               icon={isSpeakerOff ? 'speaker-off' : 'speaker-volume-high'}
               label="Speaker"

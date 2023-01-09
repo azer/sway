@@ -38,8 +38,7 @@ export function Participant(props: Props) {
   if (
     participant &&
     participant.dailyUserId &&
-    status.mode === PresenceMode.Active &&
-    participant.cameraOn
+    status.mode === PresenceMode.Active
   ) {
     return <ActiveParticipant participantId={participant.dailyUserId} />
   }
@@ -70,10 +69,11 @@ const InactiveParticipant = styled('div', {
   center: true,
   borderRadius: '$large',
   width: '150px',
-  aspectRatio: '1 / 1.2',
+  aspectRatio: '1',
 })
 
 export const User = styled('footer', {
+  maxWidth: '130px',
   height: '24px',
   background: '$participantUsernameBg',
   color: '$participantUsernameFg',
@@ -86,6 +86,7 @@ export const User = styled('footer', {
   fontSize: '$small',
   fontWeight: '$medium',
   overflow: 'hidden',
+  ellipsis: true,
   [`& ${PresenceModeIcon}`]: {
     height: '24px',
   },

@@ -61,7 +61,7 @@ export function useVideoSettings() {
         when: !isOff,
       })
 
-      register(`Turn on the camera`, turnCamOff, {
+      register(`Turn on the camera`, turnCamOn, {
         icon: 'video',
         type: CommandType.Settings,
         when: isOff,
@@ -137,6 +137,10 @@ export function useVideoSettings() {
   }
 
   function turnCamOff() {
+    dispatch(setVideoInputOff(true))
+  }
+
+  function turnCamOn() {
     dispatch(setVideoInputOff(true))
   }
 

@@ -74,7 +74,7 @@ export default function CommandPaletteModal(props: Props) {
               <Commands ref={listEl} pin={props.commands.some((c) => c.pin)}>
                 {props.commands.map((cmd, ind) => (
                   <Command
-                    key={ind}
+                    key={cmd.id}
                     onClick={() => handleClick(cmd.id)}
                     data-id={cmd.id}
                     selected={props.selectedId == cmd.id}
@@ -155,6 +155,7 @@ const Overlay = styled('div', {
 const Outer = styled('div', {
   position: 'relative',
   top: '20vh',
+  height: 'min-content',
 })
 
 const Modal = styled('main', {

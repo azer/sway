@@ -9,18 +9,27 @@ import {
   setPresenceAsDoNotDisturb,
   setPresenceAsFocus,
 } from './slice'
-import { Container, Label } from './Button'
 import { useCommandRegistry } from 'features/CommandRegistry'
-import { useDaily, useDevices } from '@daily-co/daily-react-hooks'
+import {
+  useDaily,
+  useDevices,
+  useScreenShare,
+} from '@daily-co/daily-react-hooks'
 import { useUserSocket } from 'features/UserSocket'
-import { getLabel, PresenceModeIcon } from 'components/PresenceModeIcon'
+import { PresenceModeIcon } from 'components/PresenceModeIcon'
 import { CommandType, useCommandPalette } from 'features/CommandPalette'
+import {
+  setAudioInputOff,
+  setAudioOutputOff,
+  setVideoInputOff,
+} from 'features/Settings/slice'
+import { styled } from 'themes'
 
 interface Props {}
 
 const log = logger('status/presence')
 
-export function PresenceModeView(props: Props) {
+export function PresenceModeButton(props: Props) {
   const dispatch = useDispatch()
   const { useRegister } = useCommandRegistry()
 
@@ -28,6 +37,8 @@ export function PresenceModeView(props: Props) {
 
   const callObject = useDaily()
   const { cameras, setCamera, microphones, setMicrophone } = useDevices()
+  const { isSharingScreen, startScreenShare, stopScreenShare } =
+    useScreenShare()
 
   const [userId, presence] = useSelector((state) => [
     selectors.users.getSelf(state)?.id,
@@ -66,9 +77,9 @@ export function PresenceModeView(props: Props) {
         () => {
           if (userId) {
             dispatch(setPresenceAsFocus(userId))
-            callObject?.setLocalVideo(false)
-            callObject?.setLocalAudio(false)
-            callObject?.setInputDevices({ audioSource: false })
+            dispatch(setVideoInputOff(true))
+            dispatch(setAudioInputOff(true))
+            dispatch(setAudioOutputOff(true))
             channel?.push('user:status', { presence_mode: 'focus' })
           }
         },
@@ -91,9 +102,11 @@ export function PresenceModeView(props: Props) {
             /*if (microphones.length > 0)
               setMicrophone(microphones[0].device.deviceId)*/
 
-            callObject?.setLocalVideo(true)
-            callObject?.setLocalAudio(true)
+            dispatch(setVideoInputOff(false))
+            dispatch(setAudioInputOff(false))
+            dispatch(setAudioOutputOff(false))
 
+            log.info('Push to user:status channel', channel)
             channel?.push('user:status', { presence_mode: 'active' })
           }
         },
@@ -110,8 +123,9 @@ export function PresenceModeView(props: Props) {
         () => {
           if (userId) {
             dispatch(setPresenceAsAway(userId))
-            callObject?.setLocalVideo(false)
-            callObject?.setLocalAudio(false)
+            dispatch(setVideoInputOff(true))
+            dispatch(setAudioInputOff(true))
+            dispatch(setAudioOutputOff(true))
             channel?.push('user:status', { presence_mode: 'away' })
           }
         },
@@ -128,8 +142,9 @@ export function PresenceModeView(props: Props) {
         () => {
           if (userId) {
             dispatch(setPresenceAsDoNotDisturb(userId))
-            callObject?.setLocalVideo(false)
-            callObject?.setLocalAudio(false)
+            dispatch(setVideoInputOff(true))
+            dispatch(setAudioInputOff(true))
+            dispatch(setAudioOutputOff(true))
             channel?.push('user:status', { presence_mode: 'dnd' })
           }
         },
@@ -141,16 +156,16 @@ export function PresenceModeView(props: Props) {
         }
       )
     },
-    [userId, presence, callObject]
+    [userId, presence, channel]
   )
 
   const mode = presence?.mode || PresenceMode.Focus
   //const label = getLabel(mode)
 
   return (
-    <Container highlighted>
+    <Button>
       <PresenceModeIcon mode={mode} onClick={openSettings} />
-    </Container>
+    </Button>
   )
 
   function openSettings() {
@@ -163,3 +178,26 @@ export function PresenceModeView(props: Props) {
       })
   }
 }
+
+const Button = styled('div', {
+  height: '100%',
+  aspectRatio: '1',
+  center: true,
+  round: 'large',
+  space: { inner: [0, 2], gap: 1 },
+  colors: {
+    bg: '$dockButtonBg',
+    fg: '$dockButtonFg',
+  },
+  '& svg': {
+    width: '20px',
+    height: '20px',
+    margin: '0 auto',
+    overflow: 'visible',
+  },
+  '&:hover': {
+    background: '$dockButtonHoverBg',
+    color: '$dockButtonHoverFg',
+    borderColor: 'rgba(255, 255, 255, 0.03),',
+  },
+})

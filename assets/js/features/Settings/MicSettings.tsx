@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
-import { findCommandById, performSearch } from 'features/CommandRegistry'
+import {
+  findCommandById,
+  performSearch,
+  useCommandRegistry,
+} from 'features/CommandRegistry'
 import {
   DailyProvider,
   useAudioTrack,
@@ -9,7 +13,12 @@ import {
   useLocalParticipant,
   useVideoTrack,
 } from '@daily-co/daily-react-hooks'
-import { Command, ModalProps, useCommandPalette } from 'features/CommandPalette'
+import {
+  Command,
+  CommandType,
+  ModalProps,
+  useCommandPalette,
+} from 'features/CommandPalette'
 import logger from 'lib/log'
 import { setAudioInputDeviceId, setAudioInputOff } from './slice'
 import { useSelector, useDispatch } from 'state'
@@ -19,6 +28,7 @@ const log = logger('settings/mic')
 const dialogId = 'mic-settings'
 
 export function useMicSettings() {
+  const { useRegister } = useCommandRegistry()
   const dispatch = useDispatch()
   const [isOff, selectedDeviceId, allDevices] = useSelector((state) => [
     selectors.settings.isAudioInputOff(state),
@@ -33,6 +43,44 @@ export function useMicSettings() {
     if (!commandPalette.isOpen || commandPalette.id !== dialogId) return
     commandPalette.setCommands(buildCommandList())
   }, [commandPalette.isOpen, commandPalette.id, allDevices])
+
+  useRegister(
+    (register) => {
+      register(`Microphone Settings`, open, {
+        icon: 'video',
+        type: CommandType.Settings,
+        palette: {
+          modal: modalProps,
+          commands: buildCommandList,
+        },
+      })
+
+      register(`Mute microphone`, turnMicOff, {
+        icon: 'mic-off',
+        type: CommandType.Settings,
+        when: !isOff,
+      })
+
+      register(`Unmute microphone`, turnMicOff, {
+        icon: 'mic',
+        type: CommandType.Settings,
+        when: isOff,
+      })
+
+      for (const device of allDevices) {
+        register(
+          `Switch microphone to ${device.label}`,
+          switchDevice(device.id),
+          {
+            icon: 'video',
+            type: CommandType.Settings,
+            when: selectedDeviceId !== device.id,
+          }
+        )
+      }
+    },
+    [isOff, selectedDeviceId, allDevices]
+  )
 
   return {
     commands: buildCommandList,
@@ -76,7 +124,7 @@ export function useMicSettings() {
         value: device.id,
         icon: currentSelectedId == device.id ? 'checkmark' : '',
         name: device.label,
-        callback: () => setDevice(device.id),
+        callback: switchDevice(device.id),
       })
     }
 
@@ -85,7 +133,7 @@ export function useMicSettings() {
       value: 'off',
       icon: isOff ? 'checkmark' : '',
       name: 'Off',
-      callback: () => dispatch(setAudioInputOff(true)),
+      callback: turnMicOff,
     })
 
     return commands
@@ -94,5 +142,20 @@ export function useMicSettings() {
   function setDevice(id: string) {
     dispatch(setAudioInputDeviceId(id))
     dispatch(setAudioInputOff(false))
+  }
+
+  function turnMicOff() {
+    dispatch(setAudioInputOff(true))
+  }
+
+  function turnMicOn() {
+    dispatch(setAudioInputOff(false))
+  }
+
+  function switchDevice(deviceId: string) {
+    return function () {
+      dispatch(setAudioInputDeviceId(deviceId))
+      dispatch(setAudioInputOff(false))
+    }
   }
 }

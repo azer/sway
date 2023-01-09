@@ -15,26 +15,24 @@ export default function Video(props: Props) {
   // const dispatch = useDispatch()
   // const [] = useSelector((state) => [])
   const track = useMediaTrack(props.id, 'video')
-  const el = useRef<HTMLVideoElement>()
+  const el = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
     const video = el.current
-    log.info('Video track', { user: props.id })
+    log.info('Video track', { user: props.id }, video?.srcObject, track)
 
     if (!video || !track?.persistentTrack) return
     /*  The track is ready to be played. We can show video of the participant in the UI. */
 
     video.srcObject = new MediaStream([track?.persistentTrack])
-  }, [track?.persistentTrack])
-
-  if (!el) return <Blank />
+  }, [track, track?.persistentTrack])
 
   return <Player autoPlay muted playsInline ref={el} />
 }
 
 const Player = styled('video', {
   width: '100%',
+  height: '100%',
+  'object-fit': 'cover',
   background: 'rgba(0, 0, 0, 0.2)',
 })
-
-const Blank = styled('div', {})

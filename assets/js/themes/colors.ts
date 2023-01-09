@@ -49,6 +49,7 @@ export const dark = {
   dockButtonHoverFg: 'rgba(255, 255, 255, 0.6)',
   dockButtonHighlightedBg: 'rgba(255, 255, 255, 0.03)',
   dockButtonOffFg: '$red',
+  dockButtonOnFg: '$green',
   presenceModelineFocusFg: 'rgba(242, 201, 76, 0.9)',
   presenceModelineFocusBlur: 'rgba(242, 201, 76, 0.2)',
   presenceModelineAwayFg: 'rgba(255, 93, 224, 0.9)',

@@ -68,9 +68,7 @@ export function useSettings() {
 
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== 'settings') return
-    log.info('updating')
     commandPalette.setCommands(buildCommandList())
-    log.info('updated', currentCameraLabel)
   }, [
     commandPalette.isOpen,
     commandPalette.id,

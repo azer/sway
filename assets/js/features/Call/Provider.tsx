@@ -16,6 +16,7 @@ import { logger } from 'lib/log'
 import { User } from 'state/entities'
 import {
   ConnectionState,
+  PresenceMode,
   setDailyCallConnectionStatus,
 } from 'features/Dock/slice'
 import {
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const log = logger('call/provider')
+const dlog = logger('daily')
 const roomUrl = 'https://shtest.daily.co/bafapublic'
 
 export function CallProvider(props: Props) {
@@ -161,7 +163,7 @@ export function CallProvider(props: Props) {
 }
 
 function logEvent(e: any) {
-  log.info('Daily event. Action: %s', e.action, e)
+  dlog.info('Action: %s', e.action, e)
 }
 
 function SubscribeToRemoteParticipants() {
@@ -214,44 +216,69 @@ function SubscribeToRemoteParticipant(props: { id: string }) {
 function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
   const { setMicrophone, setCamera, setSpeaker } = useDevices()
 
-  const [isCameraOff, videoInputId, isMicOff, audioInputId, audioOutputId] =
-    useSelector((state) => [
-      selectors.settings.isVideoInputOff(state),
-      selectors.settings.getVideoInputDeviceId(state),
-      selectors.settings.isAudioInputOff(state),
-      selectors.settings.getAudioInputDeviceId(state),
-      selectors.settings.getAudioOutputDeviceId(state),
-    ])
+  const [
+    isActive,
+    isCameraOff,
+    videoInputId,
+    isMicOff,
+    audioInputId,
+    audioOutputId,
+  ] = useSelector((state) => [
+    selectors.dock.getSelfPresenceStatus(state)?.mode === PresenceMode.Active,
+    selectors.settings.isVideoInputOff(state),
+    selectors.settings.getVideoInputDeviceId(state),
+    selectors.settings.isAudioInputOff(state),
+    selectors.settings.getAudioInputDeviceId(state),
+    selectors.settings.getAudioOutputDeviceId(state),
+  ])
 
   useEffect(() => {
-    log.info('Turn off video input device:', videoInputId)
-    props.callObject.setLocalVideo(false)
-  }, [isCameraOff])
+    if (isCameraOff || !isActive) {
+      log.info('Turn off video input device')
+      props.callObject.setLocalVideo(false)
+      props.callObject.setInputDevices({
+        videoSource: false,
+      })
+    }
 
-  useEffect(() => {
-    log.info('Turn off audio input device:', videoInputId)
-    props.callObject.setLocalAudio(false)
-  }, [isMicOff])
-
-  useEffect(() => {
-    log.info('Set video input device:', videoInputId)
-    if (videoInputId && !isCameraOff) {
-      setCamera(videoInputId)
+    if (!isCameraOff && isActive) {
+      log.info('Turn on local video input')
       props.callObject.setLocalVideo(true)
     }
-  }, [videoInputId, isCameraOff])
+  }, [isCameraOff, isActive])
 
   useEffect(() => {
-    log.info('Set audio input device:', audioOutputId)
-    if (audioInputId && !isMicOff) {
-      setMicrophone(audioInputId)
+    if (isMicOff || !isActive) {
+      log.info('Turn off audio input device:')
+      props.callObject.setLocalAudio(false)
+      props.callObject.setInputDevices({
+        audioSource: false,
+      })
+    }
+
+    if (!isMicOff && isActive) {
+      log.info('Turn on local audio input')
       props.callObject.setLocalAudio(true)
     }
-  }, [audioInputId, isMicOff])
+  }, [isMicOff, isActive])
 
   useEffect(() => {
-    log.info('Set audio output device:', audioOutputId)
+    if (videoInputId) {
+      log.info('Set video input device:', videoInputId)
+      setCamera(videoInputId)
+    }
+  }, [videoInputId])
+
+  useEffect(() => {
+    if (audioInputId) {
+      log.info('Set audio input device:', audioOutputId)
+      setMicrophone(audioInputId)
+    }
+  }, [audioInputId])
+
+  useEffect(() => {
     if (audioOutputId) {
+      log.info('Set audio output device:', audioOutputId)
       setSpeaker(audioOutputId)
     }
   }, [audioOutputId])

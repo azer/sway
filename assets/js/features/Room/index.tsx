@@ -11,6 +11,7 @@ import {
 import { ParticipantGrid } from './ParticipantGrid'
 import { CallProvider } from 'features/Call/Provider'
 import { Dock } from 'features/Dock'
+import { ScreenshareProvider } from 'features/Screenshare/Provider'
 // import { useSelector, useDispatch } from 'app/state'
 
 interface Props {
@@ -51,6 +52,7 @@ export default function Room(props: Props) {
 
   return (
     <CallProvider>
+      <ScreenshareProvider />
       <Container>
         <Header>
           <Title>

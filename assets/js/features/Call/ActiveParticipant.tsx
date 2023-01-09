@@ -7,6 +7,7 @@ import logger from 'lib/log'
 import { useDispatch, useSelector } from 'state'
 import { AvatarView } from 'features/Avatar/AvatarView'
 import { Name, User } from 'features/Room/RoomParticipant'
+import { ScreenshareVideo } from 'features/Screenshare/Video'
 
 interface Props {
   participantId: string
@@ -28,8 +29,6 @@ export function ActiveParticipant(props: Props) {
     selectors.settings.isAudioOutputOff(state),
   ])
 
-  //  return <Container>Participant #{props.id}</Container>
-
   useEffect(() => {
     if (audioTrack?.state === 'playable') {
       if (audioElement?.current) {
@@ -41,23 +40,32 @@ export function ActiveParticipant(props: Props) {
 
   return (
     <Container data-participant-id={props.participantId}>
-      <User>
-        <AvatarView
-          photoUrl={user?.photoUrl}
-          name={user?.name}
-          fill
-          round="none"
-        />
-        <Name>{user?.name}</Name>
-      </User>
-      <Video id={props.participantId} />
-      {!props.muted && !isSpeakerOff && audioTrack && (
-        <audio
-          autoPlay
-          playsInline
-          ref={audioElement as React.RefObject<HTMLAudioElement>}
-        />
-      )}
+      {participant && participant.screen ? (
+        <ScreenshareVideo sessionId={participant?.session_id} />
+      ) : null}
+
+      <Inner screensharing={!!participant?.screen}>
+        {!participant?.screen ? (
+          <User>
+            <AvatarView
+              photoUrl={user?.photoUrl}
+              name={user?.name}
+              fill
+              round="none"
+            />
+            <Name>{user?.name}</Name>
+          </User>
+        ) : null}
+
+        <Video id={props.participantId} />
+        {!props.muted && !isSpeakerOff && audioTrack && (
+          <audio
+            autoPlay
+            playsInline
+            ref={audioElement as React.RefObject<HTMLAudioElement>}
+          />
+        )}
+      </Inner>
     </Container>
   )
 }
@@ -68,9 +76,38 @@ const Container = styled('div', {
   overflow: 'hidden',
   center: true,
   width: '100%',
-  '& video': {
-    aspectRatio: '1.35 / 1',
-    'object-fit': 'cover',
+  maxWidth: '100%',
+  maxHeight: '100%',
+  aspectRatio: '1.25 / 1',
+  'object-fit': 'cover',
+})
+
+const Inner = styled('div', {
+  width: '100%',
+  height: '100%',
+  center: true,
+  overflow: 'hidden',
+  variants: {
+    screensharing: {
+      true: {
+        position: 'absolute',
+        width: '15%',
+        height: '15%',
+        bottom: '16px',
+        right: '16px',
+        '& video': {
+          round: 'large',
+          background: 'rgba(0, 0, 0, 1)',
+          width: 'auto',
+          height: 'auto',
+          maxWidth: '100%',
+          maxHeight: '100%',
+          boxShadow: 'rgb(0 0 0 / 50%) 0px 0px 20px',
+          'object-fit': 'cover',
+          aspectRatio: '1',
+        },
+      },
+    },
   },
 })
 
