@@ -6,6 +6,7 @@ import { ConnectionState, PresenceMode } from './slice'
 import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import Video from 'features/Call/Video'
 import { AvatarView } from 'features/Avatar/AvatarView'
+import { useVideoSettings } from 'features/Settings/VideoSettings'
 
 interface Props {}
 
@@ -19,6 +20,7 @@ export function Mirror(props: Props) {
   ])
 
   const localParticipant = useLocalParticipant()
+  const cameraSettings = useVideoSettings()
 
   const items = [conn?.bafaSocket, conn?.bafaRoom, conn?.dailyCall]
   let status: string = ConnectionState.Ready
@@ -38,7 +40,7 @@ export function Mirror(props: Props) {
   }
 
   return (
-    <Container>
+    <Container onClick={cameraSettings.open}>
       {localParticipant &&
       presence?.mode === PresenceMode.Active &&
       !isCameraOff ? (
@@ -69,6 +71,9 @@ const Container = styled('div', {
   position: 'relative',
   height: '100%',
   aspectRatio: '1 / 1',
+  '& img': {
+    boxShadow: 'rgb(0 0 0 / 20%) 0px 0px 4px',
+  },
 })
 
 const SelfVideo = styled('div', {
@@ -77,6 +82,7 @@ const SelfVideo = styled('div', {
   overflow: 'hidden',
   round: 'large',
   center: true,
+  boxShadow: 'rgb(0 0 0 / 20%) 0px 0px 4px',
   '& video': {
     width: 'auto',
     height: '100%',

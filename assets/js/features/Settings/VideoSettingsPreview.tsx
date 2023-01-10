@@ -1,11 +1,6 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
-import {
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
 import logger from 'lib/log'
 import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
@@ -19,6 +14,7 @@ const log = logger('settings/video-preview')
 
 export function VideoSettingsPreview(props: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const trackRef = useRef<MediaStreamTrack[]>([])
 
   const [label] = useSelector((state) => [
     selectors.settings.getVideoInputDeviceLabelById(
@@ -28,19 +24,36 @@ export function VideoSettingsPreview(props: Props) {
   ])
 
   useEffect(() => {
-    async function getCamera() {
-      const stream = await navigator.mediaDevices.getUserMedia({
+    navigator.mediaDevices
+      .getUserMedia({
         video: {
           deviceId: { exact: props.deviceId },
         },
       })
+      .then((stream) => {
+        trackRef.current.forEach((t) => {
+          t.stop()
+        })
+        trackRef.current = []
 
-      if (videoRef && videoRef.current) {
-        videoRef.current.srcObject = stream
-      }
+        trackRef.current = stream.getTracks()
+
+        if (videoRef && videoRef.current) {
+          videoRef.current.srcObject = stream
+        }
+      })
+
+    return function () {
+      log.info(
+        'Closing video tracks for testing camera',
+        props.deviceId,
+        trackRef.current
+      )
+      trackRef.current.forEach((t) => {
+        t.stop()
+      })
+      trackRef.current = []
     }
-
-    getCamera()
   }, [props.deviceId, videoRef])
 
   return (
@@ -53,7 +66,7 @@ export function VideoSettingsPreview(props: Props) {
         <video autoPlay muted playsInline ref={videoRef} />
       )}
       <Table>
-        <Prop>Camera:</Prop>
+        <Prop>Camera</Prop>
         <Value off={props.deviceId === 'off'}>{label || props.deviceId}</Value>
       </Table>
     </Container>
@@ -67,7 +80,7 @@ const Container = styled('div', {
   padding: '16px',
   '& video': {
     width: '100%',
-    aspectRatio: '1.5 / 1',
+    aspectRatio: '1.75 / 1',
     borderRadius: '$small',
     background: '$gray1',
     marginBottom: '8px',

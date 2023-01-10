@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
 import { useMediaTrack } from '@daily-co/daily-react-hooks'
 import logger from 'lib/log'
-// import { useSelector, useDispatch } from 'state'
+import { useSelector } from 'state'
 
 interface Props {
   id: string
@@ -13,13 +13,15 @@ const log = logger('video')
 
 export default function Video(props: Props) {
   // const dispatch = useDispatch()
-  // const [] = useSelector((state) => [])
+  const [isActive, isSpeakerOff] = useSelector((state) => [
+    selectors.dock.getSelfPresenceStatus(state),
+    selectors.settings.isAudioOutputOff(state),
+  ])
   const track = useMediaTrack(props.id, 'video')
   const el = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
     const video = el.current
-    log.info('Video track', { user: props.id }, video?.srcObject, track)
 
     if (!video || !track?.persistentTrack) return
     /*  The track is ready to be played. We can show video of the participant in the UI. */
@@ -27,7 +29,9 @@ export default function Video(props: Props) {
     video.srcObject = new MediaStream([track?.persistentTrack])
   }, [track, track?.persistentTrack])
 
-  return <Player autoPlay muted playsInline ref={el} />
+  return (
+    <Player autoPlay muted={!isActive || !isSpeakerOff} playsInline ref={el} />
+  )
 }
 
 const Player = styled('video', {

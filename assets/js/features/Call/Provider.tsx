@@ -64,8 +64,6 @@ export function CallProvider(props: Props) {
   const handleJoiningCall = useCallback(async () => {
     if (!localUser) return
 
-    requestAccessToInputDevices()
-
     log.info('Joining', localUser)
 
     const callObject = createCallObject()
@@ -108,23 +106,32 @@ export function CallProvider(props: Props) {
   }
 
   async function joinDailyCall(callObject: DailyCall, user: User) {
-    const callParticipants = await callObject.join({
-      userData: { id: localUser?.id },
-      url: roomUrl,
-      videoSource: false,
-      audioSource: false,
-      startVideoOff: true,
-      startAudioOff: true,
-    })
-
     callObject.setLocalVideo(false)
     callObject.setLocalAudio(false)
 
-    if (!callParticipants) {
-      handleJoinError(user)
-    } else {
-      handleJoinSuccess(user, callParticipants)
-    }
+    await callObject.setInputDevicesAsync({
+      videoSource: false,
+      audioSource: false,
+    })
+
+    callObject
+      .join({
+        userData: { id: localUser?.id },
+        url: roomUrl,
+        videoSource: false,
+        audioSource: false,
+        startVideoOff: true,
+        startAudioOff: true,
+      })
+      .then((callParticipants) => {
+        log.info('joined?', callParticipants)
+
+        if (!callParticipants) {
+          handleJoinError(user)
+        } else {
+          handleJoinSuccess(user, callParticipants)
+        }
+      })
   }
 
   function handleJoinError(user: User) {
@@ -155,10 +162,6 @@ export function CallProvider(props: Props) {
         },
       })
     )
-  }
-
-  async function requestAccessToInputDevices() {
-    await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
   }
 }
 
@@ -232,6 +235,8 @@ function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
     selectors.settings.getAudioOutputDeviceId(state),
   ])
 
+  const localVideoEnabled = !isCameraOff && isActive
+
   useEffect(() => {
     if (isCameraOff || !isActive) {
       log.info('Turn off video input device')
@@ -241,11 +246,12 @@ function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
       })
     }
 
-    if (!isCameraOff && isActive) {
-      log.info('Turn on local video input')
+    if (!isCameraOff && isActive && videoInputId) {
+      log.info('Turn on local video input', videoInputId)
       props.callObject.setLocalVideo(true)
+      setCamera(videoInputId)
     }
-  }, [isCameraOff, isActive])
+  }, [isCameraOff, isActive, videoInputId])
 
   useEffect(() => {
     if (isMicOff || !isActive) {
@@ -256,23 +262,25 @@ function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
       })
     }
 
-    if (!isMicOff && isActive) {
-      log.info('Turn on local audio input')
+    if (!isMicOff && isActive && audioInputId) {
+      log.info('Turn on local audio input', audioInputId)
+      setMicrophone(audioInputId)
       props.callObject.setLocalAudio(true)
     }
-  }, [isMicOff, isActive])
+  }, [isMicOff, isActive, audioInputId])
 
   useEffect(() => {
     if (videoInputId) {
       log.info('Set video input device:', videoInputId)
-      setCamera(videoInputId)
+      //setCamera(videoInputId)
+      //props.callObject.setLocalVideo(isCameraOff || !isActive)
     }
   }, [videoInputId])
 
   useEffect(() => {
     if (audioInputId) {
       log.info('Set audio input device:', audioOutputId)
-      setMicrophone(audioInputId)
+      //setMicrophone(audioInputId)
     }
   }, [audioInputId])
 

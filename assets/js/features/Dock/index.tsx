@@ -1,23 +1,21 @@
 import { styled } from 'themes'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
 import { Mirror } from './Mirror'
 import { PresenceModeButton } from './PresenceMode'
 import { Button } from './Button'
-import {
-  useDevices,
-  useLocalParticipant,
-  useScreenShare,
-} from '@daily-co/daily-react-hooks'
+import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import { setParticipantStatus } from 'features/Call/slice'
 import { useSettings } from 'features/Settings'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
 import { useMicSettings } from 'features/Settings/MicSettings'
 import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
-import { PresenceMode } from './slice'
+import { PresenceMode, setPresenceAsActive } from './slice'
 import { ScreenshareButton } from 'features/Screenshare/Provider'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { setAudioInputOff, setVideoInputOff } from 'features/Settings/slice'
 
 interface Props {
   roomId: string
@@ -27,36 +25,61 @@ const log = logger('dock')
 
 export function Dock(props: Props) {
   const dispatch = useDispatch()
-
-  const {
-    cameras,
-    setCamera,
-    microphones,
-    setMicrophone,
-    speakers,
-    setSpeaker,
-  } = useDevices()
+  const pushToTalkStopRef = useRef<NodeJS.Timer | null>(null)
+  const [pushToTalk, setPushToTalk] = useState(false)
+  const [mediaSettings, setMediaSettings] = useState({
+    audioInputOff: false,
+    videoInputOff: false,
+  })
 
   const localParticipant = useLocalParticipant()
   const settings = useSettings()
   const cameraSettings = useVideoSettings()
   const micSettings = useMicSettings()
   const speakerSettings = useSpeakerSettings()
-  const [localUser, isActive, isVideoOff, isMicOff, isSpeakerOff, isOnAirpods] =
-    useSelector((state) => {
-      const isActive =
-        selectors.dock.getSelfPresenceStatus(state)?.mode ===
-        PresenceMode.Active
 
-      return [
-        selectors.users.getSelf(state),
-        isActive,
-        !isActive || selectors.settings.isVideoInputOff(state),
-        !isActive || selectors.settings.isAudioInputOff(state),
-        !isActive || selectors.settings.isAudioOutputOff(state),
-        selectors.settings.isOnAirpods(state),
-      ]
-    })
+  const [
+    localUser,
+    isActive,
+    isVideoOff,
+    isMicOff,
+    isSpeakerOff,
+    isOnAirpods,
+    pushToTalkVideo,
+  ] = useSelector((state) => {
+    const isActive =
+      selectors.dock.getSelfPresenceStatus(state)?.mode === PresenceMode.Active
+
+    return [
+      selectors.users.getSelf(state),
+      isActive,
+      !isActive || selectors.settings.isVideoInputOff(state),
+      !isActive || selectors.settings.isAudioInputOff(state),
+      !isActive || selectors.settings.isAudioOutputOff(state),
+      selectors.settings.isOnAirpods(state),
+      selectors.settings.isPushToTalkVideoOn(state),
+    ]
+  })
+
+  useHotkeys(
+    'space',
+    startPushToTalk,
+    {
+      preventDefault: true,
+      keydown: true,
+    },
+    [isMicOff, isVideoOff, pushToTalkVideo]
+  )
+
+  useHotkeys(
+    'space',
+    delayStoppingPushToTalk,
+    {
+      preventDefault: true,
+      keyup: true,
+    },
+    [pushToTalk, isMicOff, isVideoOff]
+  )
 
   useEffect(() => {
     if (!localParticipant || !localUser) return
@@ -113,6 +136,33 @@ export function Dock(props: Props) {
       <Button icon="sliders" label="Options" onClick={settings.open} />
     </Container>
   )
+
+  function startPushToTalk() {
+    if (!isActive || !isMicOff || pushToTalk) return
+
+    setMediaSettings({ audioInputOff: isMicOff, videoInputOff: isVideoOff })
+    setPushToTalk(true)
+    dispatch(setAudioInputOff(false))
+
+    if (pushToTalkVideo) {
+      dispatch(setVideoInputOff(false))
+    }
+  }
+
+  function delayStoppingPushToTalk() {
+    pushToTalkStopRef.current = setTimeout(() => {
+      stopPushToTalk()
+      pushToTalkStopRef.current = null
+    }, 1500)
+  }
+
+  function stopPushToTalk() {
+    if (!pushToTalk) return
+
+    setPushToTalk(false)
+    dispatch(setAudioInputOff(mediaSettings.audioInputOff))
+    dispatch(setVideoInputOff(mediaSettings.videoInputOff))
+  }
 }
 
 const Container = styled('nav', {

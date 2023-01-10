@@ -1,14 +1,9 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
-import {
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
 import logger from 'lib/log'
 import Icon from 'components/Icon'
-import { useSelector, useDispatch } from 'state'
+import { useSelector } from 'state'
 import { CameraOff as MicOff, Prop, Table, Value } from './CallSettingsPreview'
 
 interface Props {
@@ -20,6 +15,7 @@ const log = logger('settings/audio-preview')
 export function MicSettingsPreview(props: Props) {
   const [level, setLevel] = useState(0)
   const intervalRef = useRef<NodeJS.Timer | null>(null)
+  const trackRef = useRef<MediaStreamTrack[]>([])
 
   const [label] = useSelector((state) => [
     selectors.settings.getAudioInputDeviceLabelById(
@@ -29,6 +25,19 @@ export function MicSettingsPreview(props: Props) {
   ])
 
   useEffect(() => {
+    if (!props.deviceId) return
+    if (trackRef.current.length > 0) {
+      log.info(
+        'Closing audio context for testing mic',
+        props.deviceId,
+        trackRef.current
+      )
+      trackRef.current.forEach((t) => {
+        t.stop()
+      })
+      trackRef.current = []
+    }
+
     navigator.mediaDevices
       .getUserMedia({
         audio: {
@@ -42,9 +51,13 @@ export function MicSettingsPreview(props: Props) {
         },
       })
       .then((stream) => {
-        const audioContext = new AudioContext()
-        const source = audioContext.createMediaStreamSource(stream)
-        const analyser = audioContext.createAnalyser()
+        trackRef.current = stream.getAudioTracks()
+
+        log.info('Creating test audio for microphone', props.deviceId)
+
+        const audio = new AudioContext()
+        const source = audio.createMediaStreamSource(stream)
+        const analyser = audio.createAnalyser()
         source.connect(analyser)
 
         const dataArray = new Uint8Array(analyser.frequencyBinCount)
@@ -63,7 +76,16 @@ export function MicSettingsPreview(props: Props) {
       })
 
     return () => {
+      if (trackRef.current) {
+        log.info('Closing audio context for testing mic', props.deviceId)
+        trackRef.current.forEach((t) => {
+          t.stop()
+        })
+        trackRef.current = []
+      }
+
       if (intervalRef.current) {
+        log.info('Clear up mic test interval')
         clearInterval(intervalRef.current)
         intervalRef.current = null
       }
@@ -89,7 +111,7 @@ export function MicSettingsPreview(props: Props) {
         </MicOff>
       )}
       <Table>
-        <Prop>Microphone:</Prop>
+        <Prop>Microphone</Prop>
         <Value off={props.deviceId === 'off'}>{label || props.deviceId}</Value>
       </Table>
     </Container>

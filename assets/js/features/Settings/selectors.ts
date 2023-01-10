@@ -74,3 +74,7 @@ export function isOnAirpods(state: RootState): boolean {
   )
   return /airpod/i.test(label || '')
 }
+
+export function isPushToTalkVideoOn(state: RootState): boolean {
+  return state.settings.pushToTalkVideo
+}

@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
-import {
-  findCommandById,
-  performSearch,
-  useCommandRegistry,
-} from 'features/CommandRegistry'
-import {
-  DailyProvider,
-  useAudioTrack,
-  useDaily,
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
+import { performSearch, useCommandRegistry } from 'features/CommandRegistry'
 import {
   Command,
   CommandType,
@@ -23,6 +11,7 @@ import logger from 'lib/log'
 import { setAudioInputDeviceId, setAudioInputOff } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { MicSettingsPreview } from './MicSettingsPreview'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 const log = logger('settings/mic')
 const dialogId = 'mic-settings'
@@ -39,6 +28,16 @@ export function useMicSettings() {
   const currentSelectedId = isOff ? 'off' : selectedDeviceId
   const commandPalette = useCommandPalette()
 
+  useHotkeys(
+    'meta+d',
+    toggle,
+    {
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [isOff]
+  )
+
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== dialogId) return
     commandPalette.setCommands(buildCommandList())
@@ -47,7 +46,7 @@ export function useMicSettings() {
   useRegister(
     (register) => {
       register(`Microphone Settings`, open, {
-        icon: 'video',
+        icon: 'mic',
         type: CommandType.Settings,
         palette: {
           modal: modalProps,
@@ -58,12 +57,14 @@ export function useMicSettings() {
       register(`Mute microphone`, turnMicOff, {
         icon: 'mic-off',
         type: CommandType.Settings,
+        shortcut: ['cmd', 'd'],
         when: !isOff,
       })
 
       register(`Unmute microphone`, turnMicOff, {
         icon: 'mic',
         type: CommandType.Settings,
+        shortcut: ['cmd', 'd'],
         when: isOff,
       })
 
@@ -139,17 +140,20 @@ export function useMicSettings() {
     return commands
   }
 
-  function setDevice(id: string) {
-    dispatch(setAudioInputDeviceId(id))
-    dispatch(setAudioInputOff(false))
-  }
-
   function turnMicOff() {
     dispatch(setAudioInputOff(true))
   }
 
   function turnMicOn() {
     dispatch(setAudioInputOff(false))
+  }
+
+  function toggle() {
+    if (isOff) {
+      turnMicOn()
+    } else {
+      turnMicOff()
+    }
   }
 
   function switchDevice(deviceId: string) {

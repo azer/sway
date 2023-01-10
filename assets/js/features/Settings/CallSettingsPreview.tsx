@@ -1,11 +1,6 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
-import {
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
 import logger from 'lib/log'
 import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
@@ -76,15 +71,15 @@ export function CallSettingsPreview(props: Props) {
         <video autoPlay muted playsInline ref={videoRef} />
       )}
       <Table>
-        <Prop>Camera:</Prop>
+        <Prop>Camera</Prop>
         <Value off={isVideoOff}>
           {isVideoOff ? 'off' : videoDeviceLabel || videoDeviceId}
         </Value>
-        <Prop>Microphone:</Prop>
+        <Prop>Microphone</Prop>
         <Value off={isMicOff}>
           {isMicOff ? 'off' : micDeviceLabel || micDeviceId}
         </Value>
-        <Prop>Speakers:</Prop>
+        <Prop>Speakers</Prop>
         <Value off={isSpeakerOff}>
           {isSpeakerOff ? 'off' : speakerDeviceLabel || speakerDeviceId}
         </Value>
@@ -100,7 +95,7 @@ const Container = styled('div', {
   padding: '16px',
   '& video': {
     width: '100%',
-    aspectRatio: '1.5 / 1',
+    aspectRatio: '1.75 / 1',
     borderRadius: '$small',
     background: '$gray1',
     marginBottom: '8px',
@@ -114,7 +109,7 @@ export const CameraOff = styled('div', {
   borderRadius: '$small',
   background: '$gray1',
   marginBottom: '11.5px',
-  aspectRatio: '1.5 / 1',
+  aspectRatio: '1.75 / 1',
   color: '$gray4',
   fontSize: '$small',
   center: true,
@@ -131,16 +126,17 @@ const Label = styled('label', {
 export const Table = styled('div', {
   display: 'grid',
   gridTemplateColumns: 'min-content 1fr',
-  gridRowGap: '8px',
+  gridRowGap: '4px',
   gridColumnGap: '16px',
   fontSize: '12px',
   label: true,
-  paddingTop: '12px',
+  padding: '0 8px',
 })
 
 export const Prop = styled('div', {
   fontWeight: '$medium',
   color: '$gray8',
+  textAlign: 'left',
 })
 
 export const Value = styled('div', {

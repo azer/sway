@@ -21,12 +21,14 @@ interface State {
   videoInputDevices: DeviceInfo[]
   audioInputDevices: DeviceInfo[]
   audioOutputDevices: DeviceInfo[]
+  pushToTalkVideo: boolean
 }
 
 export const initialState: State = {
   videoInputOff: false,
   audioInputOff: false,
   audioOutputOff: false,
+  pushToTalkVideo: true,
   videoInputDevices: [],
   audioInputDevices: [],
   audioOutputDevices: [],
@@ -63,6 +65,9 @@ export const slice = createSlice({
     setAudioOutputDevices: (state, action: PayloadAction<DeviceInfo[]>) => {
       state.audioOutputDevices = action.payload
     },
+    setPushToTalkVideo: (state, action: PayloadAction<boolean>) => {
+      state.pushToTalkVideo = action.payload
+    },
   },
 })
 
@@ -76,6 +81,7 @@ export const {
   setAudioInputDevices,
   setAudioOutputDevices,
   setVideoInputDevices,
+  setPushToTalkVideo,
 } = slice.actions
 export default slice.reducer
 
@@ -87,6 +93,8 @@ export function syncDevices() {
       .getUserMedia({ audio: true, video: true })
       .then((stream) => {
         stream.getTracks().forEach((track) => {
+          track.stop()
+
           const id = track.getSettings().deviceId
 
           if (track.kind === 'video' && id) {
@@ -96,6 +104,8 @@ export function syncDevices() {
           if (track.kind === 'audio' && id) {
             dispatch(setAudioInputDeviceId(id))
           }
+
+          log.info('Stop media device', track)
         })
       })
 

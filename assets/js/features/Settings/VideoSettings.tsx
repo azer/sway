@@ -1,18 +1,6 @@
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
-import {
-  findCommandById,
-  performSearch,
-  useCommandRegistry,
-} from 'features/CommandRegistry'
-import {
-  DailyProvider,
-  useAudioTrack,
-  useDaily,
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
+import { performSearch, useCommandRegistry } from 'features/CommandRegistry'
 import {
   Command,
   CommandType,
@@ -23,6 +11,7 @@ import logger from 'lib/log'
 import { setVideoInputDeviceId, setVideoInputOff } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { VideoSettingsPreview } from './VideoSettingsPreview'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 const log = logger('settings/video')
 const dialogId = 'camera-settings'
@@ -39,6 +28,16 @@ export function useVideoSettings() {
   const commandPalette = useCommandPalette()
   const { useRegister } = useCommandRegistry()
 
+  useHotkeys(
+    'meta+e',
+    toggle,
+    {
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [toggle, isOff]
+  )
+
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== dialogId) return
     commandPalette.setCommands(buildCommandList())
@@ -49,6 +48,7 @@ export function useVideoSettings() {
       register(`Camera Settings`, open, {
         icon: 'video',
         type: CommandType.Settings,
+
         palette: {
           modal: modalProps,
           commands: buildCommandList,
@@ -57,11 +57,13 @@ export function useVideoSettings() {
 
       register(`Turn off the camera`, turnCamOff, {
         icon: 'video-off',
+        shortcut: ['cmd', 'e'],
         type: CommandType.Settings,
         when: !isOff,
       })
 
       register(`Turn on the camera`, turnCamOn, {
+        shortcut: ['cmd', 'e'],
         icon: 'video',
         type: CommandType.Settings,
         when: isOff,
@@ -141,7 +143,15 @@ export function useVideoSettings() {
   }
 
   function turnCamOn() {
-    dispatch(setVideoInputOff(true))
+    dispatch(setVideoInputOff(false))
+  }
+
+  function toggle() {
+    if (isOff) {
+      turnCamOn()
+    } else {
+      turnCamOff()
+    }
   }
 
   function switchDevice(deviceId: string) {

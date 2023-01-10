@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
-import { findCommandById, performSearch } from 'features/CommandRegistry'
-import {
-  DailyProvider,
-  useAudioTrack,
-  useDaily,
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
+import { performSearch } from 'features/CommandRegistry'
 import { Command, ModalProps, useCommandPalette } from 'features/CommandPalette'
 import logger from 'lib/log'
 import { setAudioOutputDeviceId, setAudioOutputOff } from './slice'

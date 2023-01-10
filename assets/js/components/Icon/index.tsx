@@ -19,6 +19,7 @@ import Undo from './Undo'
 import SpeakerVolumeHigh from './SpeakerVolumeHigh'
 import SpeakerOff from './SpeakerOff'
 import ProjectorIcon from './Projector'
+import { PressIcon } from './Press'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -42,6 +43,7 @@ const icons: {
   airpods: AirpodsIcon,
   projector: ProjectorIcon,
   undo: Undo,
+  press: PressIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {

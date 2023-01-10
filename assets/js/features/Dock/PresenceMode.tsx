@@ -8,13 +8,9 @@ import {
   setPresenceAsAway,
   setPresenceAsDoNotDisturb,
   setPresenceAsFocus,
+  setPresenceMode,
 } from './slice'
 import { useCommandRegistry } from 'features/CommandRegistry'
-import {
-  useDaily,
-  useDevices,
-  useScreenShare,
-} from '@daily-co/daily-react-hooks'
 import { useUserSocket } from 'features/UserSocket'
 import { PresenceModeIcon } from 'components/PresenceModeIcon'
 import { CommandType, useCommandPalette } from 'features/CommandPalette'
@@ -24,6 +20,7 @@ import {
   setVideoInputOff,
 } from 'features/Settings/slice'
 import { styled } from 'themes'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 interface Props {}
 
@@ -35,17 +32,48 @@ export function PresenceModeButton(props: Props) {
 
   const commandPalette = useCommandPalette()
 
-  const callObject = useDaily()
-  const { cameras, setCamera, microphones, setMicrophone } = useDevices()
-  const { isSharingScreen, startScreenShare, stopScreenShare } =
-    useScreenShare()
-
   const [userId, presence] = useSelector((state) => [
     selectors.users.getSelf(state)?.id,
     selectors.dock.getSelfPresenceStatus(state),
   ])
 
   const { channel } = useUserSocket()
+
+  useHotkeys(
+    'alt+a',
+    setModeAs(PresenceMode.Active),
+    {
+      preventDefault: true,
+    },
+    [userId]
+  )
+
+  useHotkeys(
+    'alt+f',
+    setModeAs(PresenceMode.Focus),
+    {
+      preventDefault: true,
+    },
+    [userId]
+  )
+
+  useHotkeys(
+    'alt+w',
+    setModeAs(PresenceMode.Away),
+    {
+      preventDefault: true,
+    },
+    [userId]
+  )
+
+  useHotkeys(
+    'alt+d',
+    setModeAs(PresenceMode.DoNotDisturb),
+    {
+      preventDefault: true,
+    },
+    [userId]
+  )
 
   useEffect(() => {
     if (!channel) return
@@ -85,7 +113,7 @@ export function PresenceModeButton(props: Props) {
         },
         {
           icon: 'headphones',
-          shortcut: ['⎇', 'f'],
+          shortcut: ['alt', 'f'],
           type: CommandType.AlterMode,
           when: presence?.mode !== PresenceMode.Focus,
         }
@@ -96,7 +124,7 @@ export function PresenceModeButton(props: Props) {
         async () => {
           if (userId) {
             dispatch(setPresenceAsActive(userId))
-            log.info('switching to active mode', cameras[0], microphones[0])
+            //log.info('switching to active mode', cameras[0], microphones[0])
 
             //if (cameras.length > 0) setCamera(cameras[0].device.deviceId)
             /*if (microphones.length > 0)
@@ -112,7 +140,7 @@ export function PresenceModeButton(props: Props) {
         },
         {
           icon: 'phoneCall',
-          shortcut: ['⎇', 'a'],
+          shortcut: ['alt', 'a'],
           type: CommandType.AlterMode,
           when: presence?.mode !== PresenceMode.Active,
         }
@@ -131,7 +159,7 @@ export function PresenceModeButton(props: Props) {
         },
         {
           icon: 'coffee',
-          shortcut: ['⎇', 'w'],
+          shortcut: ['alt', 'w'],
           type: CommandType.AlterMode,
           when: presence?.mode !== PresenceMode.Away,
         }
@@ -150,7 +178,7 @@ export function PresenceModeButton(props: Props) {
         },
         {
           icon: 'night',
-          shortcut: ['⎇', 'd'],
+          shortcut: ['alt', 'd'],
           type: CommandType.AlterMode,
           when: presence?.mode !== PresenceMode.DoNotDisturb,
         }
@@ -163,10 +191,19 @@ export function PresenceModeButton(props: Props) {
   //const label = getLabel(mode)
 
   return (
-    <Button>
-      <PresenceModeIcon mode={mode} onClick={openSettings} />
+    <Button onClick={openSettings}>
+      <Circle>
+        <PresenceModeIcon mode={mode} onClick={openSettings} />
+      </Circle>
     </Button>
   )
+
+  function setModeAs(mode: PresenceMode) {
+    return function () {
+      if (!userId) return
+      dispatch(setPresenceMode({ userId, mode }))
+    }
+  }
 
   function openSettings() {
     if (!commandPalette.isOpen)
@@ -185,6 +222,8 @@ const Button = styled('div', {
   center: true,
   round: 'large',
   space: { inner: [0, 2], gap: 1 },
+  border: '1px solid rgba(255, 255, 255, 0.02)',
+  boxShadow: 'rgb(0 0 0 / 5%) 0px 0px 4px',
   colors: {
     bg: '$dockButtonBg',
     fg: '$dockButtonFg',
@@ -200,4 +239,12 @@ const Button = styled('div', {
     color: '$dockButtonHoverFg',
     borderColor: 'rgba(255, 255, 255, 0.03),',
   },
+})
+
+const Circle = styled('div', {
+  background: 'rgba(255, 255, 255, 0.02)',
+  width: '50px',
+  height: '50px',
+  round: 'circle',
+  center: true,
 })

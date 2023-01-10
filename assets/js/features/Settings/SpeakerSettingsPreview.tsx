@@ -1,11 +1,6 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
-import {
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
 import logger from 'lib/log'
 import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
@@ -45,7 +40,7 @@ export function SpeakerSettingsPreview(props: Props) {
         </SpeakerOff>
       )}
       <Table>
-        <Prop>Speakers:</Prop>
+        <Prop>Speakers</Prop>
         <Value off={props.deviceId === 'off'}>{label || props.deviceId}</Value>
       </Table>
     </Container>

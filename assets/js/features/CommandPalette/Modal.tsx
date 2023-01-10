@@ -6,6 +6,13 @@ import Icon from 'components/Icon'
 import logger from 'lib/log'
 // import { useSelector, useDispatch } from 'state'
 
+const shortcutMap: Record<string, string> = {
+  cmd: '⌘',
+  opt: '⎇',
+  alt: '⎇',
+  shift: '⇧',
+}
+
 export interface Props {
   title: string
   icon: string
@@ -101,7 +108,9 @@ export default function CommandPaletteModal(props: Props) {
                     {cmd.shortcut ? (
                       <Hint>
                         {cmd.shortcut.map((s) => (
-                          <Kbd selected={props.selectedId === cmd.id}>{s}</Kbd>
+                          <Kbd selected={props.selectedId === cmd.id}>
+                            {shortcutMap[s] || s}
+                          </Kbd>
                         ))}
                       </Hint>
                     ) : null}
@@ -171,7 +180,7 @@ const Modal = styled('main', {
 })
 
 const Grid = styled('div', {
-  height: '330px',
+  height: '270px',
   variants: {
     preview: {
       true: {
@@ -239,8 +248,10 @@ const Separator = styled('div', {
 const Commands = styled('nav', {
   height: '100%',
   overflowY: 'auto',
-  '&::-webkit-scrollbar': {
+  /*'&::-webkit-scrollbar': {
     width: '7.5px',
+    opacity: '0',
+    background: 'transparent',
   },
   '&::-webkit-scrollbar-track': {
     background: '$scrollTrackBg',
@@ -250,6 +261,9 @@ const Commands = styled('nav', {
     borderRadius: '2px',
     width: '6px',
   },
+  '&::-webkit-scrollbar:hover': {
+    opacity: '1',
+  },*/
   variants: {
     pin: {
       true: {
@@ -350,7 +364,7 @@ const Kbd = styled('kbd', {
   padding: '4px 3px 4px 4px',
   background: '$commandPaletteShortcutBg',
   round: 'small',
-  textTransform: 'uppercase',
+  textTransform: 'capitalize',
   label: true,
   fontFamily: '$sans',
   variants: {

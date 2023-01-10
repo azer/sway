@@ -2,14 +2,6 @@ import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { performSearch, useCommandRegistry } from 'features/CommandRegistry'
 import {
-  DailyProvider,
-  useAudioTrack,
-  useDaily,
-  useDevices,
-  useLocalParticipant,
-  useVideoTrack,
-} from '@daily-co/daily-react-hooks'
-import {
   Command,
   CommandType,
   ModalProps,
@@ -23,6 +15,7 @@ import { useVideoSettings } from './VideoSettings'
 import { useMicSettings } from './MicSettings'
 import { useSpeakerSettings } from './SpeakerSettings'
 import debounce from 'debounce-fn'
+import { usePushToTalkSettings } from './PushToTalkSettings'
 
 interface Props {}
 
@@ -34,6 +27,7 @@ export function useSettings() {
   const videoSettings = useVideoSettings()
   const micSettings = useMicSettings()
   const speakerSettings = useSpeakerSettings()
+  const pushToTalkSettings = usePushToTalkSettings()
 
   const callSyncDevices = debounce(() => {
     dispatch(syncDevices())
@@ -50,21 +44,26 @@ export function useSettings() {
     }
   }, [])
 
-  const [currentCameraLabel, currentMicLabel, currentSpeakerLabel] =
-    useSelector((state) => [
-      selectors.settings.getVideoInputDeviceLabelById(
-        state,
-        selectors.settings.getVideoInputDeviceId(state) || ''
-      ),
-      selectors.settings.getAudioInputDeviceLabelById(
-        state,
-        selectors.settings.getAudioInputDeviceId(state) || ''
-      ),
-      selectors.settings.getAudioOutputDeviceLabelById(
-        state,
-        selectors.settings.getAudioOutputDeviceId(state) || ''
-      ),
-    ])
+  const [
+    currentCameraLabel,
+    currentMicLabel,
+    currentSpeakerLabel,
+    pushToTalkVideo,
+  ] = useSelector((state) => [
+    selectors.settings.getVideoInputDeviceLabelById(
+      state,
+      selectors.settings.getVideoInputDeviceId(state) || ''
+    ),
+    selectors.settings.getAudioInputDeviceLabelById(
+      state,
+      selectors.settings.getAudioInputDeviceId(state) || ''
+    ),
+    selectors.settings.getAudioOutputDeviceLabelById(
+      state,
+      selectors.settings.getAudioOutputDeviceId(state) || ''
+    ),
+    selectors.settings.isPushToTalkVideoOn(state),
+  ])
 
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== 'settings') return
@@ -120,6 +119,13 @@ export function useSettings() {
         name: 'Speakers',
         hint: hint(currentSpeakerLabel),
         palette: speakerSettings,
+      },
+      {
+        id: 'push-to-talk',
+        icon: 'press',
+        name: 'Push-to-Talk',
+        hint: pushToTalkVideo ? 'Camera & Microphone' : 'Only Microphone',
+        palette: pushToTalkSettings,
       },
       {
         id: 'back',

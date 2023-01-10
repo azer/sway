@@ -81,6 +81,15 @@ export const slice = createSlice({
     ) => {
       state.presence[action.payload.userId] = action.payload.status
     },
+    setPresenceMode: (
+      state,
+      action: PayloadAction<{ userId: string; mode: PresenceMode }>
+    ) => {
+      state.presence[action.payload.userId] = {
+        ...state.presence[action.payload.userId],
+        mode: action.payload.mode,
+      }
+    },
     setPresenceAsActive: (state, action: PayloadAction<string>) => {
       state.presence[action.payload] = {
         ...state.presence[action.payload],
@@ -114,6 +123,7 @@ export const {
   setPresenceAsDoNotDisturb,
   setPresenceAsFocus,
   setPresenceStatus,
+  setPresenceMode,
   setBafaRoomConnectionStatus,
   setBafaSocketConnectionStatus,
   setDailyCallConnectionStatus,
