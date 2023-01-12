@@ -37,6 +37,7 @@ import { LiveSocket } from 'phoenix_live_view'
 import topbar from '../vendor/topbar'
 import CommandPaletteProvider from 'features/CommandPalette'
 import { SettingsProvider } from 'features/Settings'
+import { CallProvider } from 'features/Call/Provider'
 import { CallSettingsProvider } from 'features/Settings/CallSettingsProvider'
 
 let csrfToken = document
@@ -66,10 +67,12 @@ ReactDOM.render(
     <Provider store={store}>
       <UserSocketProvider>
         <CommandRegistryProvider>
-          <CommandPaletteProvider>
-            <SettingsProvider />
-            <Routing />
-          </CommandPaletteProvider>
+          <CallProvider>
+            <CommandPaletteProvider>
+              <SettingsProvider />
+              <Routing />
+            </CommandPaletteProvider>
+          </CallProvider>
         </CommandRegistryProvider>
       </UserSocketProvider>
     </Provider>

@@ -121,9 +121,7 @@ export default function CommandPaletteModal(props: Props) {
             {Preview ? (
               <>
                 <PreviewSeparator />
-                <Preview
-                  selectedValue={props.selectedValue || props.selectedId}
-                />
+                <Preview selectedValue={props.selectedValue} />
               </>
             ) : null}
           </Grid>
@@ -380,6 +378,7 @@ const Kbd = styled('kbd', {
 const Navigation = styled('div', {
   position: 'relative',
   height: '100%',
+  overflow: 'hidden',
 })
 
 const PreviewSeparator = styled('div', {

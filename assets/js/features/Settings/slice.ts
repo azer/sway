@@ -22,6 +22,7 @@ interface State {
   audioInputDevices: DeviceInfo[]
   audioOutputDevices: DeviceInfo[]
   pushToTalkVideo: boolean
+  backgroundBlur: number
 }
 
 export const initialState: State = {
@@ -32,6 +33,7 @@ export const initialState: State = {
   videoInputDevices: [],
   audioInputDevices: [],
   audioOutputDevices: [],
+  backgroundBlur: 0,
 }
 
 export const slice = createSlice({
@@ -68,6 +70,9 @@ export const slice = createSlice({
     setPushToTalkVideo: (state, action: PayloadAction<boolean>) => {
       state.pushToTalkVideo = action.payload
     },
+    setBackgroundBlur: (state, action: PayloadAction<number>) => {
+      state.backgroundBlur = action.payload
+    },
   },
 })
 
@@ -82,6 +87,7 @@ export const {
   setAudioOutputDevices,
   setVideoInputDevices,
   setPushToTalkVideo,
+  setBackgroundBlur,
 } = slice.actions
 export default slice.reducer
 

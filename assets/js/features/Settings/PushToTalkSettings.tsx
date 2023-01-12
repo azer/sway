@@ -1,8 +1,13 @@
 import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
-import { performSearch } from 'features/CommandRegistry'
-import { Command, ModalProps, useCommandPalette } from 'features/CommandPalette'
+import { performSearch, useCommandRegistry } from 'features/CommandRegistry'
+import {
+  Command,
+  CommandType,
+  ModalProps,
+  useCommandPalette,
+} from 'features/CommandPalette'
 import logger from 'lib/log'
 import { KeyboardIcon } from 'components/Icon/Keyboard'
 import { setPushToTalkVideo } from './slice'
@@ -19,18 +24,32 @@ export function usePushToTalkSettings() {
 
   const commandPalette = useCommandPalette()
   const currentSelectedId = isOn ? 'audio' : 'audio-video'
+  const { useRegister } = useCommandRegistry()
 
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== dialogId) return
     commandPalette.setCommands(buildCommandList())
   }, [isOn, commandPalette.id, commandPalette.isOpen])
 
+  useRegister((register) => {
+    register(`Push-to-Talk Settings`, open, {
+      icon: 'press',
+      type: CommandType.Settings,
+      palette: {
+        modal: modalProps,
+        commands: buildCommandList,
+      },
+    })
+  }, [])
+
   return {
     commands: buildCommandList,
     modal: modalProps,
-    open: () => {
-      commandPalette.open(buildCommandList(), modalProps())
-    },
+    open,
+  }
+
+  function open() {
+    commandPalette.open(buildCommandList(), modalProps())
   }
 
   function modalProps(parentModal?: () => ModalProps) {

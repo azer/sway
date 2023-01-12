@@ -87,7 +87,8 @@ export default function CommandPaletteProvider(props: Props) {
   )
 
   const selectedCmd = commands.find((c) => c.id === selectedId)
-  const selectedValue: unknown = selectedCmd?.value || selectedCmd?.id
+  const selectedValue: unknown =
+    selectedCmd?.value !== undefined ? selectedCmd.value : selectedId
 
   useHotkeys(
     'up',

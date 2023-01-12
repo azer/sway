@@ -78,3 +78,15 @@ export function isOnAirpods(state: RootState): boolean {
 export function isPushToTalkVideoOn(state: RootState): boolean {
   return state.settings.pushToTalkVideo
 }
+
+export function getBackgroundBlurValue(state: RootState): number {
+  return state.settings.backgroundBlur
+}
+
+export function getBackgroundBlurLabel(state: RootState): string {
+  if (state.settings.backgroundBlur === 0) {
+    return 'Off'
+  }
+
+  return `${state.settings.backgroundBlur * 100}%`
+}

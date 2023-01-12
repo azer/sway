@@ -4,15 +4,23 @@ import selectors from 'selectors'
 import logger from 'lib/log'
 import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
+import {
+  useDaily,
+  useLocalParticipant,
+  useVideoTrack,
+} from '@daily-co/daily-react-hooks'
 
 interface Props {
   deviceId?: string
 }
 
-const log = logger('settings/video-preview')
+const log = logger('settings/preview')
 
 export function CallSettingsPreview(props: Props) {
-  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const call = useDaily()
+  const videoElement = useRef()
+  const localParticipant = useLocalParticipant()
+  const videoTrack = useVideoTrack(localParticipant?.session_id || '')
 
   const [
     isVideoOff,
@@ -46,20 +54,34 @@ export function CallSettingsPreview(props: Props) {
   ])
 
   useEffect(() => {
-    async function getCamera() {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          deviceId: { exact: videoDeviceId },
-        },
-      })
+    if (!videoTrack.persistentTrack) return
+    if (videoElement?.current) {
+      // @ts-ignore
+      videoElement.current.srcObject =
+        videoTrack.persistentTrack &&
+        new MediaStream([videoTrack?.persistentTrack])
+    }
+  }, [videoTrack.persistentTrack])
 
-      if (videoRef && videoRef.current) {
-        videoRef.current.srcObject = stream
-      }
+  useEffect(() => {
+    if (!call) return
+
+    if (!call.localVideo()) {
+      log.info('Turn on local video')
+      call.setLocalVideo(true)
+      call.setInputDevicesAsync({
+        videoDeviceId: videoDeviceId,
+      })
     }
 
-    getCamera()
-  }, [videoDeviceId])
+    return () => {
+      log.info('Turn off local video')
+      call.setLocalVideo(false)
+      call.setInputDevicesAsync({
+        videoSource: false,
+      })
+    }
+  }, [call])
 
   return (
     <Container>
@@ -68,7 +90,7 @@ export function CallSettingsPreview(props: Props) {
           <Icon name="video-off" />
         </CameraOff>
       ) : (
-        <video autoPlay muted playsInline ref={videoRef} />
+        <video autoPlay muted playsInline ref={videoElement} />
       )}
       <Table>
         <Prop>Camera</Prop>

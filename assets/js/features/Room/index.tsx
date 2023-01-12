@@ -9,7 +9,7 @@ import {
   setBafaRoomConnectionStatus,
 } from 'features/Dock/slice'
 import { ParticipantGrid } from './ParticipantGrid'
-import { CallProvider } from 'features/Call/Provider'
+
 import { Dock } from 'features/Dock'
 import { ScreenshareProvider } from 'features/Screenshare/Provider'
 // import { useSelector, useDispatch } from 'app/state'
@@ -51,19 +51,17 @@ export default function Room(props: Props) {
   }, [channel])
 
   return (
-    <CallProvider>
+    <Container>
       <ScreenshareProvider />
-      <Container>
-        <Header>
-          <Title>
-            <Hash>#</Hash>
-            {room?.name}
-          </Title>
-        </Header>
-        <ParticipantGrid roomId={props.id} />
-        <Dock roomId={props.id} />
-      </Container>
-    </CallProvider>
+      <Header>
+        <Title>
+          <Hash>#</Hash>
+          {room?.name}
+        </Title>
+      </Header>
+      <ParticipantGrid roomId={props.id} />
+      <Dock roomId={props.id} />
+    </Container>
   )
 
   function handleJoin(payload: { id: string; user_id: string }) {

@@ -16,6 +16,7 @@ import { useMicSettings } from './MicSettings'
 import { useSpeakerSettings } from './SpeakerSettings'
 import debounce from 'debounce-fn'
 import { usePushToTalkSettings } from './PushToTalkSettings'
+import { useBackgroundBlurSettings } from './BackgroundBlur'
 
 interface Props {}
 
@@ -28,6 +29,7 @@ export function useSettings() {
   const micSettings = useMicSettings()
   const speakerSettings = useSpeakerSettings()
   const pushToTalkSettings = usePushToTalkSettings()
+  const backgroundBlur = useBackgroundBlurSettings()
 
   const callSyncDevices = debounce(() => {
     dispatch(syncDevices())
@@ -49,6 +51,7 @@ export function useSettings() {
     currentMicLabel,
     currentSpeakerLabel,
     pushToTalkVideo,
+    backgroundBlurLabel,
   ] = useSelector((state) => [
     selectors.settings.getVideoInputDeviceLabelById(
       state,
@@ -63,6 +66,7 @@ export function useSettings() {
       selectors.settings.getAudioOutputDeviceId(state) || ''
     ),
     selectors.settings.isPushToTalkVideoOn(state),
+    selectors.settings.getBackgroundBlurLabel(state),
   ])
 
   useEffect(() => {
@@ -121,11 +125,18 @@ export function useSettings() {
         palette: speakerSettings,
       },
       {
-        id: 'push-to-talk',
+        id: 'push-to-talk-settings',
         icon: 'press',
         name: 'Push-to-Talk',
         hint: pushToTalkVideo ? 'Camera & Microphone' : 'Only Microphone',
         palette: pushToTalkSettings,
+      },
+      {
+        id: 'background-blur-settings',
+        icon: 'dots',
+        name: 'Background Blur',
+        hint: backgroundBlurLabel,
+        palette: backgroundBlur,
       },
       {
         id: 'back',
