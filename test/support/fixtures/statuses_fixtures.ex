@@ -11,9 +11,7 @@ defmodule Bafa.StatusesFixtures do
     {:ok, status} =
       attrs
       |> Enum.into(%{
-        ended_at: ~N[2022-11-13 14:54:00],
         message: "some message",
-        started_at: ~N[2022-11-13 14:54:00],
         status: :focus
       })
       |> Bafa.Statuses.create_status()

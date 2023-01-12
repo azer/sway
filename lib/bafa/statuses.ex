@@ -37,12 +37,10 @@ defmodule Bafa.Statuses do
   """
   def get_status!(id), do: Repo.get!(Status, id)
 
-  def get_current_status(user_id, org_id) do
+  def get_latest_status(user_id) do
     from(s in Status,
       where: s.user_id == ^user_id,
-      where: s.org_id == ^org_id,
-      where: is_nil(s.ended_at),
-      order_by: [desc: s.started_at]
+      order_by: [desc: s.created_at]
     ) |> Repo.one
   end
 

@@ -56,7 +56,7 @@ config :bafa, Bafa.Guardian,
   issuer: "bafa",
   secret_key: "cPy1Th485lsMzkP28x7FffKiCWK5te7+oEBz/L4QOUIwGOU5/3N7Mrqnb+1Kvx7m"
 
-config :tasty_recipes, BafaWeb.ApiAuthPipeline,
+config :bafa, BafaWeb.ApiAuthPipeline,
   error_handler: BafaWeb.ApiAuthErrorHandler,
   module: Bafa.Guardian
 

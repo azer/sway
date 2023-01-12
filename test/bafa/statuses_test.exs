@@ -8,7 +8,7 @@ defmodule Bafa.StatusesTest do
 
     import Bafa.StatusesFixtures
 
-    @invalid_attrs %{ended_at: nil, message: nil, started_at: nil, status: nil}
+    @invalid_attrs %{message: nil, status: nil}
 
     test "list_statuses/0 returns all statuses" do
       status = status_fixture()
@@ -21,12 +21,10 @@ defmodule Bafa.StatusesTest do
     end
 
     test "create_status/1 with valid data creates a status" do
-      valid_attrs = %{ended_at: ~N[2022-11-13 14:54:00], message: "some message", started_at: ~N[2022-11-13 14:54:00], status: :focus}
+      valid_attrs = %{message: "some message", status: :focus}
 
       assert {:ok, %Status{} = status} = Statuses.create_status(valid_attrs)
-      assert status.ended_at == ~N[2022-11-13 14:54:00]
       assert status.message == "some message"
-      assert status.started_at == ~N[2022-11-13 14:54:00]
       assert status.status == :focus
     end
 
@@ -36,12 +34,10 @@ defmodule Bafa.StatusesTest do
 
     test "update_status/2 with valid data updates the status" do
       status = status_fixture()
-      update_attrs = %{ended_at: ~N[2022-11-14 14:54:00], message: "some updated message", started_at: ~N[2022-11-14 14:54:00], status: :active}
+      update_attrs = %{message: "some updated message", status: :active}
 
       assert {:ok, %Status{} = status} = Statuses.update_status(status, update_attrs)
-      assert status.ended_at == ~N[2022-11-14 14:54:00]
       assert status.message == "some updated message"
-      assert status.started_at == ~N[2022-11-14 14:54:00]
       assert status.status == :active
     end
 

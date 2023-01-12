@@ -45,12 +45,10 @@ export interface Room {
 export const Statuses = 'statuses'
 export interface Status {
   id: string
-  org_id: string
+  room_id: string
   user_id: string
   status: string
   message: string
-  started_at: string
-  ended_at: string
 }
 
 export const Presences = 'presences'
