@@ -18,6 +18,6 @@ defmodule Bafa.Statuses.Status do
   def changeset(status, attrs) do
     status
     |> cast(attrs, [:status, :message, :started_at, :ended_at, :user_id, :org_id])
-    |> validate_required([:status, :message, :started_at, :ended_at])
+    |> validate_required([:status, :user_id])
   end
 end

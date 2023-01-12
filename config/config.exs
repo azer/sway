@@ -47,11 +47,19 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{config_env()}.exs"
-
 config :ueberauth, Ueberauth,
   providers: [
     google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}
   ]
+
+config :bafa, Bafa.Guardian,
+  issuer: "bafa",
+  secret_key: "cPy1Th485lsMzkP28x7FffKiCWK5te7+oEBz/L4QOUIwGOU5/3N7Mrqnb+1Kvx7m"
+
+config :tasty_recipes, BafaWeb.ApiAuthPipeline,
+  error_handler: BafaWeb.ApiAuthErrorHandler,
+  module: Bafa.Guardian
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{config_env()}.exs"

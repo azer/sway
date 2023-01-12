@@ -33,7 +33,7 @@ defmodule BafaWeb.ChatChannel do
     {:reply, {:ok, payload}, socket}
   end
 
-  def handle_in("entities:fetch", %{"id" => id, "entity" => entity }, socket) do
+  def handle_in("entities:fetch", %{"id" => id, "entity" => entity}, socket) do
     user = Bafa.Accounts.get_user!(String.to_integer(id))
 
     resp = %{
@@ -60,8 +60,19 @@ defmodule BafaWeb.ChatChannel do
     {:noreply, socket}
   end
 
-  def handle_in("user:status", %{ "presence_mode" => presence_mode }, socket) do
-    broadcast(socket, "user:status", %{"presence_mode" => presence_mode, "user_id" => socket.assigns.user})
+  def handle_in("user:status", %{"presence_mode" => presence_mode}, socket) do
+    broadcast(socket, "user:status", %{
+      "presence_mode" => presence_mode,
+      "user_id" => socket.assigns.user
+    })
+
+    IO.puts(presence_mode)
+
+    case Bafa.Statuses.create_status(%{status: presence_mode, user_id: socket.assigns.user}) do
+      {:ok, status} -> IO.inspect(status)
+      {:error, reason} -> IO.puts(reason)
+    end
+
     {:noreply, socket}
   end
 

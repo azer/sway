@@ -52,7 +52,8 @@ defmodule Bafa.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:elixir_auth_google, "~> 1.6.3"},
       {:ueberauth, "~> 0.6"},
-      {:ueberauth_google, "~> 0.10"}
+      {:ueberauth_google, "~> 0.10"},
+      {:guardian, "~> 2.0"}
     ]
   end
 

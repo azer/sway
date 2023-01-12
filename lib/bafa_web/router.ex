@@ -31,6 +31,11 @@ defmodule BafaWeb.Router do
     get "/rooms/:slug", AppController, :room
   end
 
+  scope "/api", BafaWeb do
+    pipe_through [:api, :require_authenticated_user]
+    get "/status", StatusController, :index
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", BafaWeb do
   #   pipe_through :api
