@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export default function AirpodsIcon(props: React.SVGProps<SVGSVGElement>) {
+export function AirpodsIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="4 4 16 16"

@@ -64,8 +64,12 @@ const context = React.createContext<{
   setModal: React.Dispatch<React.SetStateAction<ModalProps>>
   commands: Command[]
   setCommands: React.Dispatch<React.SetStateAction<Command[]>>
+  fullScreen: boolean
+  setFullScreen: React.Dispatch<React.SetStateAction<boolean>>
 }>({
   isOpen: false,
+  fullscreen: false,
+  setFullScreen: noop,
   setIsOpen: noop,
   modal: defaultModal,
   setModal: noop,
@@ -75,6 +79,7 @@ const context = React.createContext<{
 
 export default function CommandPaletteProvider(props: Props) {
   const [isOpen, setIsOpen] = useState(false)
+  const [fullScreen, setFullScreen] = useState(false)
   const [modalProps, setModalProps] = useState<ModalProps>({
     ...defaultModal,
   })
@@ -123,6 +128,16 @@ export default function CommandPaletteProvider(props: Props) {
     [modalProps]
   )
 
+  useHotkeys(
+    'alt+l',
+    () => setFullScreen(!fullScreen),
+    {
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [fullScreen]
+  )
+
   useEffect(() => {
     log.info('Filtering & sorting command palette rows', query, selectedId)
     const rows = (modalProps.search || performSearch)(commands, query)
@@ -147,6 +162,8 @@ export default function CommandPaletteProvider(props: Props) {
         setCommands,
         modal: modalProps,
         setModal: setModalProps,
+        fullScreen: fullScreen,
+        setFullScreen: setFullScreen,
       }}
     >
       {isOpen ? (
@@ -164,6 +181,7 @@ export default function CommandPaletteProvider(props: Props) {
           query={query}
           setQuery={setQuery}
           preview={modalProps.preview}
+          fullScreen={fullScreen}
         />
       ) : null}
       {props.children}
@@ -265,8 +283,16 @@ export default function CommandPaletteProvider(props: Props) {
 }
 
 export function useCommandPalette() {
-  const { isOpen, setIsOpen, setModal, modal, commands, setCommands } =
-    useContext(context)
+  const {
+    isOpen,
+    setIsOpen,
+    setModal,
+    modal,
+    commands,
+    setCommands,
+    fullScreen,
+    setFullScreen,
+  } = useContext(context)
 
   return {
     id: modal.id,
@@ -275,6 +301,8 @@ export function useCommandPalette() {
     close,
     getCommands: () => commands,
     setCommands,
+    setFullScreen,
+    fullScreen,
   }
 
   function open(commands: Command[], modalProps: ModalProps) {
@@ -284,6 +312,7 @@ export function useCommandPalette() {
 
     setCommands(commands)
     setModal(modalProps)
+    setFullScreen(false)
     setIsOpen(true)
   }
 

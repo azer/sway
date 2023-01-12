@@ -10,7 +10,6 @@ import MicIcon from './Mic'
 import VideoIcon from './Video'
 import MonitorIcon from './Monitor'
 import SpeakerIcon from './Speaker'
-import AirpodsIcon from './Airpods'
 import MicOffIcon from './Mic-off'
 import VideoOffIcon from './Video-off'
 import logger from 'lib/log'
@@ -21,6 +20,8 @@ import SpeakerOff from './SpeakerOff'
 import ProjectorIcon from './Projector'
 import { PressIcon } from './Press'
 import { DotsIcon } from './Dots'
+import { AirpodsIcon } from './Airpods'
+import { ZoomInIcon, ZoomOutIcon } from './Zoom'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -46,6 +47,8 @@ const icons: {
   undo: Undo,
   press: PressIcon,
   dots: DotsIcon,
+  zoomIn: ZoomInIcon,
+  zoomOut: ZoomOutIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {

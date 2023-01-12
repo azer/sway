@@ -27,6 +27,7 @@ export interface Props {
   setSelectedId: (id: string) => void
   selectAndProceed: (id: string) => void
   close: () => void
+  fullScreen: boolean
 }
 
 const log = logger('command-palette/modal')
@@ -54,8 +55,8 @@ export default function CommandPaletteModal(props: Props) {
       onClick={handleClickOutside}
       data-selected-id={props.selectedId || ''}
     >
-      <Outer>
-        <Modal>
+      <Outer fullScreen={props.fullScreen}>
+        <Modal fullScreen={props.fullScreen}>
           <Title>
             <IconWrapper>
               <Icon name={props.icon} />
@@ -76,7 +77,7 @@ export default function CommandPaletteModal(props: Props) {
               props.commands[0].id == props.selectedId
             }
           />
-          <Grid preview={!!props.preview}>
+          <Grid preview={!!props.preview} fullScreen={props.fullScreen}>
             <Navigation>
               <Commands ref={listEl} pin={props.commands.some((c) => c.pin)}>
                 {props.commands.map((cmd, ind) => (
@@ -161,8 +162,17 @@ const Overlay = styled('div', {
 
 const Outer = styled('div', {
   position: 'relative',
-  top: '20vh',
+  top: '17.5vh',
   height: 'min-content',
+  variants: {
+    fullScreen: {
+      true: {
+        top: '24px',
+        height: 'calc(100vh - 48px)',
+        width: 'calc(100vw - 48px)',
+      },
+    },
+  },
 })
 
 const Modal = styled('main', {
@@ -175,15 +185,28 @@ const Modal = styled('main', {
   border: '0.5px solid rgba(82, 82, 111, 0.44)',
   backdropFilter: 'blur(20px) saturate(190%) contrast(70%) brightness(80%)',
   overflow: 'hidden',
+  variants: {
+    fullScreen: {
+      true: {
+        width: '100%',
+        height: '100%',
+      },
+    },
+  },
 })
 
 const Grid = styled('div', {
-  height: '270px',
+  height: '330px',
   variants: {
     preview: {
       true: {
         display: 'grid',
         gridTemplateColumns: '45% 1px calc(55% - 1px)',
+      },
+    },
+    fullScreen: {
+      true: {
+        height: 'calc(100% - 120px)',
       },
     },
   },

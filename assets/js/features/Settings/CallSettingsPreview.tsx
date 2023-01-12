@@ -9,6 +9,7 @@ import {
   useLocalParticipant,
   useVideoTrack,
 } from '@daily-co/daily-react-hooks'
+import { ZoomButton } from './BlurSettingsPreview'
 
 interface Props {
   deviceId?: string
@@ -32,6 +33,8 @@ export function CallSettingsPreview(props: Props) {
     isSpeakerOff,
     speakerDeviceId,
     speakerDeviceLabel,
+    blurLabel,
+    blurValue,
   ] = useSelector((state) => [
     selectors.settings.isVideoInputOff(state),
     selectors.settings.getVideoInputDeviceId(state),
@@ -51,6 +54,8 @@ export function CallSettingsPreview(props: Props) {
       state,
       selectors.settings.getAudioOutputDeviceId(state) || ''
     ),
+    selectors.settings.getBackgroundBlurLabel(state),
+    selectors.settings.getBackgroundBlurValue(state),
   ])
 
   useEffect(() => {
@@ -76,6 +81,7 @@ export function CallSettingsPreview(props: Props) {
 
     return () => {
       log.info('Turn off local video')
+      videoTrack.persistentTrack?.stop()
       call.setLocalVideo(false)
       call.setInputDevicesAsync({
         videoSource: false,
@@ -90,7 +96,10 @@ export function CallSettingsPreview(props: Props) {
           <Icon name="video-off" />
         </CameraOff>
       ) : (
-        <video autoPlay muted playsInline ref={videoElement} />
+        <>
+          <video autoPlay muted playsInline ref={videoElement} />
+          <ZoomButton />
+        </>
       )}
       <Table>
         <Prop>Camera</Prop>
@@ -105,6 +114,8 @@ export function CallSettingsPreview(props: Props) {
         <Value off={isSpeakerOff}>
           {isSpeakerOff ? 'off' : speakerDeviceLabel || speakerDeviceId}
         </Value>
+        <Prop>Background Blur</Prop>
+        <Value off={blurValue === 0}>{blurLabel}</Value>
       </Table>
     </Container>
   )
@@ -148,7 +159,7 @@ const Label = styled('label', {
 export const Table = styled('div', {
   display: 'grid',
   gridTemplateColumns: 'min-content 1fr',
-  gridRowGap: '4px',
+  gridRowGap: '6px',
   gridColumnGap: '16px',
   fontSize: '12px',
   label: true,

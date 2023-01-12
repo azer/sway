@@ -10,6 +10,7 @@ import {
   useLocalParticipant,
   useVideoTrack,
 } from '@daily-co/daily-react-hooks'
+import { useCommandPalette } from 'features/CommandPalette'
 
 interface Props {
   value: number
@@ -23,7 +24,13 @@ export function BlurSettingsPreview(props: Props) {
   const videoTrack = useVideoTrack(localParticipant?.session_id || '')
   const videoElement = useRef()
   const timerRef = useRef<NodeJS.Timer | null>(null)
+  const [previewValue, setPreviewValue] = useState(props.value)
+
   const [waiting, setWaiting] = useState(false)
+  const [processing, setProcessing] = useState<number | undefined>(undefined)
+  const [error, setError] = useState(false)
+  const [delayedValue, setDelayedValue] =
+    useState<number | undefined>(undefined)
 
   const [isOff, deviceId, deviceLabel] = useSelector((state) => [
     selectors.settings.isVideoInputOff(state),
@@ -34,26 +41,38 @@ export function BlurSettingsPreview(props: Props) {
     ),
   ])
 
-  useEffect(() => {
-    if (!call) return
+  const label = props.value === 0 ? 'Off' : Math.floor(props.value * 100) + '%'
 
-    if (!call.localVideo()) {
-      log.info('Turn on local video')
-      call.setLocalVideo(true)
-      call.setInputDevicesAsync({
-        videoDeviceId: deviceId,
-      })
-    }
+  useEffect(() => {
+    turnOnVideo()
 
     return () => {
-      log.info('Turn off local video')
       clearTimer()
-      call.setLocalVideo(false)
-      call.setInputDevicesAsync({
-        videoSource: false,
-      })
+      turnOffVideo()
     }
   }, [call])
+
+  useEffect(() => {
+    if (processing === undefined) {
+      setPreviewValue(props.value)
+    } else if (processing !== props.value) {
+      log.info('Delay ', props.value)
+      setDelayedValue(props.value)
+    }
+  }, [props.value])
+
+  useEffect(() => {
+    if (
+      processing ||
+      delayedValue === undefined ||
+      previewValue === delayedValue
+    )
+      return
+
+    log.info('Pick up next')
+    setDelayedValue(undefined)
+    setPreviewValue(delayedValue)
+  }, [delayedValue, processing])
 
   useEffect(() => {
     if (!videoTrack.persistentTrack) return
@@ -66,31 +85,43 @@ export function BlurSettingsPreview(props: Props) {
   }, [videoTrack.persistentTrack])
 
   useEffect(() => {
-    if (!call || !props.value) return
+    if (!call) return
 
     clearTimer()
     setWaiting(true)
+    setError(false)
 
-    timerRef.current = setTimeout(async () => {
-      log.info('Setting background blur', props.value)
+    timerRef.current = setTimeout(
+      async () => {
+        log.info('Setting background blur', previewValue)
 
-      try {
-        await call.updateInputSettings({
-          video: {
-            processor: {
-              type: 'background-blur',
-              config: { strength: props.value },
+        setProcessing(previewValue)
+
+        try {
+          call.updateInputSettings({
+            video: {
+              processor:
+                previewValue === 0
+                  ? { type: 'none' }
+                  : {
+                      type: 'background-blur',
+                      config: { strength: previewValue },
+                    },
             },
-          },
-        })
+          })
+        } catch (err) {
+          log.info('Failed to generate preview', err)
+          setError(true)
+        }
 
         setWaiting(false)
-      } catch (err) {
-        log.info('Failed to generate preview', err)
-        setWaiting(false)
-      }
-    }, 1000)
-  }, [props.value])
+        setProcessing(undefined)
+        turnOnVideo()
+        log.info('Processing done', previewValue)
+      },
+      waiting ? 1500 : 0
+    )
+  }, [previewValue])
 
   return (
     <Container>
@@ -100,15 +131,18 @@ export function BlurSettingsPreview(props: Props) {
           <Icon name="video-off" />
         </CameraOff>
       ) : (
-        <video autoPlay muted playsInline ref={videoElement} />
+        <>
+          <video autoPlay muted playsInline ref={videoElement} />
+          <ZoomButton />
+        </>
       )}
       <Table>
+        <Prop>Blur</Prop>
+        <Value off={props.value === 0 || error}>
+          {error ? 'Error' : waiting ? 'Processing' : label}
+        </Value>
         <Prop>Camera</Prop>
         <Value off={isOff}>{deviceLabel}</Value>
-        <Prop>Blur</Prop>
-        <Value off={props.value === 0}>
-          {props.value === 0 ? 'Off' : Math.floor(props.value * 100) + '%'}
-        </Value>
       </Table>
     </Container>
   )
@@ -119,6 +153,29 @@ export function BlurSettingsPreview(props: Props) {
       clearTimeout(timerRef.current)
       timerRef.current = null
     }
+  }
+
+  function turnOnVideo() {
+    if (!call || call.localVideo()) return
+
+    log.info('Turn on local video')
+
+    call.setLocalVideo(true)
+    call.setInputDevicesAsync({
+      videoDeviceId: deviceId,
+    })
+  }
+
+  function turnOffVideo() {
+    if (!call) return
+
+    log.info('Turn off local video')
+    videoTrack.persistentTrack?.stop()
+
+    call.setLocalVideo(false)
+    call.setInputDevicesAsync({
+      videoSource: false,
+    })
   }
 }
 
@@ -156,5 +213,31 @@ const Waiting = styled('div', {
         visibility: 'visible',
       },
     },
+  },
+})
+
+export function ZoomButton(props: {}) {
+  const commandPalette = useCommandPalette()
+
+  return (
+    <ZoomButtonView title="Toggle zoom" onClick={toggleZoom}>
+      <Icon name={commandPalette.fullScreen ? 'zoom-out' : 'zoom-in'} />
+    </ZoomButtonView>
+  )
+
+  function toggleZoom() {
+    commandPalette.setFullScreen(!commandPalette.fullScreen)
+  }
+}
+
+const ZoomButtonView = styled('div', {
+  position: 'absolute',
+  right: '24px',
+  top: '24px',
+  width: '20px',
+  height: '20px',
+  color: 'rgba(255, 255, 255, 0.75)',
+  '&:hover': {
+    color: 'rgba(255, 255, 255, 0.95)',
   },
 })
