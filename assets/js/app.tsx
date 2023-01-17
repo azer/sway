@@ -39,6 +39,7 @@ import CommandPaletteProvider from 'features/CommandPalette'
 import { SettingsProvider } from 'features/Settings'
 import { CallProvider } from 'features/Call/Provider'
 import { CallSettingsProvider } from 'features/Settings/CallSettingsProvider'
+import PresenceProvider from 'features/Presence/Provider'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -70,6 +71,7 @@ ReactDOM.render(
           <CallProvider>
             <CommandPaletteProvider>
               <SettingsProvider />
+              <PresenceProvider />
               <Routing />
             </CommandPaletteProvider>
           </CallProvider>

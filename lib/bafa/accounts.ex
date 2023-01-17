@@ -66,7 +66,7 @@ defmodule Bafa.Accounts do
 
   ## Get or create org
   def fetch_or_create_org(attrs) do
-    case get_org_by_name(attrs.name) do
+    case get_org_by_name("roadbeats") do
       %Org{} = org ->
         {:ok, org}
       _ ->

@@ -4,7 +4,8 @@ defmodule Bafa.Statuses.Status do
 
   schema "statuses" do
     field :message, :string
-    field :status, Ecto.Enum, values: [:focus, :active, :away, :dnd]
+    field :status, Ecto.Enum, values: [:social, :solo, :focus, :zen]
+    field :is_active, :boolean
 
     belongs_to :user, Bafa.Accounts.User
     belongs_to :room, Bafa.Rooms.Room
@@ -15,7 +16,7 @@ defmodule Bafa.Statuses.Status do
   @doc false
   def changeset(status, attrs) do
     status
-    |> cast(attrs, [:status, :message, :user_id, :room_id])
-    |> validate_required([:status, :user_id])
+    |> cast(attrs, [:status, :message, :user_id, :room_id, :is_active])
+    |> validate_required([:status, :user_id, :room_id])
   end
 end

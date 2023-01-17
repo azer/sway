@@ -7,6 +7,8 @@ import * as shell from 'features/Shell/selectors'
 import * as dock from 'features/Dock/selectors'
 import * as call from 'features/Call/selectors'
 import * as settings from 'features/Settings/selectors'
+import * as statuses from './status'
+import * as presence from 'features/Presence/selectors'
 
 export default {
   session,
@@ -18,4 +20,6 @@ export default {
   dock,
   call,
   settings,
+  statuses,
+  presence,
 }

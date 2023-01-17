@@ -38,10 +38,20 @@ defmodule Bafa.Statuses do
   def get_status!(id), do: Repo.get!(Status, id)
 
   def get_latest_status(user_id) do
-    from(s in Status,
+    status = from(s in Status,
       where: s.user_id == ^user_id,
-      order_by: [desc: s.created_at]
-    ) |> Repo.one
+      order_by: [desc: s.inserted_at],
+      limit: 1) |> Repo.one
+
+    case status do
+      %Status{} ->
+	status
+      _ ->
+	user = Bafa.Accounts.get_user!(user_id)
+	room = Bafa.Rooms.get_default_room(user.org_id, user_id)
+	{:ok, status} = create_status(%{ user_id: user_id, room_id: room.id, status: :focus })
+	status
+    end
   end
 
   @doc """

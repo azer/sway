@@ -1,6 +1,5 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
-import selectors from 'selectors'
 import { useMediaTrack } from '@daily-co/daily-react-hooks'
 // import { useSelector, useDispatch } from 'state'
 

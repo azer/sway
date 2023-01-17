@@ -23,7 +23,9 @@ defmodule BafaWeb.AppController do
 
     [org, rooms, status] = fetchRoomData(org_id, user_id)
 
-    room = Enum.find(rooms, fn el -> el.slug == slug end)
+    room = Enum.find(rooms, fn el ->
+      el.slug == slug
+    end)
 
     render(conn, "index.html",
       user: conn.assigns.current_user,
@@ -45,7 +47,7 @@ defmodule BafaWeb.AppController do
         [nil, []]
       end
 
-     status = Bafa.Statuses.get_current_status(user_id, org.id)
+     status = Bafa.Statuses.get_latest_status(user_id)
 
      [org, allRooms, status]
   end

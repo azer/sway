@@ -112,7 +112,7 @@ export function usePushToTalkSettings() {
   }
 }
 
-const Preview = styled('div', {
+export const Preview = styled('div', {
   width: '100%',
   height: '100%',
   overflow: 'hidden',
@@ -127,7 +127,7 @@ const Preview = styled('div', {
   },
 })
 
-const Title = styled('h1', {
+export const Title = styled('h1', {
   fontSize: '$medium',
   fontWeight: '$medium',
   textAlign: 'center',
@@ -135,7 +135,7 @@ const Title = styled('h1', {
   margin: '16px 0 8px 0',
 })
 
-const Desc = styled('h2', {
+export const Desc = styled('h2', {
   width: '200px',
   fontSize: '$small',
   fontWeight: '$normal',

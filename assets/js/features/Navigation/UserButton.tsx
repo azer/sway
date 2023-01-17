@@ -13,10 +13,10 @@ export function UserButton(props: Props) {
   // const dispatch = useDispatch()
   const [user, presence] = useSelector((state) => [
     selectors.users.getById(state, props.id),
-    selectors.dock.getPresenceStatusByUserId(state, props.id),
+    selectors.presence.getStatusByUserId(state, props.id),
   ])
 
-  const icon = getIcon(presence.mode)
+  const icon = getIcon(presence?.status)
 
   return (
     <Container>

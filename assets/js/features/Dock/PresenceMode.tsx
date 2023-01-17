@@ -2,14 +2,6 @@ import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import logger from 'lib/log'
 import { useSelector, useDispatch } from 'state'
-import {
-  PresenceMode,
-  setPresenceAsActive,
-  setPresenceAsAway,
-  setPresenceAsDoNotDisturb,
-  setPresenceAsFocus,
-  setPresenceMode,
-} from './slice'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { useUserSocket } from 'features/UserSocket'
 import { PresenceModeIcon } from 'components/PresenceModeIcon'
@@ -21,6 +13,8 @@ import {
 } from 'features/Settings/slice'
 import { styled } from 'themes'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { Entity, add, Status, Statuses, PresenceMode } from 'state/entities'
+import { usePresenceSettings } from 'features/Settings/PresenceSettings'
 
 interface Props {}
 
@@ -28,191 +22,49 @@ const log = logger('status/presence')
 
 export function PresenceModeButton(props: Props) {
   const dispatch = useDispatch()
-  const { useRegister } = useCommandRegistry()
 
-  const commandPalette = useCommandPalette()
+  const presenceSettings = usePresenceSettings()
 
-  const [userId, presence] = useSelector((state) => [
+  const [userId, roomId, presence] = useSelector((state) => [
     selectors.users.getSelf(state)?.id,
-    selectors.dock.getSelfPresenceStatus(state),
+    selectors.rooms.getFocusedRoomId(state),
+    selectors.presence.getSelfStatus(state),
   ])
 
   const { channel } = useUserSocket()
 
-  useHotkeys(
-    'alt+a',
-    setModeAs(PresenceMode.Active),
-    {
-      preventDefault: true,
-    },
-    [userId]
-  )
-
-  useHotkeys(
-    'alt+f',
-    setModeAs(PresenceMode.Focus),
-    {
-      preventDefault: true,
-    },
-    [userId]
-  )
-
-  useHotkeys(
-    'alt+w',
-    setModeAs(PresenceMode.Away),
-    {
-      preventDefault: true,
-    },
-    [userId]
-  )
-
-  useHotkeys(
-    'alt+d',
-    setModeAs(PresenceMode.DoNotDisturb),
-    {
-      preventDefault: true,
-    },
-    [userId]
-  )
-
-  useEffect(() => {
-    if (!channel) return
-    channel.on(
-      'user:status',
-      (payload: { presence_mode: string; user_id: string }) => {
-        switch (payload.presence_mode) {
-          case 'focus':
-            dispatch(setPresenceAsFocus(payload.user_id))
-            break
-          case 'dnd':
-            dispatch(setPresenceAsDoNotDisturb(payload.user_id))
-            break
-          case 'away':
-            dispatch(setPresenceAsAway(payload.user_id))
-            break
-          case 'active':
-            dispatch(setPresenceAsActive(payload.user_id))
-            break
-        }
-      }
-    )
-  }, [channel])
-
-  useRegister(
-    (register) => {
-      register(
-        'Focus mode',
-        () => {
-          if (userId) {
-            dispatch(setPresenceAsFocus(userId))
-            dispatch(setVideoInputOff(true))
-            dispatch(setAudioInputOff(true))
-            dispatch(setAudioOutputOff(true))
-            channel?.push('user:status', { presence_mode: 'focus' })
-          }
-        },
-        {
-          icon: 'headphones',
-          shortcut: ['alt', 'f'],
-          type: CommandType.AlterMode,
-          when: presence?.mode !== PresenceMode.Focus,
-        }
-      )
-
-      register(
-        'Active mode',
-        async () => {
-          if (userId) {
-            dispatch(setPresenceAsActive(userId))
-            //log.info('switching to active mode', cameras[0], microphones[0])
-
-            //if (cameras.length > 0) setCamera(cameras[0].device.deviceId)
-            /*if (microphones.length > 0)
-              setMicrophone(microphones[0].device.deviceId)*/
-
-            dispatch(setVideoInputOff(false))
-            dispatch(setAudioInputOff(false))
-            dispatch(setAudioOutputOff(false))
-
-            log.info('Push to user:status channel', channel)
-            channel?.push('user:status', { presence_mode: 'active' })
-          }
-        },
-        {
-          icon: 'phoneCall',
-          shortcut: ['alt', 'a'],
-          type: CommandType.AlterMode,
-          when: presence?.mode !== PresenceMode.Active,
-        }
-      )
-
-      register(
-        'Away mode',
-        () => {
-          if (userId) {
-            dispatch(setPresenceAsAway(userId))
-            dispatch(setVideoInputOff(true))
-            dispatch(setAudioInputOff(true))
-            dispatch(setAudioOutputOff(true))
-            channel?.push('user:status', { presence_mode: 'away' })
-          }
-        },
-        {
-          icon: 'coffee',
-          shortcut: ['alt', 'w'],
-          type: CommandType.AlterMode,
-          when: presence?.mode !== PresenceMode.Away,
-        }
-      )
-
-      register(
-        'Do not disturb mode',
-        () => {
-          if (userId) {
-            dispatch(setPresenceAsDoNotDisturb(userId))
-            dispatch(setVideoInputOff(true))
-            dispatch(setAudioInputOff(true))
-            dispatch(setAudioOutputOff(true))
-            channel?.push('user:status', { presence_mode: 'dnd' })
-          }
-        },
-        {
-          icon: 'night',
-          shortcut: ['alt', 'd'],
-          type: CommandType.AlterMode,
-          when: presence?.mode !== PresenceMode.DoNotDisturb,
-        }
-      )
-    },
-    [userId, presence, channel]
-  )
-
-  const mode = presence?.mode || PresenceMode.Focus
-  //const label = getLabel(mode)
-
   return (
-    <Button onClick={openSettings}>
+    <Button onClick={presenceSettings.open}>
       <Circle>
-        <PresenceModeIcon mode={mode} onClick={openSettings} />
+        <PresenceModeIcon
+          active={presence.is_active}
+          mode={presence.status}
+          onClick={presenceSettings.open}
+        />
       </Circle>
     </Button>
   )
 
-  function setModeAs(mode: PresenceMode) {
-    return function () {
-      if (!userId) return
-      dispatch(setPresenceMode({ userId, mode }))
-    }
-  }
+  function switchPresenceStatus(newStatus: PresenceMode) {
+    switch (newStatus) {
+      case 'active':
+        dispatch(setVideoInputOff(false))
+        dispatch(setAudioInputOff(false))
+        dispatch(setAudioOutputOff(false))
+        break
 
-  function openSettings() {
-    if (!commandPalette.isOpen)
-      commandPalette.open([], {
-        id: 'cmdk',
-        title: 'Bafa Command',
-        icon: 'command',
-        placeholder: '',
-      })
+      default:
+        dispatch(setVideoInputOff(false))
+        dispatch(setAudioInputOff(false))
+        dispatch(setAudioOutputOff(false))
+    }
+
+    if (!channel) return
+
+    channel.push('user:status', {
+      presence_mode: newStatus,
+      room_id: roomId,
+    })
   }
 }
 

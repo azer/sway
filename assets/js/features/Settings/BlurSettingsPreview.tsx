@@ -32,8 +32,9 @@ export function BlurSettingsPreview(props: Props) {
   const [delayedValue, setDelayedValue] =
     useState<number | undefined>(undefined)
 
-  const [isOff, deviceId, deviceLabel] = useSelector((state) => [
+  const [isOff, isActive, deviceId, deviceLabel] = useSelector((state) => [
     selectors.settings.isVideoInputOff(state),
+    selectors.presence.getSelfStatus(state).is_active,
     selectors.settings.getVideoInputDeviceId(state),
     selectors.settings.getVideoInputDeviceLabelById(
       state,
@@ -50,7 +51,7 @@ export function BlurSettingsPreview(props: Props) {
       clearTimer()
       turnOffVideo()
     }
-  }, [call])
+  }, [isActive, call])
 
   useEffect(() => {
     if (processing === undefined) {
@@ -98,7 +99,7 @@ export function BlurSettingsPreview(props: Props) {
         setProcessing(previewValue)
 
         try {
-          call.updateInputSettings({
+          await call.updateInputSettings({
             video: {
               processor:
                 previewValue === 0
@@ -119,13 +120,13 @@ export function BlurSettingsPreview(props: Props) {
         turnOnVideo()
         log.info('Processing done', previewValue)
       },
-      waiting ? 1500 : 0
+      waiting ? 1500 : 500
     )
   }, [previewValue])
 
   return (
     <Container>
-      <Waiting visible={waiting}>Processing</Waiting>
+      <Waiting visible={processing !== undefined}>Processing</Waiting>
       {isOff ? (
         <CameraOff>
           <Icon name="video-off" />
@@ -139,7 +140,7 @@ export function BlurSettingsPreview(props: Props) {
       <Table>
         <Prop>Blur</Prop>
         <Value off={props.value === 0 || error}>
-          {error ? 'Error' : waiting ? 'Processing' : label}
+          {error ? 'Error' : processing !== undefined ? 'Processing' : label}
         </Value>
         <Prop>Camera</Prop>
         <Value off={isOff}>{deviceLabel}</Value>
@@ -168,6 +169,7 @@ export function BlurSettingsPreview(props: Props) {
 
   function turnOffVideo() {
     if (!call) return
+    if (isActive) return
 
     log.info('Turn off local video')
     videoTrack.persistentTrack?.stop()

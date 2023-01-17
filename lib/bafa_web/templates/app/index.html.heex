@@ -11,6 +11,11 @@
 	id: "<%= @selected_room_id %>"
       }
     },
+    status: {
+	<%= if @status != nil do %>
+	id: "<%= @status.id %>"
+	<%= end %>
+    },
     entities: {
       orgs: [
 	{
@@ -46,8 +51,10 @@
 	  {
 	    id: "<%= @status.id %>",
 	    userId: "<%= @status.user_id %>",
+	    roomId: "<%= @status.room_id %>",
 	    status: "<%= @status.status %>",
 	    message: "<%= @status.message %>",
+	    inserted_at: "<%= @status.inserted_at %>",
 	  }
 	  <%= end %>
       ]

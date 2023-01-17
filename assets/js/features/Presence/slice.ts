@@ -1,32 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PresenceMode } from 'state/entities'
 
 export const name = 'presence'
+export const DefaultPresenceMode = PresenceMode.Focus
 
 interface State {
-  online: string[]
-  lastSeenAt: { [id: string]: string }
+  userStatuses: { [userId: string]: string }
 }
 
 export const initialState: State = {
-  online: [],
-  lastSeenAt: {},
+  userStatuses: {},
 }
 
 export const slice = createSlice({
   name,
   initialState,
   reducers: {
-    update: (
+    setStatusId: (
       state,
-      action: PayloadAction<{ id: string; lastSeenAt: string }[]>
+      action: PayloadAction<{ userId: string; statusId: string }>
     ) => {
-      state.online = action.payload.map((r) => r.id)
-      for (const row of action.payload) {
-        state.lastSeenAt[row.id] = row.lastSeenAt
-      }
+      state.userStatuses[action.payload.userId] = action.payload.statusId
     },
   },
 })
 
-export const { update } = slice.actions
+export const { setStatusId } = slice.actions
 export default slice.reducer

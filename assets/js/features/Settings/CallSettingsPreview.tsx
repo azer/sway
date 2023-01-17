@@ -24,6 +24,7 @@ export function CallSettingsPreview(props: Props) {
   const videoTrack = useVideoTrack(localParticipant?.session_id || '')
 
   const [
+    isActive,
     isVideoOff,
     videoDeviceId,
     videoDeviceLabel,
@@ -36,6 +37,7 @@ export function CallSettingsPreview(props: Props) {
     blurLabel,
     blurValue,
   ] = useSelector((state) => [
+    selectors.presence.getSelfStatus(state).is_active,
     selectors.settings.isVideoInputOff(state),
     selectors.settings.getVideoInputDeviceId(state),
     selectors.settings.getVideoInputDeviceLabelById(
@@ -80,14 +82,16 @@ export function CallSettingsPreview(props: Props) {
     }
 
     return () => {
-      log.info('Turn off local video')
+      log.info('Turn off local video', isActive)
+      if (isActive) return
+
       videoTrack.persistentTrack?.stop()
       call.setLocalVideo(false)
       call.setInputDevicesAsync({
         videoSource: false,
       })
     }
-  }, [call])
+  }, [call, isActive])
 
   return (
     <Container>
@@ -114,7 +118,7 @@ export function CallSettingsPreview(props: Props) {
         <Value off={isSpeakerOff}>
           {isSpeakerOff ? 'off' : speakerDeviceLabel || speakerDeviceId}
         </Value>
-        <Prop>Background Blur</Prop>
+        <Prop>Blur</Prop>
         <Value off={blurValue === 0}>{blurLabel}</Value>
       </Table>
     </Container>
@@ -122,6 +126,7 @@ export function CallSettingsPreview(props: Props) {
 }
 
 const Container = styled('div', {
+  position: 'relative',
   width: '100%',
   height: '100%',
   overflow: 'hidden',

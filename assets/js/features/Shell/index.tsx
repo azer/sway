@@ -3,8 +3,8 @@ import { styled } from 'themes'
 import Sidebar from 'features/Sidebar'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { PresenceMode } from 'features/Dock/slice'
 import { Navigation } from 'features/Navigation'
+import { PresenceMode } from 'state/entities'
 
 interface Props {
   children?: React.ReactNode
@@ -12,11 +12,11 @@ interface Props {
 
 export function Shell(props: Props) {
   const [presenceMode] = useSelector((state) => [
-    selectors.dock.getSelfPresenceStatus(state),
+    selectors.presence.getSelfStatus(state),
   ])
 
   return (
-    <Container mode={presenceMode?.mode}>
+    <Container mode={presenceMode?.status}>
       <Navigation />
       {props.children}
       <Sidebar />
@@ -37,14 +37,14 @@ const Container = styled('main', {
   overflow: 'hidden',
   variants: {
     mode: {
-      [PresenceMode.Active]: {
-        backgroundImage: `${bottomBlurEffect('$presenceModelineActiveBlur')}`,
+      [PresenceMode.Social]: {
+        backgroundImage: `${bottomBlurEffect('$presenceModelineSocialBlur')}`,
       },
-      [PresenceMode.Away]: {
-        backgroundImage: `${bottomBlurEffect('$presenceModelineAwayBlur')}`,
+      [PresenceMode.Solo]: {
+        backgroundImage: `${bottomBlurEffect('$presenceModelineSoloBlur')}`,
       },
-      [PresenceMode.DoNotDisturb]: {
-        backgroundImage: `${bottomBlurEffect('$presenceModelineDndBlur')}`,
+      [PresenceMode.Zen]: {
+        backgroundImage: `${bottomBlurEffect('$presenceModelineZenBlur')}`,
       },
       [PresenceMode.Focus]: {
         backgroundImage: `${bottomBlurEffect('$presenceModelineFocusBlur')}`,

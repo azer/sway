@@ -26,8 +26,8 @@ interface State {
 }
 
 export const initialState: State = {
-  videoInputOff: false,
-  audioInputOff: false,
+  videoInputOff: true,
+  audioInputOff: true,
   audioOutputOff: false,
   pushToTalkVideo: true,
   videoInputDevices: [],

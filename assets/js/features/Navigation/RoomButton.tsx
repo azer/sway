@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { Avatar } from 'features/Avatar'
-import { PresenceMode } from 'features/Dock/slice'
+
 import { AvatarStack } from 'features/Avatar/AvatarView'
+import { RoomStatus } from 'features/Room/selectors'
 // import { useSelector, useDispatch } from 'state'
 
 interface Props {
@@ -16,10 +17,10 @@ interface Props {
 export function RoomButton(props: Props) {
   const navigate = useNavigate()
 
-  const [room, usersInRoom, roomPresenceMode] = useSelector((state) => [
+  const [room, usersInRoom, roomStatus] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.id),
     selectors.rooms.getUsersInRoom(state, props.id),
-    selectors.rooms.getRoomPresenceMode(state, props.id),
+    selectors.rooms.getRoomStatus(state, props.id),
   ])
 
   return (
@@ -28,7 +29,7 @@ export function RoomButton(props: Props) {
       hasUsers={!props.selected && usersInRoom.length > 0}
       onClick={handleClick}
     >
-      <PresenceIcon mode={roomPresenceMode} />
+      <PresenceIcon mode={roomStatus} />
       <Name>{room?.name || ''}</Name>
       {!props.selected && usersInRoom.length > 0 ? (
         <Users>
@@ -97,13 +98,13 @@ const PresenceIcon = styled('div', {
   round: true,
   variants: {
     mode: {
-      [PresenceMode.Offline]: {
+      [RoomStatus.Offline]: {
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
       },
-      [PresenceMode.Focus]: {
+      [RoomStatus.Focus]: {
         backgroundColor: '$yellow',
       },
-      [PresenceMode.Active]: {
+      [RoomStatus.Active]: {
         backgroundColor: '$green',
       },
     },

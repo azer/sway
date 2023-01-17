@@ -1,36 +1,16 @@
+import { logger } from 'lib/log'
 import selectors from 'selectors'
 import { RootState } from 'state'
-import {
-  PresenceMode,
-  PresenceStatus,
-  ConnectionStatus,
-  ConnectionState,
-} from './slice'
+import { PresenceMode, Status } from 'state/entities'
+import { ConnectionStatus, ConnectionState } from './slice'
 
-export function getPresenceStatusByUserId(
-  state: RootState,
-  userId: string
-): PresenceStatus {
-  return state.dock.presence[userId] || { userId, mode: PresenceMode.Focus }
-}
+const log = logger('dock/selectors')
 
 export function getConnectionStatusByUserId(
   state: RootState,
   userId: string
 ): ConnectionStatus | undefined {
   return state.dock.connection[userId]
-}
-
-export function getSelfPresenceStatus(
-  state: RootState
-): PresenceStatus | undefined {
-  const userId = selectors.users.getSelf(state)?.id
-  return userId ? getPresenceStatusByUserId(state, userId) : undefined
-}
-
-export function getSelfCallStatus(state: RootState): CallStatus | undefined {
-  const userId = selectors.users.getSelf(state)?.id
-  return userId ? getCallStatusByUserId(state, userId) : undefined
 }
 
 export function getSelfConnectionStatus(

@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppDispatch } from './store'
 
 export type Entity = User | Org | Room | Status | Participant
 export type Table =
@@ -42,13 +41,22 @@ export interface Room {
   isDefault: boolean
 }
 
+export enum PresenceMode {
+  Social = 'social',
+  Focus = 'focus',
+  Solo = 'solo',
+  Zen = 'zen',
+}
+
 export const Statuses = 'statuses'
 export interface Status {
   id: string
-  room_id: string
   user_id: string
-  status: string
+  room_id: string
+  status: PresenceMode
+  is_active: boolean
   message: string
+  inserted_at: Date
 }
 
 export const Presences = 'presences'

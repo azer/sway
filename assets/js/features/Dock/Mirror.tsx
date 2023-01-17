@@ -2,22 +2,26 @@ import { styled } from 'themes'
 import React from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { ConnectionState, PresenceMode } from './slice'
+import { ConnectionState } from './slice'
 import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import Video from 'features/Call/Video'
 import { AvatarView } from 'features/Avatar/AvatarView'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
+import { PresenceMode } from 'state/entities'
 
 interface Props {}
 
 export function Mirror(props: Props) {
   // const dispatch = useDispatch()
-  const [user, presence, conn, isCameraOff] = useSelector((state) => [
-    selectors.users.getSelf(state),
-    selectors.dock.getSelfPresenceStatus(state),
-    selectors.dock.getSelfConnectionStatus(state),
-    selectors.settings.isVideoInputOff(state),
-  ])
+  const [user, isActive, isOnSocialMode, conn, isCameraOff] = useSelector(
+    (state) => [
+      selectors.users.getSelf(state),
+      selectors.presence.getSelfStatus(state).is_active,
+      selectors.presence.getSelfStatus(state).status === PresenceMode.Social,
+      selectors.dock.getSelfConnectionStatus(state),
+      selectors.settings.isVideoInputOff(state),
+    ]
+  )
 
   const localParticipant = useLocalParticipant()
   const cameraSettings = useVideoSettings()
@@ -41,9 +45,7 @@ export function Mirror(props: Props) {
 
   return (
     <Container onClick={cameraSettings.open}>
-      {localParticipant &&
-      presence?.mode === PresenceMode.Active &&
-      !isCameraOff ? (
+      {localParticipant && (isActive || isOnSocialMode) && !isCameraOff ? (
         <SelfVideo>
           <Video id={localParticipant.session_id} />
         </SelfVideo>
@@ -55,14 +57,7 @@ export function Mirror(props: Props) {
           fill
         />
       )}
-      <ConnectionIcon
-        status={status}
-        title={'Connection:' + status}
-        small={
-          presence?.mode === PresenceMode.Active &&
-          status === ConnectionState.Successful
-        }
-      />
+      <ConnectionIcon status={status} title={'Connection:' + status} small />
     </Container>
   )
 }

@@ -1,11 +1,12 @@
 import { styled } from 'themes'
 import React from 'react'
-import { PresenceMode } from 'features/Dock/slice'
 import Icon from 'components/Icon'
+import { PresenceMode } from 'state/entities'
 
 interface Props {
   mode: PresenceMode
-  onClick: () => void
+  active?: boolean
+  onClick?: () => void
 }
 
 export function PresenceModeIcon(props: Props) {
@@ -13,32 +14,40 @@ export function PresenceModeIcon(props: Props) {
   // const [] = useSelector((state) => [])
 
   return (
-    <Container mode={props.mode} onClick={props.onClick}>
-      <Icon name={getIcon(props.mode)} />
+    <Container active={props.active} mode={props.mode} onClick={props.onClick}>
+      <Icon name={getIcon(props.mode, props.active)} />
     </Container>
   )
 }
 
-export function getIcon(mode: string): string {
-  if (mode === PresenceMode.Active) return 'phoneCall'
-  if (mode === PresenceMode.DoNotDisturb) return 'night'
-  if (mode === PresenceMode.Away) return 'coffee'
+export function getIcon(mode: string, active: boolean): string {
+  if (active) return 'phoneCall'
+  if (mode === PresenceMode.Social) return 'eye'
+  if (mode === PresenceMode.Solo) return 'incognito'
+  if (mode === PresenceMode.Zen) return 'sunrise'
   return 'headphones'
 }
 
 export function getLabel(mode: string): string {
-  if (mode === PresenceMode.Active) return 'Active'
-  if (mode === PresenceMode.DoNotDisturb) return 'Do Not Disturb'
-  if (mode === PresenceMode.Away) return 'Away'
+  if (mode === PresenceMode.Social) return 'Social'
+  if (mode === PresenceMode.Solo) return 'Solo'
+  if (mode === PresenceMode.Zen) return 'Zen'
   return 'Focus'
+}
+
+export function getDesc(mode: string): string {
+  if (mode === PresenceMode.Social) return 'Be present, visible.'
+  if (mode === PresenceMode.Solo) return 'Private and selective.'
+  if (mode === PresenceMode.Zen) return 'Calm, undisturbed.'
+  return 'Productive and responsive.'
 }
 
 export const Container = styled('div', {
   variants: {
     mode: {
-      away: {
+      solo: {
         '& svg': {
-          color: '$presenceModelineAwayFg',
+          color: '$presenceModelineSoloFg',
         },
         '& svg path': {
           filter: 'drop-shadow(0px 0px 4px rgba(255, 93, 224, 0.7))',
@@ -52,20 +61,30 @@ export const Container = styled('div', {
           filter: 'drop-shadow(0px 0px 4px rgba(242, 201, 76, 0.9))',
         },
       },
-      active: {
+      social: {
         '& svg': {
-          color: '$presenceModelineActiveFg',
+          color: '$presenceModelineSocialFg',
         },
         '& svg path': {
           filter: 'drop-shadow(0px 0px 4px rgba(38, 181, 206, 0.9))',
         },
       },
-      do_not_disturb: {
+      zen: {
         '& svg': {
-          color: '$presenceModelineDndFg',
+          color: '$presenceModelineZenFg',
         },
         '& svg path': {
           filter: 'drop-shadow(0px 0px 4px rgba(235, 87, 87, 0.9))',
+        },
+      },
+    },
+    active: {
+      true: {
+        '& svg': {
+          color: '$presenceModelineActiveFg',
+        },
+        '& svg path': {
+          filter: 'drop-shadow(0px 0px 4px rgba(38, 181, 206, 0.9))',
         },
       },
     },

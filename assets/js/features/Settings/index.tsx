@@ -17,6 +17,7 @@ import { useSpeakerSettings } from './SpeakerSettings'
 import debounce from 'debounce-fn'
 import { usePushToTalkSettings } from './PushToTalkSettings'
 import { useBackgroundBlurSettings } from './BackgroundBlur'
+import { usePresenceSettings } from './PresenceSettings'
 
 interface Props {}
 
@@ -30,6 +31,7 @@ export function useSettings() {
   const speakerSettings = useSpeakerSettings()
   const pushToTalkSettings = usePushToTalkSettings()
   const backgroundBlur = useBackgroundBlurSettings()
+  const presenceSettings = usePresenceSettings()
 
   const callSyncDevices = debounce(() => {
     dispatch(syncDevices())
@@ -52,6 +54,7 @@ export function useSettings() {
     currentSpeakerLabel,
     pushToTalkVideo,
     backgroundBlurLabel,
+    presenceSettingsLabel,
   ] = useSelector((state) => [
     selectors.settings.getVideoInputDeviceLabelById(
       state,
@@ -67,6 +70,7 @@ export function useSettings() {
     ),
     selectors.settings.isPushToTalkVideoOn(state),
     selectors.settings.getBackgroundBlurLabel(state),
+    selectors.presence.getSelfStatusLabel(state),
   ])
 
   useEffect(() => {
@@ -137,6 +141,13 @@ export function useSettings() {
         name: 'Background Blur',
         hint: backgroundBlurLabel,
         palette: backgroundBlur,
+      },
+      {
+        id: 'presence-settings',
+        icon: 'livestream',
+        name: 'Presence',
+        hint: presenceSettingsLabel,
+        palette: presenceSettings,
       },
       {
         id: 'back',

@@ -14,7 +14,7 @@ const log = logger('video')
 export default function Video(props: Props) {
   // const dispatch = useDispatch()
   const [isActive, isSpeakerOff] = useSelector((state) => [
-    selectors.dock.getSelfPresenceStatus(state),
+    selectors.presence.getSelfStatus(state),
     selectors.settings.isAudioOutputOff(state),
   ])
   const track = useMediaTrack(props.id, 'video')

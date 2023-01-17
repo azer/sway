@@ -57,23 +57,60 @@ defmodule BafaWeb.ChatChannel do
         room_id: id
       })
 
-    {:noreply, socket}
+    status = Bafa.Statuses.get_latest_status(socket.assigns.user)
+
+    case Bafa.Statuses.update_status(status, %{room_id: id}) do
+      {:ok, status} -> {:noreply, socket}
+      {:error, reason} -> {:error, %{reason: reason}}
+    end
   end
 
-  def handle_in("user:status", %{"presence_mode" => presence_mode}, socket) do
-    broadcast(socket, "user:status", %{
-      "presence_mode" => presence_mode,
-      "user_id" => socket.assigns.user
-    })
+  def handle_in("user:status", %{"presence_mode" => presence_mode, "room_id" => room_id}, socket) do
+    {room_id_int, ""} = Integer.parse(room_id)
 
-    IO.puts(presence_mode)
+    case Bafa.Statuses.create_status(%{
+           status: presence_mode,
+           user_id: socket.assigns.user,
+           room_id: room_id_int
+         }) do
+      {:ok, status} ->
+        broadcast(socket, "user:status", %{
+          "id" => status.id,
+          "room_id" => status.room_id,
+          "user_id" => status.user_id,
+          "message" => status.message,
+          "is_active" => status.is_active,
+          "status" => status.status,
+          "inserted_at" => status.inserted_at
+        })
 
-    case Bafa.Statuses.create_status(%{status: presence_mode, user_id: socket.assigns.user}) do
-      {:ok, status} -> IO.inspect(status)
-      {:error, reason} -> IO.puts(reason)
+        {:noreply, socket}
+
+      {:error, reason} ->
+        {:error, %{reason: reason}}
     end
+  end
 
-    {:noreply, socket}
+  def handle_in("user:status", %{"is_active" => is_active}, socket) do
+    status = Bafa.Statuses.get_latest_status(socket.assigns.user)
+
+    case Bafa.Statuses.update_status(status, %{is_active: is_active}) do
+      {:ok, status} ->
+        broadcast(socket, "user:status", %{
+          "id" => status.id,
+          "room_id" => status.room_id,
+          "user_id" => status.user_id,
+          "message" => status.message,
+	  "is_active" => status.is_active,
+          "status" => status.status,
+          "inserted_at" => status.inserted_at
+        })
+
+        {:noreply, socket}
+
+      {:error, reason} ->
+        {:error, %{reason: reason}}
+    end
   end
 
   # It is also common to receive messages from the client and

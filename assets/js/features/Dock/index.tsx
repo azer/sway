@@ -1,7 +1,7 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
-import { useSelector, useDispatch } from 'state'
+import { useSelector, useDispatch, entities } from 'state'
 import { logger } from 'lib/log'
 import { Mirror } from './Mirror'
 import { PresenceModeButton } from './PresenceMode'
@@ -12,10 +12,18 @@ import { useSettings } from 'features/Settings'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
 import { useMicSettings } from 'features/Settings/MicSettings'
 import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
-import { PresenceMode, setPresenceAsActive } from './slice'
 import { ScreenshareButton } from 'features/Screenshare/Provider'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { setAudioInputOff, setVideoInputOff } from 'features/Settings/slice'
+import {
+  add,
+  Entity,
+  PresenceMode,
+  Statuses,
+  toStateEntity,
+} from 'state/entities'
+import { isAudioInputOff } from 'features/Settings/selectors'
+import { useUserSocket } from 'features/UserSocket'
 
 interface Props {
   roomId: string
@@ -25,12 +33,6 @@ const log = logger('dock')
 
 export function Dock(props: Props) {
   const dispatch = useDispatch()
-  const pushToTalkStopRef = useRef<NodeJS.Timer | null>(null)
-  const [pushToTalk, setPushToTalk] = useState(false)
-  const [mediaSettings, setMediaSettings] = useState({
-    audioInputOff: false,
-    videoInputOff: false,
-  })
 
   const localParticipant = useLocalParticipant()
   const settings = useSettings()
@@ -38,48 +40,18 @@ export function Dock(props: Props) {
   const micSettings = useMicSettings()
   const speakerSettings = useSpeakerSettings()
 
-  const [
-    localUser,
-    isActive,
-    isVideoOff,
-    isMicOff,
-    isSpeakerOff,
-    isOnAirpods,
-    pushToTalkVideo,
-  ] = useSelector((state) => {
-    const isActive =
-      selectors.dock.getSelfPresenceStatus(state)?.mode === PresenceMode.Active
+  const [localUser, isCameraOff, isMicOff, isSpeakerOff, isOnAirpods] =
+    useSelector((state) => {
+      const status = selectors.presence.getSelfStatus(state)
 
-    return [
-      selectors.users.getSelf(state),
-      isActive,
-      !isActive || selectors.settings.isVideoInputOff(state),
-      !isActive || selectors.settings.isAudioInputOff(state),
-      !isActive || selectors.settings.isAudioOutputOff(state),
-      selectors.settings.isOnAirpods(state),
-      selectors.settings.isPushToTalkVideoOn(state),
-    ]
-  })
-
-  useHotkeys(
-    'space',
-    startPushToTalk,
-    {
-      preventDefault: true,
-      keydown: true,
-    },
-    [isMicOff, isVideoOff, pushToTalkVideo]
-  )
-
-  useHotkeys(
-    'space',
-    delayStoppingPushToTalk,
-    {
-      preventDefault: true,
-      keyup: true,
-    },
-    [pushToTalk, isMicOff, isVideoOff]
-  )
+      return [
+        selectors.users.getSelf(state),
+        !status?.is_active || selectors.settings.isVideoInputOff(state),
+        !status?.is_active || selectors.settings.isAudioInputOff(state),
+        !status?.is_active || selectors.settings.isAudioOutputOff(state),
+        selectors.settings.isOnAirpods(state),
+      ]
+    })
 
   useEffect(() => {
     if (!localParticipant || !localUser) return
@@ -107,62 +79,31 @@ export function Dock(props: Props) {
       <Separator />
       <PresenceModeButton />
       <Separator group />
-      {isActive ? (
-        <>
-          <Buttonset>
-            <Button
-              icon={isVideoOff ? 'video-off' : 'video'}
-              label="Camera"
-              onClick={cameraSettings.open}
-              off={isVideoOff}
-            />
-            <Button
-              icon={isMicOff ? 'mic-off' : isOnAirpods ? 'airpods' : 'mic'}
-              label="Microphone"
-              onClick={micSettings.open}
-              off={isMicOff}
-            />
-            <ScreenshareButton />
-            <Button
-              icon={isSpeakerOff ? 'speaker-off' : 'speaker-volume-high'}
-              label="Speaker"
-              onClick={speakerSettings.open}
-              off={isSpeakerOff}
-            />
-          </Buttonset>
-          <Separator group />
-        </>
-      ) : null}
+      <Buttonset>
+        <Button
+          icon={isCameraOff ? 'video-off' : 'video'}
+          label="Camera"
+          onClick={cameraSettings.open}
+          off={isCameraOff}
+        />
+        <Button
+          icon={isMicOff ? 'mic-off' : isOnAirpods ? 'airpods' : 'mic'}
+          label="Microphone"
+          onClick={micSettings.open}
+          off={isMicOff}
+        />
+        <ScreenshareButton />
+        <Button
+          icon={isSpeakerOff ? 'speaker-off' : 'speaker-volume-high'}
+          label="Speaker"
+          onClick={speakerSettings.open}
+          off={isSpeakerOff}
+        />
+      </Buttonset>
+      <Separator group />
       <Button icon="sliders" label="Options" onClick={settings.open} />
     </Container>
   )
-
-  function startPushToTalk() {
-    if (!isActive || !isMicOff || pushToTalk) return
-
-    setMediaSettings({ audioInputOff: isMicOff, videoInputOff: isVideoOff })
-    setPushToTalk(true)
-    dispatch(setAudioInputOff(false))
-
-    if (pushToTalkVideo) {
-      dispatch(setVideoInputOff(false))
-    }
-  }
-
-  function delayStoppingPushToTalk() {
-    pushToTalkStopRef.current = setTimeout(() => {
-      stopPushToTalk()
-      pushToTalkStopRef.current = null
-    }, 1500)
-  }
-
-  function stopPushToTalk() {
-    if (!pushToTalk) return
-
-    setPushToTalk(false)
-    dispatch(setAudioInputOff(mediaSettings.audioInputOff))
-    dispatch(setVideoInputOff(mediaSettings.videoInputOff))
-  }
 }
 
 const Container = styled('nav', {

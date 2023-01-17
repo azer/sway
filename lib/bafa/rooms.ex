@@ -41,6 +41,10 @@ defmodule Bafa.Rooms do
     Repo.get_by(Room, org_id: org_id, name: name)
   end
 
+  def get_default_room(org_id, user_id) do
+    list_org_rooms(org_id, user_id) |> hd
+  end
+
   def list_org_rooms(org_id, user_id) when is_integer(org_id) do
     lobby = %{
       "name" => "lobby",

@@ -3,7 +3,6 @@ import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import { ActiveParticipant } from 'features/Call/ActiveParticipant'
 import logger from 'lib/log'
-import { PresenceMode } from 'features/Dock/slice'
 import { styled } from 'themes'
 import {
   getIcon,
@@ -12,7 +11,7 @@ import {
 } from 'components/PresenceModeIcon'
 import Icon from 'components/Icon'
 import { AvatarView } from 'features/Avatar/AvatarView'
-import { Users } from 'state/entities'
+import { PresenceMode, Users } from 'state/entities'
 import { useUserSocket } from 'features/UserSocket'
 
 interface Props {
@@ -26,7 +25,7 @@ export function Participant(props: Props) {
   const [user, participant, status] = useSelector((state) => [
     selectors.users.getById(state, props.userId),
     selectors.call.getParticipantStatusByUserId(state, props.userId),
-    selectors.dock.getPresenceStatusByUserId(state, props.userId),
+    selectors.presence.getStatusByUserId(state, props.userId),
   ])
 
   useEffect(() => {
@@ -38,7 +37,7 @@ export function Participant(props: Props) {
   if (
     participant &&
     participant.dailyUserId &&
-    status.mode === PresenceMode.Active
+    (participant.cameraOn || participant?.micOn)
   ) {
     return <ActiveParticipant participantId={participant.dailyUserId} />
   }
@@ -46,11 +45,11 @@ export function Participant(props: Props) {
   return (
     <InactiveParticipant
       data-user-id={props.userId}
-      title={getLabel(status.mode)}
+      title={getLabel(status.status)}
     >
-      <User mode={String(status.mode)}>
-        <Mode mode={String(status.mode)}>
-          <Icon name={getIcon(status.mode)} />
+      <User mode={status.status}>
+        <Mode mode={status.status}>
+          <Icon name={getIcon(status.status, status.is_active)} />
         </Mode>
         <Name>{user?.name || 'Unknown'}</Name>
       </User>
@@ -104,7 +103,7 @@ export const User = styled('footer', {
         color: '$participantAwayFg',
         background: '$participantAwayBg',
       },
-      do_not_disturb: {
+      dnd: {
         color: '$participantDndFg',
         background: '$participantDndBg',
       },
@@ -141,7 +140,7 @@ const Mode = styled('div', {
         color: '$participantAwayFg',
         background: '$participantAwayBg',
       },
-      do_not_disturb: {
+      dnd: {
         color: '$participantDndFg',
         background: '$participantDndBg',
       },

@@ -7,7 +7,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { logger } from 'lib/log'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { PresenceMode } from 'features/Dock/slice'
+import { PresenceMode } from 'state/entities'
 
 interface Props {}
 
@@ -19,7 +19,7 @@ export function ScreenshareProvider(props: Props) {
     useScreenShare()
 
   const [isActive] = useSelector((state) => [
-    selectors.dock.getSelfPresenceStatus(state)?.mode === PresenceMode.Active,
+    selectors.presence.getSelfStatus(state)?.status === PresenceMode.Social,
   ])
 
   useHotkeys(
@@ -85,6 +85,8 @@ export function ScreenshareProvider(props: Props) {
 export function ScreenshareButton(props: {}) {
   const { isSharingScreen, startScreenShare, stopScreenShare } =
     useScreenShare()
+
+  if (!isSharingScreen) return null
 
   const label = isSharingScreen
     ? 'Stop presenting your screen'

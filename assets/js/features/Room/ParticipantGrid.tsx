@@ -4,10 +4,8 @@ import selectors from 'selectors'
 import { useSelector } from 'state'
 import { Participant } from './RoomParticipant'
 import logger from 'lib/log'
-import { PresenceMode } from 'features/Dock/slice'
 import { useMediaTrack, useScreenShare } from '@daily-co/daily-react-hooks'
-import { CommandType } from 'features/CommandPalette'
-import { useCommandRegistry } from 'features/CommandRegistry'
+import { PresenceMode } from 'state/entities'
 
 interface Props {
   roomId: string
@@ -16,9 +14,6 @@ interface Props {
 const log = logger('rooms/participant-grid')
 
 export function ParticipantGrid(props: Props) {
-  // const dispatch = useDispatch()
-  // const [] = useSelector((state) => [])
-
   const [activeUsers, inactiveUsers, divide] = useSelector((state) => {
     const users = selectors.rooms
       .getUsersInRoom(state, props.roomId)
@@ -26,13 +21,16 @@ export function ParticipantGrid(props: Props) {
 
     const activeUsers = users.filter(
       (uid) =>
-        selectors.dock.getPresenceStatusByUserId(state, uid).mode ===
-        PresenceMode.Active
+        selectors.presence.getStatusByUserId(state, uid).is_active ||
+        selectors.presence.getStatusByUserId(state, uid).status ===
+          PresenceMode.Social
     )
+
     const inactiveUsers = users.filter(
       (uid) =>
-        selectors.dock.getPresenceStatusByUserId(state, uid).mode !==
-        PresenceMode.Active
+        !selectors.presence.getStatusByUserId(state, uid).is_active &&
+        selectors.presence.getStatusByUserId(state, uid).status !==
+          PresenceMode.Social
     )
 
     return [
