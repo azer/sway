@@ -15,7 +15,7 @@ export function getFocusedRoomId(state: RootState): string {
   return selectors.shell.getFocus(state).center.room.roomId
 }
 
-export function getFocusedRoom(state: RootState): Room {
+export function getFocusedRoom(state: RootState): Room | undefined {
   return getRoomById(state, getFocusedRoomId(state))
 }
 

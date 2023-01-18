@@ -21,12 +21,12 @@ export function ActiveParticipant(props: Props) {
   const audioElement = useRef<HTMLAudioElement>()
 
   const participant = useParticipant(props.participantId)
-  const [user, isSpeakerOff] = useSelector((state) => [
+  const [user, isSpeakerOn] = useSelector((state) => [
     participant?.userData
       ? // @ts-ignore
         selectors.users.getById(state, participant.userData.id)
       : undefined,
-    selectors.settings.isAudioOutputOff(state),
+    selectors.dock.isAudioOutputOn(state),
   ])
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export function ActiveParticipant(props: Props) {
         ) : null}
 
         <Video id={props.participantId} />
-        {!props.muted && !isSpeakerOff && audioTrack && (
+        {!props.muted && isSpeakerOn && audioTrack && (
           <audio
             autoPlay
             playsInline

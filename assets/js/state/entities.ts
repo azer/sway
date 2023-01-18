@@ -148,5 +148,14 @@ export function toStateEntity(table: Table, record: any): Entity {
     }
   }
 
+  if (table === Statuses) {
+    return {
+      ...record,
+      id: String(record.id),
+      room_id: String(record.room_id),
+      user_id: String(record.user_id),
+    }
+  }
+
   return record
 }

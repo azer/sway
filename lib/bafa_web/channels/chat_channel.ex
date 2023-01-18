@@ -60,7 +60,17 @@ defmodule BafaWeb.ChatChannel do
     status = Bafa.Statuses.get_latest_status(socket.assigns.user)
 
     case Bafa.Statuses.update_status(status, %{room_id: id}) do
-      {:ok, status} -> {:noreply, socket}
+      {:ok, status} ->
+	broadcast(socket, "user:status", %{
+          "id" => status.id,
+          "room_id" => status.room_id,
+          "user_id" => status.user_id,
+          "message" => status.message,
+          "is_active" => status.is_active,
+          "status" => status.status,
+          "inserted_at" => status.inserted_at
+        })
+	{:noreply, socket}
       {:error, reason} -> {:error, %{reason: reason}}
     end
   end

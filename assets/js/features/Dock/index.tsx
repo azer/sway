@@ -40,18 +40,14 @@ export function Dock(props: Props) {
   const micSettings = useMicSettings()
   const speakerSettings = useSpeakerSettings()
 
-  const [localUser, isCameraOff, isMicOff, isSpeakerOff, isOnAirpods] =
-    useSelector((state) => {
-      const status = selectors.presence.getSelfStatus(state)
-
-      return [
-        selectors.users.getSelf(state),
-        !status?.is_active || selectors.settings.isVideoInputOff(state),
-        !status?.is_active || selectors.settings.isAudioInputOff(state),
-        !status?.is_active || selectors.settings.isAudioOutputOff(state),
-        selectors.settings.isOnAirpods(state),
-      ]
-    })
+  const [localUser, isCameraOn, isMicOn, isSpeakerOn, isOnAirpods] =
+    useSelector((state) => [
+      selectors.users.getSelf(state),
+      selectors.dock.isVideoInputOn(state),
+      selectors.dock.isAudioInputOn(state),
+      selectors.dock.isAudioOutputOn(state),
+      selectors.settings.isOnAirpods(state),
+    ])
 
   useEffect(() => {
     if (!localParticipant || !localUser) return
@@ -81,23 +77,23 @@ export function Dock(props: Props) {
       <Separator group />
       <Buttonset>
         <Button
-          icon={isCameraOff ? 'video-off' : 'video'}
+          icon={!isCameraOn ? 'video-off' : 'video'}
           label="Camera"
           onClick={cameraSettings.open}
-          off={isCameraOff}
+          off={!isCameraOn}
         />
         <Button
-          icon={isMicOff ? 'mic-off' : isOnAirpods ? 'airpods' : 'mic'}
+          icon={!isMicOn ? 'mic-off' : isOnAirpods ? 'airpods' : 'mic'}
           label="Microphone"
           onClick={micSettings.open}
-          off={isMicOff}
+          off={!isMicOn}
         />
         <ScreenshareButton />
         <Button
-          icon={isSpeakerOff ? 'speaker-off' : 'speaker-volume-high'}
+          icon={!isSpeakerOn ? 'speaker-off' : 'speaker-volume-high'}
           label="Speaker"
           onClick={speakerSettings.open}
-          off={isSpeakerOff}
+          off={!isSpeakerOn}
         />
       </Buttonset>
       <Separator group />

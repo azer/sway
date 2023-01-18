@@ -42,6 +42,10 @@ export default function Room(props: Props) {
       })
     )
 
+    // FIXME:
+    // Change the room when user triggers
+    // Navigating to a room
+    // Or receiving a new status
     channel.push('rooms:join', { id: room.id })
   }, [channel, room, localUser, isSocketConnected])
 

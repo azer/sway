@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import logger from 'lib/log'
+import { selector } from 'recoil'
 import { AppDispatch, RootState } from 'state'
 
 const log = logger('settings/slice')
@@ -126,6 +127,26 @@ export function syncDevices() {
     listDevices('audiooutput').then((allSpeakers) => {
       dispatch(setAudioOutputDevices(allSpeakers))
     })
+  }
+}
+
+export function turnOnCamera() {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    log.info('Turning on camera')
+
+    const state = getState()
+    const currentDeviceId = state.settings.videoInputDeviceId
+    if (!currentDeviceId && state.settings.videoInputDevices.length === 0) {
+      return log.error(
+        'Can not enable video. No video input devices.',
+        currentDeviceId,
+        state.settings.videoInputDevices
+      )
+    } else if (!currentDeviceId) {
+      dispatch(setVideoInputDeviceId(state.settings.videoInputDevices[0].id))
+    }
+
+    dispatch(setVideoInputOff(false))
   }
 }
 

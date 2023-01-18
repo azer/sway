@@ -41,3 +41,29 @@ export function isBafaSocketConnected(state: RootState): boolean {
     ConnectionState.Successful
   )
 }
+
+export function isVideoInputOn(state: RootState): boolean {
+  const isTurnedOff = selectors.settings.isVideoInputOff(state)
+  const presence = selectors.presence.getSelfStatus(state)
+
+  return (
+    (presence.is_active || presence.status === PresenceMode.Social) &&
+    !isTurnedOff
+  )
+}
+
+export function isAudioInputOn(state: RootState): boolean {
+  const isTurnedOff = selectors.settings.isAudioInputOff(state)
+  const presence = selectors.presence.getSelfStatus(state)
+
+  return presence.is_active && !isTurnedOff
+}
+
+export function isAudioOutputOn(state: RootState): boolean {
+  const isTurnedOff = selectors.settings.isAudioOutputOff(state)
+  const presence = selectors.presence.getSelfStatus(state)
+
+  return (
+    (presence.is_active || presence.status !== PresenceMode.Zen) && !isTurnedOff
+  )
+}

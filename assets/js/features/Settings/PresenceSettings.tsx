@@ -19,12 +19,13 @@ import {
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Prop, Table, Value } from './CallSettingsPreview'
 import { useUserSocket } from 'features/UserSocket'
-import { useSelector } from 'state'
+import { useDispatch, useSelector } from 'state'
+import { turnOnCamera } from './slice'
 
 const dialogId = 'presence-settings'
 
 export function usePresenceSettings() {
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   // const [] = useSelector((state) => [  ])
 
   const { useRegister } = useCommandRegistry()
@@ -196,6 +197,10 @@ export function usePresenceSettings() {
   }
 
   function setMode(newMode: PresenceMode) {
+    if (newMode === PresenceMode.Social) {
+      dispatch(turnOnCamera())
+    }
+
     channel?.push('user:status', {
       presence_mode: newMode,
       room_id: roomId,
