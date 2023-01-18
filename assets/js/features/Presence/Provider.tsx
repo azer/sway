@@ -54,6 +54,12 @@ export default function PresenceProvider(props: Props) {
   }, [mode, isCameraOff, roomId])
 
   useEffect(() => {
+    if (isActive && isCameraOff) {
+      setAsInactive()
+    }
+  }, [mode, isActive, isCameraOff])
+
+  useEffect(() => {
     if (!channel) return
     channel.on('user:status', (payload: Status) => {
       log.info('Received new user status', payload)

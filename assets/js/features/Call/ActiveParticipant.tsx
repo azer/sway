@@ -6,7 +6,7 @@ import Video from './Video'
 import logger from 'lib/log'
 import { useDispatch, useSelector } from 'state'
 import { AvatarView } from 'features/Avatar/AvatarView'
-import { Name, User } from 'features/Room/RoomParticipant'
+import { Border, Name, User } from 'features/Room/RoomParticipant'
 import { ScreenshareVideo } from 'features/Screenshare/Video'
 
 interface Props {
@@ -39,34 +39,36 @@ export function ActiveParticipant(props: Props) {
   }, [audioTrack])
 
   return (
-    <Container data-participant-id={props.participantId}>
-      {participant && participant.screen ? (
-        <ScreenshareVideo sessionId={participant?.session_id} />
-      ) : null}
-
-      <Inner screensharing={!!participant?.screen}>
-        {!participant?.screen ? (
-          <User>
-            <AvatarView
-              photoUrl={user?.photoUrl}
-              name={user?.name}
-              fill
-              round="none"
-            />
-            <Name>{user?.name}</Name>
-          </User>
+    <Border active>
+      <Container data-participant-id={props.participantId}>
+        {participant && participant.screen ? (
+          <ScreenshareVideo sessionId={participant?.session_id} />
         ) : null}
 
-        <Video id={props.participantId} />
-        {!props.muted && isSpeakerOn && audioTrack && (
-          <audio
-            autoPlay
-            playsInline
-            ref={audioElement as React.RefObject<HTMLAudioElement>}
-          />
-        )}
-      </Inner>
-    </Container>
+        <Inner screensharing={!!participant?.screen}>
+          {!participant?.screen ? (
+            <User>
+              <AvatarView
+                photoUrl={user?.photoUrl}
+                name={user?.name}
+                fill
+                round="none"
+              />
+              <Name>{user?.name.split(' ')[0]}</Name>
+            </User>
+          ) : null}
+
+          <Video id={props.participantId} />
+          {!props.muted && isSpeakerOn && audioTrack && (
+            <audio
+              autoPlay
+              playsInline
+              ref={audioElement as React.RefObject<HTMLAudioElement>}
+            />
+          )}
+        </Inner>
+      </Container>
+    </Border>
   )
 }
 

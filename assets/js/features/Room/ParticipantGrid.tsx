@@ -33,12 +33,7 @@ export function ParticipantGrid(props: Props) {
           PresenceMode.Social
     )
 
-    return [
-      activeUsers,
-      inactiveUsers,
-      activeUsers.length > 0 && inactiveUsers.length > 0,
-      window.innerWidth / window.innerHeight <= 1.33,
-    ]
+    return [activeUsers, inactiveUsers, false]
   })
 
   let grid = gridRuleForActiveUsers(activeUsers.length)

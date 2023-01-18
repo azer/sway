@@ -37,31 +37,54 @@ export function Participant(props: Props) {
   if (
     participant &&
     participant.dailyUserId &&
-    (participant.cameraOn || participant?.micOn)
+    (participant.cameraOn ||
+      participant?.micOn ||
+      status.status === PresenceMode.Social)
   ) {
     return <ActiveParticipant participantId={participant.dailyUserId} />
   }
 
   return (
-    <InactiveParticipant
-      data-user-id={props.userId}
-      title={getLabel(status.status)}
-    >
-      <User mode={status.status}>
-        <Mode mode={status.status}>
-          <Icon name={getIcon(status.status, status.is_active)} />
-        </Mode>
-        <Name>{user?.name || 'Unknown'}</Name>
-      </User>
-      <AvatarView
-        name={user?.name || ''}
-        photoUrl={user?.photoUrl}
-        fill
-        round="large"
-      />
-    </InactiveParticipant>
+    <Border>
+      <InactiveParticipant
+        data-user-id={props.userId}
+        title={getLabel(status.status)}
+      >
+        <User mode={status.status}>
+          <Mode mode={status.status}>
+            <Icon name={getIcon(status.status, status.is_active)} />
+          </Mode>
+          <Name>{user?.name.split(' ')[0] || 'Unknown'}</Name>
+        </User>
+        <AvatarView
+          name={user?.name || ''}
+          photoUrl={user?.photoUrl}
+          fill
+          round="large"
+        />
+      </InactiveParticipant>
+    </Border>
   )
 }
+
+export const Border = styled('div', {
+  padding: '4px',
+  border: '1px solid rgba(150, 190, 255, 0.2)',
+  borderRadius: '18px',
+  variants: {
+    active: {
+      true: {
+        border: '0',
+        display: 'flex',
+        width: '100%',
+        maxWidth: '100%',
+        maxHeight: '100%',
+        aspectRatio: '1.25 / 1',
+        'object-fit': 'cover',
+      },
+    },
+  },
+})
 
 const InactiveParticipant = styled('div', {
   position: 'relative',
@@ -69,6 +92,7 @@ const InactiveParticipant = styled('div', {
   borderRadius: '$large',
   width: '150px',
   aspectRatio: '1',
+  padding: '2px',
 })
 
 export const User = styled('footer', {
