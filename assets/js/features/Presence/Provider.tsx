@@ -121,7 +121,7 @@ export default function PresenceProvider(props: Props) {
 
   function startPushToTalk() {
     if (!isActive || !isMicOff || pushToTalk) return
-
+    setPushToTalk(true)
     setAsActive()
   }
 
@@ -135,11 +135,12 @@ export default function PresenceProvider(props: Props) {
   function stopPushToTalk() {
     if (!pushToTalk) return
     setAsInactive()
+    setPushToTalk(false)
   }
 
   function setAsActive() {
     setMediaSettings({ audioInputOff: isMicOff, videoInputOff: isCameraOff })
-    setPushToTalk(true)
+
     dispatch(setAudioInputOff(false))
 
     if (pushToTalkVideo) {
@@ -150,7 +151,6 @@ export default function PresenceProvider(props: Props) {
   }
 
   function setAsInactive() {
-    setPushToTalk(false)
     dispatch(setAudioInputOff(mediaSettings.audioInputOff))
     dispatch(setVideoInputOff(mediaSettings.videoInputOff))
 

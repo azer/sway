@@ -35,9 +35,10 @@ export default function UserSocket(props: Props) {
   const dispatch = useDispatch()
   const [channel, setChannel] = useState<Channel>()
   const [presence, setPresence] = useState<Presence>()
-  const [userId, orgId] = useSelector((state) => [
+  const [userId, orgId, status] = useSelector((state) => [
     selectors.session.getUserId(state),
     selectors.orgs.getSelfOrg(state)?.id,
+    selectors.dock.getSelfConnectionStatus(state),
   ])
 
   const ctx = {
@@ -52,7 +53,40 @@ export default function UserSocket(props: Props) {
   }, [])
 
   useEffect(() => {
+    if (
+      status?.bafaSocket === ConnectionState.Disconnected &&
+      status.internet === ConnectionState.Connected
+    ) {
+      //log.info('Try connecting to the user socket again')
+      //socket.connect()
+    }
+  }, [status?.internet, status?.bafaSocket])
+
+  useEffect(() => {
     if (!orgId || !userId) return
+
+    socket.onClose(() => {
+      log.info('Socket is disconnected')
+
+      dispatch(
+        setBafaSocketConnectionStatus({
+          userId,
+          state: ConnectionState.Disconnected,
+        })
+      )
+    })
+
+    socket.onOpen(() => {
+      // @ts-ignore
+      log.info('Socket is connected')
+
+      dispatch(
+        setBafaSocketConnectionStatus({
+          userId,
+          state: ConnectionState.Connected,
+        })
+      )
+    })
 
     dispatch(
       setBafaSocketConnectionStatus({
@@ -74,7 +108,7 @@ export default function UserSocket(props: Props) {
         dispatch(
           setBafaSocketConnectionStatus({
             userId,
-            state: ConnectionState.Successful,
+            state: ConnectionState.Connected,
           })
         )
       })
@@ -97,6 +131,10 @@ export default function UserSocket(props: Props) {
 
     const presence = new Presence(channel)
     setPresence(presence)
+
+    presence.onLeave((id) => {
+      log.info(`User ${id} has disconnected`)
+    })
 
     presence.onSync(() => {
       const all: { id: string; onlineAt: string }[] = []

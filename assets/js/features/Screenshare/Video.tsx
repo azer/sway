@@ -26,14 +26,5 @@ const Video = styled('video', {
   width: '100%',
   height: '100%',
   'object-fit': 'contain',
-  background: `radial-gradient(
-      ellipse at top left,
-      rgba(253, 216, 216, 0.5),
-      transparent
-    ),
-    radial-gradient(
-      ellipse at bottom right,
-      rgba(150, 199, 232, 0.5),
-      transparent
-    );`,
+  background: `rgba(255, 255, 255, 0.03)`,
 })

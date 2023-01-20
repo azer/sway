@@ -13,8 +13,6 @@ import { useVideoSettings } from 'features/Settings/VideoSettings'
 import { useMicSettings } from 'features/Settings/MicSettings'
 import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
 import { ScreenshareButton } from 'features/Screenshare/Provider'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { setAudioInputOff, setVideoInputOff } from 'features/Settings/slice'
 import {
   add,
   Entity,
@@ -22,8 +20,7 @@ import {
   Statuses,
   toStateEntity,
 } from 'state/entities'
-import { isAudioInputOff } from 'features/Settings/selectors'
-import { useUserSocket } from 'features/UserSocket'
+import { ConnectionState, setInternetConnectionStatus } from './slice'
 
 interface Props {
   roomId: string
@@ -69,6 +66,18 @@ export function Dock(props: Props) {
     )
   }, [localParticipant])
 
+  useEffect(() => {
+    if (!localUser) return
+
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [localUser?.id])
+
   return (
     <Container>
       <Mirror />
@@ -100,6 +109,28 @@ export function Dock(props: Props) {
       <Button icon="sliders" label="Options" onClick={settings.open} />
     </Container>
   )
+
+  function handleOnline() {
+    if (!localUser) return
+
+    dispatch(
+      setInternetConnectionStatus({
+        userId: localUser.id,
+        state: ConnectionState.Connected,
+      })
+    )
+  }
+
+  function handleOffline() {
+    if (!localUser) return
+
+    dispatch(
+      setInternetConnectionStatus({
+        userId: localUser.id,
+        state: ConnectionState.Disconnected,
+      })
+    )
+  }
 }
 
 const Container = styled('nav', {

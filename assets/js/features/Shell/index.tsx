@@ -19,7 +19,6 @@ export function Shell(props: Props) {
     <Container mode={presenceMode?.status}>
       <Navigation />
       {props.children}
-      <Sidebar />
     </Container>
   )
 }
@@ -28,12 +27,13 @@ const bottomBlurEffect = (color: string) =>
   `radial-gradient(440px at 50% calc(100vh + 300px), ${color}, transparent)`
 
 const Container = styled('main', {
+  '-webkit-app-region': 'drag',
   backgroundColor: '$shellBg',
   color: '$shellFg',
   width: '100vw',
   minHeight: '100vh',
   display: 'grid',
-  gridTemplateColumns: '220px auto 220px',
+  gridTemplateColumns: '220px auto',
   overflow: 'hidden',
   variants: {
     mode: {

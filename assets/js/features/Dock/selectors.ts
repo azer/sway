@@ -38,7 +38,7 @@ export function isBafaSocketConnected(state: RootState): boolean {
   if (!state.session.id) return false
   return (
     getBafaSocketConnectionStatus(state, state.session.id) ===
-    ConnectionState.Successful
+    ConnectionState.Connected
   )
 }
 

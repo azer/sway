@@ -3,7 +3,7 @@ import React from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { ConnectionState } from './slice'
-import { useLocalParticipant } from '@daily-co/daily-react-hooks'
+import { useDaily, useLocalParticipant } from '@daily-co/daily-react-hooks'
 import Video from 'features/Call/Video'
 import { AvatarView } from 'features/Avatar/AvatarView'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
@@ -26,7 +26,12 @@ export function Mirror(props: Props) {
   const localParticipant = useLocalParticipant()
   const cameraSettings = useVideoSettings()
 
-  const items = [conn?.bafaSocket, conn?.bafaRoom, conn?.dailyCall]
+  const items = [
+    conn?.bafaSocket,
+    conn?.bafaRoom,
+    conn?.dailyCall,
+    conn?.internet,
+  ]
   let status: string = ConnectionState.Ready
 
   if (conn && items.some((c) => !c || c === ConnectionState.Ready)) {
@@ -37,8 +42,8 @@ export function Mirror(props: Props) {
     status = ConnectionState.Failed
   } else if (conn && items.some((c) => c === ConnectionState.Timeout)) {
     status = ConnectionState.Failed
-  } else if (conn && items.every((c) => c === ConnectionState.Successful)) {
-    status = ConnectionState.Successful
+  } else if (conn && items.every((c) => c === ConnectionState.Connected)) {
+    status = ConnectionState.Connected
   } else {
     status = 'unknown'
   }
@@ -110,7 +115,7 @@ const ConnectionIcon = styled('div', {
       failed: {
         background: '$dockIconFailedBg',
       },
-      successful: {
+      connected: {
         background: '$dockIconConnectedBg',
       },
     },

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'state'
 import { AvatarView } from 'features/Avatar/AvatarView'
 import { Border, Name, User } from 'features/Room/RoomParticipant'
 import { ScreenshareVideo } from 'features/Screenshare/Video'
+import Icon from 'components/Icon'
 
 interface Props {
   participantId: string
@@ -21,12 +22,16 @@ export function ActiveParticipant(props: Props) {
   const audioElement = useRef<HTMLAudioElement>()
 
   const participant = useParticipant(props.participantId)
-  const [user, isSpeakerOn] = useSelector((state) => [
+  const screensharing = participant && participant.tracks.screenVideo.track
+
+  const [user, isSpeakerOn, isSelf] = useSelector((state) => [
     participant?.userData
       ? // @ts-ignore
         selectors.users.getById(state, participant.userData.id)
       : undefined,
     selectors.dock.isAudioOutputOn(state),
+    // @ts-ignore
+    selectors.users.getSelf(state)?.id === participant?.userData?.id,
   ])
 
   useEffect(() => {
@@ -38,31 +43,57 @@ export function ActiveParticipant(props: Props) {
     }
   }, [audioTrack])
 
+  const firstName = user?.name.split(' ')[0]
+
+  /*
+          {!participant?.screen ? (
+            <User>
+              <Name>{user?.name.split(' ')[0]}</Name>
+            </User>
+          ) : null}
+          */
+
   return (
     <Border active>
       <Container data-participant-id={props.participantId}>
-        {participant && participant.screen ? (
+        {screensharing ? (
           <ScreenshareVideo sessionId={participant?.session_id} />
         ) : null}
-
-        <Inner screensharing={!!participant?.screen}>
-          {!participant?.screen ? (
-            <User>
+        {!participant?.audio ? (
+          <MuteIcon>
+            <Icon name="mic-off" />
+          </MuteIcon>
+        ) : null}
+        {screensharing ? (
+          <Info screensharing>
+            <AvatarView
+              photoUrl={user?.photoUrl}
+              name={user?.name}
+              fill
+              round="smalsl"
+            />
+            <Name>{isSelf ? 'Your Screen' : `${firstName}'s Screen`}</Name>
+          </Info>
+        ) : null}
+        <Inner screensharing={!!screensharing}>
+          {!screensharing ? (
+            <Info>
               <AvatarView
                 photoUrl={user?.photoUrl}
                 name={user?.name}
                 fill
-                round="none"
+                round="small"
               />
               <Name>{user?.name.split(' ')[0]}</Name>
-            </User>
+            </Info>
           ) : null}
 
           <Video id={props.participantId} />
-          {!props.muted && isSpeakerOn && audioTrack && (
+          {audioTrack && (
             <audio
               autoPlay
               playsInline
+              muted={props.muted || !isSpeakerOn}
               ref={audioElement as React.RefObject<HTMLAudioElement>}
             />
           )}
@@ -96,7 +127,7 @@ const Inner = styled('div', {
         width: '15%',
         height: '15%',
         bottom: '16px',
-        right: '16px',
+        right: '0',
         '& video': {
           round: 'large',
           background: 'rgba(0, 0, 0, 1)',
@@ -113,28 +144,37 @@ const Inner = styled('div', {
   },
 })
 
-/*const User = styled('figcaption', {
+const Info = styled('div', {
   position: 'absolute',
-  bottom: '8px',
-  height: '24px',
   display: 'flex',
   flexDirection: 'row',
-  gap: '4px',
-  background: '$participantUsernameBg',
-  color: '$participantUsernameFg',
-  round: 'small',
-  fontSize: '$small',
-  overflow: 'hidden',
-  fontWeight: '$medium',
-  backdrop: { blur: 10, saturate: 190, contrast: 70, brightness: 120 },
-  '& img': {
-    borderRadius: '0',
+  height: '24px',
+  bottom: '12px',
+  left: '16px',
+  gap: '6px',
+  [`& label`]: {
+    textShadow: 'rgba(0,0,0,0.3) 1px 1px 1px',
+  },
+  variants: {
+    screensharing: {
+      true: {
+        left: 'auto',
+        bottom: '0',
+        background: '$shellBg',
+        borderRadius: '$small $small 0 0',
+        '& img': {
+          marginRight: '8px',
+          round: 'small 0 0 0',
+        },
+      },
+    },
   },
 })
 
-const Name = styled('div', {
-  label: true,
-  fontWeight: '$medium',
-  padding: '4px 8px 4px 6px',
+const MuteIcon = styled('div', {
+  position: 'absolute',
+  bottom: '12px',
+  right: '16px',
+  width: '16px',
+  height: '16px',
 })
-*/

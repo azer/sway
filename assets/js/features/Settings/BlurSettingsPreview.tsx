@@ -236,8 +236,8 @@ const ZoomButtonView = styled('div', {
   position: 'absolute',
   right: '24px',
   top: '24px',
-  width: '20px',
-  height: '20px',
+  width: '16px',
+  height: '16px',
   color: 'rgba(255, 255, 255, 0.75)',
   '&:hover': {
     color: 'rgba(255, 255, 255, 0.95)',

@@ -19,7 +19,7 @@ export function ScreenshareProvider(props: Props) {
     useScreenShare()
 
   const [isActive] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state)?.status === PresenceMode.Social,
+    selectors.presence.getSelfStatus(state)?.is_active,
   ])
 
   useHotkeys(
@@ -36,7 +36,7 @@ export function ScreenshareProvider(props: Props) {
     if (!isActive && isSharingScreen) {
       stop()
     }
-  }, [isActive])
+  }, [isSharingScreen, isActive, stopScreenShare])
 
   useRegister(
     (register) => {
@@ -56,7 +56,7 @@ export function ScreenshareProvider(props: Props) {
         when: isSharingScreen,
       })
     },
-    [isSharingScreen, startScreenShare, stopScreenShare]
+    [isActive, isSharingScreen, startScreenShare, stopScreenShare]
   )
 
   return <></>

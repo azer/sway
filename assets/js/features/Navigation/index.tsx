@@ -64,7 +64,7 @@ const Container = styled('nav', {
 })
 
 const Header = styled('header', {
-  baselineBlock: 10,
+  baselineBlock: 16, // 10,
   width: '100%',
   display: 'grid',
   gridTemplateColumns: '24px auto',
@@ -102,7 +102,7 @@ const OrgName = styled('div', {
 })
 
 const Rooms = styled('section', {
-  space: { outer: [9, 5, 0, 5] },
+  space: { outer: [6, 5, 0, 5] }, // { outer: [9, 5, 0, 5] },
 })
 
 const Title = styled('div', {

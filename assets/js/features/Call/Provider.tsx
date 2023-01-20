@@ -2,12 +2,15 @@ import React, { useCallback, useEffect, useState } from 'react'
 import selectors from 'selectors'
 import DailyIframe, {
   DailyCall,
+  DailyEvent,
   DailyParticipantsObject,
 } from '@daily-co/daily-js'
 import {
   DailyProvider,
+  useDaily,
   useDailyEvent,
   useDevices,
+  useLocalParticipant,
   useParticipant,
   useParticipantIds,
 } from '@daily-co/daily-react-hooks'
@@ -23,6 +26,7 @@ import {
   setParticipantStatus,
   setRemoteParticipantIds,
 } from './slice'
+import { setVideoInputError } from 'features/Settings/slice'
 
 interface Props {
   children: React.ReactNode
@@ -36,18 +40,22 @@ export function CallProvider(props: Props) {
   const dispatch = useDispatch()
   const [callObject, setCallObject] = useState<DailyCall>()
 
-  const [localUser] = useSelector((state) => [selectors.users.getSelf(state)])
+  const [localUser, shouldReconnect] = useSelector((state) => [
+    selectors.users.getSelf(state),
+    selectors.call.shouldReconnect(state),
+  ])
 
   useEffect(() => {
-    log.info('Establishing call provider', localUser)
+    if (callObject && localUser && navigator.onLine && shouldReconnect) {
+      log.info('Reconnecting')
+      joinDailyCall(callObject, localUser)
+    }
+  }, [callObject, localUser, shouldReconnect, navigator.onLine])
+
+  useEffect(() => {
     if (!localUser) return
 
-    dispatch(
-      setDailyCallConnectionStatus({
-        userId: localUser.id,
-        state: ConnectionState.Connecting,
-      })
-    )
+    log.info('Establishing call provider', localUser)
 
     handleJoiningCall()
   }, [localUser])
@@ -56,12 +64,19 @@ export function CallProvider(props: Props) {
     'camera-error',
     useCallback((event) => {
       log.error('Camera error', event)
-      dispatch(setCameraError(true))
+      dispatch(setVideoInputError(true))
     }, [])
   )
 
   const handleJoiningCall = useCallback(async () => {
     if (!localUser) return
+
+    dispatch(
+      setDailyCallConnectionStatus({
+        userId: localUser.id,
+        state: ConnectionState.Connecting,
+      })
+    )
 
     log.info('Joining', localUser)
 
@@ -79,6 +94,7 @@ export function CallProvider(props: Props) {
         <SubscribeToDeviceSettings callObject={callObject} />
       ) : null}
       <SubscribeToRemoteParticipants />
+      <SubscribeToLocalParticipantState />
       {props.children}
     </DailyProvider>
   )
@@ -90,16 +106,17 @@ export function CallProvider(props: Props) {
       startVideoOff: true,
       startAudioOff: true,
     })
-      .on('loading', logEvent)
-      .on('loaded', logEvent)
-      .on('left-meeting', logEvent)
+      .on('loading', updateLocalDailyState)
+      .on('loaded', updateLocalDailyState)
+      .on('left-meeting', updateLocalDailyState)
       .on('started-camera', logEvent)
       .on('camera-error', logEvent)
-      .on('joining-meeting', logEvent)
-      .on('joined-meeting', logEvent)
+      .on('joining-meeting', updateLocalDailyState)
+      .on('joined-meeting', updateLocalDailyState)
       .on('participant-updated', logEvent)
       .on('participant-joined', logEvent)
       .on('participant-left', logEvent)
+      .on('active-speaker-change', logEvent)
       .on('error', logEvent)
       .on('network-connection', logEvent)
   }
@@ -133,8 +150,19 @@ export function CallProvider(props: Props) {
       })
   }
 
+  function updateLocalDailyState(event?: any) {
+    log.info(
+      'Event triggered updating local daily state',
+      callObject?.meetingState(),
+      event
+    )
+  }
+
   function handleJoinError(user: User) {
-    log.error('Failed to join call', user)
+    setDailyCallConnectionStatus({
+      state: ConnectionState.Failed,
+      userId: user.id,
+    })
   }
 
   function handleJoinSuccess(
@@ -144,7 +172,7 @@ export function CallProvider(props: Props) {
     dispatch(
       setDailyCallConnectionStatus({
         userId: user.id,
-        state: ConnectionState.Successful,
+        state: ConnectionState.Connected,
       })
     )
 
@@ -162,10 +190,52 @@ export function CallProvider(props: Props) {
       })
     )
   }
+
+  function logEvent(e: any) {
+    dlog.info('Action: %s', e.action, e)
+  }
 }
 
-function logEvent(e: any) {
-  dlog.info('Action: %s', e.action, e)
+function SubscribeToLocalParticipantState() {
+  const call = useDaily()
+  const dispatch = useDispatch()
+  const localParticipant = useLocalParticipant()
+
+  const [userId] = useSelector((state) => [selectors.users.getSelf(state)?.id])
+
+  useEffect(() => {
+    if (!call || !userId) return
+
+    const meetingState = call.meetingState()
+    switch (meetingState) {
+      case 'joining-meeting':
+        dispatch(
+          setDailyCallConnectionStatus({
+            userId,
+            state: ConnectionState.Connecting,
+          })
+        )
+        break
+      case 'joined-meeting':
+        dispatch(
+          setDailyCallConnectionStatus({
+            userId,
+            state: ConnectionState.Connected,
+          })
+        )
+        break
+      case 'left-meeting':
+        dispatch(
+          setDailyCallConnectionStatus({
+            userId,
+            state: ConnectionState.Disconnected,
+          })
+        )
+        break
+    }
+  }, [userId, localParticipant, call])
+
+  return <></>
 }
 
 function SubscribeToRemoteParticipants() {

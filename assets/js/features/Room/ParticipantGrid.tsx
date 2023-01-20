@@ -14,30 +14,37 @@ interface Props {
 const log = logger('rooms/participant-grid')
 
 export function ParticipantGrid(props: Props) {
-  const [activeUsers, inactiveUsers, divide] = useSelector((state) => {
-    const users = selectors.rooms
-      .getUsersInRoom(state, props.roomId)
-      .filter((id) => selectors.users.getSelf(state)?.id !== id)
+  const { isSharingScreen } = useScreenShare()
 
-    const activeUsers = users.filter(
-      (uid) =>
-        selectors.presence.getStatusByUserId(state, uid).is_active ||
-        selectors.presence.getStatusByUserId(state, uid).status ===
-          PresenceMode.Social
-    )
+  const [localUserId, activeUsers, inactiveUsers, divide] = useSelector(
+    (state) => {
+      const users = selectors.rooms.getUsersInRoom(state, props.roomId)
 
-    const inactiveUsers = users.filter(
-      (uid) =>
-        !selectors.presence.getStatusByUserId(state, uid).is_active &&
-        selectors.presence.getStatusByUserId(state, uid).status !==
-          PresenceMode.Social
-    )
+      const activeUsers = users.filter(
+        (uid) =>
+          selectors.presence.getStatusByUserId(state, uid).is_active ||
+          selectors.presence.getStatusByUserId(state, uid).status ===
+            PresenceMode.Social
+      )
 
-    return [activeUsers, inactiveUsers, false]
-  })
+      const inactiveUsers = users.filter(
+        (uid) =>
+          !selectors.presence.getStatusByUserId(state, uid).is_active &&
+          selectors.presence.getStatusByUserId(state, uid).status !==
+            PresenceMode.Social
+      )
+
+      return [
+        selectors.users.getSelf(state)?.id,
+        activeUsers,
+        inactiveUsers,
+        false,
+      ]
+    }
+  )
 
   let grid = gridRuleForActiveUsers(activeUsers.length)
-  const alone = inactiveUsers.length === 0 && activeUsers.length === 0
+  const alone = inactiveUsers.length + activeUsers.length === 1
 
   if (!window.navigator.onLine) {
     //return <Error>You're offline.</Error>
@@ -54,11 +61,11 @@ export function ParticipantGrid(props: Props) {
   if (!divide) {
     return (
       <Container>
-        {activeUsers.map((id) => (
+        {activeUsers.filter(filterSelf).map((id) => (
           <Participant key={id} userId={id} />
         ))}
 
-        {inactiveUsers.map((id) => (
+        {inactiveUsers.filter(filterSelf).map((id) => (
           <Participant key={id} userId={id} />
         ))}
       </Container>
@@ -81,6 +88,10 @@ export function ParticipantGrid(props: Props) {
       </InactiveGrid>
     </Container>
   )
+
+  function filterSelf(userId: string) {
+    return isSharingScreen || userId !== localUserId
+  }
 }
 
 const Container = styled('div', {

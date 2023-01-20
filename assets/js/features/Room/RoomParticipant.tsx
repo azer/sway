@@ -60,7 +60,7 @@ export function Participant(props: Props) {
           name={user?.name || ''}
           photoUrl={user?.photoUrl}
           fill
-          round="large"
+          round="medium"
         />
       </InactiveParticipant>
     </Border>
@@ -69,8 +69,8 @@ export function Participant(props: Props) {
 
 export const Border = styled('div', {
   padding: '4px',
-  border: '1px solid rgba(150, 190, 255, 0.2)',
-  borderRadius: '18px',
+  border: '1px solid rgba(150, 190, 255, 0.1)',
+  round: 'large',
   variants: {
     active: {
       true: {
@@ -89,33 +89,34 @@ export const Border = styled('div', {
 const InactiveParticipant = styled('div', {
   position: 'relative',
   center: true,
-  borderRadius: '$large',
   width: '150px',
   aspectRatio: '1',
-  padding: '2px',
 })
 
 export const User = styled('footer', {
   maxWidth: '130px',
   height: '24px',
   background: '$participantUsernameBg',
+  borderBottom: '0',
   color: '$participantUsernameFg',
   position: 'absolute',
-  bottom: '8px',
-  borderRadius: '$small 0 0 $small',
+  bottom: '0',
+  borderRadius: '$small $small 0 0',
   display: 'flex',
   flexDirection: 'row',
-  round: 'small',
   fontSize: '$small',
   fontWeight: '$medium',
   overflow: 'hidden',
   ellipsis: true,
+  gap: '8px',
+  padding: '4px 14px 2px 14px',
   [`& ${PresenceModeIcon}`]: {
     height: '24px',
   },
+  [`& label`]: {},
   variants: {
     mode: {
-      focus: {
+      /*focus: {
         color: '$participantFocusFg',
         background: '$participantFocusBg',
       },
@@ -130,20 +131,19 @@ export const User = styled('footer', {
       dnd: {
         color: '$participantDndFg',
         background: '$participantDndBg',
-      },
+      },*/
     },
   },
 })
 
-export const Name = styled('div', {
+export const Name = styled('label', {
+  display: 'block',
   label: true,
   fontWeight: '$medium',
-  padding: '0 8px 0 6px',
   vcenter: true,
 })
 
 const Mode = styled('div', {
-  padding: '4px 6px',
   vcenter: true,
   label: true,
   height: '100%',
@@ -153,20 +153,16 @@ const Mode = styled('div', {
   variants: {
     mode: {
       focus: {
-        color: '$participantFocusFg',
-        background: '$participantFocusBg',
+        color: '$participantFocusBg',
       },
-      active: {
-        color: '$participantActiveFg',
-        background: '$participantActiveBg',
+      social: {
+        color: '$participantSocialBg',
       },
-      away: {
-        color: '$participantAwayFg',
-        background: '$participantAwayBg',
+      solo: {
+        color: '$participantSoloBg',
       },
-      dnd: {
-        color: '$participantDndFg',
-        background: '$participantDndBg',
+      zen: {
+        color: '$participantZenBg',
       },
     },
   },

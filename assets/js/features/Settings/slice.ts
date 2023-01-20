@@ -13,6 +13,9 @@ export interface DeviceInfo {
 }
 
 interface State {
+  videoInputError?: boolean
+  audioInputError?: boolean
+  audioOutputError?: boolean
   videoInputOff: boolean
   audioInputOff: boolean
   audioOutputOff: boolean
@@ -74,10 +77,22 @@ export const slice = createSlice({
     setBackgroundBlur: (state, action: PayloadAction<number>) => {
       state.backgroundBlur = action.payload
     },
+    setVideoInputError: (state, action: PayloadAction<boolean>) => {
+      state.videoInputError = action.payload
+    },
+    setAudioInputError: (state, action: PayloadAction<boolean>) => {
+      state.audioInputError = action.payload
+    },
+    setAudioOutputError: (state, action: PayloadAction<boolean>) => {
+      state.audioOutputError = action.payload
+    },
   },
 })
 
 export const {
+  setAudioInputError,
+  setAudioOutputError,
+  setVideoInputError,
   setAudioInputDeviceId,
   setAudioInputOff,
   setAudioOutputDeviceId,
@@ -105,18 +120,39 @@ export function syncDevices() {
           const id = track.getSettings().deviceId
 
           if (track.kind === 'video' && id) {
+            log.info('Default video device found', id)
             dispatch(setVideoInputDeviceId(id))
           }
 
           if (track.kind === 'audio' && id) {
+            log.info('Default audio input device found', id)
             dispatch(setAudioInputDeviceId(id))
           }
 
           log.info('Stop media device', track)
         })
       })
+      .catch((err) => {
+        const state = getState()
+
+        log.error(
+          'Unable to access user media to find out default devices:',
+          err,
+          state.settings.videoInputDevices.length
+        )
+
+        if (state.settings.videoInputDevices.length > 0)
+          dispatch(
+            setVideoInputDeviceId(state.settings.videoInputDevices[0].id)
+          )
+        if (state.settings.audioInputDevices.length > 0)
+          dispatch(
+            setVideoInputDeviceId(state.settings.audioInputDevices[0].id)
+          )
+      })
 
     listDevices('videoinput').then((allCameras) => {
+      log.info('All video video input devices', allCameras)
       dispatch(setVideoInputDevices(allCameras))
     })
 

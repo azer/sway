@@ -32,6 +32,40 @@ export default function Room(props: Props) {
     selectors.dock.isBafaSocketConnected(state),
   ])
 
+  /*
+  const [hasCamAndMicAccess, setHasCamAndMicAccess] = useState(true)
+
+  useEffect(() => {
+    const checkcamAndMicAccess = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices()
+        const cameras = devices
+          .filter((device) => device.kind === 'videoinput')
+          .filter((d) => d.deviceId !== '')
+        const microphones = devices.filter(
+          (device) => device.kind === 'audioinput'
+        )
+        log.info('cameras', cameras)
+        setHasCamAndMicAccess(cameras.length > 0)
+      } catch (err) {
+        setHasCamAndMicAccess(false)
+      }
+    }
+
+    checkcamAndMicAccess()
+    }, [])
+
+
+    {hasCamAndMicAccess ? (
+
+      ) : (
+        <Error>
+          <RequestAccess onClick={requestAccess}>
+            Grant camera & microphone access
+          </RequestAccess>
+        </Error>
+      )}*/
+
   useEffect(() => {
     if (!room || !channel || !localUser || !isSocketConnected) return
 
@@ -64,6 +98,7 @@ export default function Room(props: Props) {
         </Title>
       </Header>
       <ParticipantGrid roomId={props.id} />
+
       <Dock roomId={props.id} />
     </Container>
   )
@@ -73,12 +108,36 @@ export default function Room(props: Props) {
       dispatch(
         setBafaRoomConnectionStatus({
           userId: localUser.id,
-          state: ConnectionState.Successful,
+          state: ConnectionState.Connected,
         })
       )
     }
   }
 }
+
+const Error = styled('div', {
+  center: true,
+})
+
+function requestAccess() {
+  log.info('request access')
+  navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: {
+      facingMode: 'user',
+    },
+  })
+}
+
+const RequestAccess = styled('button', {
+  background: 'transparent',
+  padding: '12px 36px',
+  color: '$white',
+  border: '1px solid $silver',
+  pointer: 'default',
+  fontSize: '$base',
+  round: 'large',
+})
 
 const topBlurEffect =
   'radial-gradient(1000px at 200px -700px, $shellBlur1, transparent)'
@@ -86,7 +145,7 @@ const topBlurEffect =
 const Container = styled('main', {
   width: '100%',
   display: 'grid',
-  gridTemplateRows: 'calc(16 * 4px) auto calc(28 * 4px)',
+  gridTemplateRows: 'calc(16 * 3.5px) auto calc(28 * 4px)',
   backgroundImage: topBlurEffect,
 })
 
@@ -99,7 +158,7 @@ const Header = styled('header', {
 })
 
 const Title = styled('div', {
-  baselineBlock: 10,
+  baselineBlock: 8,
   baselineFontSize: 'base',
   fontWeight: '$medium',
   label: true,

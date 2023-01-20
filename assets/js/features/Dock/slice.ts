@@ -5,13 +5,15 @@ export const name = 'status'
 export enum ConnectionState {
   Ready = 'ready',
   Connecting = 'connecting',
-  Successful = 'successful',
+  Connected = 'connected',
   Failed = 'failed',
   Timeout = 'timeout',
+  Disconnected = 'disconnected',
 }
 
 export interface ConnectionStatus {
   userId: string
+  internet: ConnectionState
   bafaSocket?: ConnectionState
   bafaRoom?: ConnectionState
   dailyCall?: ConnectionState
@@ -24,7 +26,16 @@ interface State {
 
 export const initialState: State = {
   presence: {},
-  connection: {},
+  connection: {
+    // @ts-ignore
+    [window.initialState.session.userId]: {
+      // @ts-ignore
+      userId: window.initialState.session.userId,
+      internet: navigator.onLine
+        ? ConnectionState.Connected
+        : ConnectionState.Disconnected,
+    },
+  },
 }
 
 export const slice = createSlice({
@@ -61,6 +72,16 @@ export const slice = createSlice({
         dailyCall: action.payload.state,
       }
     },
+    setInternetConnectionStatus: (
+      state,
+      action: PayloadAction<{ userId: string; state: ConnectionState }>
+    ) => {
+      state.connection[action.payload.userId] = {
+        ...state.connection[action.payload.userId],
+        userId: action.payload.userId,
+        internet: action.payload.state,
+      }
+    },
     setStatusId: (
       state,
       action: PayloadAction<{ userId: string; statusId: string }>
@@ -75,5 +96,6 @@ export const {
   setBafaRoomConnectionStatus,
   setBafaSocketConnectionStatus,
   setDailyCallConnectionStatus,
+  setInternetConnectionStatus,
 } = slice.actions
 export default slice.reducer
