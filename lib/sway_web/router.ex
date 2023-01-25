@@ -32,8 +32,8 @@ defmodule SwayWeb.Router do
   end
 
   scope "/api", SwayWeb do
-    pipe_through [:api, :require_authenticated_user]
-    get "/status", StatusController, :index
+    pipe_through [:api]
+    resources "/workspaces", WorkspaceController
   end
 
   # Other scopes may use custom stacks.
@@ -74,6 +74,11 @@ defmodule SwayWeb.Router do
 
   scope "/", SwayWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    get "/register", UserRegistrationController, :new
+    post "/register", UserRegistrationController, :create
+    get "/login", UserSessionController, :new
+    post "/login", UserSessionController, :create
 
     get "/users/register", UserRegistrationController, :new
     post "/users/register", UserRegistrationController, :create

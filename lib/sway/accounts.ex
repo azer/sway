@@ -26,10 +26,6 @@ defmodule Sway.Accounts do
     Repo.get_by(User, email: email)
   end
 
-  def get_org_by_name(name) when is_binary(name) do
-    Repo.get_by(Org, name: name)
-  end
-
   @doc """
   Gets a user by email and password.
 
@@ -63,18 +59,6 @@ defmodule Sway.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
-
-  ## Get or create org
-  def fetch_or_create_org(attrs) do
-    case get_org_by_name("roadbeats") do
-      %Org{} = org ->
-        {:ok, org}
-      _ ->
-        %Org{}
-        |> Org.changeset(attrs)
-        |> Repo.insert()
-    end
-  end
 
   # fetch or create user
   def fetch_or_create_user(attrs) do
