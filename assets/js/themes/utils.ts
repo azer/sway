@@ -162,6 +162,13 @@ export const utils = {
       backdropFilter: `blur(${options.blur}px) saturate(${options.saturate}%) contrast(${options.contrast}%) brightness(${options.brightness}%)`,
     }
   },
+  fade: (options: { props: string[]; time: number; effect?: string }) => {
+    const effect = options.effect || 'ease-in-out'
+
+    return {
+      transition: `${options.props.join(' ')} ${options.time}s ${effect}`,
+    }
+  },
 }
 
 function mapCSSOptions(

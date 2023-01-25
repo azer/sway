@@ -17,6 +17,14 @@ export const slice = createSlice({
   name,
   initialState,
   reducers: {
+    setOrgRoomIds: (state, action: PayloadAction<string[]>) => {
+      state.orgRoomIds = action.payload
+    },
+    appendToOrgRoomIds: (state, action: PayloadAction<string>) => {
+      state.orgRoomIds = state.orgRoomIds.includes(action.payload)
+        ? state.orgRoomIds
+        : [...state.orgRoomIds, action.payload]
+    },
     syncRoomUsers: (
       state,
       action: PayloadAction<{ roomId: string; users: string[] }>
@@ -32,7 +40,12 @@ export const slice = createSlice({
   },
 })
 
-export const { syncRoomUsers, syncAllRoomUsers } = slice.actions
+export const {
+  syncRoomUsers,
+  syncAllRoomUsers,
+  setOrgRoomIds,
+  appendToOrgRoomIds,
+} = slice.actions
 export default slice.reducer
 
 export function setRoomId(id: string) {

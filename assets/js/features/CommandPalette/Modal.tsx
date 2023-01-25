@@ -77,7 +77,11 @@ export default function CommandPaletteModal(props: Props) {
               props.commands[0].id == props.selectedId
             }
           />
-          <Grid preview={!!props.preview} fullScreen={props.fullScreen}>
+          <Grid
+            autoHeight={props.commands.length <= 4 && !props.preview}
+            preview={!!props.preview}
+            fullScreen={props.fullScreen}
+          >
             <Navigation>
               <Commands ref={listEl} pin={props.commands.some((c) => c.pin)}>
                 {props.commands.map((cmd, ind) => (
@@ -100,7 +104,10 @@ export default function CommandPaletteModal(props: Props) {
                     >
                       {cmd.icon ? <Icon name={cmd.icon} /> : null}
                     </CommandIcon>
-                    <Name>{cmd.name}</Name>
+                    <Name>
+                      {cmd.name}
+                      {cmd.suffix ? <Suffix>{cmd.suffix}</Suffix> : null}
+                    </Name>
                     {cmd.hint ? (
                       <Hint selected={props.selectedId == cmd.id}>
                         {cmd.hint}
@@ -198,6 +205,11 @@ const Modal = styled('main', {
 const Grid = styled('div', {
   height: '330px',
   variants: {
+    autoHeight: {
+      true: {
+        height: 'auto',
+      },
+    },
     preview: {
       true: {
         display: 'grid',
@@ -356,6 +368,11 @@ const CommandIcon = styled('div', {
 
 const Name = styled('div', {
   ellipsis: true,
+})
+
+const Suffix = styled('label', {
+  color: '$gray9',
+  marginLeft: '4px',
 })
 
 const Hint = styled('div', {

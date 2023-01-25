@@ -1,5 +1,5 @@
 import { styled } from 'themes'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { ConnectionState } from './slice'
@@ -12,13 +12,15 @@ import { PresenceMode } from 'state/entities'
 interface Props {}
 
 export function Mirror(props: Props) {
+  const [showStatus, setShowStatus] = useState(true)
+
   // const dispatch = useDispatch()
-  const [user, isActive, isOnSocialMode, conn, isCameraOff] = useSelector(
+  const [user, status, isActive, isOnSocialMode, isCameraOff] = useSelector(
     (state) => [
       selectors.users.getSelf(state),
+      selectors.dock.getStatusMessage(state),
       selectors.presence.getSelfStatus(state).is_active,
       selectors.presence.getSelfStatus(state).status === PresenceMode.Social,
-      selectors.dock.getSelfConnectionStatus(state),
       selectors.settings.isVideoInputOff(state),
     ]
   )
@@ -26,30 +28,19 @@ export function Mirror(props: Props) {
   const localParticipant = useLocalParticipant()
   const cameraSettings = useVideoSettings()
 
-  const items = [
-    conn?.bafaSocket,
-    conn?.bafaRoom,
-    conn?.dailyCall,
-    conn?.internet,
-  ]
-  let status: string = ConnectionState.Ready
-
-  if (conn && items.some((c) => !c || c === ConnectionState.Ready)) {
-    status = ConnectionState.Ready
-  } else if (conn && items.some((c) => c === ConnectionState.Connecting)) {
-    status = ConnectionState.Connecting
-  } else if (conn && items.some((c) => c === ConnectionState.Failed)) {
-    status = ConnectionState.Failed
-  } else if (conn && items.some((c) => c === ConnectionState.Timeout)) {
-    status = ConnectionState.Failed
-  } else if (conn && items.every((c) => c === ConnectionState.Connected)) {
-    status = ConnectionState.Connected
-  } else {
-    status = 'unknown'
-  }
+  useEffect(() => {
+    if (status.status === ConnectionState.Connected) {
+      setShowStatus(false)
+    } else {
+      setShowStatus(true)
+    }
+  }, [status.status])
 
   return (
     <Container onClick={cameraSettings.open}>
+      <Message status={status.status} visible={showStatus}>
+        {status.msg}
+      </Message>
       {localParticipant && (isActive || isOnSocialMode) && !isCameraOff ? (
         <SelfVideo>
           <Video id={localParticipant.session_id} />
@@ -62,7 +53,11 @@ export function Mirror(props: Props) {
           fill
         />
       )}
-      <ConnectionIcon status={status} title={'Connection:' + status} small />
+      <ConnectionIcon
+        status={status.status}
+        title={'Connection:' + status}
+        small
+      />
     </Container>
   )
 }
@@ -115,6 +110,9 @@ const ConnectionIcon = styled('div', {
       failed: {
         background: '$dockIconFailedBg',
       },
+      disconnected: {
+        background: '$dockIconFailedBg',
+      },
       connected: {
         background: '$dockIconConnectedBg',
       },
@@ -122,4 +120,35 @@ const ConnectionIcon = styled('div', {
   },
 })
 
-function unifiedState() {}
+const Message = styled('div', {
+  position: 'absolute',
+  width: '200px',
+  top: '-35px',
+  left: 0,
+  color: 'rgba(255, 255, 255, 0.35)',
+  fontSize: '$small',
+  opacity: '0',
+  fade: { props: ['opacity'], time: 0.1 },
+  label: true,
+  variants: {
+    visible: {
+      true: {
+        opacity: '1',
+      },
+    },
+    status: {
+      ready: {
+        color: '$dockIconReadyBg',
+      },
+      failed: {
+        color: '$dockIconFailedBg',
+      },
+      disconnected: {
+        color: '$dockIconFailedBg',
+      },
+      connected: {
+        color: '$dockIconConnectedBg',
+      },
+    },
+  },
+})

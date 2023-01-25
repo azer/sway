@@ -1,4 +1,4 @@
-import { Command, CommandType } from 'features/CommandPalette'
+import { Command, CommandType, ModalProps } from 'features/CommandPalette'
 import logger from 'lib/log'
 import React, { useContext, useEffect, useState } from 'react'
 // import { useSelector, useDispatch } from 'state'
@@ -31,6 +31,11 @@ type RegisterFn = (
   callback: (input: string) => void,
   options?: Partial<Omit<Command, 'name' | 'callback'>>
 ) => Command
+
+type RegisterPaletteCommand = (
+  options: ModalProps,
+  commands: (input?: string) => Command[]
+) => void
 
 // useCommandRegistry({ set } => {
 //   set()
@@ -88,13 +93,15 @@ export function useCommandRegistry() {
   }
 
   function useRegister(
-    fn: (r: RegisterFn) => void,
+    fn: (r: RegisterFn, rp: RegisterPaletteCommand) => void,
     deps: React.DependencyList
   ) {
     const registered: string[] = []
 
+    register.paletteCmd = registerPaletteCommand
+
     useEffect(() => {
-      fn(register)
+      fn(register, registerPaletteCommand)
 
       return () => {
         remove(registered.splice(0, registered.length))
@@ -109,6 +116,22 @@ export function useCommandRegistry() {
       const id = add(name, callback, options)
       registered.push(id)
       return commands[id]
+    }
+
+    function registerPaletteCommand(
+      options: ModalProps,
+      commandGenerator: (input?: string) => Command[]
+    ) {
+      register(options.title, noop, {
+        icon: options.icon,
+        palette: {
+          commands: () => commandGenerator(),
+          modal: () => ({
+            ...options,
+            commands: () => commandGenerator(),
+          }),
+        },
+      })
     }
   }
 }

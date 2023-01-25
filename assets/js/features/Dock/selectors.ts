@@ -67,3 +67,70 @@ export function isAudioOutputOn(state: RootState): boolean {
     (presence.is_active || presence.status !== PresenceMode.Zen) && !isTurnedOff
   )
 }
+
+export function getStatusMessage(state: RootState): {
+  msg: string
+  status: ConnectionState
+} {
+  const status = selectors.dock.getSelfConnectionStatus(state)
+  if (!status)
+    return { msg: 'Initializing', status: ConnectionState.Connecting }
+
+  if (status.internet === ConnectionState.Disconnected) {
+    return { msg: "You're offline.", status: ConnectionState.Disconnected }
+  }
+
+  // connecting
+  if (status.bafaSocket === ConnectionState.Connecting) {
+    return { msg: 'Opening socket', status: ConnectionState.Connecting }
+  }
+
+  if (status.bafaRoom === ConnectionState.Connecting) {
+    return { msg: 'Joining room', status: ConnectionState.Connecting }
+  }
+
+  if (status.dailyCall === ConnectionState.Connecting) {
+    return {
+      msg: 'Opening media connection',
+      status: ConnectionState.Connecting,
+    }
+  }
+
+  // failed
+  if (status.bafaSocket === ConnectionState.Failed) {
+    return { msg: "Can't open socket", status: ConnectionState.Failed }
+  }
+
+  if (status.bafaRoom === ConnectionState.Failed) {
+    return { msg: "Can't join room", status: ConnectionState.Failed }
+  }
+
+  if (status.dailyCall === ConnectionState.Failed) {
+    return { msg: 'Media connection failed', status: ConnectionState.Failed }
+  }
+
+  // disconnected
+  if (status.bafaSocket === ConnectionState.Disconnected) {
+    return {
+      msg: 'Lost socket connection',
+      status: ConnectionState.Disconnected,
+    }
+  }
+
+  if (status.bafaRoom === ConnectionState.Disconnected) {
+    return {
+      msg: 'Lost connection with room',
+      status: ConnectionState.Disconnected,
+    }
+  }
+
+  if (status.dailyCall === ConnectionState.Disconnected) {
+    return {
+      msg: 'Lost media connection',
+      status: ConnectionState.Disconnected,
+    }
+  }
+
+  //
+  return { msg: 'Connected', status: ConnectionState.Connected }
+}

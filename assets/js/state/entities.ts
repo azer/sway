@@ -39,6 +39,7 @@ export interface Room {
   name: string
   slug: string
   isDefault: boolean
+  isActive: boolean
 }
 
 export enum PresenceMode {
@@ -154,6 +155,16 @@ export function toStateEntity(table: Table, record: any): Entity {
       id: String(record.id),
       room_id: String(record.room_id),
       user_id: String(record.user_id),
+    }
+  }
+
+  if (table === Rooms) {
+    return {
+      ...record,
+      id: String(record.id),
+      userId: String(record.user_id),
+      isActive: record.is_active,
+      isDefault: record.is_default,
     }
   }
 

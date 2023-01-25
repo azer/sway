@@ -11,6 +11,13 @@ export function listAllRooms(state: RootState): string[] {
   return state.rooms.orgRoomIds.map((id) => String(id))
 }
 
+export function listActiveRooms(state: RootState): string[] {
+  return state.rooms.orgRoomIds
+    .map((id) => getRoomById(state, id))
+    .filter((r) => r && r.isActive)
+    .map((r) => r.id)
+}
+
 export function getFocusedRoomId(state: RootState): string {
   return selectors.shell.getFocus(state).center.room.roomId
 }
@@ -19,9 +26,25 @@ export function getFocusedRoom(state: RootState): Room | undefined {
   return getRoomById(state, getFocusedRoomId(state))
 }
 
-export function getFocusedRoomByUserId(state: RootState, userId: string): Room {
-  //selectors.rooms.getUsersInRoom
+export function getPrevRoom(state: RootState): Room | undefined {
+  const focusedId = getFocusedRoomId(state)
+  const idx = state.rooms.orgRoomIds.findIndex((id) => id === focusedId)
+
+  let prevId
+  let i = idx
+  while (i--) {
+    if (getRoomById(state, state.rooms.orgRoomIds[i])?.isActive) {
+      prevId = state.rooms.orgRoomIds[i]
+      break
+    }
+  }
+
+  return prevId ? getRoomById(state, prevId) : undefined
 }
+
+/*export function getFocusedRoomByUserId(state: RootState, userId: string): Room {
+  //selectors.rooms.getUsersInRoom
+}*/
 
 export function getUsersInRoom(state: RootState, roomId: string): string[] {
   return state.rooms.users[roomId] || []

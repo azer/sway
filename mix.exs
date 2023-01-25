@@ -53,7 +53,8 @@ defmodule Bafa.MixProject do
       {:elixir_auth_google, "~> 1.6.3"},
       {:ueberauth, "~> 0.6"},
       {:ueberauth_google, "~> 0.10"},
-      {:guardian, "~> 2.0"}
+      {:guardian, "~> 2.0"},
+      {:slugify, "~> 1.3"}
     ]
   end
 

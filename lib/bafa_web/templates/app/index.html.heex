@@ -6,7 +6,7 @@
       token: "<%= assigns[:user_token] %>",
     },
     room: {
-      orgRoomIds: [<%= Enum.join(Enum.map(@rooms, fn (r) -> r.id end), ", ") %>],
+      orgRoomIds: [<%= Enum.join(Enum.map(@rooms, fn (r) -> r.id end), ", ") %>].map(id => String(id)),
       focus: {
 	id: "<%= @selected_room_id %>"
       }
@@ -41,8 +41,10 @@
 	  name: "<%= room.name %>",
 	  slug: "<%= room.slug %>",
 	  isDefault: <%= room.is_default %>,
+	  isActive: <%= room.is_active %>,
 	  orgId: "<%= room.org_id %>",
 	  userId: "<%= room.user_id %>",
+	  insertedAt: "<%= room.inserted_at %>"
 	},
 	<%= end %>
       ],

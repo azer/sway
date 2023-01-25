@@ -24,6 +24,7 @@ export interface Command {
   name: string
   value?: unknown
   hint?: string
+  suffix?: string
   keywords?: string[]
   when?: boolean
   pin?: boolean
@@ -45,6 +46,7 @@ export interface ModalProps {
   selectedId?: string
   parentModal?: () => ModalProps
   search?: (commands: Command[], query: string) => Command[]
+  commands?: () => Command[]
   callback?: (id: string | undefined, query: string) => void
 }
 
@@ -152,6 +154,13 @@ export default function CommandPaletteProvider(props: Props) {
     log.info('Results changed', query, results)
     setSelectedId(results[0]?.id)
   }, [results])
+
+  useEffect(() => {
+    if (modalProps.commands) {
+      log.info('Reset commands after modal change', modalProps.id)
+      setCommands(modalProps.commands())
+    }
+  }, [modalProps.id])
 
   return (
     <context.Provider
@@ -278,7 +287,7 @@ export default function CommandPaletteProvider(props: Props) {
   }
 
   function findById(id: string): Command | undefined {
-    return commands.find((c) => c.id === id)
+    return commands.find((c) => c.id === id) || results.find((c) => c.id === id)
   }
 }
 

@@ -26,6 +26,10 @@ import { EyeIcon } from './Eye'
 import { SunriseIcon } from './Sunrise'
 import { IncognitoIcon } from './Incognito'
 import { LiveStreamIcon } from './Livestream'
+import { PlusIcon } from './Plus'
+import { HashtagIcon } from './Hashtag'
+import { EditIcon } from './Edit'
+import { TrashIcon } from './Trash'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -57,6 +61,10 @@ const icons: {
   sunrise: SunriseIcon,
   incognito: IncognitoIcon,
   livestream: LiveStreamIcon,
+  plus: PlusIcon,
+  hashtag: HashtagIcon,
+  edit: EditIcon,
+  trash: TrashIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {

@@ -35,16 +35,7 @@ defmodule BafaWeb.ChatChannel do
 
   def handle_in("entities:fetch", %{"id" => id, "entity" => entity}, socket) do
     user = Bafa.Accounts.get_user!(String.to_integer(id))
-
-    resp = %{
-      "id" => id,
-      "name" => user.name,
-      "email" => user.email,
-      "org_id" => user.org_id,
-      "profile_photo_url" => user.profile_photo_url
-    }
-
-    {:reply, {:ok, resp}, socket}
+    {:reply, {:ok, user_broadcastable(user)}, socket}
   end
 
   def handle_in("rooms:join", %{"id" => id}, socket) do
@@ -61,17 +52,78 @@ defmodule BafaWeb.ChatChannel do
 
     case Bafa.Statuses.update_status(status, %{room_id: id}) do
       {:ok, status} ->
-	broadcast(socket, "user:status", %{
-          "id" => status.id,
-          "room_id" => status.room_id,
-          "user_id" => status.user_id,
-          "message" => status.message,
-          "is_active" => status.is_active,
-          "status" => status.status,
-          "inserted_at" => status.inserted_at
-        })
-	{:noreply, socket}
-      {:error, reason} -> {:error, %{reason: reason}}
+        broadcast(socket, "user:status", status_broadcastable(status))
+        {:noreply, socket}
+
+      {:error, reason} ->
+        {:error, %{reason: reason}}
+    end
+  end
+
+  def handle_in("rooms:create", %{"name" => name, "org_id" => org_id}, socket) do
+    user = Bafa.Accounts.get_user!(socket.assigns.user)
+
+    attrs = %{
+               name: name,
+               slug: Slug.slugify(name),
+               org_id: org_id,
+               user_id: socket.assigns.user
+    }
+
+    case user.org_id == org_id do
+      true ->
+        case Bafa.Rooms.create_or_activate_room(attrs) do
+          {:ok, room} ->
+	    org_rooms = Bafa.Rooms.list_org_rooms(user.org_id, user.id)
+	    all = Enum.map(org_rooms, fn room -> room_broadcastable(room) end)
+
+	    broadcast(socket, "rooms:create", %{ "all": all, "created": room_broadcastable(room) })
+	    {:reply, {:ok, %{ "room": room_broadcastable(room), "org_rooms": all }}, socket}
+
+          {:error, changeset} ->
+	    errors = Enum.map(changeset.errors, fn err -> error_broadcastable(err) end)
+            {:reply, {:error, errors}, socket}
+        end
+
+      false ->
+        {:reply, {:error, "No access to specified org"}, socket}
+    end
+  end
+
+  def handle_in("rooms:rename", %{ "id" => room_id, "name" => name }, socket) do
+    user = Bafa.Accounts.get_user!(socket.assigns.user)
+    room = Bafa.Rooms.get_room!(room_id)
+    case room.org_id == user.org_id do
+      true ->
+	case Bafa.Rooms.update_room(room, %{ name: name }) do
+          {:ok, room} ->
+	    broadcast(socket, "rooms:update", room_broadcastable(room))
+	    {:reply, {:ok, %{ "room": room_broadcastable(room) }}, socket}
+          {:error, changeset} ->
+	    errors = Enum.map(changeset.errors, fn err -> error_broadcastable(err) end)
+            {:reply, {:error, errors}, socket}
+        end
+      false ->
+	{:reply, {:error, "Wrong org"}, socket}
+    end
+  end
+
+  def handle_in("rooms:delete", %{ "id" => room_id }, socket) do
+    user = Bafa.Accounts.get_user!(socket.assigns.user)
+    room = Bafa.Rooms.get_room!(room_id)
+    case room.org_id == user.org_id do
+      true ->
+	case Bafa.Rooms.update_room(room, %{ is_active: false }) do
+          {:ok, room} ->
+	    broadcast(socket, "rooms:update", room_broadcastable(room))
+	    org_rooms = Bafa.Rooms.list_org_rooms(user.org_id, user.id)
+	    {:reply, {:ok, %{ "room": room_broadcastable(room), "org_rooms": Enum.map(org_rooms, fn room -> room_broadcastable(room) end) }}, socket}
+          {:error, changeset} ->
+	    errors = Enum.map(changeset.errors, fn err -> error_broadcastable(err) end)
+            {:reply, {:error, errors}, socket}
+        end
+      false ->
+	{:reply, {:error, "Wrong org"}, socket}
     end
   end
 
@@ -84,16 +136,7 @@ defmodule BafaWeb.ChatChannel do
            room_id: room_id_int
          }) do
       {:ok, status} ->
-        broadcast(socket, "user:status", %{
-          "id" => status.id,
-          "room_id" => status.room_id,
-          "user_id" => status.user_id,
-          "message" => status.message,
-          "is_active" => status.is_active,
-          "status" => status.status,
-          "inserted_at" => status.inserted_at
-        })
-
+        broadcast(socket, "user:status", status_broadcastable(status))
         {:noreply, socket}
 
       {:error, reason} ->
@@ -106,18 +149,8 @@ defmodule BafaWeb.ChatChannel do
 
     case Bafa.Statuses.update_status(status, %{is_active: is_active}) do
       {:ok, status} ->
-        broadcast(socket, "user:status", %{
-          "id" => status.id,
-          "room_id" => status.room_id,
-          "user_id" => status.user_id,
-          "message" => status.message,
-	  "is_active" => status.is_active,
-          "status" => status.status,
-          "inserted_at" => status.inserted_at
-        })
-
+        broadcast(socket, "user:status", status_broadcastable(status))
         {:noreply, socket}
-
       {:error, reason} ->
         {:error, %{reason: reason}}
     end
@@ -135,5 +168,47 @@ defmodule BafaWeb.ChatChannel do
   defp authorized?(userId, orgId) do
     user = Bafa.Accounts.get_user!(userId)
     user.org_id == orgId
+  end
+
+  def room_broadcastable(room) do
+    %{
+      "id" => room.id,
+      "name" => room.name,
+      "slug" => room.slug,
+      "is_default" => room.is_default,
+      "is_active" => room.is_active,
+      "user_id" => room.user_id,
+      "inserted_at" => room.inserted_at
+    }
+  end
+
+  def user_broadcastable(user) do
+    %{
+      "id" => user.id,
+      "name" => user.name,
+      "email" => user.email,
+      "org_id" => user.org_id,
+      "profile_photo_url" => user.profile_photo_url
+    }
+  end
+
+  def status_broadcastable(status) do
+    %{
+      "id" => status.id,
+      "room_id" => status.room_id,
+      "user_id" => status.user_id,
+      "message" => status.message,
+      "is_active" => status.is_active,
+      "status" => status.status,
+      "inserted_at" => status.inserted_at
+    }
+  end
+
+  def error_broadcastable({ field, value }) do
+    err = elem(value, 0)
+    %{
+      "field" => field,
+      "error" => err
+    }
   end
 end

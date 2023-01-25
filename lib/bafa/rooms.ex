@@ -41,6 +41,10 @@ defmodule Bafa.Rooms do
     Repo.get_by(Room, org_id: org_id, name: name)
   end
 
+  def get_room_by_slug(org_id, slug) when is_binary(slug) do
+    Repo.get_by(Room, org_id: org_id, name: slug)
+  end
+
   def get_default_room(org_id, user_id) do
     list_org_rooms(org_id, user_id) |> hd
   end
@@ -89,6 +93,22 @@ defmodule Bafa.Rooms do
     %Room{}
     |> Room.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_or_activate_room(attrs \\ %{}) do
+    existing = Repo.get_by(Room, org_id: attrs[:org_id], slug: attrs[:slug], is_active: false)
+    case existing do
+      nil ->
+	create_room(attrs)
+      room ->
+	update_room(room, %{ is_active: true })
+    end
+  end
+
+
+  def soft_delete_room(id) do
+    room = get_room!(id)
+    update_room(room, %{ is_active: false })
   end
 
   @doc """

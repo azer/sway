@@ -1,24 +1,40 @@
 import { styled } from 'themes'
-import React from 'react'
+import React, { useEffect } from 'react'
 import selectors from 'selectors'
-import { useSelector, useDispatch } from 'state'
+import { useSelector, useDispatch, entities } from 'state'
 import logger from 'lib/log'
+import { useCommandRegistry } from 'features/CommandRegistry'
 import { RoomButton } from './RoomButton'
 import { UserButton } from './UserButton'
+import { useUserSocket } from 'features/UserSocket'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {}
 
 const log = logger('navigation')
 
 export function Navigation(props: Props) {
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { channel } = useUserSocket()
 
-  const [org, rooms, selectedRoomId, allUsers] = useSelector((state) => [
-    selectors.orgs.getSelfOrg(state),
-    selectors.rooms.listAllRooms(state),
-    selectors.rooms.getFocusedRoomId(state),
-    selectors.orgs.getUsersByOrgId(state),
-  ])
+  const [org, activeRoomIds, focusedRoom, allUsers, localUser, prevRoom] =
+    useSelector((state) => [
+      selectors.orgs.getSelfOrg(state),
+      selectors.rooms.listActiveRooms(state),
+      selectors.rooms.getFocusedRoom(state),
+      selectors.orgs.getUsersByOrgId(state),
+      selectors.users.getSelf(state),
+      selectors.rooms.getPrevRoom(state),
+    ])
+
+  const { useRegister } = useCommandRegistry()
+
+  useEffect(() => {
+    if (!focusedRoom?.isActive && prevRoom) {
+      navigate(`/rooms/${prevRoom.slug}`)
+    }
+  }, [focusedRoom?.isActive, !!prevRoom])
 
   return (
     <Container>
@@ -32,8 +48,8 @@ export function Navigation(props: Props) {
       </Header>
       <Rooms>
         <Title>Your Rooms</Title>
-        {rooms.map((id) => (
-          <RoomButton key={id} id={id} selected={id === selectedRoomId} />
+        {activeRoomIds.map((id) => (
+          <RoomButton key={id} id={id} selected={id === focusedRoom?.id} />
         ))}
       </Rooms>
       <Rooms>

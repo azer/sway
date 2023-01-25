@@ -1,5 +1,5 @@
 import { styled } from 'themes'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import selectors from 'selectors'
 import { useSelector } from 'state'

@@ -8,13 +8,8 @@ import {
   useCommandPalette,
 } from 'features/CommandPalette'
 import logger from 'lib/log'
-import {
-  setBackgroundBlur,
-  setVideoInputDeviceId,
-  setVideoInputOff,
-} from './slice'
+import { setBackgroundBlur } from './slice'
 import { useSelector, useDispatch } from 'state'
-import { VideoSettingsPreview } from './VideoSettingsPreview'
 import { BlurSettingsPreview } from './BlurSettingsPreview'
 
 const log = logger('settings/video')
