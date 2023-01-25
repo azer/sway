@@ -1,7 +1,7 @@
-defmodule BafaWeb.UserRegistrationControllerTest do
-  use BafaWeb.ConnCase, async: true
+defmodule SwayWeb.UserRegistrationControllerTest do
+  use SwayWeb.ConnCase, async: true
 
-  import Bafa.AccountsFixtures
+  import Sway.AccountsFixtures
 
   describe "GET /users/register" do
     test "renders registration page", %{conn: conn} do

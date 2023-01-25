@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.AddKeyToRooms do
+defmodule Sway.Repo.Migrations.AddKeyToRooms do
   use Ecto.Migration
 
   def change do

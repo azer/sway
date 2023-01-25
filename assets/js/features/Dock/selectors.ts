@@ -20,24 +20,24 @@ export function getSelfConnectionStatus(
   return userId ? getConnectionStatusByUserId(state, userId) : undefined
 }
 
-export function getBafaSocketConnectionStatus(
+export function getSwaySocketConnectionStatus(
   state: RootState,
   userId: string
 ): ConnectionState {
-  return state.dock.connection[userId]?.bafaSocket || ConnectionState.Ready
+  return state.dock.connection[userId]?.swaySocket || ConnectionState.Ready
 }
 
-export function getBafaRoomConnectionStatus(
+export function getSwayRoomConnectionStatus(
   state: RootState,
   userId: string
 ): ConnectionState {
-  return state.dock.connection[userId]?.bafaRoom || ConnectionState.Ready
+  return state.dock.connection[userId]?.swayRoom || ConnectionState.Ready
 }
 
-export function isBafaSocketConnected(state: RootState): boolean {
+export function isSwaySocketConnected(state: RootState): boolean {
   if (!state.session.id) return false
   return (
-    getBafaSocketConnectionStatus(state, state.session.id) ===
+    getSwaySocketConnectionStatus(state, state.session.id) ===
     ConnectionState.Connected
   )
 }
@@ -81,11 +81,11 @@ export function getStatusMessage(state: RootState): {
   }
 
   // connecting
-  if (status.bafaSocket === ConnectionState.Connecting) {
+  if (status.swaySocket === ConnectionState.Connecting) {
     return { msg: 'Opening socket', status: ConnectionState.Connecting }
   }
 
-  if (status.bafaRoom === ConnectionState.Connecting) {
+  if (status.swayRoom === ConnectionState.Connecting) {
     return { msg: 'Joining room', status: ConnectionState.Connecting }
   }
 
@@ -97,11 +97,11 @@ export function getStatusMessage(state: RootState): {
   }
 
   // failed
-  if (status.bafaSocket === ConnectionState.Failed) {
+  if (status.swaySocket === ConnectionState.Failed) {
     return { msg: "Can't open socket", status: ConnectionState.Failed }
   }
 
-  if (status.bafaRoom === ConnectionState.Failed) {
+  if (status.swayRoom === ConnectionState.Failed) {
     return { msg: "Can't join room", status: ConnectionState.Failed }
   }
 
@@ -110,14 +110,14 @@ export function getStatusMessage(state: RootState): {
   }
 
   // disconnected
-  if (status.bafaSocket === ConnectionState.Disconnected) {
+  if (status.swaySocket === ConnectionState.Disconnected) {
     return {
       msg: 'Lost socket connection',
       status: ConnectionState.Disconnected,
     }
   }
 
-  if (status.bafaRoom === ConnectionState.Disconnected) {
+  if (status.swayRoom === ConnectionState.Disconnected) {
     return {
       msg: 'Lost connection with room',
       status: ConnectionState.Disconnected,

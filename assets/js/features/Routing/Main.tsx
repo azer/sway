@@ -64,7 +64,7 @@ export default function Main(): JSX.Element {
 
     commandPalette.open([], {
       id: 'cmdk',
-      title: 'Bafa Command',
+      title: 'Sway Command',
       icon: 'command',
       placeholder: '',
     })

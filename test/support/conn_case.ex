@@ -1,4 +1,4 @@
-defmodule BafaWeb.ConnCase do
+defmodule SwayWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule BafaWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use BafaWeb.ConnCase, async: true`, although
+  by setting `use SwayWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -22,17 +22,17 @@ defmodule BafaWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import BafaWeb.ConnCase
+      import SwayWeb.ConnCase
 
-      alias BafaWeb.Router.Helpers, as: Routes
+      alias SwayWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint BafaWeb.Endpoint
+      @endpoint SwayWeb.Endpoint
     end
   end
 
   setup tags do
-    Bafa.DataCase.setup_sandbox(tags)
+    Sway.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
@@ -45,7 +45,7 @@ defmodule BafaWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}) do
-    user = Bafa.AccountsFixtures.user_fixture()
+    user = Sway.AccountsFixtures.user_fixture()
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -55,7 +55,7 @@ defmodule BafaWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_user(conn, user) do
-    token = Bafa.Accounts.generate_user_session_token(user)
+    token = Sway.Accounts.generate_user_session_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

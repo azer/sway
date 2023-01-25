@@ -1,1 +1,1 @@
-call "%~dp0\bafa" eval Bafa.Release.migrate
+call "%~dp0\sway" eval Sway.Release.migrate

@@ -1,3 +1,3 @@
-defmodule BafaWeb.PageViewTest do
-  use BafaWeb.ConnCase, async: true
+defmodule SwayWeb.PageViewTest do
+  use SwayWeb.ConnCase, async: true
 end

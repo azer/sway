@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.CreateOrgs do
+defmodule Sway.Repo.Migrations.CreateOrgs do
   use Ecto.Migration
 
   def change do

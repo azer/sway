@@ -1,16 +1,16 @@
-defmodule BafaWeb.UserAuthTest do
-  use BafaWeb.ConnCase, async: true
+defmodule SwayWeb.UserAuthTest do
+  use SwayWeb.ConnCase, async: true
 
-  alias Bafa.Accounts
-  alias BafaWeb.UserAuth
-  import Bafa.AccountsFixtures
+  alias Sway.Accounts
+  alias SwayWeb.UserAuth
+  import Sway.AccountsFixtures
 
-  @remember_me_cookie "_bafa_web_user_remember_me"
+  @remember_me_cookie "_sway_web_user_remember_me"
 
   setup %{conn: conn} do
     conn =
       conn
-      |> Map.replace!(:secret_key_base, BafaWeb.Endpoint.config(:secret_key_base))
+      |> Map.replace!(:secret_key_base, SwayWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
     %{user: user_fixture(), conn: conn}
@@ -65,7 +65,7 @@ defmodule BafaWeb.UserAuthTest do
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
       live_socket_id = "users_sessions:abcdef-token"
-      BafaWeb.Endpoint.subscribe(live_socket_id)
+      SwayWeb.Endpoint.subscribe(live_socket_id)
 
       conn
       |> put_session(:live_socket_id, live_socket_id)

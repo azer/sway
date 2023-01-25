@@ -1,9 +1,9 @@
-defmodule Bafa.MixProject do
+defmodule Sway.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :bafa,
+      app: :sway,
       version: "0.1.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Bafa.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Bafa.Application, []},
+      mod: {Sway.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

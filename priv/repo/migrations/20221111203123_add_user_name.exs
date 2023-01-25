@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.AddUserName do
+defmodule Sway.Repo.Migrations.AddUserName do
   use Ecto.Migration
 
   def change do

@@ -1,8 +1,8 @@
-defmodule BafaWeb.UserSettingsControllerTest do
-  use BafaWeb.ConnCase, async: true
+defmodule SwayWeb.UserSettingsControllerTest do
+  use SwayWeb.ConnCase, async: true
 
-  alias Bafa.Accounts
-  import Bafa.AccountsFixtures
+  alias Sway.Accounts
+  import Sway.AccountsFixtures
 
   setup :register_and_log_in_user
 

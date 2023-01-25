@@ -181,7 +181,7 @@ export function CallProvider(props: Props) {
         userId: user.id,
         status: {
           dailyUserId: callParticipants.local.user_id,
-          bafaUserId: user.id,
+          swayUserId: user.id,
           sessionId: callParticipants.local.session_id,
           cameraOn: callParticipants.local.video,
           screenOn: callParticipants.local.screen,
@@ -272,7 +272,7 @@ function SubscribeToRemoteParticipant(props: { id: string }) {
         userId,
         status: {
           dailyUserId: participant.user_id,
-          bafaUserId: userId,
+          swayUserId: userId,
           sessionId: participant?.session_id,
           cameraOn: participant.video,
           screenOn: participant.screen,

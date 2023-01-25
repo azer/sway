@@ -1,7 +1,7 @@
-defmodule BafaWeb.UserSessionControllerTest do
-  use BafaWeb.ConnCase, async: true
+defmodule SwayWeb.UserSessionControllerTest do
+  use SwayWeb.ConnCase, async: true
 
-  import Bafa.AccountsFixtures
+  import Sway.AccountsFixtures
 
   setup do
     %{user: user_fixture()}
@@ -50,7 +50,7 @@ defmodule BafaWeb.UserSessionControllerTest do
           }
         })
 
-      assert conn.resp_cookies["_bafa_web_user_remember_me"]
+      assert conn.resp_cookies["_sway_web_user_remember_me"]
       assert redirected_to(conn) == "/"
     end
 

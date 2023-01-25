@@ -1,7 +1,7 @@
-defmodule Bafa.StatusesFixtures do
+defmodule Sway.StatusesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Bafa.Statuses` context.
+  entities via the `Sway.Statuses` context.
   """
 
   @doc """
@@ -14,7 +14,7 @@ defmodule Bafa.StatusesFixtures do
         message: "some message",
         status: :focus
       })
-      |> Bafa.Statuses.create_status()
+      |> Sway.Statuses.create_status()
 
     status
   end

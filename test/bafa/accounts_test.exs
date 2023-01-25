@@ -1,10 +1,10 @@
-defmodule Bafa.AccountsTest do
-  use Bafa.DataCase
+defmodule Sway.AccountsTest do
+  use Sway.DataCase
 
-  alias Bafa.Accounts
+  alias Sway.Accounts
 
-  import Bafa.AccountsFixtures
-  alias Bafa.Accounts.{User, UserToken}
+  import Sway.AccountsFixtures
+  alias Sway.Accounts.{User, UserToken}
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
@@ -507,9 +507,9 @@ defmodule Bafa.AccountsTest do
   end
 
   describe "orgs" do
-    alias Bafa.Accounts.Org
+    alias Sway.Accounts.Org
 
-    import Bafa.AccountsFixtures
+    import Sway.AccountsFixtures
 
     @invalid_attrs %{domain: nil, name: nil}
 

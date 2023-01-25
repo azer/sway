@@ -1,9 +1,9 @@
-defmodule BafaWeb.OrgControllerTest do
-  use BafaWeb.ConnCase
+defmodule SwayWeb.OrgControllerTest do
+  use SwayWeb.ConnCase
 
-  import Bafa.AccountsFixtures
+  import Sway.AccountsFixtures
 
-  alias Bafa.Accounts.Org
+  alias Sway.Accounts.Org
 
   @create_attrs %{
     domain: "some domain",

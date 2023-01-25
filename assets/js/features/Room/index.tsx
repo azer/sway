@@ -6,7 +6,7 @@ import { styled } from 'themes'
 import logger from 'lib/log'
 import {
   ConnectionState,
-  setBafaRoomConnectionStatus,
+  setSwayRoomConnectionStatus,
 } from 'features/Dock/slice'
 import { ParticipantGrid } from './ParticipantGrid'
 
@@ -38,7 +38,7 @@ export default function Room(props: Props) {
     selectors.users.getSelf(state),
     selectors.rooms.getRoomById(state, props.id),
     selectors.rooms.getUsersInRoom(state, props.id),
-    selectors.dock.isBafaSocketConnected(state),
+    selectors.dock.isSwaySocketConnected(state),
   ])
 
   const commandPalette = useCommandPalette()
@@ -129,7 +129,7 @@ export default function Room(props: Props) {
     if (!room || !channel || !localUser || !isSocketConnected) return
 
     dispatch(
-      setBafaRoomConnectionStatus({
+      setSwayRoomConnectionStatus({
         userId: localUser.id,
         state: ConnectionState.Connecting,
       })
@@ -168,7 +168,7 @@ export default function Room(props: Props) {
   function handleJoin(payload: { id: string; user_id: string }) {
     if (String(payload.user_id) === localUser?.id) {
       dispatch(
-        setBafaRoomConnectionStatus({
+        setSwayRoomConnectionStatus({
           userId: localUser.id,
           state: ConnectionState.Connected,
         })

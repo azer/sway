@@ -7,14 +7,14 @@
 # General application configuration
 import Config
 
-config :bafa,
-  ecto_repos: [Bafa.Repo]
+config :sway,
+  ecto_repos: [Sway.Repo]
 
 # Configures the endpoint
-config :bafa, BafaWeb.Endpoint,
+config :sway, SwayWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: BafaWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Bafa.PubSub,
+  render_errors: [view: SwayWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Sway.PubSub,
   live_view: [signing_salt: "VU0V/0jX"]
 
 # Configures the mailer
@@ -24,7 +24,7 @@ config :bafa, BafaWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :bafa, Bafa.Mailer, adapter: Swoosh.Adapters.Local
+config :sway, Sway.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
@@ -52,13 +52,13 @@ config :ueberauth, Ueberauth,
     google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}
   ]
 
-config :bafa, Bafa.Guardian,
-  issuer: "bafa",
+config :sway, Sway.Guardian,
+  issuer: "sway",
   secret_key: "cPy1Th485lsMzkP28x7FffKiCWK5te7+oEBz/L4QOUIwGOU5/3N7Mrqnb+1Kvx7m"
 
-config :bafa, BafaWeb.ApiAuthPipeline,
-  error_handler: BafaWeb.ApiAuthErrorHandler,
-  module: Bafa.Guardian
+config :sway, SwayWeb.ApiAuthPipeline,
+  error_handler: SwayWeb.ApiAuthErrorHandler,
+  module: Sway.Guardian
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

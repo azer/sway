@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.AddActiveFieldToStatus do
+defmodule Sway.Repo.Migrations.AddActiveFieldToStatus do
   use Ecto.Migration
 
   def change do

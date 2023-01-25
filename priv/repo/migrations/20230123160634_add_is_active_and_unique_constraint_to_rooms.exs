@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.AddIsActiveAndUniqueConstraintToRooms do
+defmodule Sway.Repo.Migrations.AddIsActiveAndUniqueConstraintToRooms do
   use Ecto.Migration
 
   def change do

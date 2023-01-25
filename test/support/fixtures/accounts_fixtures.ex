@@ -1,7 +1,7 @@
-defmodule Bafa.AccountsFixtures do
+defmodule Sway.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Bafa.Accounts` context.
+  entities via the `Sway.Accounts` context.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -18,7 +18,7 @@ defmodule Bafa.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> Bafa.Accounts.register_user()
+      |> Sway.Accounts.register_user()
 
     user
   end
@@ -39,7 +39,7 @@ defmodule Bafa.AccountsFixtures do
         domain: "some domain",
         name: "some name"
       })
-      |> Bafa.Accounts.create_org()
+      |> Sway.Accounts.create_org()
 
     org
   end

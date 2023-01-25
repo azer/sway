@@ -1,7 +1,7 @@
-defmodule Bafa.RoomsFixtures do
+defmodule Sway.RoomsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Bafa.Rooms` context.
+  entities via the `Sway.Rooms` context.
   """
 
   @doc """
@@ -13,7 +13,7 @@ defmodule Bafa.RoomsFixtures do
       |> Enum.into(%{
         name: "some name"
       })
-      |> Bafa.Rooms.create_room()
+      |> Sway.Rooms.create_room()
 
     room
   end

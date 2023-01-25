@@ -12,7 +12,7 @@ interface State {
 }
 
 export interface CallParticipantStatus {
-  bafaUserId: string
+  swayUserId: string
   dailyUserId?: string
   sessionId?: string
   cameraOn?: boolean

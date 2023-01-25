@@ -24,7 +24,7 @@ doc
 **/*.ez
 
 # Ignore package tarball (built via "mix hex.build").
-**/bafa-*.tar
+**/sway-*.tar
 
 # Ignore assets that are produced by build tools.
 priv/static/assets

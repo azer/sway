@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.AddOrgIdToUser do
+defmodule Sway.Repo.Migrations.AddOrgIdToUser do
   use Ecto.Migration
 
   def change do

@@ -1,9 +1,9 @@
-defmodule BafaWeb.UserConfirmationControllerTest do
-  use BafaWeb.ConnCase, async: true
+defmodule SwayWeb.UserConfirmationControllerTest do
+  use SwayWeb.ConnCase, async: true
 
-  alias Bafa.Accounts
-  alias Bafa.Repo
-  import Bafa.AccountsFixtures
+  alias Sway.Accounts
+  alias Sway.Repo
+  import Sway.AccountsFixtures
 
   setup do
     %{user: user_fixture()}

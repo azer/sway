@@ -1,12 +1,12 @@
-defmodule Bafa.RoomsTest do
-  use Bafa.DataCase
+defmodule Sway.RoomsTest do
+  use Sway.DataCase
 
-  alias Bafa.Rooms
+  alias Sway.Rooms
 
   describe "rooms" do
-    alias Bafa.Rooms.Room
+    alias Sway.Rooms.Room
 
-    import Bafa.RoomsFixtures
+    import Sway.RoomsFixtures
 
     @invalid_attrs %{name: nil}
 

@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.CreateUsersAuthTables do
+defmodule Sway.Repo.Migrations.CreateUsersAuthTables do
   use Ecto.Migration
 
   def change do

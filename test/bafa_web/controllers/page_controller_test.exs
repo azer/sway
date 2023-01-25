@@ -1,5 +1,5 @@
-defmodule BafaWeb.PageControllerTest do
-  use BafaWeb.ConnCase
+defmodule SwayWeb.PageControllerTest do
+  use SwayWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

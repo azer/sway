@@ -1,11 +1,11 @@
-defmodule BafaWeb.ChatChannelTest do
-  use BafaWeb.ChannelCase
+defmodule SwayWeb.ChatChannelTest do
+  use SwayWeb.ChannelCase
 
   setup do
     {:ok, _, socket} =
-      BafaWeb.UserSocket
+      SwayWeb.UserSocket
       |> socket("user_id", %{some: :assign})
-      |> subscribe_and_join(BafaWeb.ChatChannel, "chat:lobby")
+      |> subscribe_and_join(SwayWeb.ChatChannel, "chat:lobby")
 
     %{socket: socket}
   end

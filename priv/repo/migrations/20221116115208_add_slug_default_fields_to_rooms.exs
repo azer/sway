@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.AddSlugDefaultFieldsToRooms do
+defmodule Sway.Repo.Migrations.AddSlugDefaultFieldsToRooms do
   use Ecto.Migration
 
   def change do

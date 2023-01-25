@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.CleanStatus do
+defmodule Sway.Repo.Migrations.CleanStatus do
   use Ecto.Migration
 
   def change do

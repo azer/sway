@@ -1,4 +1,4 @@
-defmodule BafaWeb.ChannelCase do
+defmodule SwayWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule BafaWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use BafaWeb.ChannelCase, async: true`, although
+  by setting `use SwayWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,15 +21,15 @@ defmodule BafaWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import BafaWeb.ChannelCase
+      import SwayWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint BafaWeb.Endpoint
+      @endpoint SwayWeb.Endpoint
     end
   end
 
   setup tags do
-    Bafa.DataCase.setup_sandbox(tags)
+    Sway.DataCase.setup_sandbox(tags)
     :ok
   end
 end

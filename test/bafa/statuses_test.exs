@@ -1,12 +1,12 @@
-defmodule Bafa.StatusesTest do
-  use Bafa.DataCase
+defmodule Sway.StatusesTest do
+  use Sway.DataCase
 
-  alias Bafa.Statuses
+  alias Sway.Statuses
 
   describe "statuses" do
-    alias Bafa.Statuses.Status
+    alias Sway.Statuses.Status
 
-    import Bafa.StatusesFixtures
+    import Sway.StatusesFixtures
 
     @invalid_attrs %{message: nil, status: nil}
 

@@ -14,8 +14,8 @@ export enum ConnectionState {
 export interface ConnectionStatus {
   userId: string
   internet: ConnectionState
-  bafaSocket?: ConnectionState
-  bafaRoom?: ConnectionState
+  swaySocket?: ConnectionState
+  swayRoom?: ConnectionState
   dailyCall?: ConnectionState
 }
 
@@ -42,24 +42,24 @@ export const slice = createSlice({
   name,
   initialState,
   reducers: {
-    setBafaSocketConnectionStatus: (
+    setSwaySocketConnectionStatus: (
       state,
       action: PayloadAction<{ userId: string; state: ConnectionState }>
     ) => {
       state.connection[action.payload.userId] = {
         ...state.connection[action.payload.userId],
         userId: action.payload.userId,
-        bafaSocket: action.payload.state,
+        swaySocket: action.payload.state,
       }
     },
-    setBafaRoomConnectionStatus: (
+    setSwayRoomConnectionStatus: (
       state,
       action: PayloadAction<{ userId: string; state: ConnectionState }>
     ) => {
       state.connection[action.payload.userId] = {
         ...state.connection[action.payload.userId],
         userId: action.payload.userId,
-        bafaRoom: action.payload.state,
+        swayRoom: action.payload.state,
       }
     },
     setDailyCallConnectionStatus: (
@@ -93,8 +93,8 @@ export const slice = createSlice({
 
 export const {
   setStatusId,
-  setBafaRoomConnectionStatus,
-  setBafaSocketConnectionStatus,
+  setSwayRoomConnectionStatus,
+  setSwaySocketConnectionStatus,
   setDailyCallConnectionStatus,
   setInternetConnectionStatus,
 } = slice.actions

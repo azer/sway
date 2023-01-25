@@ -1,4 +1,4 @@
-defmodule Bafa.Repo.Migrations.SlugIsDefaultDefaultValue do
+defmodule Sway.Repo.Migrations.SlugIsDefaultDefaultValue do
   use Ecto.Migration
 
   def change do

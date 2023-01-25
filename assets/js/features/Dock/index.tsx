@@ -56,7 +56,7 @@ export function Dock(props: Props) {
         userId: localUser.id,
         status: {
           dailyUserId: localParticipant.user_id,
-          bafaUserId: localUser.id,
+          swayUserId: localUser.id,
           sessionId: localParticipant?.session_id,
           cameraOn: localParticipant.video,
           screenOn: localParticipant.screen,

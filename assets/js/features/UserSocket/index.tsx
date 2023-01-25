@@ -10,7 +10,7 @@ import { add, Entity, toStateEntity } from 'state/entities'
 import logger from 'lib/log'
 import {
   ConnectionState,
-  setBafaSocketConnectionStatus,
+  setSwaySocketConnectionStatus,
 } from 'features/Dock/slice'
 // import useUserSocket, { context, initialState } from './use-user-socket'
 // import { useSelector, useDispatch } from 'app/state'
@@ -54,13 +54,13 @@ export default function UserSocket(props: Props) {
 
   useEffect(() => {
     if (
-      status?.bafaSocket === ConnectionState.Disconnected &&
+      status?.swaySocket === ConnectionState.Disconnected &&
       status.internet === ConnectionState.Connected
     ) {
       //log.info('Try connecting to the user socket again')
       //socket.connect()
     }
-  }, [status?.internet, status?.bafaSocket])
+  }, [status?.internet, status?.swaySocket])
 
   useEffect(() => {
     if (!orgId || !userId) return
@@ -69,7 +69,7 @@ export default function UserSocket(props: Props) {
       log.info('Socket is disconnected')
 
       dispatch(
-        setBafaSocketConnectionStatus({
+        setSwaySocketConnectionStatus({
           userId,
           state: ConnectionState.Disconnected,
         })
@@ -81,7 +81,7 @@ export default function UserSocket(props: Props) {
       log.info('Socket is connected')
 
       dispatch(
-        setBafaSocketConnectionStatus({
+        setSwaySocketConnectionStatus({
           userId,
           state: ConnectionState.Connected,
         })
@@ -89,7 +89,7 @@ export default function UserSocket(props: Props) {
     })
 
     dispatch(
-      setBafaSocketConnectionStatus({
+      setSwaySocketConnectionStatus({
         userId,
         state: ConnectionState.Connecting,
       })
@@ -106,7 +106,7 @@ export default function UserSocket(props: Props) {
         log.info('Joined org channel', { orgId })
 
         dispatch(
-          setBafaSocketConnectionStatus({
+          setSwaySocketConnectionStatus({
             userId,
             state: ConnectionState.Connected,
           })
@@ -116,14 +116,14 @@ export default function UserSocket(props: Props) {
         log.error('Failed to join org channel', resp)
 
         dispatch(
-          setBafaSocketConnectionStatus({
+          setSwaySocketConnectionStatus({
             userId,
             state: ConnectionState.Failed,
           })
         )
       })
       .receive('timeout', () => {
-        setBafaSocketConnectionStatus({
+        setSwaySocketConnectionStatus({
           userId,
           state: ConnectionState.Timeout,
         })
