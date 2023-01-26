@@ -34,6 +34,7 @@ defmodule SwayWeb.Router do
   scope "/api", SwayWeb do
     pipe_through [:api]
     resources "/workspaces", WorkspaceController
+    resources "/invites", InviteController
   end
 
   # Other scopes may use custom stacks.
