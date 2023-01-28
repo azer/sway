@@ -30,6 +30,7 @@ import { PlusIcon } from './Plus'
 import { HashtagIcon } from './Hashtag'
 import { EditIcon } from './Edit'
 import { TrashIcon } from './Trash'
+import { LogoutIcon } from './Logout'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -65,6 +66,7 @@ const icons: {
   hashtag: HashtagIcon,
   edit: EditIcon,
   trash: TrashIcon,
+  logout: LogoutIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {

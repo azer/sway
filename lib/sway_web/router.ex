@@ -76,8 +76,8 @@ defmodule SwayWeb.Router do
   scope "/", SwayWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    get "/register", UserRegistrationController, :new
-    post "/register", UserRegistrationController, :create
+    get "/join", UserRegistrationController, :new
+    post "/join", UserRegistrationController, :create
     get "/login", UserSessionController, :new
     post "/login", UserSessionController, :create
 

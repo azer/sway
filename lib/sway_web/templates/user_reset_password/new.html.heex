@@ -1,15 +1,18 @@
-<h1>Forgot your password?</h1>
+<SwayWeb.FormPageComponent.form>
+  <SwayWeb.FormPageComponent.header title="Forgot Password" conn={@conn} />
 
-<.form let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}>
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
+    <.form let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}>
+      <div class="fieldset">
+	<%= email_input f, :email, required: true, placeholder: "Email" %>
+	<div>
+	  <%= submit "Reset password" %>
+	</div>
+      </div>
+    </.form>
 
-  <div>
-    <%= submit "Send instructions to reset password" %>
-  </div>
-</.form>
+    <footer>
+      <%= link "Sign up", to: Routes.user_registration_path(@conn, :new) %> —
+      <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+    </footer>
 
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
+</SwayWeb.FormPageComponent.form>

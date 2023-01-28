@@ -4,6 +4,8 @@ defmodule SwayWeb.UserSessionController do
   alias Sway.Accounts
   alias SwayWeb.UserAuth
 
+  plug Ueberauth
+
   def new(conn, _params) do
     render(conn, "new.html", error_message: nil)
   end
@@ -22,6 +24,7 @@ defmodule SwayWeb.UserSessionController do
   def delete(conn, _params) do
     conn
     |> put_flash(:info, "Logged out successfully.")
+    |> clear_session()
     |> UserAuth.log_out_user()
   end
 end

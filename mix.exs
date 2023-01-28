@@ -54,7 +54,9 @@ defmodule Sway.MixProject do
       {:ueberauth, "~> 0.6"},
       {:ueberauth_google, "~> 0.10"},
       {:guardian, "~> 2.0"},
-      {:slugify, "~> 1.3"}
+      {:slugify, "~> 1.3"},
+      {:mailgun, "~> 0.1.2"},
+      {:dotenv_parser, "~> 2.0"}
     ]
   end
 

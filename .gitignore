@@ -36,3 +36,6 @@ npm-debug.log
 
 .DS_Store
 .log
+
+/config/prod.secret.exs
+/config/config.secret.exs

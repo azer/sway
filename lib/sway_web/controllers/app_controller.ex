@@ -2,6 +2,8 @@ defmodule SwayWeb.AppController do
   use SwayWeb, :controller
 
   def index(conn, _params) do
+    IO.puts "app controller"
+
     user_id = conn.assigns.current_user.id
     org_id = conn.assigns.current_user.org_id
     [org, rooms, status] = fetchRoomData(org_id, user_id)

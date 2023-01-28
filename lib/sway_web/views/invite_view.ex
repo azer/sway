@@ -18,7 +18,13 @@ defmodule SwayWeb.InviteView do
       name: invite.name,
       email: invite.email,
       workspace: render_one(invite.workspace, SwayWeb.WorkspaceView, "workspace.json"),
-      created_by: invite.created_by.id
+      created_by: render_one(invite.created_by, SwayWeb.UserView, "user.json"),
+    }
+  end
+
+  def render("error.json", %{message: message}) do
+    %{
+      error: message
     }
   end
 end

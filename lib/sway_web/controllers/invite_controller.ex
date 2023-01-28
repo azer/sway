@@ -19,11 +19,22 @@ defmodule SwayWeb.InviteController do
         |> json(%{error: "A user with this email already exists"})
 
       true ->
-        with {:ok, %Invite{} = invite} <- Invites.create_invite(invite_params) do
-          conn
-          |> put_status(:created)
-          |> put_resp_header("location", Routes.invite_path(conn, :show, invite))
-          |> render("show.json", invite: invite)
+	try do
+          with {:ok, %Invite{} = invite} <- Invites.create_invite(invite_params) do
+	    invite = invite |> Sway.Repo.preload([:workspace, :created_by])
+
+	    SwayWeb.InviteEmail.welcome(invite) |> Sway.Mailer.deliver()
+
+            conn
+            |> put_status(:created)
+            |> put_resp_header("location", Routes.invite_path(conn, :show, invite))
+            |> render("show.json", invite: invite)
+	  end
+	rescue
+	  Ecto.ConstraintError ->
+	    conn
+	    |> put_status(:unprocessable_entity)
+	    |> render("error.json", message: "Invite with the same email already exists.")
         end
     end
   end

@@ -18,6 +18,7 @@ import debounce from 'debounce-fn'
 import { usePushToTalkSettings } from './PushToTalkSettings'
 import { useBackgroundBlurSettings } from './BackgroundBlur'
 import { usePresenceSettings } from './PresenceSettings'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {}
 
@@ -171,12 +172,37 @@ export function SettingsProvider(props: Props) {
       palette: settings,
     })
 
+    register(`Sign out`, logout, {
+      icon: 'logout',
+      type: CommandType.AlterSession,
+      keywords: ['logout', 'log out'],
+    })
+
     function openSettings() {
       //commandPalette.open(settings.modal())
     }
   }, [])
 
   return <></>
+
+  function logout() {
+    fetch('/users/log_out', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        // @ts-ignore
+        'x-csrf-token': document.querySelector('meta[name=csrf-token]').content,
+      },
+    }).then((response) => {
+      // Check if the response is successful
+      if (response.ok) {
+        // Redirect the user to the login page or show a message
+        window.location.href = '/login'
+      } else {
+        // Handle errors
+      }
+    })
+  }
 }
 
 function hint(label: string | undefined): string {

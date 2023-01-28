@@ -1,5 +1,33 @@
 @import "./fonts.css";
 
+:root {
+    --colors-black: rgba(0,0,0,0.95);
+    --colors-gray1: rgb(20, 22, 26);
+    --colors-gray2: rgb(30, 34, 41);
+    --colors-gray3: rgb(65, 65, 65);
+    --colors-gray4: rgb(72, 83, 94);
+    --colors-gray8: rgb(110, 121, 132);
+    --colors-gray9: rgb(145, 145, 149);
+    --colors-silver: rgb(198, 203, 209);
+    --colors-white: rgba(255, 255, 255, 0.95);
+    --colors-teal: rgb(38, 181, 206);
+    --colors-lightBlue: rgba(100, 198, 251, 1);
+    --colors-darkBlue: rgb(38, 150, 255);
+    --colors-blue: rgba(75, 177, 232, 1);
+    --colors-turquise: rgb(14, 152, 173);
+    --colors-purple: rgb(155, 129, 188);
+    --colors-lightPurple: rgb(167, 159, 253);
+    --colors-candy: rgb(249, 174, 170);
+    --colors-orange: rgb(242, 153, 74);
+    --colors-red: rgb(235, 87, 87);
+    --colors-darkRed: rgb(197, 40, 40);
+    --colors-darkGreen: rgb(15, 120, 60);
+    --colors-green: rgb(76, 183, 130);
+    --colors-yellow: rgb(242, 201, 76);
+
+    --sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -16,11 +44,175 @@ html, body {
     margin: 0;
     touch-action: manipulation;
     font-size: 14px;
-    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: var(--sans);
     overflow: hidden;
 }
 
-.center-screen {
+.page {
+    width: 100vw;
+    min-height: 100vh;;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.page header .logo {
+    width: 350px;
+    height: 80px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -100px;
+}
+
+.page .logo img {
+    width: auto;
+    height: 100%;
+}
+
+.form {
+    position: relative;
+    width: 350px;
+    background: #fff;
+    border-radius: 20px;
+}
+
+.form header {
+    margin-bottom: 40px;
+    cursor: default;
+}
+
+.form h1 {
+    font-size: 28px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--colors-gray2);
+    margin: 0;
+}
+
+.form h3 {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 4px 0 0 0;
+    color: var(--colors-gray4);
+    line-height: 1.65;
+}
+
+.form .fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px auto;
+}
+
+.form .fieldset input {
+    display: block;
+    width: 100%;
+    color: var(--colors-gray1);
+    padding: 15px 10px;
+    border: 2px solid transparent;
+    background: rgba(30, 34, 41, 0.07);
+    border-radius: 7px;
+    font-size: 16px;
+    font-family: var(--sans);
+    outline: none;
+}
+
+.form .fieldset input:focus {
+    border-color: var(--colors-darkBlue);
+    background: #fff;
+}
+
+.form .fieldset input::placeholder {
+    color: var(--colors-silver);
+}
+
+.form .fieldset button, .form .oauth-button {
+    margin-top: 10px;
+    padding: 15px 10px;
+    color: var(--colors-gray1);
+    border: 0;
+    display: block;
+    width: 100%;
+    border-radius: 7px;
+    font-size: 16px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: rgb(0 0 0 / 9%) 0px 1px 1px;
+    font-weight: 600;
+    cursor: default;
+}
+
+.form .fieldset button:hover , .form .oauth-button:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.form footer {
+    color: var(--colors-gray8);
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: -0.2px;
+    margin-top: 20px;
+}
+
+.form footer a {
+    color: var(--colors-gray4);
+    text-decoration: none;
+}
+
+.form .oauth-button {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    background: var(--colors-gray2);
+    color: #fff;
+}
+
+.form .oauth-button:hover {
+    background: rgba(30, 34, 41, 0.9);
+}
+
+.form .oauth-button .logo {
+    height: 20px;
+    margin-right: 12px;
+}
+
+.form .separator {
+    display: grid;
+    grid-template-columns: 1fr 25px 1fr;
+    height: 20px;
+    text-align: center;
+    margin: 10px 0;
+    color: rgba(0,0,0,0.4);
+    cursor: default;
+}
+
+.form .separator::before, .form .separator::after {
+    content: "";
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    height: calc(50% - 1px);
+}
+
+.form .invalid-feedback {
+    font-size: 12px;
+    text-align: right;
+    color: var(--colors-red);
+}
+
+.form .alert {
+    color: var(--colors-red);;
+    padding: 5px 0;
+    border-radius: 2px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/*.center-screen {
     width: 100vw;
     height: 100vh;;
     display: flex;
@@ -83,16 +275,15 @@ html, body {
     color: #fff;
 }
 
+
+
+
+
 .phx .oauth label {
     display: block;
     margin-top: 1px;
 }
 
-
-.phx form .logo {
-    height: 98px;
-    text-align: center;
-}
 
 .phx form header h1 {
     font-size: 18px;
@@ -103,12 +294,9 @@ html, body {
     letter-spacing: -1px;
 }
 
+
 .phx .email-form {
     display: none;
-}
-
-.phx form .logo img {
-    height: 100%;
 }
 
 .phx form label {
@@ -144,3 +332,4 @@ html, body {
 .alerts {
     display: none;
 }
+*/
