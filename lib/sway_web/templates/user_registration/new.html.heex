@@ -1,11 +1,5 @@
 <SwayWeb.FormPageComponent.form>
-  <SwayWeb.FormPageComponent.header title="Join Sway" conn={@conn}>
-    <%= if @invite do %>
-    <h3>You're invited by <%= @invite.created_by.name %> to join <%= @invite.workspace.name %> workspace.</h3>
-    <% end %>
-  </SwayWeb.FormPageComponent.header>
-
-
+  <SwayWeb.FormPageComponent.header title="Join Sway" conn={@conn} />
 
     <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
       <a href={Routes.user_oauth_path(@conn, :request, "google")} class="oauth-button">

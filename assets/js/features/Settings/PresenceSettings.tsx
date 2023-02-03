@@ -32,8 +32,9 @@ export function usePresenceSettings() {
   const commandPalette = useCommandPalette()
   const { channel } = useUserSocket()
 
-  const [roomId, mode] = useSelector((state) => [
+  const [roomId, workspaceId, mode] = useSelector((state) => [
     selectors.rooms.getFocusedRoomId(state),
+    selectors.memberships.getSelfMembership(state)?.workspace_id,
     selectors.presence.getSelfStatus(state).status,
   ])
 
@@ -204,11 +205,12 @@ export function usePresenceSettings() {
     channel?.push('user:status', {
       presence_mode: newMode,
       room_id: roomId,
+      workspace_id: workspaceId,
     })
   }
 }
 
-const IconWrapper = styled('div', {
+export const IconWrapper = styled('div', {
   maxWidth: '100px',
   margin: '0 auto',
   '& svg path': {
@@ -216,7 +218,7 @@ const IconWrapper = styled('div', {
   },
 })
 
-const Preview = styled('div', {
+export const Preview = styled('div', {
   position: 'relative',
   width: '100%',
   height: '100%',

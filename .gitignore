@@ -39,3 +39,5 @@ npm-debug.log
 
 /config/prod.secret.exs
 /config/config.secret.exs
+
+electron/dist

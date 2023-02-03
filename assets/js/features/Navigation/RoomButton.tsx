@@ -12,12 +12,14 @@ import { RoomStatus } from 'features/Room/selectors'
 interface Props {
   id: string
   selected?: boolean
+  onClick: (id: string) => void
 }
 
 export function RoomButton(props: Props) {
   const navigate = useNavigate()
 
-  const [room, usersInRoom, roomStatus] = useSelector((state) => [
+  const [workspace, room, usersInRoom, roomStatus] = useSelector((state) => [
+    selectors.workspaces.getSelfWorkspace(state),
     selectors.rooms.getRoomById(state, props.id),
     selectors.rooms.getUsersInRoom(state, props.id),
     selectors.rooms.getRoomStatus(state, props.id),
@@ -27,7 +29,7 @@ export function RoomButton(props: Props) {
     <Container
       selected={props.selected}
       hasUsers={!props.selected && usersInRoom.length > 0}
-      onClick={handleClick}
+      onClick={() => props.onClick(props.id)}
     >
       <PresenceIcon mode={roomStatus} />
       <Name>{room?.name || ''}</Name>
@@ -42,10 +44,6 @@ export function RoomButton(props: Props) {
       ) : null}
     </Container>
   )
-
-  function handleClick() {
-    if (room) navigate(`/rooms/${room.slug}`)
-  }
 }
 
 const Container = styled('div', {
@@ -95,7 +93,7 @@ const Users = styled('div', {
 const PresenceIcon = styled('div', {
   width: '8px',
   height: '8px',
-  round: true,
+  round: 'xsmall',
   variants: {
     mode: {
       [RoomStatus.Offline]: {

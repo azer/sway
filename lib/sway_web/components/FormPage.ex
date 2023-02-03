@@ -3,6 +3,7 @@ defmodule SwayWeb.FormPageComponent do
   alias SwayWeb.Router.Helpers, as: Routes
 
   def form(assigns) do
+
     ~H"""
     <div class="page">
     <div class="form">
@@ -13,6 +14,9 @@ defmodule SwayWeb.FormPageComponent do
   end
 
   def header(assigns) do
+    alert = Phoenix.Controller.get_flash(assigns.conn, :error)
+    info = Phoenix.Controller.get_flash(assigns.conn, :info)
+
     ~H"""
     <header>
     <div class="logo">
@@ -22,7 +26,16 @@ defmodule SwayWeb.FormPageComponent do
       <%= if assigns[:inner_block] do %>
       <%= render_slot(@inner_block) %>
       <% end %>
-    </header>
+      <%= if info do %>
+      <div class="alert info"><%= info %></div>
+      <% end %>
+      <%= if alert do %>
+      <div class="alert error"><%= alert %></div>
+      <% end %>
+      </header>
+
     """
   end
+
+
 end

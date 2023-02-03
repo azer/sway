@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { Participant } from './RoomParticipant'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { useMediaTrack, useScreenShare } from '@daily-co/daily-react-hooks'
 import { PresenceMode } from 'state/entities'
 

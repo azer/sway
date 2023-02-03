@@ -1,11 +1,11 @@
-defmodule SwayWeb.ChatChannel do
+defmodule SwayWeb.WorkspaceChannel do
   use SwayWeb, :channel
 
   alias SwayWeb.UserPresence
 
   @impl true
-  def join("org:" <> org_id, payload, socket) do
-    if authorized?(socket.assigns.user, String.to_integer(org_id)) do
+  def join("workspace:" <> workspace_id, _payload, socket) do
+    if authorized?(socket.assigns.user, String.to_integer(workspace_id)) do
       send(self(), :after_join)
       {:ok, socket}
     else
@@ -18,8 +18,8 @@ defmodule SwayWeb.ChatChannel do
 
     {:ok, _} =
       UserPresence.track(socket, "users:#{user.id}", %{
-        user_id: user.id,
-        online_at: inspect(System.system_time(:second))
+            user_id: user.id,
+            online_at: inspect(System.system_time(:second))
       })
 
     push(socket, "presence_state", UserPresence.list(socket))
@@ -38,21 +38,29 @@ defmodule SwayWeb.ChatChannel do
     {:reply, {:ok, user_broadcastable(user)}, socket}
   end
 
-  def handle_in("rooms:join", %{"id" => id}, socket) do
+  def handle_in("workspace:list_users", %{ "workspace_id" => workspace_id }, socket) do
+    users_by_rooms = list_online_users_by_rooms(socket, workspace_id)
+    {:reply, {:ok, users_by_rooms}, socket}
+  end
+
+  def handle_in("rooms:join", %{"id" => id, "workspace_id" => workspace_id}, socket) do
     broadcast(socket, "rooms:join", %{"id" => id, "user_id" => socket.assigns.user})
 
     {:ok, _} =
       UserPresence.update(socket, "users:#{socket.assigns.user}", %{
         user_id: socket.assigns.user,
         online_at: inspect(System.system_time(:second)),
-        room_id: id
+        room_id: id,
+	workspace_id: workspace_id
       })
 
-    status = Sway.Statuses.get_latest_status(socket.assigns.user)
+    status = Sway.Statuses.get_latest_status(socket.assigns.user, workspace_id)
 
     case Sway.Statuses.update_status(status, %{room_id: id}) do
       {:ok, status} ->
-        broadcast(socket, "user:status", status_broadcastable(status))
+        #broadcast(socket, "user:status", status_broadcastable(status))
+	broadcast(socket, "workspace:sync_users", list_online_users_by_rooms(socket, workspace_id))
+
         {:noreply, socket}
 
       {:error, reason} ->
@@ -60,25 +68,25 @@ defmodule SwayWeb.ChatChannel do
     end
   end
 
-  def handle_in("rooms:create", %{"name" => name, "org_id" => org_id}, socket) do
+  def handle_in("rooms:create", %{"name" => name, "workspace_id" => workspace_id}, socket) do
     user = Sway.Accounts.get_user!(socket.assigns.user)
 
     attrs = %{
                name: name,
                slug: Slug.slugify(name),
-               org_id: org_id,
+               workspace_id: workspace_id,
                user_id: socket.assigns.user
     }
 
-    case user.org_id == org_id do
+    case authorized?(user.id, workspace_id) do
       true ->
         case Sway.Rooms.create_or_activate_room(attrs) do
           {:ok, room} ->
-	    org_rooms = Sway.Rooms.list_org_rooms(user.org_id, user.id)
-	    all = Enum.map(org_rooms, fn room -> room_broadcastable(room) end)
+	    workspace_rooms = Sway.Rooms.list_by_workspace_id(workspace_id)
+	    all = Enum.map(workspace_rooms, fn room -> room_broadcastable(room) end)
 
 	    broadcast(socket, "rooms:create", %{ "all": all, "created": room_broadcastable(room) })
-	    {:reply, {:ok, %{ "room": room_broadcastable(room), "org_rooms": all }}, socket}
+	    {:reply, {:ok, %{ "room": room_broadcastable(room), "workspace_rooms": all }}, socket}
 
           {:error, changeset} ->
 	    errors = Enum.map(changeset.errors, fn err -> error_broadcastable(err) end)
@@ -93,7 +101,7 @@ defmodule SwayWeb.ChatChannel do
   def handle_in("rooms:rename", %{ "id" => room_id, "name" => name }, socket) do
     user = Sway.Accounts.get_user!(socket.assigns.user)
     room = Sway.Rooms.get_room!(room_id)
-    case room.org_id == user.org_id do
+    case authorized?(user.id, room.workspace_id) do
       true ->
 	case Sway.Rooms.update_room(room, %{ name: name }) do
           {:ok, room} ->
@@ -111,13 +119,13 @@ defmodule SwayWeb.ChatChannel do
   def handle_in("rooms:delete", %{ "id" => room_id }, socket) do
     user = Sway.Accounts.get_user!(socket.assigns.user)
     room = Sway.Rooms.get_room!(room_id)
-    case room.org_id == user.org_id do
+    case authorized?(user.id, room.workspace_id) do
       true ->
 	case Sway.Rooms.update_room(room, %{ is_active: false }) do
           {:ok, room} ->
 	    broadcast(socket, "rooms:update", room_broadcastable(room))
-	    org_rooms = Sway.Rooms.list_org_rooms(user.org_id, user.id)
-	    {:reply, {:ok, %{ "room": room_broadcastable(room), "org_rooms": Enum.map(org_rooms, fn room -> room_broadcastable(room) end) }}, socket}
+	    workspace_rooms = Sway.Rooms.list_by_workspace_id(room.workspace_id)
+	    {:reply, {:ok, %{ "room": room_broadcastable(room), "workspace_rooms": Enum.map(workspace_rooms, fn room -> room_broadcastable(room) end) }}, socket}
           {:error, changeset} ->
 	    errors = Enum.map(changeset.errors, fn err -> error_broadcastable(err) end)
             {:reply, {:error, errors}, socket}
@@ -127,13 +135,15 @@ defmodule SwayWeb.ChatChannel do
     end
   end
 
-  def handle_in("user:status", %{"presence_mode" => presence_mode, "room_id" => room_id}, socket) do
+  def handle_in("user:status", %{"presence_mode" => presence_mode, "room_id" => room_id, "workspace_id" => workspace_id }, socket) do
     {room_id_int, ""} = Integer.parse(room_id)
+    {workspace_id_int, ""} = Integer.parse(workspace_id)
 
     case Sway.Statuses.create_status(%{
            status: presence_mode,
            user_id: socket.assigns.user,
-           room_id: room_id_int
+           room_id: room_id_int,
+	   workspace_id: workspace_id_int
          }) do
       {:ok, status} ->
         broadcast(socket, "user:status", status_broadcastable(status))
@@ -144,8 +154,8 @@ defmodule SwayWeb.ChatChannel do
     end
   end
 
-  def handle_in("user:status", %{"is_active" => is_active}, socket) do
-    status = Sway.Statuses.get_latest_status(socket.assigns.user)
+  def handle_in("user:status", %{"is_active" => is_active, "workspace_id" => workspace_id}, socket) do
+    status = Sway.Statuses.get_latest_status(socket.assigns.user, workspace_id)
 
     case Sway.Statuses.update_status(status, %{is_active: is_active}) do
       {:ok, status} ->
@@ -165,9 +175,22 @@ defmodule SwayWeb.ChatChannel do
   end
 
   # Add authorization logic here as required.
-  defp authorized?(userId, orgId) do
-    user = Sway.Accounts.get_user!(userId)
-    user.org_id == orgId
+  defp authorized?(user_id, workspace_id) do
+    membership = Sway.Workspaces.get_membership_by_workspace(user_id, workspace_id)
+    membership != nil
+  end
+
+  defp list_online_users_by_rooms(socket, workspace_id) do
+    list = UserPresence.list(socket)
+    user_ids = Enum.map(list, fn ({_, value}) -> hd(value[:metas])[:user_id] end)
+    statuses = Enum.map(user_ids, fn user_id -> status_broadcastable(Sway.Statuses.get_latest_status(user_id, workspace_id)) end)
+
+    Enum.reduce(statuses, %{}, fn %{"room_id" => room_id, "user_id" => user_id}, acc ->
+      case Map.get(acc, room_id) do
+	nil -> Map.put(acc, room_id, ["#{user_id}"])
+	users -> Map.put(acc, room_id, users ++ ["#{user_id}"])
+      end
+    end)
   end
 
   def room_broadcastable(room) do
@@ -187,7 +210,6 @@ defmodule SwayWeb.ChatChannel do
       "id" => user.id,
       "name" => user.name,
       "email" => user.email,
-      "org_id" => user.org_id,
       "profile_photo_url" => user.profile_photo_url
     }
   end
@@ -200,6 +222,7 @@ defmodule SwayWeb.ChatChannel do
       "message" => status.message,
       "is_active" => status.is_active,
       "status" => status.status,
+      "workspace_id" => status.workspace_id,
       "inserted_at" => status.inserted_at
     }
   end

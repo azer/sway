@@ -3,22 +3,18 @@ import selectors from 'selectors'
 import { useUserSocket } from 'features/UserSocket'
 import { entities, useDispatch, useSelector } from 'state'
 import { styled } from 'themes'
-import logger from 'lib/log'
-import {
-  ConnectionState,
-  setSwayRoomConnectionStatus,
-} from 'features/Dock/slice'
+import { logger } from 'lib/log'
 import { ParticipantGrid } from './ParticipantGrid'
 
 import { Dock } from 'features/Dock'
 import { ScreenshareProvider } from 'features/Screenshare/Provider'
 import { Channel } from 'phoenix'
-import { appendToOrgRoomIds, setOrgRoomIds } from './slice'
-import { add, addBatch, Room, Room, Rooms, toStateEntity } from 'state/entities'
-import { useNavigate } from 'react-router-dom'
+import { setFocusedRoomById, setWorkspaceRoomIds } from './slice'
+import { add, addBatch, Room, Rooms, toStateEntity } from 'state/entities'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { Command, useCommandPalette } from 'features/CommandPalette'
 import Icon from 'components/Icon'
+import { useRooms } from './use-rooms'
 
 // import { useSelector, useDispatch } from 'app/state'
 
@@ -28,43 +24,44 @@ interface Props {
 
 const log = logger('room')
 
-export default function Room(props: Props) {
+export function RoomPage(props: Props) {
   const dispatch = useDispatch()
   // const [] = useSelector((state) => [])
   const { channel } = useUserSocket()
-  const navigate = useNavigate()
+  const { enterById } = useRooms()
 
-  const [localUser, room, isSocketConnected] = useSelector((state) => [
-    selectors.users.getSelf(state),
-    selectors.rooms.getRoomById(state, props.id),
-    selectors.rooms.getUsersInRoom(state, props.id),
-    selectors.dock.isSwaySocketConnected(state),
-  ])
+  const [localUser, localWorkspaceId, room, isSocketConnected] = useSelector(
+    (state) => [
+      selectors.users.getSelf(state),
+      selectors.memberships.getSelfMembership(state)?.workspace_id,
+      selectors.rooms.getRoomById(state, props.id),
+      selectors.rooms.getUsersInRoom(state, props.id),
+      selectors.dock.isSwaySocketConnected(state),
+    ]
+  )
 
   const commandPalette = useCommandPalette()
   const { useRegister } = useCommandRegistry()
 
   useRegister(
     (register, registerPaletteCmd) => {
-      if (!room || !channel || !localUser) return
+      if (!room || !channel || !localWorkspaceId) return
 
-      registerPaletteCmd(createRoomModal(channel, localUser.orgId), () => [])
+      registerPaletteCmd(createRoomModal(channel, localWorkspaceId), () => [])
       registerPaletteCmd(renameRoomModal(channel, room), () =>
         renameRoomCmd(room)
       )
-      registerPaletteCmd(deleteRoomModal(channel, room), () =>
-        deleteRoomCmd(channel, room)
+      registerPaletteCmd(deleteRoomModal(channel, room, localWorkspaceId), () =>
+        deleteRoomCmd(channel, room, localWorkspaceId)
       )
     },
-    [channel, room, localUser]
+    [channel, room, localWorkspaceId]
   )
 
   useEffect(() => {
-    if (!channel) return
+    if (!channel || !localWorkspaceId) return
 
     channel.on('rooms:update', (payload: Room) => {
-      log.info('update room', payload)
-
       dispatch(
         add({
           table: Rooms,
@@ -77,7 +74,12 @@ export default function Room(props: Props) {
     channel.on('rooms:create', (payload: { all: Room[]; created: Room }) => {
       log.info('create message received', payload)
 
-      dispatch(setOrgRoomIds(payload.all.map((r) => String(r.id))))
+      dispatch(
+        setWorkspaceRoomIds({
+          workspaceId: localWorkspaceId,
+          roomIds: payload.all.map((r) => String(r.id)),
+        })
+      )
 
       dispatch(
         addBatch(
@@ -89,63 +91,7 @@ export default function Room(props: Props) {
         )
       )
     })
-  }, [channel])
-
-  /*
-  const [hasCamAndMicAccess, setHasCamAndMicAccess] = useState(true)
-
-  useEffect(() => {
-    const checkcamAndMicAccess = async () => {
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices()
-        const cameras = devices
-          .filter((device) => device.kind === 'videoinput')
-          .filter((d) => d.deviceId !== '')
-        const microphones = devices.filter(
-          (device) => device.kind === 'audioinput'
-        )
-        log.info('cameras', cameras)
-        setHasCamAndMicAccess(cameras.length > 0)
-      } catch (err) {
-        setHasCamAndMicAccess(false)
-      }
-    }
-
-    checkcamAndMicAccess()
-    }, [])
-
-
-    {hasCamAndMicAccess ? (
-
-      ) : (
-        <Error>
-          <RequestAccess onClick={requestAccess}>
-            Grant camera & microphone access
-          </RequestAccess>
-        </Error>
-      )}*/
-
-  useEffect(() => {
-    if (!room || !channel || !localUser || !isSocketConnected) return
-
-    dispatch(
-      setSwayRoomConnectionStatus({
-        userId: localUser.id,
-        state: ConnectionState.Connecting,
-      })
-    )
-
-    // FIXME:
-    // Change the room when user triggers
-    // Navigating to a room
-    // Or receiving a new status
-    channel.push('rooms:join', { id: room.id })
-  }, [channel, room, localUser, isSocketConnected])
-
-  useEffect(() => {
-    if (!channel) return
-    channel.on('rooms:join', handleJoin)
-  }, [channel])
+  }, [channel, localWorkspaceId])
 
   return (
     <Container>
@@ -165,19 +111,8 @@ export default function Room(props: Props) {
     </Container>
   )
 
-  function handleJoin(payload: { id: string; user_id: string }) {
-    if (String(payload.user_id) === localUser?.id) {
-      dispatch(
-        setSwayRoomConnectionStatus({
-          userId: localUser.id,
-          state: ConnectionState.Connected,
-        })
-      )
-    }
-  }
-
   function openRoomCommands() {
-    if (!channel || !localUser) return
+    if (!channel || !localUser || !localWorkspaceId) return
 
     commandPalette.open(
       [
@@ -195,8 +130,8 @@ export default function Room(props: Props) {
           name: 'Delete #' + room.name,
           icon: 'trash',
           palette: {
-            modal: () => deleteRoomModal(channel, room),
-            commands: () => deleteRoomCmd(channel, room),
+            modal: () => deleteRoomModal(channel, room, localWorkspaceId),
+            commands: () => deleteRoomCmd(channel, room, localWorkspaceId),
           },
         },
         {
@@ -204,7 +139,7 @@ export default function Room(props: Props) {
           name: 'Create New Room',
           icon: 'plus',
           palette: {
-            modal: () => createRoomModal(channel, localUser.orgId),
+            modal: () => createRoomModal(channel, localWorkspaceId),
             commands: () => [],
           },
         },
@@ -241,22 +176,30 @@ export default function Room(props: Props) {
     }
   }
 
-  function createRoom(channel: Channel, name: string, orgId: string) {
+  function createRoom(channel: Channel, name: string, workspaceId: string) {
     log.info('Creating room', name)
 
     channel
       .push('rooms:create', {
         name,
-        org_id: orgId,
+        workspace_id: workspaceId,
       })
       .receive(
         'ok',
-        (response: { room: entities.Room; org_rooms: entities.Room[] }) => {
-          dispatch(setOrgRoomIds(response.org_rooms.map((r) => String(r.id))))
+        (response: {
+          room: entities.Room
+          workspace_rooms: entities.Room[]
+        }) => {
+          dispatch(
+            setWorkspaceRoomIds({
+              workspaceId,
+              roomIds: response.workspace_rooms.map((r) => String(r.id)),
+            })
+          )
 
           dispatch(
             addBatch(
-              response.org_rooms.map((r) => ({
+              response.workspace_rooms.map((r) => ({
                 id: r.id,
                 table: entities.Rooms,
                 record: toStateEntity(entities.Rooms, r),
@@ -264,7 +207,7 @@ export default function Room(props: Props) {
             )
           )
 
-          navigate(`/rooms/${response.room.slug}`)
+          enterById(response.room.id)
         }
       )
       .receive('error', (response) => {
@@ -272,24 +215,24 @@ export default function Room(props: Props) {
       })
   }
 
-  function deleteRoomModal(channel: Channel, room: Room) {
+  function deleteRoomModal(channel: Channel, room: Room, workspaceId: string) {
     return {
       id: 'delete-room-confirm-' + room.id,
       icon: 'trash',
       title: 'Delete room: ' + room.name,
-      commands: () => deleteRoomCmd(channel, room),
+      commands: () => deleteRoomCmd(channel, room, workspaceId),
       placeholder: 'Want to close #' + room.name + ' room permanently?',
     }
   }
 
-  function deleteRoomCmd(channel: Channel, room: Room) {
+  function deleteRoomCmd(channel: Channel, room: Room, workspaceId: string) {
     return [
       {
         id: 'delete-room-yes',
         name: `Absolutely, adios "${room.name}"`,
         icon: 'trash',
         keywords: ['yes'],
-        callback: () => deleteRoom(channel, room.id),
+        callback: () => deleteRoom(channel, room.id, workspaceId),
       },
       {
         id: 'delete-room-no',
@@ -301,7 +244,7 @@ export default function Room(props: Props) {
     ]
   }
 
-  function deleteRoom(channel: Channel, id: string) {
+  function deleteRoom(channel: Channel, id: string, workspaceId: string) {
     log.info('Deleting room', id)
     channel
       ?.push('rooms:delete', {
@@ -309,12 +252,20 @@ export default function Room(props: Props) {
       })
       .receive(
         'ok',
-        (response: { room: entities.Room; org_rooms: entities.Room[] }) => {
-          dispatch(setOrgRoomIds(response.org_rooms.map((r) => String(r.id))))
+        (response: {
+          room: entities.Room
+          workspace_rooms: entities.Room[]
+        }) => {
+          dispatch(
+            setWorkspaceRoomIds({
+              workspaceId: workspaceId,
+              roomIds: response.workspace_rooms.map((r) => String(r.id)),
+            })
+          )
 
           dispatch(
             addBatch(
-              response.org_rooms.map((r) => ({
+              response.workspace_rooms.map((r) => ({
                 id: r.id,
                 table: entities.Rooms,
                 record: toStateEntity(entities.Rooms, r),
@@ -385,20 +336,6 @@ export default function Room(props: Props) {
   }
 }
 
-const Error = styled('div', {
-  center: true,
-})
-
-function requestAccess() {
-  log.info('request access')
-  navigator.mediaDevices.getUserMedia({
-    audio: true,
-    video: {
-      facingMode: 'user',
-    },
-  })
-}
-
 const RequestAccess = styled('button', {
   background: 'transparent',
   padding: '12px 36px',
@@ -415,7 +352,7 @@ const topBlurEffect =
 const Container = styled('main', {
   width: '100%',
   display: 'grid',
-  gridTemplateRows: 'calc(16 * 3.5px) auto calc(28 * 4px)',
+  gridTemplateRows: 'calc(16 * 4px) auto calc(28 * 4px)',
   backgroundImage: topBlurEffect,
 })
 
@@ -428,10 +365,10 @@ const Header = styled('header', {
 
 const TitleBg = styled('div', {
   position: 'absolute',
-  top: '13px',
+  top: '21px',
   left: '-8px',
   width: 'calc(100% + 16px)',
-  height: 'calc(100% - 4px)',
+  height: 'calc(100% - 12px)',
   round: 'small',
   '&:hover': {
     background: 'rgba(220, 230, 255, 0.04)',
@@ -441,7 +378,7 @@ const TitleBg = styled('div', {
 const Title = styled('div', {
   display: 'inline-block',
   position: 'relative',
-  baselineBlock: 8,
+  baselineBlock: 10,
   fontWeight: '$medium',
   label: true,
   color: '$roomTitleFg',

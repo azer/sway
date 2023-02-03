@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'state'
-import { addInitialState } from 'state/entities'
 import { useDispatch } from 'state'
 import { useParams } from 'react-router-dom'
 import selectors from 'selectors'
-import { setRoomId } from 'features/Room/slice'
-import Room from 'features/Room'
-import logger from 'lib/log'
+import { RoomPage } from 'features/Room'
+import { logger } from 'lib/log'
 import { useCommandPalette } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -14,7 +12,7 @@ import { Shell } from 'features/Shell'
 
 const log = logger('main-route')
 
-export default function Main(): JSX.Element {
+export function MainRoute(): JSX.Element {
   const { commands, add } = useCommandRegistry()
   const commandPalette = useCommandPalette()
 
@@ -24,18 +22,8 @@ export default function Main(): JSX.Element {
   const [room] = useSelector((state) => [
     params.slug
       ? selectors.rooms.getRoomBySlug(state, params.slug)
-      : selectors.rooms.getDefaultRoom(state),
+      : selectors.rooms.getFocusedRoom(state),
   ])
-
-  useEffect(() => {
-    dispatch(addInitialState())
-  }, [])
-
-  useEffect(() => {
-    if (room) {
-      dispatch(setRoomId(room.id))
-    }
-  }, [room?.id, params.slug])
 
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== 'cmdk') return
@@ -53,7 +41,7 @@ export default function Main(): JSX.Element {
 
   return (
     <Shell>
-      <Room id={room?.id || ''} />
+      <RoomPage id={room?.id || ''} />
     </Shell>
   )
 

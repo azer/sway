@@ -37,7 +37,7 @@ defmodule Sway.Statuses do
   """
   def get_status!(id), do: Repo.get!(Status, id)
 
-  def get_latest_status(user_id) do
+  def get_latest_status(user_id, workspace_id) do
     status = from(s in Status,
       where: s.user_id == ^user_id,
       order_by: [desc: s.inserted_at],
@@ -48,9 +48,10 @@ defmodule Sway.Statuses do
 	status
       _ ->
 	user = Sway.Accounts.get_user!(user_id)
-	room = Sway.Rooms.get_default_room(user.org_id, user_id)
-	{:ok, status} = create_status(%{ user_id: user_id, room_id: room.id, status: :focus })
-	status
+	room = Sway.Rooms.get_default_room(workspace_id)
+	with {:ok, %Status{} = status} <- create_status(%{ user_id: user_id, room_id: room.id, status: :focus, workspace_id: workspace_id }) do
+	  status
+      end
     end
   end
 

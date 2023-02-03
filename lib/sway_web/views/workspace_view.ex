@@ -14,7 +14,9 @@ defmodule SwayWeb.WorkspaceView do
     %{
       id: workspace.id,
       name: workspace.name,
+      slug: workspace.slug,
       domain: workspace.domain,
+      is_active: workspace.is_active,
       logo_url: workspace.logo_url
     }
   end

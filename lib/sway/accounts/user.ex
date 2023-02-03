@@ -9,8 +9,7 @@ defmodule Sway.Accounts.User do
     field :confirmed_at, :naive_datetime
     field :name, :string
     field :profile_photo_url, :string
-
-    belongs_to :org, Sway.Accounts.Org
+    field :is_superuser, :boolean
 
     timestamps()
   end
@@ -34,7 +33,7 @@ defmodule Sway.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :name, :profile_photo_url, :password, :org_id])
+    |> cast(attrs, [:email, :name, :profile_photo_url, :password])
     |> validate_email()
     |> validate_password(opts)
   end

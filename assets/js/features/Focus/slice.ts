@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, RootState } from 'app/state'
-import { initialShellFocus, ShellFocus } from 'features/Shell/focus'
+import { initialWorkspaceFocus, WorkspaceFocus } from 'features/Workspace/focus'
 
 export const name = 'focus'
 
 interface State {
   windowHasFocus: boolean
-  shell: ShellFocus
+  workspace: WorkspaceFocus
 }
 
 export const initialState: State = {
   windowHasFocus: document.hasFocus(),
-  shell: initialShellFocus,
+  workspace: initialWorkspaceFocus,
 }
 
 export const slice = createSlice({
@@ -21,23 +21,23 @@ export const slice = createSlice({
     setWindowFocus: (state, action: PayloadAction<boolean>) => {
       state.windowHasFocus = action.payload
     },
-    setShellFocus: (state, action: PayloadAction<ShellFocus>) => {
-      state.shell = action.payload
+    setWorkspaceFocus: (state, action: PayloadAction<WorkspaceFocus>) => {
+      state.workspace = action.payload
     },
   },
 })
 
-export const { setWindowFocus, setShellFocus } = slice.actions
+export const { setWindowFocus, setWorkspaceFocus } = slice.actions
 export default slice.reducer
 
-export function updateShellFocus(
-  updateFn: (draft: ShellFocus, getState: () => RootState) => void
+export function updateWorkspaceFocus(
+  updateFn: (draft: WorkspaceFocus, getState: () => RootState) => void
 ) {
   return (dispatch: AppDispatch, getState: () => RootState) => {
-    const current = getState().focus.shell
+    const current = getState().focus.workspace
     const draft = JSON.parse(JSON.stringify(current))
 
     updateFn(draft, getState)
-    dispatch(setShellFocus(draft))
+    dispatch(setWorkspaceFocus(draft))
   }
 }

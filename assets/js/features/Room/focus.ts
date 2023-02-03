@@ -3,5 +3,5 @@ export interface RoomFocus {
 }
 
 export const initialRoomFocus: RoomFocus = {
-  roomId: (window as any).initialState.room.focus.id,
+  roomId: (window as any).initialState.focus.roomId,
 }

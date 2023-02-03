@@ -6,8 +6,9 @@ defmodule SwayWeb.InviteView do
     %{data: render_many(invites, InviteView, "invite.json")}
   end
 
-  def render("show.json", %{invite: invite}) do
+  def render("show.json", %{invite: invite, token: token}) do
     %{
+      link: "https://sway.so/join?invite=#{token}",
       data: render_one(invite, InviteView, "invite.json"),
     }
   end

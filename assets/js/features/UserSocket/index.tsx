@@ -5,9 +5,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { Socket, Presence, Channel } from 'phoenix'
 import { useDispatch } from 'react-redux'
-import { syncAllRoomUsers } from 'features/Room/slice'
+import { setAllRoomUserIds, setWorkspaceRoomIds } from 'features/Room/slice'
 import { add, Entity, toStateEntity } from 'state/entities'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import {
   ConnectionState,
   setSwaySocketConnectionStatus,
@@ -35,9 +35,9 @@ export default function UserSocket(props: Props) {
   const dispatch = useDispatch()
   const [channel, setChannel] = useState<Channel>()
   const [presence, setPresence] = useState<Presence>()
-  const [userId, orgId, status] = useSelector((state) => [
+  const [userId, workspaceId, status] = useSelector((state) => [
     selectors.session.getUserId(state),
-    selectors.orgs.getSelfOrg(state)?.id,
+    selectors.memberships.getSelfMembership(state)?.workspace_id,
     selectors.dock.getSelfConnectionStatus(state),
   ])
 
@@ -63,7 +63,7 @@ export default function UserSocket(props: Props) {
   }, [status?.internet, status?.swaySocket])
 
   useEffect(() => {
-    if (!orgId || !userId) return
+    if (!workspaceId || !userId) return
 
     socket.onClose(() => {
       log.info('Socket is disconnected')
@@ -95,15 +95,15 @@ export default function UserSocket(props: Props) {
       })
     )
 
-    const channel = socket.channel('org:' + orgId)
+    const channel = socket.channel('workspace:' + workspaceId)
     setChannel(channel)
 
-    log.info('Join org-wide channel', { orgId })
+    log.info('Join workspace channel', { workspaceId })
 
     channel
       .join()
       .receive('ok', (resp) => {
-        log.info('Joined org channel', { orgId })
+        log.info('Joined workspace channel', { workspaceId })
 
         dispatch(
           setSwaySocketConnectionStatus({
@@ -113,7 +113,7 @@ export default function UserSocket(props: Props) {
         )
       })
       .receive('error', (resp) => {
-        log.error('Failed to join org channel', resp)
+        log.error('Failed to join workspace channel', resp)
 
         dispatch(
           setSwaySocketConnectionStatus({
@@ -133,7 +133,7 @@ export default function UserSocket(props: Props) {
     setPresence(presence)
 
     presence.onLeave((id) => {
-      log.info(`User ${id} has disconnected`)
+      log.info(`User ${id} left`)
     })
 
     presence.onSync(() => {
@@ -155,10 +155,11 @@ export default function UserSocket(props: Props) {
         }
       })
 
+      // dispatch(setAllRoomUserIds(rooms))
       dispatch(syncOnline(all))
-      dispatch(syncAllRoomUsers(rooms))
+      // dispatch(setWorkspaceRoomIds({ workspaceId, roomIds: rooms }))
     })
-  }, [orgId, userId])
+  }, [workspaceId, userId])
 
   return <context.Provider value={ctx}>{props.children}</context.Provider>
 }

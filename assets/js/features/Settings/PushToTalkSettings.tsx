@@ -8,7 +8,7 @@ import {
   ModalProps,
   useCommandPalette,
 } from 'features/CommandPalette'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { KeyboardIcon } from 'components/Icon/Keyboard'
 import { setPushToTalkVideo } from './slice'
 import { useSelector, useDispatch } from 'state'

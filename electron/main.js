@@ -43,13 +43,16 @@ var isDev = require("electron-is-dev");
 var path = require("path");
 //let win: BrowserWindow | null = null;
 var win = null;
+console.log("file:///" + __dirname + "/../priv/static/images/logo.ico");
 function createWindow() {
     win = new electron_1.BrowserWindow({
         width: 800,
         height: 600,
+        title: "Sway",
         titleBarStyle: "hidden",
         trafficLightPosition: { x: 20, y: 12 },
         transparent: true,
+        icon: "file:///" + __dirname + "/../priv/static/images/logo.ico",
         webPreferences: {
             nodeIntegration: true,
         },
@@ -79,7 +82,7 @@ function createWindow() {
         //win.webContents.openDevTools()
     }
 }
-electron_1.app.on("ready", createWindow);
+electron_1.app.on("ready", function () { return createWindow(); });
 electron_1.app.on("window-all-closed", function () {
     if (process.platform !== "darwin") {
         electron_1.app.quit();
@@ -94,12 +97,7 @@ electron_1.app.whenReady().then(function () { return __awaiter(void 0, void 0, v
     var devtoolsStr, devtoolsExtensions;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                devtoolsStr = (process.env.DEVTOOLS_EXTENSIONS || "").trim();
-                if (!devtoolsStr)
-                    return [2 /*return*/];
-                devtoolsExtensions = devtoolsStr.split(/\s*,\s*/);
-                return [4 /*yield*/, Promise.all(devtoolsExtensions.map(function (path) { return electron_1.session.defaultSession.loadExtension(path); }))];
+            case 0: return [2 /*return*/];
             case 1:
                 _a.sent();
                 return [2 /*return*/];

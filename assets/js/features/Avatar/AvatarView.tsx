@@ -1,4 +1,4 @@
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import React, { useEffect, useRef, useState } from 'react'
 import { styled } from 'themes'
 

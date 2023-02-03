@@ -18,6 +18,6 @@ defmodule Sway.Invites.Invite do
   def changeset(invite, attrs) do
     invite
     |> cast(attrs, [:name, :email, :workspace_id, :created_by_id])
-    |> validate_required([:email, :name, :workspace_id, :created_by_id])
+    |> validate_required([:email, :name, :workspace_id])
   end
 end

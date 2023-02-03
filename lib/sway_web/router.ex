@@ -18,6 +18,14 @@ defmodule SwayWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :api_auth do
+    plug SwayWeb.ApiAuthPipeline
+  end
+
+  pipeline :api_superuser do
+    plug SwayWeb.ApiSuperuserPipeline
+  end
+
   scope "/", SwayWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
@@ -25,17 +33,12 @@ defmodule SwayWeb.Router do
     get "/auth/:provider/callback", UserOauthController, :callback
   end
 
-  scope "/", SwayWeb do
-    pipe_through [:browser, :require_authenticated_user]
-    get "/", AppController, :index
-    get "/rooms/:slug", AppController, :room
-  end
 
   scope "/api", SwayWeb do
     pipe_through [:api]
-    resources "/workspaces", WorkspaceController
-    resources "/invites", InviteController
+    post "/login", ApiSessionController, :create
   end
+
 
   # Other scopes may use custom stacks.
   # scope "/api", SwayWeb do
@@ -108,5 +111,21 @@ defmodule SwayWeb.Router do
     get "/users/confirm/:token", UserConfirmationController, :edit
     post "/users/confirm/:token", UserConfirmationController, :update
   end
+
+
+  scope "/api", SwayWeb do
+    pipe_through [:api, :api_auth, :api_superuser]
+    resources "/workspaces", WorkspaceController
+    resources "/invites", InviteController
+  end
+
+  scope "/", SwayWeb do
+    pipe_through [:browser, :require_authenticated_user]
+    get "/", AppController, :index
+    get "/:workspace", AppController, :index
+    get "/:workspace/room/:room", AppController, :room
+  end
+
+
 
 end

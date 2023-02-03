@@ -19,4 +19,18 @@ defmodule Sway.WorkspacesFixtures do
 
     workspace
   end
+
+  @doc """
+  Generate a membership.
+  """
+  def membership_fixture(attrs \\ %{}) do
+    {:ok, membership} =
+      attrs
+      |> Enum.into(%{
+        is_admin: true
+      })
+      |> Sway.Workspaces.create_membership()
+
+    membership
+  end
 end

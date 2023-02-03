@@ -8,7 +8,7 @@ defmodule Sway.Rooms.Room do
     field :is_default, :boolean
     field :is_active, :boolean
 
-    belongs_to :org, Sway.Accounts.Org
+    belongs_to :workspace, Sway.Workspaces.Workspace
     belongs_to :user, Sway.Accounts.User
 
     timestamps()
@@ -17,8 +17,8 @@ defmodule Sway.Rooms.Room do
   @doc false
   def changeset(room, attrs) do
     room
-    |> cast(attrs, [:name, :org_id, :user_id, :slug, :is_default, :is_active])
+    |> cast(attrs, [:name, :workspace_id, :user_id, :slug, :is_default, :is_active])
     |> validate_required([:name])
-    |> unique_constraint(:slug, name: :rooms_slug_org_id_index)
+    |> unique_constraint(:slug, name: :rooms_slug_workspace_id_index)
   end
 end

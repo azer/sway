@@ -1,5 +1,5 @@
 import { Command, CommandType, ModalProps } from 'features/CommandPalette'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import React, { useContext, useEffect, useState } from 'react'
 // import { useSelector, useDispatch } from 'state'
 
@@ -191,6 +191,10 @@ export function performSearch(
   for (const [_, cmd] of Object.entries(commands)) {
     if (cmd.pin === true) {
       pinned.push(cmd)
+      continue
+    }
+
+    if (cmd.hidden) {
       continue
     }
 

@@ -7,7 +7,7 @@ import {
   ModalProps,
   useCommandPalette,
 } from 'features/CommandPalette'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { setBackgroundBlur } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { BlurSettingsPreview } from './BlurSettingsPreview'

@@ -5,10 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="csrf-token" content={csrf_token_value()}>
-    <%= live_title_tag assigns[:page_title] || "Lobby", suffix: " · Sway" %>
+
+    <%= if assigns[:page_title] do %>
+    <%= live_title_tag assigns[:page_title], suffix: " · Sway" %>
+    <% else %>
+    <%= live_title_tag "Sway" %>
+    <% end %>
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
   </head>
-  <body>
+  <body class={assigns[:body_class] || ""}>
     <%= @inner_content %>
   </body>
 </html>

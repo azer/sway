@@ -34,30 +34,38 @@ export default function PresenceProvider(props: Props) {
 
   const commandPalette = useCommandPalette()
 
-  const [mode, isActive, isCameraOff, isMicOff, pushToTalkVideo, roomId] =
-    useSelector((state) => {
-      const status = selectors.presence.getSelfStatus(state)
-      return [
-        status?.status,
-        status?.is_active,
-        selectors.settings.isVideoInputOff(state),
-        !status?.is_active || selectors.settings.isAudioInputOff(state),
-        selectors.settings.isPushToTalkVideoOn(state),
-        status?.room_id,
-      ]
-    })
+  const [
+    mode,
+    isActive,
+    isCameraOff,
+    isMicOff,
+    pushToTalkVideo,
+    roomId,
+    workspaceId,
+  ] = useSelector((state) => {
+    const status = selectors.presence.getSelfStatus(state)
+    return [
+      status?.status,
+      status?.is_active,
+      selectors.settings.isVideoInputOff(state),
+      !status?.is_active || selectors.settings.isAudioInputOff(state),
+      selectors.settings.isPushToTalkVideoOn(state),
+      status?.room_id,
+      selectors.memberships.getSelfMembership(state)?.workspace_id,
+    ]
+  })
 
   useEffect(() => {
     if (mode === PresenceMode.Social && isCameraOff) {
       setMode(PresenceMode.Focus, roomId)
     }
-  }, [mode, isCameraOff, roomId])
+  }, [mode, isCameraOff, roomId, workspaceId])
 
   useEffect(() => {
     if (isActive && isCameraOff) {
       setAsInactive()
     }
-  }, [mode, isActive, isCameraOff])
+  }, [mode, isActive, isCameraOff, workspaceId])
 
   useEffect(() => {
     if (!channel) return
@@ -84,7 +92,7 @@ export default function PresenceProvider(props: Props) {
       preventDefault: true,
       keyup: true,
     },
-    [channel, isActive, isMicOff, isCameraOff]
+    [channel, isActive, isMicOff, isCameraOff, workspaceId]
   )
 
   useHotkeys(
@@ -95,7 +103,7 @@ export default function PresenceProvider(props: Props) {
       preventDefault: true,
       keydown: true,
     },
-    [channel, isMicOff, isCameraOff, pushToTalkVideo]
+    [channel, isMicOff, isCameraOff, pushToTalkVideo, workspaceId]
   )
 
   useHotkeys(
@@ -106,7 +114,7 @@ export default function PresenceProvider(props: Props) {
       preventDefault: true,
       keyup: true,
     },
-    [channel, pushToTalk, isMicOff, isCameraOff]
+    [channel, pushToTalk, isMicOff, isCameraOff, workspaceId]
   )
 
   return <></>
@@ -160,6 +168,7 @@ export default function PresenceProvider(props: Props) {
   function publishActiveStatus(active: boolean) {
     channel?.push('user:status', {
       is_active: active,
+      workspace_id: workspaceId,
     })
   }
 
@@ -168,6 +177,7 @@ export default function PresenceProvider(props: Props) {
     channel?.push('user:status', {
       presence_mode: newMode,
       room_id: roomId,
+      workspace_id: workspaceId,
     })
   }
 }

@@ -1,5 +1,5 @@
-defmodule TastyRecipesWeb.ApiAuthPipeline do
-  use Guardian.Plug.Pipeline, otp_app: :tasty_recipes
+defmodule SwayWeb.ApiAuthPipeline do
+  use Guardian.Plug.Pipeline, otp_app: :sway
 
   plug Guardian.Plug.VerifyHeader, claims: %{"typ" => "access"}
   plug Guardian.Plug.EnsureAuthenticated

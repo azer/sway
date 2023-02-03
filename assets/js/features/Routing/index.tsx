@@ -1,8 +1,20 @@
 import { useCommandPalette } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
+import { useRooms } from 'features/Room/use-rooms'
+import { logger } from 'lib/log'
 import React, { useEffect } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Main from './Main'
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
+import selectors from 'selectors'
+import { useSelector } from 'state'
+import { MainRoute } from './Main'
+
+const log = logger('routing')
 
 export default function Routing(): JSX.Element {
   const reg = useCommandRegistry()
@@ -11,9 +23,41 @@ export default function Routing(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/rooms/:slug" element={<Main />} />
+        <Route path="/" element={<DefaultWorkspace />} />
+        <Route path="/:workspace" element={<DefaultRoom />} />
+        <Route path="/:workspace/room/:room" element={<MainRoute />} />
       </Routes>
     </BrowserRouter>
   )
+}
+
+function DefaultWorkspace(): JSX.Element {
+  const navigate = useNavigate()
+  const [workspace, room] = useSelector((state) => [
+    selectors.workspaces.getSelfWorkspace(state),
+    selectors.rooms.getDefaultRoom(state),
+  ])
+
+  useEffect(() => {
+    if (!workspace || !room) return
+    log.info('Redirecting to default workspace')
+    navigate(`/${workspace.slug}/room/${room?.slug}`)
+  }, [workspace?.slug, room?.slug])
+
+  return <></>
+}
+
+function DefaultRoom(): JSX.Element {
+  const navigate = useNavigate()
+  const params = useParams()
+
+  const [room] = useSelector((state) => [selectors.rooms.getDefaultRoom(state)])
+
+  useEffect(() => {
+    if (!room) return
+    log.info('Redirecting to default room')
+    navigate(`/${params.workspace}/room/${room?.slug}`)
+  }, [room?.slug])
+
+  return <></>
 }

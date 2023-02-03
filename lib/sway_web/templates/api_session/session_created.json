@@ -1,0 +1,6 @@
+{
+    "data": {
+        "email": "<%= @user.email %>",
+        "token": "<%= @jwt.token %>"
+    }
+}

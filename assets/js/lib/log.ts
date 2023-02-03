@@ -44,5 +44,3 @@ export function logger(name: string): Logger {
     fn.apply(console, args)
   }
 }
-
-export default logger

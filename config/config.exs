@@ -56,14 +56,15 @@ config :sway, Sway.Guardian,
   issuer: "sway",
   secret_key: "cPy1Th485lsMzkP28x7FffKiCWK5te7+oEBz/L4QOUIwGOU5/3N7Mrqnb+1Kvx7m"
 
-config :sway,
-       mailgun_domain: System.get_env("MAILGUN_DOMAIN"),
-  mailgun_key: System.get_env("MAILGUN_API_KEY")
+config :sway, SwayWeb.ApiAuthPipeline,
+  error_handler: SwayWeb.ApiAuthErrorHandler,
+  module: Sway.Guardian
 
 config :sway, Sway.Mailer,
   adapter: Swoosh.Adapters.Mailgun,
-  api_key: "d7d64f7ac8f21cc0aabfd1ac54b6f22c-c9746cf8-341aaf62",
-  domain: "sandbox891302ce10044596a7a2083b3e315157.mailgun.org"
+  api_key: "fea17b5c774c4b65cbb7de375c3a5182-75cd784d-c536d7e7",
+  domain: "sway.so",
+  base_url: "https://api.eu.mailgun.net/v3"
 
 config :swoosh, :api_client, Swoosh.ApiClient.Hackney
 

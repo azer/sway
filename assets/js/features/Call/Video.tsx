@@ -2,7 +2,7 @@ import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
 import { useMediaTrack } from '@daily-co/daily-react-hooks'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { useSelector } from 'state'
 
 interface Props {

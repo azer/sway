@@ -39,6 +39,10 @@ defmodule Sway.Invites do
     Repo.get!(Invite, id) |> Repo.preload(preloads)
   end
 
+  def get_invite_by_email!(email, preloads \\ []) do
+    Repo.get_by(Invite, email: email) |> Repo.preload(preloads)
+  end
+
   @doc """
   Creates a invite.
 

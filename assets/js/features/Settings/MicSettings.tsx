@@ -7,7 +7,7 @@ import {
   ModalProps,
   useCommandPalette,
 } from 'features/CommandPalette'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { setAudioInputDeviceId, setAudioInputOff } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { MicSettingsPreview } from './MicSettingsPreview'

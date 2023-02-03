@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import { ActiveParticipant } from 'features/Call/ActiveParticipant'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { styled } from 'themes'
 import {
   getIcon,
@@ -76,7 +76,7 @@ export const Border = styled('div', {
       true: {
         border: '0',
         display: 'flex',
-        width: '100%',
+        height: '100%',
         maxWidth: '100%',
         maxHeight: '100%',
         aspectRatio: '1.25 / 1',

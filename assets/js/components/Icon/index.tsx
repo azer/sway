@@ -12,7 +12,7 @@ import MonitorIcon from './Monitor'
 import SpeakerIcon from './Speaker'
 import MicOffIcon from './Mic-off'
 import VideoOffIcon from './Video-off'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import CheckmarkIcon from './Checkmark'
 import Undo from './Undo'
 import SpeakerVolumeHigh from './SpeakerVolumeHigh'
@@ -31,6 +31,12 @@ import { HashtagIcon } from './Hashtag'
 import { EditIcon } from './Edit'
 import { TrashIcon } from './Trash'
 import { LogoutIcon } from './Logout'
+import { AvatarIcon } from './Avatar'
+import { MailIcon } from './Mail'
+import { PassportIcon } from './Passport'
+import { NewHireIcon } from './NewHire'
+import { SendIcon } from './Send'
+import { LightBulbIcon } from './LightBulb'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -67,6 +73,12 @@ const icons: {
   edit: EditIcon,
   trash: TrashIcon,
   logout: LogoutIcon,
+  avatar: AvatarIcon,
+  mail: MailIcon,
+  passport: PassportIcon,
+  newHire: NewHireIcon,
+  send: SendIcon,
+  lightbulb: LightBulbIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {

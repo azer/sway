@@ -1,1 +1,1 @@
-export { updateShellFocus } from './slice'
+export { updateWorkspaceFocus } from './slice'

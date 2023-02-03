@@ -3,8 +3,8 @@ defmodule Sway.Repo.Migrations.AddUniqueConstraintToInvites do
 
   def change do
     alter table(:invites) do
-      modify :email, :string, null: false
       add :name, :string, null: false
     end
+    create unique_index(:invites, [:email])
   end
 end

@@ -1,7 +1,7 @@
 // import { useDispatch, useSelector } from 'state'
 import React, { useContext, useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import Modal from './Modal'
 import { performSearch } from 'features/CommandRegistry'
 
@@ -18,23 +18,31 @@ export enum CommandType {
   Misc = 'misc',
 }
 
+export interface Palette {
+  modal: (
+    parentModal?: () => ModalProps,
+    nextModal?: () => ModalProps
+  ) => ModalProps
+  commands: () => Command[]
+}
+
 export interface Command {
   icon?: string
   id: string
   name: string
   value?: unknown
   hint?: string
+  error?: string
   suffix?: string
   keywords?: string[]
   when?: boolean
   pin?: boolean
+  hidden?: boolean
   type?: CommandType
   shortcut?: string[]
   callback?: (_: string) => void
-  palette?: {
-    modal: (parentModal?: () => ModalProps) => ModalProps
-    commands: (parentModal?: () => Command[]) => Command[]
-  }
+  palette?: Palette
+  disableClick?: boolean
 }
 
 export interface ModalProps {
@@ -45,9 +53,16 @@ export interface ModalProps {
   preview?: (_: { selectedValue: unknown }) => JSX.Element
   selectedId?: string
   parentModal?: () => ModalProps
+  nextModal?: () => ModalProps
+  prevModal?: ModalProps
   search?: (commands: Command[], query: string) => Command[]
   commands?: () => Command[]
   callback?: (id: string | undefined, query: string) => void
+  submodalCallback?: (
+    submodalId: string,
+    id: string | undefined,
+    query: string
+  ) => void
 }
 
 const defaultModal: ModalProps = {
@@ -55,8 +70,6 @@ const defaultModal: ModalProps = {
   title: '',
   icon: '',
   placeholder: '',
-  search: (_: Command[], __: string) => [],
-  callback: noop,
 }
 
 const context = React.createContext<{
@@ -68,15 +81,17 @@ const context = React.createContext<{
   setCommands: React.Dispatch<React.SetStateAction<Command[]>>
   fullScreen: boolean
   setFullScreen: React.Dispatch<React.SetStateAction<boolean>>
+  setQuery: React.Dispatch<React.SetStateAction<string>>
 }>({
   isOpen: false,
-  fullscreen: false,
+  fullScreen: false,
   setFullScreen: noop,
   setIsOpen: noop,
   modal: defaultModal,
   setModal: noop,
   commands: [],
   setCommands: noop,
+  setQuery: noop,
 })
 
 export default function CommandPaletteProvider(props: Props) {
@@ -101,21 +116,25 @@ export default function CommandPaletteProvider(props: Props) {
     'up',
     previous,
     {
+      enabled: isOpen,
       enableOnFormTags: true,
       preventDefault: true,
     },
     [selectedId, results]
   )
 
-  useHotkeys('down', next, { enableOnFormTags: true, preventDefault: true }, [
-    selectedId,
-    results,
-  ])
+  useHotkeys(
+    'down',
+    next,
+    { enabled: isOpen, enableOnFormTags: true, preventDefault: true },
+    [selectedId, results]
+  )
 
   useHotkeys(
     'enter',
     proceedWithSelection,
     {
+      enabled: isOpen,
       enableOnFormTags: true,
     },
     [selectedId, modalProps, proceedWithSelection]
@@ -125,6 +144,7 @@ export default function CommandPaletteProvider(props: Props) {
     'esc',
     backOrClose,
     {
+      enabled: isOpen,
       enableOnFormTags: true,
     },
     [modalProps]
@@ -141,7 +161,6 @@ export default function CommandPaletteProvider(props: Props) {
   )
 
   useEffect(() => {
-    log.info('Filtering & sorting command palette rows', query, selectedId)
     const rows = (modalProps.search || performSearch)(commands, query)
     setResults(rows)
 
@@ -151,7 +170,6 @@ export default function CommandPaletteProvider(props: Props) {
   }, [commands, query])
 
   useEffect(() => {
-    log.info('Results changed', query, results)
     setSelectedId(results[0]?.id)
   }, [results])
 
@@ -169,6 +187,7 @@ export default function CommandPaletteProvider(props: Props) {
         setIsOpen,
         commands,
         setCommands,
+        setQuery,
         modal: modalProps,
         setModal: setModalProps,
         fullScreen: fullScreen,
@@ -250,8 +269,18 @@ export default function CommandPaletteProvider(props: Props) {
 
   function proceed(cmdId: string | undefined, query: string) {
     const cmd = cmdId ? findById(cmdId) : undefined
+    const parent = modalProps.parentModal ? modalProps.parentModal() : undefined
 
-    log.info('Proceed with ', cmd)
+    setQuery('')
+
+    if (cmd?.id === 'back') {
+      backOrClose()
+      return
+    }
+
+    if (parent?.submodalCallback) {
+      parent.submodalCallback(modalProps.id, cmdId, query)
+    }
 
     if (cmd && cmd.palette) {
       switchModal(cmd.palette.modal(() => modalProps))
@@ -264,8 +293,16 @@ export default function CommandPaletteProvider(props: Props) {
 
     if (modalProps.callback) return modalProps.callback(cmdId, query)
 
-    if (modalProps.parentModal) {
-      switchModal(modalProps.parentModal())
+    log.info('next modal:', modalProps, modalProps)
+
+    if (modalProps.nextModal) {
+      const next = modalProps.nextModal()
+      switchModal(next)
+      return
+    }
+
+    if (parent) {
+      switchModal(parent)
       return
     }
 
@@ -278,6 +315,8 @@ export default function CommandPaletteProvider(props: Props) {
       modalProps.id,
       nextModalProps.id
     )
+
+    nextModalProps.prevModal = modalProps
 
     setIsOpen(true)
     setQuery('')
@@ -301,6 +340,7 @@ export function useCommandPalette() {
     setCommands,
     fullScreen,
     setFullScreen,
+    setQuery,
   } = useContext(context)
 
   return {
@@ -312,6 +352,8 @@ export function useCommandPalette() {
     setCommands,
     setFullScreen,
     fullScreen,
+    setProps,
+    setQuery,
   }
 
   function open(commands: Command[], modalProps: ModalProps) {
@@ -333,6 +375,12 @@ export function useCommandPalette() {
     } else {
       setIsOpen(false)
     }
+  }
+
+  function setProps(props: ModalProps) {
+    setModal({
+      ...props,
+    })
   }
 }
 

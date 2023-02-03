@@ -9,13 +9,17 @@ import * as path from "path";
 //let win: BrowserWindow | null = null;
 let win: BrowserWindow | null = null;
 
+console.log("file:///" + __dirname + "/../priv/static/images/logo.ico");
+
 function createWindow() {
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    title: "Sway",
     titleBarStyle: "hidden",
     trafficLightPosition: { x: 20, y: 12 },
     transparent: true,
+    icon: "file:///" + __dirname + "/../priv/static/images/logo.ico",
     webPreferences: {
       nodeIntegration: true,
     },
@@ -57,7 +61,7 @@ function createWindow() {
   }
 }
 
-app.on("ready", createWindow);
+app.on("ready", () => createWindow());
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -72,6 +76,7 @@ app.on("activate", () => {
 });
 
 app.whenReady().then(async () => {
+  return;
   const devtoolsStr = (process.env.DEVTOOLS_EXTENSIONS || "").trim();
 
   if (!devtoolsStr) return;

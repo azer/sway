@@ -16,7 +16,7 @@ export function UserButton(props: Props) {
     selectors.presence.getStatusByUserId(state, props.id),
   ])
 
-  const icon = getIcon(presence?.status)
+  const icon = getIcon(presence?.status, presence.is_active)
 
   return (
     <Container>

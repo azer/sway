@@ -60,4 +60,58 @@ defmodule Sway.WorkspacesTest do
       assert %Ecto.Changeset{} = Workspaces.change_workspace(workspace)
     end
   end
+
+  describe "memberships" do
+    alias Sway.Workspaces.Membership
+
+    import Sway.WorkspacesFixtures
+
+    @invalid_attrs %{is_admin: nil}
+
+    test "list_memberships/0 returns all memberships" do
+      membership = membership_fixture()
+      assert Workspaces.list_memberships() == [membership]
+    end
+
+    test "get_membership!/1 returns the membership with given id" do
+      membership = membership_fixture()
+      assert Workspaces.get_membership!(membership.id) == membership
+    end
+
+    test "create_membership/1 with valid data creates a membership" do
+      valid_attrs = %{is_admin: true}
+
+      assert {:ok, %Membership{} = membership} = Workspaces.create_membership(valid_attrs)
+      assert membership.is_admin == true
+    end
+
+    test "create_membership/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Workspaces.create_membership(@invalid_attrs)
+    end
+
+    test "update_membership/2 with valid data updates the membership" do
+      membership = membership_fixture()
+      update_attrs = %{is_admin: false}
+
+      assert {:ok, %Membership{} = membership} = Workspaces.update_membership(membership, update_attrs)
+      assert membership.is_admin == false
+    end
+
+    test "update_membership/2 with invalid data returns error changeset" do
+      membership = membership_fixture()
+      assert {:error, %Ecto.Changeset{}} = Workspaces.update_membership(membership, @invalid_attrs)
+      assert membership == Workspaces.get_membership!(membership.id)
+    end
+
+    test "delete_membership/1 deletes the membership" do
+      membership = membership_fixture()
+      assert {:ok, %Membership{}} = Workspaces.delete_membership(membership)
+      assert_raise Ecto.NoResultsError, fn -> Workspaces.get_membership!(membership.id) end
+    end
+
+    test "change_membership/1 returns a membership changeset" do
+      membership = membership_fixture()
+      assert %Ecto.Changeset{} = Workspaces.change_membership(membership)
+    end
+  end
 end

@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-export type Entity = User | Org | Room | Status | Participant
+export type Entity = User | Workspace | Room | Status | Participant | Membership
+
 export type Table =
   | typeof Users
-  | typeof Orgs
+  | typeof Workspaces
   | typeof Rooms
   | typeof Statuses
   | typeof Participants
+  | typeof Memberships
 
 export interface Update {
   table: Table
@@ -17,29 +19,38 @@ export interface Update {
 export const Users = 'users'
 export interface User {
   id: string
-  orgId: string
   email: string
   name: string
   photoUrl?: string
 }
 
-export const Orgs = 'orgs'
-export interface Org {
+export const Memberships = 'memberships'
+export interface Membership {
+  id: string
+  user_id: string
+  workspace_id: string
+  is_admin: boolean
+  inserted_at: string
+}
+
+export const Workspaces = 'workspaces'
+export interface Workspace {
   id: string
   name: string
   domain: string
   logoUrl: string
+  slug: string
 }
 
 export const Rooms = 'rooms'
 export interface Room {
   id: string
-  orgId: string
-  userId: string
+  workspace_id: string
+  user_id: string
   name: string
   slug: string
-  isDefault: boolean
-  isActive: boolean
+  is_default: boolean
+  is_active: boolean
 }
 
 export enum PresenceMode {
@@ -54,6 +65,7 @@ export interface Status {
   id: string
   user_id: string
   room_id: string
+  workspace_id: string
   status: PresenceMode
   is_active: boolean
   message: string
@@ -78,11 +90,12 @@ export interface Participant {
 }
 
 const initialState = {
-  [Users]: {} as Record<string, User>,
-  [Orgs]: {} as Record<string, Org>,
-  [Rooms]: {} as Record<string, Room>,
-  [Statuses]: {} as Record<string, Status>,
-  [Participants]: {} as Record<string, Participant>,
+  [Users]: initial<User>(Users),
+  [Memberships]: initial<Membership>(Memberships),
+  [Workspaces]: initial<Workspace>(Workspaces),
+  [Rooms]: initial<Room>(Rooms),
+  [Statuses]: initial<Status>(Statuses),
+  [Participants]: initial<Participant>(Participants),
 }
 
 export const slice = createSlice({
@@ -131,8 +144,7 @@ export default slice.reducer
 export function toStateEntity(table: Table, record: any): Entity {
   if (table === Users) {
     return {
-      id: record.id,
-      orgId: record.org_id,
+      id: String(record.id),
       email: record.email,
       name: record.name,
       photoUrl: record.profile_photo_url,
@@ -141,7 +153,7 @@ export function toStateEntity(table: Table, record: any): Entity {
 
   if (table === Participants) {
     return {
-      id: record.user_id as string,
+      id: String(record.user_id) as string,
       sessionId: record.session_id as string,
       audio: record.audio as boolean,
       video: record.video as boolean,
@@ -155,6 +167,7 @@ export function toStateEntity(table: Table, record: any): Entity {
       id: String(record.id),
       room_id: String(record.room_id),
       user_id: String(record.user_id),
+      workspace_id: String(record.workspace_id),
     }
   }
 
@@ -162,11 +175,47 @@ export function toStateEntity(table: Table, record: any): Entity {
     return {
       ...record,
       id: String(record.id),
-      userId: String(record.user_id),
-      isActive: record.is_active,
-      isDefault: record.is_default,
+      user_id: String(record.user_id),
+      workspace_id: String(record.workspace_id),
+      is_active: record.is_active,
+      is_default: record.is_default,
+    }
+  }
+
+  if (table === Memberships) {
+    return {
+      ...record,
+      id: String(record.id),
+      user_id: String(record.user_id),
+      workspace_id: String(record.workspace_id),
+      is_admin: record.is_admin,
+    }
+  }
+
+  if (table === Workspaces) {
+    return {
+      ...record,
+      id: String(record.id),
+      name: record.name,
+      slug: record.slug,
+      domain: record.slug,
     }
   }
 
   return record
+}
+
+function initial<T>(table: Table): Record<string, T> {
+  const result: Record<string, T> = {}
+
+  // @ts-ignore
+  if (window.initialState.entities[table]) {
+    // @ts-ignore
+    for (const r of window.initialState.entities[table]) {
+      // @ts-ignore
+      result[r.id] = toStateEntity(table, r)
+    }
+  }
+
+  return result
 }

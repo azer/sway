@@ -140,8 +140,6 @@ export function CallProvider(props: Props) {
         startAudioOff: true,
       })
       .then((callParticipants) => {
-        log.info('joined?', callParticipants)
-
         if (!callParticipants) {
           handleJoinError(user)
         } else {

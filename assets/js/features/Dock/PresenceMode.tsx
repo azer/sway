@@ -1,19 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import selectors from 'selectors'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { useSelector, useDispatch } from 'state'
-import { useCommandRegistry } from 'features/CommandRegistry'
-import { useUserSocket } from 'features/UserSocket'
 import { PresenceModeIcon } from 'components/PresenceModeIcon'
-import { CommandType, useCommandPalette } from 'features/CommandPalette'
 import {
   setAudioInputOff,
   setAudioOutputOff,
   setVideoInputOff,
 } from 'features/Settings/slice'
 import { styled } from 'themes'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { Entity, add, Status, Statuses, PresenceMode } from 'state/entities'
 import { usePresenceSettings } from 'features/Settings/PresenceSettings'
 
 interface Props {}
@@ -25,13 +20,9 @@ export function PresenceModeButton(props: Props) {
 
   const presenceSettings = usePresenceSettings()
 
-  const [userId, roomId, presence] = useSelector((state) => [
-    selectors.users.getSelf(state)?.id,
-    selectors.rooms.getFocusedRoomId(state),
+  const [presence] = useSelector((state) => [
     selectors.presence.getSelfStatus(state),
   ])
-
-  const { channel } = useUserSocket()
 
   return (
     <Button onClick={presenceSettings.open}>
@@ -44,28 +35,6 @@ export function PresenceModeButton(props: Props) {
       </Circle>
     </Button>
   )
-
-  function switchPresenceStatus(newStatus: PresenceMode) {
-    switch (newStatus) {
-      case 'active':
-        dispatch(setVideoInputOff(false))
-        dispatch(setAudioInputOff(false))
-        dispatch(setAudioOutputOff(false))
-        break
-
-      default:
-        dispatch(setVideoInputOff(false))
-        dispatch(setAudioInputOff(false))
-        dispatch(setAudioOutputOff(false))
-    }
-
-    if (!channel) return
-
-    channel.push('user:status', {
-      presence_mode: newStatus,
-      room_id: roomId,
-    })
-  }
 }
 
 const Button = styled('div', {

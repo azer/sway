@@ -60,18 +60,6 @@ defmodule Sway.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  # fetch or create user
-  def fetch_or_create_user(attrs) do
-    case get_user_by_email(attrs.email) do
-      %User{} = user ->
-        {:ok, user}
-      _ ->
-        %User{}
-        |> User.registration_changeset(attrs)
-        |> Repo.insert()
-    end
-  end
-
   ## User registration
 
   @doc """

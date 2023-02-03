@@ -1,5 +1,5 @@
-import { useUserSocket } from 'features/UserSocket'
-import selectors from 'selectors'
+/*import { useUserSocket } from 'features/UserSocket'
+psimport selectors from 'selectors'
 import { PresenceMode } from 'state/entities'
 import { useSelector } from 'state'
 import { logger } from 'lib/log'
@@ -25,6 +25,7 @@ export function usePresence() {
     channel?.push('user:status', {
       presence_mode: newMode,
       room_id: roomId,
+      workspace_id: workspaceId
     })
   }
 
@@ -33,6 +34,8 @@ export function usePresence() {
 
     channel?.push('user:status', {
       is_active: active,
+      workspace_id: workspaceId
     })
   }
 }
+*/

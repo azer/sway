@@ -7,34 +7,61 @@ export function getRoomById(state: RootState, id: string): Room {
   return state.entities[Rooms][id]
 }
 
-export function listAllRooms(state: RootState): string[] {
-  return state.rooms.orgRoomIds.map((id) => String(id))
+export function listAllRooms(state: RootState, workspaceId: string): string[] {
+  return state.rooms.roomIdsByWorkspace[workspaceId]
 }
 
 export function listActiveRooms(state: RootState): string[] {
-  return state.rooms.orgRoomIds
-    .map((id) => getRoomById(state, id))
-    .filter((r) => r && r.isActive)
-    .map((r) => r.id)
+  const localWorkspaceId =
+    selectors.memberships.getSelfMembership(state)?.workspace_id
+
+  return localWorkspaceId
+    ? state.rooms.roomIdsByWorkspace[localWorkspaceId]
+        .map((id) => getRoomById(state, id))
+        .filter((r) => r && r.is_active)
+        .map((r) => r.id)
+    : []
 }
 
 export function getFocusedRoomId(state: RootState): string {
-  return selectors.shell.getFocus(state).center.room.roomId
+  return selectors.focus.getWorkspaceFocus(state).room.roomId
 }
 
 export function getFocusedRoom(state: RootState): Room | undefined {
   return getRoomById(state, getFocusedRoomId(state))
 }
 
+export function getPresentRoomId(state: RootState): string | undefined {
+  const localUserId = selectors.users.getSelf(state)?.id
+
+  if (!localUserId) return
+
+  for (const roomId in state.rooms.userIdsByRoom) {
+    if (state.rooms.userIdsByRoom[roomId].includes(localUserId)) {
+      return roomId
+    }
+  }
+}
+
+export function getPresentRoom(state: RootState): Room | undefined {
+  return getRoomById(state, getPresentRoomId(state) || '')
+}
+
 export function getPrevRoom(state: RootState): Room | undefined {
+  const localWorkspaceId =
+    selectors.memberships.getSelfMembership(state)?.workspace_id
+
+  const all = localWorkspaceId ? listAllRooms(state, localWorkspaceId) : []
+
   const focusedId = getFocusedRoomId(state)
-  const idx = state.rooms.orgRoomIds.findIndex((id) => id === focusedId)
+  const idx = all.findIndex((id) => id === focusedId)
 
   let prevId
   let i = idx
-  while (i--) {
-    if (getRoomById(state, state.rooms.orgRoomIds[i])?.isActive) {
-      prevId = state.rooms.orgRoomIds[i]
+
+  while (i >= 0 && i--) {
+    if (getRoomById(state, all[i])?.is_active) {
+      prevId = all[i]
       break
     }
   }
@@ -47,29 +74,36 @@ export function getPrevRoom(state: RootState): Room | undefined {
 }*/
 
 export function getUsersInRoom(state: RootState, roomId: string): string[] {
-  return state.rooms.users[roomId] || []
+  return state.rooms.userIdsByRoom[roomId] || []
 }
 
 export function getRoomBySlug(
   state: RootState,
   slug: string
 ): Room | undefined {
-  return listAllRooms(state)
-    .map((id) => getRoomById(state, id))
-    .find((r) => r?.slug === slug)
+  const localWorkspaceId =
+    selectors.memberships.getSelfMembership(state)?.workspace_id
+
+  return localWorkspaceId
+    ? listAllRooms(state, localWorkspaceId)
+        .map((id) => getRoomById(state, id))
+        .find((r) => r.slug === slug)
+    : undefined
 }
 
 export function getDefaultRoom(state: RootState): Room | undefined {
-  return listAllRooms(state)
-    .map((id) => getRoomById(state, id))
-    .find((r) => r?.isDefault)
+  const localWorkspaceId =
+    selectors.memberships.getSelfMembership(state)?.workspace_id
+
+  return localWorkspaceId
+    ? listAllRooms(state, localWorkspaceId)
+        .map((id) => getRoomById(state, id))
+        .find((r) => r?.is_default)
+    : undefined
 }
 
 export function isFocusOnRoom(state: RootState): boolean {
-  return (
-    selectors.shell.isFocusOnShell(state) &&
-    selectors.shell.getFocus(state).region === ShellFocusRegion.Center
-  )
+  return selectors.focus.isFocusOnWorkspace(state)
 }
 
 export enum RoomStatus {

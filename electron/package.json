@@ -1,5 +1,5 @@
 {
-  "name": "Bafa",
+  "name": "Sway",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "dev": "concurrently \"cross-env BROWSER=none  tsc -p electron -w\" \"wait-on http://localhost:4000 && tsc -p electron && electron .\"",
-    "build": "npm run build && tsc -p electron && electron-builder"
+    "build": "tsc & electron-builder"
   },
   "author": "",
   "license": "ISC"

@@ -18,17 +18,31 @@ defmodule SwayWeb.InviteController do
         |> put_status(:conflict)
         |> json(%{error: "A user with this email already exists"})
 
+      invite = Sway.Invites.get_invite_by_email!(invite_params["email"]) ->
+	invite = invite |> Sway.Repo.preload([:workspace, :created_by])
+	token = Phoenix.Token.sign(SwayWeb.Endpoint, "salt", invite.id)
+
+	conn
+            |> put_status(:created)
+            |> put_resp_header("location", Routes.invite_path(conn, :show, invite))
+            |> render("show.json", invite: invite, token: token)
+
       true ->
 	try do
           with {:ok, %Invite{} = invite} <- Invites.create_invite(invite_params) do
 	    invite = invite |> Sway.Repo.preload([:workspace, :created_by])
 
-	    SwayWeb.InviteEmail.welcome(invite) |> Sway.Mailer.deliver()
+	    token = Phoenix.Token.sign(SwayWeb.Endpoint, "salt", invite.id)
+
+	    delivery = SwayWeb.InviteEmail.welcome(invite, token) |> Sway.Mailer.deliver()
+
+	    IO.inspect("mail delivery:")
+	    IO.inspect(delivery)
 
             conn
             |> put_status(:created)
             |> put_resp_header("location", Routes.invite_path(conn, :show, invite))
-            |> render("show.json", invite: invite)
+            |> render("show.json", invite: invite, token: token)
 	  end
 	rescue
 	  Ecto.ConstraintError ->

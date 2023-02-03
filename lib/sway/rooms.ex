@@ -37,44 +37,24 @@ defmodule Sway.Rooms do
   """
   def get_room!(id), do: Repo.get!(Room, id)
 
-  def get_room_by_name(org_id, name) when is_binary(name) do
-    Repo.get_by(Room, org_id: org_id, name: name)
+  def get_room_by_name(workspace_id, name) when is_binary(name) do
+    Repo.get_by(Room, workspace_id: workspace_id, name: name)
   end
 
-  def get_room_by_slug(org_id, slug) when is_binary(slug) do
-    Repo.get_by(Room, org_id: org_id, name: slug)
+  def get_room_by_slug(workspace_id, slug) when is_binary(slug) do
+    Repo.get_by(Room, workspace_id: workspace_id, name: slug)
   end
 
-  def get_default_room(org_id, user_id) do
-    list_org_rooms(org_id, user_id) |> hd
+  def get_default_room(workspace_id) do
+    Repo.get_by(Room, workspace_id: workspace_id, is_default: true)
   end
 
-  def list_org_rooms(org_id, user_id) when is_integer(org_id) do
-    lobby = %{
-      "name" => "lobby",
-      "slug" => "lobby",
-      "is_default" => true,
-      "org_id" => org_id,
-      "user_id" => user_id
-    }
-
-    all =
-      from(r in Sway.Rooms.Room,
-        where: r.org_id == ^"#{org_id}",
+  def list_by_workspace_id(workspace_id) do
+    from(r in Sway.Rooms.Room,
+        where: r.workspace_id == ^"#{workspace_id}",
         order_by: r.id
       )
       |> Sway.Repo.all()
-
-    if length(all) > 0 do
-      all
-    else
-      default =
-        %Room{}
-        |> Room.changeset(lobby)
-        |> Repo.insert!()
-
-      [default]
-    end
   end
 
   @doc """
@@ -96,7 +76,7 @@ defmodule Sway.Rooms do
   end
 
   def create_or_activate_room(attrs \\ %{}) do
-    existing = Repo.get_by(Room, org_id: attrs[:org_id], slug: attrs[:slug], is_active: false)
+    existing = Repo.get_by(Room, workspace_id: attrs[:workspace_id], slug: attrs[:slug], is_active: false)
     case existing do
       nil ->
 	create_room(attrs)

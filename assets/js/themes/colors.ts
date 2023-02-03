@@ -70,6 +70,7 @@ export const dark = {
   commandPalettePlaceholderFg: 'rgba(255, 255, 255, 0.4)',
   commandPaletteCommandFg: 'rgba(255, 255, 255, 0.4)',
   commandPaletteHintFg: 'rgba(255, 255, 255, 0.2)',
+  commandPaletteErrorFg: '$red',
   commandPaletteCommandIconFg: 'rgba(255, 255, 255, 0.3)',
   commandPaletteSelectedCommandFg: '$white',
   commandPaletteSelectedCommandIconFg: 'rgba(255, 210, 200, 1)',

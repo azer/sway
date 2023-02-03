@@ -1,55 +1,91 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { updateShellFocus } from 'features/Focus'
+import { updateWorkspaceFocus } from 'features/Focus'
+import selectors from 'selectors'
 
 export const name = 'room'
 
 interface State {
-  users: { [id: string]: string[] }
-  orgRoomIds: string[]
+  userIdsByRoom: { [id: string]: string[] }
+  roomIdsByWorkspace: { [id: string]: string[] }
 }
 
 export const initialState: State = {
-  users: {},
-  orgRoomIds: (window as any).initialState.room.orgRoomIds || [],
+  // @ts-ignore
+  userIdsByRoom: window.initialState.room.userIdsByRoom,
+  // @ts-ignore
+  roomIdsByWorkspace: window.initialState.room.roomIdsByWorkspace || [],
 }
 
 export const slice = createSlice({
   name,
   initialState,
   reducers: {
-    setOrgRoomIds: (state, action: PayloadAction<string[]>) => {
-      state.orgRoomIds = action.payload
-    },
-    appendToOrgRoomIds: (state, action: PayloadAction<string>) => {
-      state.orgRoomIds = state.orgRoomIds.includes(action.payload)
-        ? state.orgRoomIds
-        : [...state.orgRoomIds, action.payload]
-    },
-    syncRoomUsers: (
+    setWorkspaceRoomIds: (
       state,
-      action: PayloadAction<{ roomId: string; users: string[] }>
+      action: PayloadAction<{ roomIds: string[]; workspaceId: string }>
     ) => {
-      state.users[action.payload.roomId] = action.payload.users
+      state.roomIdsByWorkspace[action.payload.workspaceId] =
+        action.payload.roomIds
     },
-    syncAllRoomUsers: (
+    appendRoomIdToWorkspace: (
+      state,
+      action: PayloadAction<{ workspaceId: string; roomId: string }>
+    ) => {
+      if (
+        !state.roomIdsByWorkspace[action.payload.workspaceId].includes(
+          action.payload.roomId
+        )
+      ) {
+        state.roomIdsByWorkspace[action.payload.workspaceId] = [
+          ...state.roomIdsByWorkspace[action.payload.workspaceId],
+          action.payload.roomId,
+        ]
+      }
+    },
+    moveUserToRoom: (
+      state,
+      action: PayloadAction<{ userId: string; roomId: string }>
+    ) => {
+      for (const roomId in state.userIdsByRoom) {
+        state.userIdsByRoom[roomId] = state.userIdsByRoom[roomId].filter(
+          (uid) => uid !== action.payload.userId
+        )
+      }
+
+      state.userIdsByRoom[action.payload.roomId] = [
+        ...(state.userIdsByRoom[action.payload.roomId] || []),
+        action.payload.userId,
+      ]
+    },
+    setAllRoomUserIds: (
       state,
       action: PayloadAction<{ [id: string]: string[] }>
     ) => {
-      state.users = action.payload
+      state.userIdsByRoom = action.payload
     },
   },
 })
 
 export const {
-  syncRoomUsers,
-  syncAllRoomUsers,
-  setOrgRoomIds,
-  appendToOrgRoomIds,
+  setAllRoomUserIds,
+  setWorkspaceRoomIds,
+  appendRoomIdToWorkspace,
+  moveUserToRoom,
 } = slice.actions
 export default slice.reducer
 
-export function setRoomId(id: string) {
-  return updateShellFocus((focus) => {
-    focus.center.room.roomId = id
+export function setFocusedRoomById(id: string) {
+  return updateWorkspaceFocus((focus) => {
+    focus.room.roomId = id
+  })
+}
+
+export function setFocusedRoomBySlug(slug: string) {
+  return updateWorkspaceFocus((focus, getState) => {
+    const state = getState()
+    const room = selectors.rooms.getRoomBySlug(state, slug)
+    if (room) {
+      focus.room.roomId = room.id
+    }
   })
 }

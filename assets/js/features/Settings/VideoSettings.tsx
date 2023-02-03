@@ -7,7 +7,7 @@ import {
   ModalProps,
   useCommandPalette,
 } from 'features/CommandPalette'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { setVideoInputDeviceId, setVideoInputOff } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { VideoSettingsPreview } from './VideoSettingsPreview'

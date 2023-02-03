@@ -1,5 +1,5 @@
 defmodule Sway.Guardian do
-  use Guardian, otp_app: :tasty_recipes
+  use Guardian, otp_app: :sway
 
   def subject_for_token(%{id: id}, _claims) do
     # You can use any value for the subject of your token but

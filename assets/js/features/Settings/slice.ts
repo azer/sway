@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import logger from 'lib/log'
-import { selector } from 'recoil'
+import { logger } from 'lib/log'
 import { AppDispatch, RootState } from 'state'
 
 const log = logger('settings/slice')

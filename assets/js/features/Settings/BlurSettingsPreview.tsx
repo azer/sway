@@ -1,7 +1,7 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
 import { CameraOff, Prop, Table, Value } from './CallSettingsPreview'

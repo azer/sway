@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
 import { Command } from 'features/CommandPalette'
 import Icon from 'components/Icon'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 // import { useSelector, useDispatch } from 'state'
 
 const shortcutMap: Record<string, string> = {
@@ -87,13 +87,13 @@ export default function CommandPaletteModal(props: Props) {
                 {props.commands.map((cmd, ind) => (
                   <Command
                     key={cmd.id}
-                    onClick={() => handleClick(cmd.id)}
+                    onClick={() => !cmd.disableClick && handleClick(cmd.id)}
                     data-id={cmd.id}
                     selected={props.selectedId == cmd.id}
                     title={cmd.hint}
                     highlighted={props.initiallySelectedId == cmd.id}
                     onMouseMove={() => props.setSelectedId(cmd.id)}
-                    pin={cmd.pin}
+                    pin={cmd.pin && props.commands.length > 4}
                   >
                     <Border selected={props.selectedId == cmd.id} />
                     <CommandIcon
@@ -108,15 +108,18 @@ export default function CommandPaletteModal(props: Props) {
                       {cmd.name}
                       {cmd.suffix ? <Suffix>{cmd.suffix}</Suffix> : null}
                     </Name>
-                    {cmd.hint ? (
-                      <Hint selected={props.selectedId == cmd.id}>
-                        {cmd.hint}
+                    {cmd.hint || cmd.error ? (
+                      <Hint
+                        selected={props.selectedId == cmd.id}
+                        error={!!cmd.error}
+                      >
+                        {cmd.error || cmd.hint}
                       </Hint>
                     ) : null}
                     {cmd.shortcut ? (
                       <Hint>
                         {cmd.shortcut.map((s) => (
-                          <Kbd selected={props.selectedId === cmd.id}>
+                          <Kbd key={s} selected={props.selectedId === cmd.id}>
                             {shortcutMap[s] || s}
                           </Kbd>
                         ))}
@@ -387,6 +390,11 @@ const Hint = styled('div', {
     selected: {
       true: {
         color: '$commandPaletteSelectedHintFg',
+      },
+    },
+    error: {
+      true: {
+        color: '$commandPaletteErrorFg',
       },
     },
   },

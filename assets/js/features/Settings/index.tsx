@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { performSearch, useCommandRegistry } from 'features/CommandRegistry'
 import {
@@ -7,7 +7,7 @@ import {
   ModalProps,
   useCommandPalette,
 } from 'features/CommandPalette'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { CallSettingsPreview } from './CallSettingsPreview'
 import { syncDevices } from './slice'
 import { useSelector, useDispatch } from 'state'
@@ -19,6 +19,7 @@ import { usePushToTalkSettings } from './PushToTalkSettings'
 import { useBackgroundBlurSettings } from './BackgroundBlur'
 import { usePresenceSettings } from './PresenceSettings'
 import { useNavigate } from 'react-router-dom'
+import { useInvitePeople } from './InvitePeople'
 
 interface Props {}
 
@@ -33,6 +34,7 @@ export function useSettings() {
   const pushToTalkSettings = usePushToTalkSettings()
   const backgroundBlur = useBackgroundBlurSettings()
   const presenceSettings = usePresenceSettings()
+  const invitePeople = useInvitePeople()
 
   const callSyncDevices = debounce(() => {
     dispatch(syncDevices())
@@ -194,13 +196,7 @@ export function SettingsProvider(props: Props) {
         'x-csrf-token': document.querySelector('meta[name=csrf-token]').content,
       },
     }).then((response) => {
-      // Check if the response is successful
-      if (response.ok) {
-        // Redirect the user to the login page or show a message
-        window.location.href = '/login'
-      } else {
-        // Handle errors
-      }
+      window.location.href = '/login'
     })
   }
 }

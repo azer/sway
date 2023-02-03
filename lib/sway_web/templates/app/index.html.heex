@@ -4,60 +4,39 @@
     session: {
       userId: "<%= @user.id %>",
       token: "<%= assigns[:user_token] %>",
+      jwt: "<%= @jwt %>",
+    },
+    focus: {
+      roomId: "<%= @status.room_id %>",
+      workspaceId: "<%= @status.workspace_id %>",
     },
     room: {
-      orgRoomIds: [<%= Enum.join(Enum.map(@rooms, fn (r) -> r.id end), ", ") %>].map(id => String(id)),
-      focus: {
-	id: "<%= @selected_room_id %>"
+      userIdsByRoom: {},
+      roomIdsByWorkspace: {
+	"<%= @workspace.id %>": [<%= raw(Enum.join(Enum.map(@rooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>],
       }
     },
     status: {
-	<%= if @status != nil do %>
-	id: "<%= @status.id %>"
-	<%= end %>
+      "<%= @status.user_id %>": "<%= @status.id %>"
     },
     entities: {
-      orgs: [
-	{
-	  id: "<%= @org.id %>",
-	  name: "<%= @org.name %>",
-	  domain: "<%= @org.domain %>",
-	  logoUrl: "<%= @org.logo_url %>",
-	}
+      workspaces: [
+	  <%= raw(Jason.encode!(render(SwayWeb.WorkspaceView, "workspace.json", workspace: @workspace))) %>
+      ],
+      memberships: [
+	  <%= raw(Jason.encode!(render(SwayWeb.MembershipView, "membership.json", membership: @membership))) %>
       ],
       users: [
-	{
-	  id: "<%= @user.id %>",
-	  name: "<%= @user.name %>",
-	  email: "<%= @user.email %>",
-	  photoUrl: "<%= @user.profile_photo_url %>",
-	  orgId: <%= @user.org_id %>
-	}
+	<%= raw(Jason.encode!(render(SwayWeb.UserView, "user.json", user: @user))) %>
       ],
       rooms: [
 	<%= for room <- @rooms do %>
-	{
-	  id: "<%= room.id %>",
-	  name: "<%= room.name %>",
-	  slug: "<%= room.slug %>",
-	  isDefault: <%= room.is_default %>,
-	  isActive: <%= room.is_active %>,
-	  orgId: "<%= room.org_id %>",
-	  userId: "<%= room.user_id %>",
-	  insertedAt: "<%= room.inserted_at %>"
-	},
+	  <%= raw(Jason.encode!(render(SwayWeb.RoomView, "room.json", room: room))) %>,
 	<%= end %>
       ],
       statuses: [
 	  <%= if @status != nil do %>
-	  {
-	    id: "<%= @status.id %>",
-	    userId: "<%= @status.user_id %>",
-	    roomId: "<%= @status.room_id %>",
-	    status: "<%= @status.status %>",
-	    message: "<%= @status.message %>",
-	    inserted_at: "<%= @status.inserted_at %>",
-	  }
+	  <%= raw(Jason.encode!(render(SwayWeb.StatusView, "status.json", status: @status))) %>,
 	  <%= end %>
       ]
     }

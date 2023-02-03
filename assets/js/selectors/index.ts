@@ -1,6 +1,7 @@
 import * as users from './users'
 import * as session from './session'
-import * as orgs from './orgs'
+import * as workspaces from './workspaces'
+import * as memberships from './memberships'
 import * as rooms from 'features/Room/selectors'
 import * as focus from 'features/Focus/selectors'
 import * as shell from 'features/Shell/selectors'
@@ -13,7 +14,8 @@ import * as presence from 'features/Presence/selectors'
 export default {
   session,
   users,
-  orgs,
+  workspaces,
+  memberships,
   rooms,
   focus,
   shell,

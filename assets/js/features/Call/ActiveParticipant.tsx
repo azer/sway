@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
 import { useMediaTrack, useParticipant } from '@daily-co/daily-react-hooks'
 import Video from './Video'
-import logger from 'lib/log'
+import { logger } from 'lib/log'
 import { useDispatch, useSelector } from 'state'
 import { AvatarView } from 'features/Avatar/AvatarView'
 import { Border, Name, User } from 'features/Room/RoomParticipant'
@@ -108,7 +108,7 @@ const Container = styled('div', {
   round: 'large',
   overflow: 'hidden',
   center: true,
-  width: '100%',
+  height: '100%',
   maxWidth: '100%',
   maxHeight: '100%',
   aspectRatio: '1.25 / 1',
