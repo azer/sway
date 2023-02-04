@@ -1,6 +1,6 @@
-# fly.toml file generated for sway on 2023-01-25T13:34:45+01:00
+# fly.toml file generated for sway-prod on 2023-02-04T09:18:11+01:00
 
-app = "sway"
+app = "sway-prod"
 kill_signal = "SIGTERM"
 kill_timeout = 5
 processes = []
@@ -9,21 +9,20 @@ processes = []
   release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = "sway.fly.dev"
-  PORT = "8080"
+  PHX_HOST = "sway-prod.fly.dev"
 
 [experimental]
   auto_rollback = true
 
 [[services]]
   http_checks = []
-  internal_port = 8080
+  internal_port = 4000
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
   [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
+    hard_limit = 1000
+    soft_limit = 1000
     type = "connections"
 
   [[services.ports]]

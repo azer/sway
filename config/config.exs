@@ -12,6 +12,7 @@ config :sway,
 
 # Configures the endpoint
 config :sway, SwayWeb.Endpoint,
+  server: true,
   url: [host: "localhost"],
   render_errors: [view: SwayWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Sway.PubSub,
