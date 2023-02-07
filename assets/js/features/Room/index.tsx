@@ -15,6 +15,7 @@ import { useCommandRegistry } from 'features/CommandRegistry'
 import { Command, useCommandPalette } from 'features/CommandPalette'
 import Icon from 'components/Icon'
 import { useRooms } from './use-rooms'
+import { PresenceIcon } from 'features/Navigation/RoomButton'
 
 // import { useSelector, useDispatch } from 'app/state'
 
@@ -30,13 +31,12 @@ export function RoomPage(props: Props) {
   const { channel } = useUserSocket()
   const { enterById } = useRooms()
 
-  const [localUser, localWorkspaceId, room, isSocketConnected] = useSelector(
+  const [localUser, localWorkspaceId, room, roomStatus] = useSelector(
     (state) => [
       selectors.users.getSelf(state),
       selectors.memberships.getSelfMembership(state)?.workspace_id,
       selectors.rooms.getRoomById(state, props.id),
-      selectors.rooms.getUsersInRoom(state, props.id),
-      selectors.dock.isSwaySocketConnected(state),
+      selectors.rooms.getRoomStatus(state, props.id),
     ]
   )
 
@@ -99,9 +99,7 @@ export function RoomPage(props: Props) {
       <Header>
         <Title onClick={openRoomCommands}>
           <TitleBg />
-          <Hash>
-            <Icon name="hashtag" />
-          </Hash>
+          <PresenceIcon mode={roomStatus} />
           <Label>{room?.name}</Label>
         </Title>
       </Header>
@@ -382,23 +380,14 @@ const Title = styled('div', {
   fontWeight: '$medium',
   label: true,
   color: '$roomTitleFg',
-  paddingLeft: '12px',
   //background: 'red',
   [`&:hover ${TitleBg}`]: {
     background: 'rgba(220, 230, 255, 0.1)',
   },
 })
 
-const Hash = styled('label', {
-  height: '10px',
-  marginRight: '1.4px',
-  position: 'absolute',
-  //background: 'yellow',
-  bottom: '3px',
-  left: '0',
-})
-
 const Label = styled('label', {
   baselineFontSize: 'base',
   label: true,
+  marginLeft: '6px',
 })

@@ -90,7 +90,7 @@ const Users = styled('div', {
   },
 })
 
-const PresenceIcon = styled('div', {
+export const PresenceIcon = styled('div', {
   width: '8px',
   height: '8px',
   round: 'xsmall',
