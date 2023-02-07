@@ -7,6 +7,6 @@ defmodule SwayWeb.InviteEmail do
     |> to({invite.name, invite.email})
     |> from(Sway.Mailer.from())
     |> subject("#{invite.created_by.name} invited you to #{invite.workspace.name}")
-    |> text_body("Hey #{invite.name},\n\n#{invite.created_by.name} invited you to #{invite.workspace.name}. Click the link below: https://sway.so/users/signup?invite=#{token} \n\nSway - Video chat rooms for remote teams.")
+    |> text_body("Hey #{invite.name},\n\n#{invite.created_by.name} invited you to #{invite.workspace.name}. Click the link below: https://sway.so/join?invite=#{token} \n\nSway - Video chat rooms for remote teams.")
   end
 end
