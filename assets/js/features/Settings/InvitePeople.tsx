@@ -51,10 +51,9 @@ export function useInvitePeople() {
   const emailValid = validEmail(inviteProps.email)
   const nameValid = inviteProps.name.length > 1
 
-  const [mode] = useSelector((state) => [
-    selectors.rooms.getFocusedRoomId(state),
+  const [localUserId, workspaceId] = useSelector((state) => [
+    selectors.users.getSelf(state)?.id,
     selectors.memberships.getSelfMembership(state)?.workspace_id,
-    selectors.presence.getSelfStatus(state).status,
   ])
 
   useEffect(() => {
@@ -96,7 +95,7 @@ export function useInvitePeople() {
         )
         break
     }
-  }, [commandPalette.isOpen, commandPalette.id, inviteProps.step])
+  }, [commandPalette.isOpen, commandPalette.id, inviteProps])
 
   useRegister(
     (register) => {
@@ -109,7 +108,7 @@ export function useInvitePeople() {
         },
       })
     },
-    [mode, channel]
+    [localUserId, workspaceId, channel]
   )
 
   return {
@@ -129,37 +128,40 @@ export function useInvitePeople() {
       icon: 'avatar',
       placeholder: 'Ready to send?',
       callback: (id: string | undefined, query: string) => {
-        log.info('Done?', id, query, inviteProps)
+        setInviteProps((current) => {
+          const invite = {
+            invite: {
+              email: current.email,
+              workspace_id: workspaceId,
+              name: current.name,
+              created_by_id: localUserId,
+            },
+          }
 
-        const invite = {
-          invite: {
-            email: 'azer+ananas@roadbeats.com',
-            workspace_id: 3,
-            name: 'ananas',
-            created_by_id: 9,
-          },
-        }
+          log.info('Sending invite')
 
-        log.info('Sending invite')
-
-        fetch('/api/invites', {
-          method: 'POST',
-          credentials: 'include',
-          body: JSON.stringify(invite),
-          headers: {
-            'Content-Type': 'application/json',
-            // @ts-ignore
-            Authorization: `Bearer ${window.initialState.session.jwt}`,
-          },
+          fetch('/api/invites', {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify(invite),
+            headers: {
+              'Content-Type': 'application/json',
+              // @ts-ignore
+              Authorization: `Bearer ${window.initialState.session.jwt}`,
+            },
+          })
+            .then((response) => {
+              log.info('Sent invite', response)
+              setInviteProps({ name: '', email: '', admin: false })
+              commandPalette.close()
+            })
+            .catch((err) => {
+              log.error('err', err)
+            })
+          return current
         })
-          .then((response) => {
-            log.info('Sent invite', response)
-            setInviteProps({ name: '', email: '', admin: false })
-            commandPalette.close()
-          })
-          .catch((err) => {
-            log.error('err', err)
-          })
+
+        return
       },
       submodalCallback: (
         modalId: string,
