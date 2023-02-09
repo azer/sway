@@ -42,7 +42,7 @@
     }
   }
 
-  <%= if @fake_state && Mix.env == :dev do %>
+  <%= if assigns[:fake_state] && Mix.env == :dev do %>
   <%= render "fake_state.html", assigns %>
   <%= end %>
 

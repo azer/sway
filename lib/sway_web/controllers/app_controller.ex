@@ -44,7 +44,7 @@ defmodule SwayWeb.AppController do
       rooms: rooms,
       body_class: "app",
       jwt: jwt,
-      fake_state: true
+      fake_state: false
     )
   end
 
