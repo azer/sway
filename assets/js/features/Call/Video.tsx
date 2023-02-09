@@ -1,5 +1,5 @@
 import { styled } from 'themes'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import selectors from 'selectors'
 import { useMediaTrack } from '@daily-co/daily-react-hooks'
 import { logger } from 'lib/log'
@@ -9,7 +9,7 @@ interface Props {
   id: string
 }
 
-const log = logger('video')
+const log = logger('call/video')
 
 export const Video = React.memo(UVideo, function (prev: Props, next: Props) {
   return prev.id === next.id
@@ -40,16 +40,27 @@ function UVideo(props: Props) {
 
     if (!video || !track?.persistentTrack) return
 
-    log.info('track')
+    log.info('Set track', track.persistentTrack)
     /*  The track is ready to be played. We can show video of the participant in the UI. */
     video.srcObject = new MediaStream([track?.persistentTrack])
-  }, [track, track?.persistentTrack])
+  }, [track?.persistentTrack?.id])
 
   log.info('Rendering video player', props.id, isActive, isSpeakerOff)
 
-  return (
-    <Player autoPlay muted={!isActive || !isSpeakerOff} playsInline ref={el} />
-  )
+  const videoEl = useMemo(() => {
+    log.info('Re-render element', isActive, isSpeakerOff)
+
+    return (
+      <Player
+        autoPlay
+        muted={!isActive || !isSpeakerOff}
+        playsInline
+        ref={el}
+      />
+    )
+  }, [isActive, isSpeakerOff])
+
+  return videoEl
 }
 
 const Player = styled('video', {
