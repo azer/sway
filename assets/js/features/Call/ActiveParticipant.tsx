@@ -2,7 +2,7 @@ import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
 import { useMediaTrack, useParticipant } from '@daily-co/daily-react-hooks'
-import Video from './Video'
+import { Video } from './Video'
 import { logger } from 'lib/log'
 import { useDispatch, useSelector } from 'state'
 import { AvatarView } from 'features/Avatar/AvatarView'
@@ -34,10 +34,7 @@ function UActiveParticipant(props: Props) {
   const participant = window.fakeState
     ? window.fakeState.useParticipant(props.participantId)
     : useParticipant(props.participantId)
-  const screensharing =
-    participant &&
-    (participant.tracks.screenVideo.track ||
-      participant.tracks.screenVideo.persistentTrack)
+  const screensharing = participant && participant.screen
 
   const [user, isSpeakerOn, isSelf] = useSelector((state) => [
     participant?.userData
@@ -59,14 +56,6 @@ function UActiveParticipant(props: Props) {
   }, [audioTrack])
 
   const firstName = user?.name.split(' ')[0]
-
-  /*
-          {!participant?.screen ? (
-            <User>
-              <Name>{user?.name.split(' ')[0]}</Name>
-            </User>
-          ) : null}
-          */
 
   return (
     <Border active>

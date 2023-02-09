@@ -70,7 +70,6 @@ ReactDOM.render(
         <CommandRegistryProvider>
           <CallProvider>
             <CommandPaletteProvider>
-              <SettingsProvider />
               <PresenceProvider />
               <Routing />
             </CommandPaletteProvider>

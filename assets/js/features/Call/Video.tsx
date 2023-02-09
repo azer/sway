@@ -11,10 +11,14 @@ interface Props {
 
 const log = logger('video')
 
-export default function Video(props: Props) {
+export const Video = React.memo(UVideo, function (prev: Props, next: Props) {
+  return prev.id === next.id
+})
+
+function UVideo(props: Props) {
   // const dispatch = useDispatch()
   const [isActive, isSpeakerOff] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state),
+    selectors.presence.getSelfStatus(state).is_active,
     selectors.settings.isAudioOutputOff(state),
   ])
   const track = useMediaTrack(props.id, 'video')
@@ -35,9 +39,13 @@ export default function Video(props: Props) {
     }
 
     if (!video || !track?.persistentTrack) return
+
+    log.info('track')
     /*  The track is ready to be played. We can show video of the participant in the UI. */
     video.srcObject = new MediaStream([track?.persistentTrack])
   }, [track, track?.persistentTrack])
+
+  log.info('Rendering video player', props.id, isActive, isSpeakerOff)
 
   return (
     <Player autoPlay muted={!isActive || !isSpeakerOff} playsInline ref={el} />

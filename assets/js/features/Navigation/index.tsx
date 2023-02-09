@@ -100,7 +100,7 @@ export function Navigation(props: Props) {
   )
 
   function mail() {
-    window.location.href = 'mailto:azer@12seeds.io'
+    window.location.href = 'mailto:azer@sway.so'
   }
 }
 
