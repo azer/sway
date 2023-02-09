@@ -34,7 +34,10 @@ function UActiveParticipant(props: Props) {
   const participant = window.fakeState
     ? window.fakeState.useParticipant(props.participantId)
     : useParticipant(props.participantId)
-  const screensharing = participant && participant.tracks.screenVideo.track
+  const screensharing =
+    participant &&
+    (participant.tracks.screenVideo.track ||
+      participant.tracks.screenVideo.persistentTrack)
 
   const [user, isSpeakerOn, isSelf] = useSelector((state) => [
     participant?.userData
@@ -78,11 +81,6 @@ function UActiveParticipant(props: Props) {
         ) : null}
         {screensharing ? (
           <Info screensharing>
-            <AvatarView
-              photoUrl={user?.photoUrl}
-              name={user?.name}
-              round="small"
-            />
             <Name>{isSelf ? 'Your Screen' : `${firstName}'s Screen`}</Name>
           </Info>
         ) : null}
@@ -99,7 +97,7 @@ function UActiveParticipant(props: Props) {
           ) : null}
 
           <Video id={props.participantId} />
-          {audioTrack && (
+          {audioTrack && !isSelf && (
             <audio
               autoPlay
               playsInline
@@ -172,8 +170,9 @@ const Info = styled('div', {
         bottom: '0',
         background: '$shellBg',
         borderRadius: '$small $small 0 0',
+        padding: '0 8px',
+        fontSize: '12px',
         '& img': {
-          marginRight: '8px',
           round: 'small 0 0 0',
         },
       },

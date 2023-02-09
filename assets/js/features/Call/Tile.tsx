@@ -32,8 +32,6 @@ export function CallTile(props: Props) {
         clearTimeout(frame)
       }
 
-      log.info('Resizing...')
-
       frame = setTimeout(() => onResize(), RESIZE_DEBOUNCE_MS)
     }
 
