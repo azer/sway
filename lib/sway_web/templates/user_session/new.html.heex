@@ -1,5 +1,5 @@
 <SwayWeb.FormPageComponent.form>
-  <SwayWeb.FormPageComponent.header title="Sign in" conn={@conn} />
+  <SwayWeb.FormPageComponent.header title="Log in to Sway" conn={@conn} />
 
 
     <.form let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
@@ -43,8 +43,8 @@
     </.form>
 
     <footer>
-      <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %> —
-      <%= link "Sign up", to: Routes.user_registration_path(@conn, :new) %>
+      <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
+      <!-- — <%= link "Sign up", to: Routes.user_registration_path(@conn, :new) %> -->
     </footer>
 
 </SwayWeb.FormPageComponent.form>

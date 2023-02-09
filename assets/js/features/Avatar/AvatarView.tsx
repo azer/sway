@@ -123,6 +123,7 @@ export const Text = styled('div', {
       true: {
         unitWidth: 5,
         unitHeight: 5,
+        fontSize: '$small',
       },
     },
     fill: {

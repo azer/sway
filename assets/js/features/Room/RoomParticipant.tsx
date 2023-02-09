@@ -76,7 +76,8 @@ export const Border = styled('div', {
       true: {
         border: '0',
         display: 'flex',
-        height: '100%',
+        width: 'var(--tile-width)',
+        height: 'var(--tile-height)',
         maxWidth: '100%',
         maxHeight: '100%',
         aspectRatio: '1.25 / 1',
@@ -86,7 +87,7 @@ export const Border = styled('div', {
   },
 })
 
-const InactiveParticipant = styled('div', {
+export const InactiveParticipant = styled('div', {
   position: 'relative',
   center: true,
   width: '150px',
@@ -114,6 +115,7 @@ export const User = styled('footer', {
     height: '24px',
   },
   [`& label`]: {},
+
   variants: {
     mode: {
       /*focus: {

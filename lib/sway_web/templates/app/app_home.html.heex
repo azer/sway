@@ -41,5 +41,10 @@
       ]
     }
   }
+
+  <%= if @fake_state && Mix.env == :dev do %>
+  <%= render "fake_state.html", assigns %>
+  <%= end %>
+
 </script>
 <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>

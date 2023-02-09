@@ -23,9 +23,19 @@ export default function Video(props: Props) {
   useEffect(() => {
     const video = el.current
 
+    // @ts-ignore
+    if (window.fakeState) {
+      // @ts-ignore
+      video.style.background = `center center url(${
+        window.fakeState.participantStatus[props.id].cover
+      })`
+      // @ts-ignore
+      video.style['background-size'] = 'cover'
+      return
+    }
+
     if (!video || !track?.persistentTrack) return
     /*  The track is ready to be played. We can show video of the participant in the UI. */
-
     video.srcObject = new MediaStream([track?.persistentTrack])
   }, [track, track?.persistentTrack])
 

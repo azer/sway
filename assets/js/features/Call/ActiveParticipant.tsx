@@ -17,11 +17,23 @@ interface Props {
 
 const log = logger('call/active-participant')
 
-export function ActiveParticipant(props: Props) {
+export const ActiveParticipant = React.memo(
+  UActiveParticipant,
+  function (prev: Props, next: Props) {
+    return (
+      prev.muted === next.muted && prev.participantId === next.participantId
+    )
+  }
+)
+
+function UActiveParticipant(props: Props) {
   const audioTrack = useMediaTrack(props.participantId, 'audio')
   const audioElement = useRef<HTMLAudioElement>()
 
-  const participant = useParticipant(props.participantId)
+  // @ts-ignore
+  const participant = window.fakeState
+    ? window.fakeState.useParticipant(props.participantId)
+    : useParticipant(props.participantId)
   const screensharing = participant && participant.tracks.screenVideo.track
 
   const [user, isSpeakerOn, isSelf] = useSelector((state) => [
@@ -69,8 +81,7 @@ export function ActiveParticipant(props: Props) {
             <AvatarView
               photoUrl={user?.photoUrl}
               name={user?.name}
-              fill
-              round="smalsl"
+              round="small"
             />
             <Name>{isSelf ? 'Your Screen' : `${firstName}'s Screen`}</Name>
           </Info>
@@ -81,7 +92,6 @@ export function ActiveParticipant(props: Props) {
               <AvatarView
                 photoUrl={user?.photoUrl}
                 name={user?.name}
-                fill
                 round="small"
               />
               <Name>{user?.name.split(' ')[0]}</Name>

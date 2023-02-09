@@ -141,7 +141,7 @@ defmodule SwayWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:info, "Log in required to continue.")
+      #|> put_flash(:info, "Log in required to continue.")
       |> maybe_store_return_to()
       |> redirect(to: Routes.user_session_path(conn, :new))
       |> halt()

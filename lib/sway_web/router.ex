@@ -119,13 +119,16 @@ defmodule SwayWeb.Router do
     resources "/invites", InviteController
   end
 
+  scope "/api", SwayWeb do
+    pipe_through [:api, :api_auth]
+    get "/users", UserController, :list_by_workspace
+  end
+
   scope "/", SwayWeb do
     pipe_through [:browser, :require_authenticated_user]
     get "/", AppController, :index
     get "/:workspace", AppController, :index
     get "/:workspace/room/:room", AppController, :room
   end
-
-
 
 end

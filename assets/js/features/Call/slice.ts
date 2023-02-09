@@ -24,8 +24,10 @@ export interface CallParticipantStatus {
 }
 
 export const initialState: State = {
-  remoteParticipantIds: [],
-  participantStatus: {},
+  // @ts-ignore
+  remoteParticipantIds: window.initialState.remoteParticipantIds || [],
+  // @ts-ignore
+  participantStatus: window.initialState.participantStatus || {},
 }
 
 export const slice = createSlice({

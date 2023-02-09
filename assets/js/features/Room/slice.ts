@@ -61,7 +61,10 @@ export const slice = createSlice({
       state,
       action: PayloadAction<{ [id: string]: string[] }>
     ) => {
-      state.userIdsByRoom = action.payload
+      // @ts-ignore
+      state.userIdsByRoom = window.fakeState
+        ? window.fakeState.room.userIdsByRoom
+        : action.payload
     },
   },
 })

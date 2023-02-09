@@ -10,7 +10,7 @@ defmodule SwayWeb.AppController do
 
     {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
 
-    render(conn, "index.html",
+    render(conn, "app_home.html",
       jwt: jwt,
       user: conn.assigns.current_user,
       membership: membership,
@@ -36,14 +36,15 @@ defmodule SwayWeb.AppController do
     # FIXME:
     # Change the room
 
-    render(conn, "index.html",
+    render(conn, "app_home.html",
       user: conn.assigns.current_user,
       membership: membership,
       workspace: workspace,
       status: status,
       rooms: rooms,
       body_class: "app",
-      jwt: jwt
+      jwt: jwt,
+      fake_state: true
     )
   end
 

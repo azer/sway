@@ -104,7 +104,6 @@ export function RoomPage(props: Props) {
         </Title>
       </Header>
       <ParticipantGrid roomId={props.id} />
-
       <Dock roomId={props.id} />
     </Container>
   )
@@ -133,7 +132,7 @@ export function RoomPage(props: Props) {
           },
         },
         {
-          id: 'craete-new-room',
+          id: 'create-new-room',
           name: 'Create New Room',
           icon: 'plus',
           palette: {

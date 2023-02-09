@@ -1,0 +1,320 @@
+
+
+window.fakeState = {
+    useParticipant: (id) => {
+      return window.fakeState.participantStatus[id]
+    },
+    session: {
+        userId: "9",
+        token: "SFMyNTY.g2gDYQluBgDOqCInhgFiAAFRgA.0ZU6D4HqNdYvFn9EGNrtFYnrt3TUGZLBrhlnhVmlcwo",
+        jwt: "jwt",
+    },
+    focus: {
+        roomId: "69",
+        workspaceId: "3",
+    },
+    room: {
+      userIdsByRoom: {
+	"69": ["9", "10", "11", "14", "13"],
+	"80": ["15", "12"]
+      },
+      roomIdsByWorkspace: {
+        "3": ["69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81"]
+      }
+    },
+    status: {
+      "9": "204",
+      10: 205,
+      11: 206,
+      12: 207,
+      13: 208,
+      14: 209,
+      15: 210,
+    },
+    remoteParticipantIds: [9, 10, 11, 12, 13, 14, 15],
+    participantStatus: {
+      9: {
+	dailyUserId: 9,
+	swayUserId: 9,
+	sessionId: 9,
+	cameraOn: false,
+	screenOn: false,
+	micOn: false,
+	tracks: {},
+      },
+      10: {
+	dailyUserId: 10,
+	swayUserId: '10',
+	sessionId: 10,
+	cameraOn: false,
+	screenOn: false,
+	micOn: false,
+	userData: {
+	  id: 10
+	},
+	cover: 'https://cldup.com/pC-zyHxB9D.thumb.jpg',
+	tracks: {
+	  screenVideo: {}
+	}
+      },
+      11: {
+	dailyUserId: 11,
+	swayUserId: 11,
+	sessionId: 11,
+	cameraOn: false,
+	screenOn: false,
+	micOn: false,
+	userData: {
+	  id: 11
+	},
+	cover: 'https://cldup.com/RQbwPIJyJU.jpg',
+	tracks: {
+	  screenVideo: {}
+	}
+      },
+      12: {
+	dailyUserId: 12,
+	swayUserId: 12,
+	sessionId: 12,
+	cameraOn: false,
+	screenOn: false,
+	micOn: false,
+	userData: {
+	  id: 12
+	},
+	cover: 'https://cldup.com/u6VRLG9lPo.thumb.jpg',
+	tracks: {
+	  screenVideo: {}
+	}
+      },
+      13: {
+	cover: 'https://cldup.com/pUNauvG29z.jpg',
+	dailyUserId: 13,
+	swayUserId: 13,
+	sessionId: 13,
+	cameraOn: false,
+	screenOn: false,
+	micOn: false,
+	userData: {
+	  id: 13
+	},
+	tracks: {
+	  screenVideo: {}
+	}
+      },
+      14: {
+	cover: 'https://cldup.com/gW2PR-UIE5.jpg',
+	dailyUserId: 14,
+	swayUserId: 14,
+	sessionId: 14,
+	cameraOn: false,
+	screenOn: false,
+	micOn: false,
+	userData: {
+	  id: 14
+	},
+	tracks: {
+	  screenVideo: {}
+	}
+      }
+    },
+    entities: {
+        workspaces: [{
+            "domain": "roadbeats.com",
+            "id": 3,
+            "is_active": true,
+            "logo_url": "https://cldup.com/H5Y6L9jt3v.png",
+            "name": "Team Sway",
+            "slug": "testing"
+        }],
+        memberships: [{
+            "id": 3,
+            "is_admin": true,
+            "user_id": 9,
+            "workspace_id": 3
+        },
+		     {
+            "id": 4,
+            "is_admin": true,
+            "user_id": 10,
+            "workspace_id": 3
+		     },
+		      {
+            "id": 5,
+            "is_admin": true,
+            "user_id": 11,
+            "workspace_id": 3
+		      },
+		      {
+            "id": 6,
+            "is_admin": true,
+            "user_id": 12,
+            "workspace_id": 3
+		      },
+		      {
+            "id": 7,
+            "is_admin": true,
+            "user_id": 13,
+            "workspace_id": 3
+		      },
+		      {
+            "id": 8,
+            "is_admin": true,
+            "user_id": 14,
+            "workspace_id": 3
+		      },
+		      {
+            "id": 9,
+            "is_admin": true,
+            "user_id": 15,
+            "workspace_id": 3
+		      },
+		     ],
+      users: [
+	{
+            "email": "azer@roadbeats.com",
+            "id": 9,
+            "name": "roadbeats",
+            "profile_photo_url": "https://lh3.googleusercontent.com/a/AEdFTp4Kha4u3O8XfD0xjN8mU8RIZobSpzrUtB3x-ejcww=s96-c"
+        },
+	{
+            "email": "melissa@roadbeats.com",
+            "id": 10,
+            "name": "Mel",
+            "profile_photo_url": ""
+        },
+	{
+            "email": "david@roadbeats.com",
+            "id": 11,
+            "name": "Amy",
+            "profile_photo_url": ""
+        },
+	{
+            "email": "sandra@roadbeats.com",
+            "id": 12,
+            "name": "David",
+            "profile_photo_url": ""
+        },
+	{
+            "email": "sandra@roadbeats.com",
+            "id": 13,
+            "name": "Nora",
+            "profile_photo_url": ""
+        },
+	{
+            "email": "mei@roadbeats.com",
+            "id": 14,
+            "name": "David",
+            "profile_photo_url": ""
+        },
+	{
+            "email": "michael@roadbeats.com",
+            "id": 15,
+            "name": "Michael",
+            "profile_photo_url": ""
+        }
+      ],
+        rooms: [
+            {
+                "id": 69,
+                "inserted_at": "2023-01-30T12:45:11",
+                "is_active": true,
+                "is_default": true,
+                "name": "watercooler",
+                "slug": "watercooler",
+                "user_id": 9,
+                "workspace_id": 3
+            },
+	  {
+                "id": 70,
+                "inserted_at": "2023-01-30T12:45:11",
+                "is_active": true,
+                "is_default": false,
+                "name": "techies",
+                "slug": "design",
+                "user_id": 9,
+                "workspace_id": 3
+          },
+	  {
+                "id": 71,
+                "inserted_at": "2023-01-30T12:45:11",
+                "is_active": true,
+                "is_default": false,
+                "name": "design",
+                "slug": "design",
+                "user_id": 9,
+                "workspace_id": 3
+          },
+	  {"id":79,"inserted_at":"2023-02-08T12:48:57","is_active":true,"is_default":false,"name":"pomodoro","slug":"pomodoro","user_id":9,"workspace_id":3},
+	  {"id":80,"inserted_at":"2023-02-08T12:49:20","is_active":true,"is_default":false,"name":"pair-programming","slug":"pair-programming","user_id":9,"workspace_id":3},
+	  {"id":81,"inserted_at":"2023-02-08T12:49:26","is_active":true,"is_default":false,"name":"office-hours","slug":"office-hours","user_id":9,"workspace_id":3},
+        ],
+        statuses: [
+            {
+                "id": 204,
+                "inserted_at": "2023-02-03T15:06:35",
+                "message": null,
+                "room_id": 69,
+                "status": "focus",
+                "user_id": 9,
+                "workspace_id": 3
+            },
+            {
+                "id": 205,
+                "inserted_at": "2023-02-03T15:06:35",
+                "message": null,
+                "room_id": 69,
+                "status": "focus",
+                "user_id": 10,
+                "workspace_id": 3
+            },
+	  {
+                "id": 206,
+                "inserted_at": "2023-02-03T15:06:35",
+                "message": null,
+                "room_id": 69,
+                "status": "social",
+                "user_id": 11,
+                "workspace_id": 3
+          },
+	   {
+                "id": 207,
+                "inserted_at": "2023-02-03T15:06:35",
+                "message": null,
+                "room_id": 69,
+                "status": "social",
+                "user_id": 12,
+                "workspace_id": 3
+            },
+            {
+                "id": 208,
+                "inserted_at": "2023-02-03T15:06:35",
+                "message": null,
+                "room_id": 69,
+                "status": "social",
+                "user_id": 13,
+                "workspace_id": 3
+            },
+	  {
+                "id": 209,
+                "inserted_at": "2023-02-03T15:06:35",
+                "message": null,
+                "room_id": 80,
+                "status": "social",
+                "user_id": 14,
+                "workspace_id": 3
+          },
+	   {
+                "id": 210,
+                "inserted_at": "2023-02-03T15:06:35",
+                "message": null,
+                "room_id": 80,
+                "status": "focus",
+                "user_id": 15,
+                "workspace_id": 3
+            }
+        ]
+    }
+  }
+
+  window.initialState = window.fakeState
