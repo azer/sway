@@ -90,12 +90,16 @@ export function Dock(props: Props) {
           label="Camera"
           onClick={cameraSettings.open}
           off={!isCameraOn}
+          tooltipLabel={isCameraOn ? 'Turn off camera' : 'Turn on camera'}
+          tooltipShortcut={['cmd', 'e']}
         />
         <Button
           icon={!isMicOn ? 'mic-off' : isOnAirpods ? 'airpods' : 'mic'}
           label="Microphone"
           onClick={micSettings.open}
           off={!isMicOn}
+          tooltipLabel={isMicOn ? 'Turn off mic' : 'Turn on mic'}
+          tooltipShortcut={['cmd', 'd']}
         />
         <ScreenshareButton />
         <Button
@@ -106,7 +110,13 @@ export function Dock(props: Props) {
         />
       </Buttonset>
       <Separator group />
-      <Button icon="sliders" label="Options" onClick={settings.open} />
+      <Button
+        icon="sliders"
+        label="Options"
+        onClick={settings.open}
+        tooltipLabel="Settings"
+        tooltipShortcut={['Cmd', 's']}
+      />
     </Container>
   )
 

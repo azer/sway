@@ -2,6 +2,7 @@ import { styled } from 'themes'
 import React from 'react'
 import selectors from 'selectors'
 import Icon from 'components/Icon'
+import { Tooltip } from 'components/Tooltip'
 // import { useSelector, useDispatch } from 'state'
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
   onClick: () => void
   off?: boolean
   on?: boolean
+  tooltipLabel?: string
+  tooltipShortcut?: string[]
 }
 
 export function Button(props: Props) {
@@ -17,14 +20,11 @@ export function Button(props: Props) {
   // const [] = useSelector((state) => [])
 
   return (
-    <Container
-      title={props.label}
-      onClick={props.onClick}
-      off={props.off}
-      on={props.on}
-    >
-      <Icon name={props.icon} />
-    </Container>
+    <Tooltip content={props.tooltipLabel} shortcut={props.tooltipShortcut}>
+      <Container onClick={props.onClick} off={props.off} on={props.on}>
+        <Icon name={props.icon} />
+      </Container>
+    </Tooltip>
   )
 }
 

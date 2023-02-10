@@ -4,14 +4,8 @@ import selectors from 'selectors'
 import { Command } from 'features/CommandPalette'
 import Icon from 'components/Icon'
 import { logger } from 'lib/log'
+import { keySymbol } from 'lib/shortcuts'
 // import { useSelector, useDispatch } from 'state'
-
-const shortcutMap: Record<string, string> = {
-  cmd: '⌘',
-  opt: '⎇',
-  alt: '⎇',
-  shift: '⇧',
-}
 
 export interface Props {
   title: string
@@ -120,7 +114,7 @@ export default function CommandPaletteModal(props: Props) {
                       <Hint>
                         {cmd.shortcut.map((s) => (
                           <Kbd key={s} selected={props.selectedId === cmd.id}>
-                            {shortcutMap[s] || s}
+                            {keySymbol(s)}
                           </Kbd>
                         ))}
                       </Hint>

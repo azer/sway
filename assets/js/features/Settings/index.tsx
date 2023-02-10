@@ -20,6 +20,7 @@ import { useBackgroundBlurSettings } from './BackgroundBlur'
 import { usePresenceSettings } from './PresenceSettings'
 import { useNavigate } from 'react-router-dom'
 import { useInvitePeople } from './InvitePeople'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 interface Props {}
 
@@ -166,6 +167,16 @@ export function useSettings() {
 export function SettingsProvider(props: Props) {
   const settings = useSettings()
   const { useRegister } = useCommandRegistry()
+
+  useHotkeys(
+    'meta+s',
+    settings.open,
+    {
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    []
+  )
 
   useRegister((register) => {
     register(`Settings`, openSettings, {

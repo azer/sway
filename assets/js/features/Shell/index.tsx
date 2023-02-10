@@ -5,6 +5,7 @@ import selectors from 'selectors'
 import { useSelector } from 'state'
 import { Navigation } from 'features/Navigation'
 import { PresenceMode } from 'state/entities'
+import * as Tooltip from '@radix-ui/react-tooltip'
 
 interface Props {
   children?: React.ReactNode
@@ -17,8 +18,10 @@ export function Shell(props: Props) {
 
   return (
     <Container mode={presenceMode?.status}>
-      <Navigation />
-      {props.children}
+      <Tooltip.Provider>
+        <Navigation />
+        {props.children}
+      </Tooltip.Provider>
     </Container>
   )
 }

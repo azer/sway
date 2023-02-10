@@ -95,4 +95,8 @@ export const dark = {
   participantActiveBg: 'rgba(24, 255, 167, 0.7)',
   participantActiveFg: 'rgba(0, 55, 24, 0.85)',
   roomTitleFg: '$white',
+  tooltipBg: 'rgba(40, 44, 51, 0.7)',
+  tooltipFg: 'rgb(235, 238, 242, 0.7)',
+  tooltipBorder: 'rgba(82, 82, 111, 0.3)',
+  tooltipKeyBg: 'rgba(149, 149, 189, 0.25)',
 }
