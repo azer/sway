@@ -3,6 +3,8 @@ const shortcutMap: Record<string, string> = {
   opt: '⎇',
   alt: '⎇',
   shift: '⇧',
+  ctrl: '⌃',
+  control: '⌃',
 }
 
 export function keySymbol(key: string): string {

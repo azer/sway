@@ -8,7 +8,7 @@ import { Tooltip } from 'components/Tooltip'
 interface Props {
   icon: string
   label: string
-  onClick: () => void
+  onClick?: () => void
   off?: boolean
   on?: boolean
   tooltipLabel?: string
@@ -16,19 +16,18 @@ interface Props {
 }
 
 export function Button(props: Props) {
-  // const dispatch = useDispatch()
-  // const [] = useSelector((state) => [])
-
   return (
-    <Tooltip content={props.tooltipLabel} shortcut={props.tooltipShortcut}>
-      <Container onClick={props.onClick} off={props.off} on={props.on}>
-        <Icon name={props.icon} />
-      </Container>
-    </Tooltip>
+    <StyledButton onClick={props.onClick} off={props.off} on={props.on}>
+      <Tooltip content={props.tooltipLabel} shortcut={props.tooltipShortcut}>
+        <Wrapper>
+          <Icon name={props.icon} />
+        </Wrapper>
+      </Tooltip>
+    </StyledButton>
   )
 }
 
-export const Container = styled('div', {
+export const StyledButton = styled('div', {
   height: '100%',
   aspectRatio: '1',
   center: true,
@@ -50,6 +49,11 @@ export const Container = styled('div', {
     color: '$dockButtonHoverFg',
     borderColor: 'rgba(255, 255, 255, 0.03),',
   },
+  '&[data-state=open]': {
+    background: '$dockButtonHoverBg',
+    color: '$dockButtonHoverFg',
+    borderColor: 'rgba(255, 255, 255, 0.03),',
+  },
   variants: {
     off: {
       true: {
@@ -62,4 +66,10 @@ export const Container = styled('div', {
       },
     },
   },
+})
+
+const Wrapper = styled('div', {
+  width: '100%',
+  height: '100%',
+  center: true,
 })

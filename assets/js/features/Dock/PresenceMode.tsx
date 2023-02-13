@@ -10,6 +10,7 @@ import {
 } from 'features/Settings/slice'
 import { styled } from 'themes'
 import { usePresenceSettings } from 'features/Settings/PresenceSettings'
+import { Tooltip } from 'components/Tooltip'
 
 interface Props {}
 
@@ -26,13 +27,22 @@ export function PresenceModeButton(props: Props) {
 
   return (
     <Button onClick={presenceSettings.open}>
-      <Circle>
-        <PresenceModeIcon
-          active={presence.is_active}
-          mode={presence.status}
-          onClick={presenceSettings.open}
-        />
-      </Circle>
+      <Tooltip
+        content={
+          !presence.is_active
+            ? 'Become active'
+            : `Switch to ${presence.status} mode`
+        }
+        shortcut={['Space']}
+      >
+        <Circle>
+          <PresenceModeIcon
+            active={presence.is_active}
+            mode={presence.status}
+            onClick={presenceSettings.open}
+          />
+        </Circle>
+      </Tooltip>
     </Button>
   )
 }
