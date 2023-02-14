@@ -20,7 +20,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { Prop, Table, Value } from './CallSettingsPreview'
 import { useUserSocket } from 'features/UserSocket'
 import { useDispatch, useSelector } from 'state'
-import { turnOnCamera } from './slice'
+import { usePresence } from 'features/Presence/use-presence'
 
 const dialogId = 'presence-settings'
 
@@ -31,6 +31,7 @@ export function usePresenceSettings() {
   const { useRegister } = useCommandRegistry()
   const commandPalette = useCommandPalette()
   const { channel } = useUserSocket()
+  const presence = usePresence()
 
   const [roomId, workspaceId, mode] = useSelector((state) => [
     selectors.rooms.getFocusedRoomId(state),
@@ -161,7 +162,7 @@ export function usePresenceSettings() {
       value: PresenceMode.Social,
       icon: mode === PresenceMode.Social ? 'checkmark' : '',
       name: 'Social',
-      callback: switchMode(PresenceMode.Social),
+      callback: () => presence.setMode(PresenceMode.Social),
     })
 
     commands.push({
@@ -169,7 +170,7 @@ export function usePresenceSettings() {
       value: PresenceMode.Focus,
       icon: mode === PresenceMode.Focus ? 'checkmark' : '',
       name: 'Focus',
-      callback: switchMode(PresenceMode.Focus),
+      callback: () => presence.setMode(PresenceMode.Focus),
     })
 
     commands.push({
@@ -177,7 +178,7 @@ export function usePresenceSettings() {
       value: PresenceMode.Zen,
       icon: mode === PresenceMode.Zen ? 'checkmark' : '',
       name: 'Zen',
-      callback: switchMode(PresenceMode.Zen),
+      callback: () => presence.setMode(PresenceMode.Zen),
     })
 
     commands.push({
@@ -185,28 +186,10 @@ export function usePresenceSettings() {
       value: PresenceMode.Solo,
       icon: mode === PresenceMode.Solo ? 'checkmark' : '',
       name: 'Solo',
-      callback: switchMode(PresenceMode.Solo),
+      callback: () => presence.setMode(PresenceMode.Solo),
     })
 
     return commands
-  }
-
-  function switchMode(mode: PresenceMode) {
-    return () => {
-      setMode(mode)
-    }
-  }
-
-  function setMode(newMode: PresenceMode) {
-    if (newMode === PresenceMode.Social) {
-      dispatch(turnOnCamera())
-    }
-
-    channel?.push('user:status', {
-      presence_mode: newMode,
-      room_id: roomId,
-      workspace_id: workspaceId,
-    })
   }
 }
 

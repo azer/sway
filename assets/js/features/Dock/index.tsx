@@ -4,7 +4,7 @@ import selectors from 'selectors'
 import { useSelector, useDispatch, entities } from 'state'
 import { logger } from 'lib/log'
 import { Mirror } from './Mirror'
-import { PresenceModeButton } from './PresenceMode'
+import { PresenceModeButton } from './PresenceModeButton'
 import { Button, StyledButton } from './Button'
 import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import { setParticipantStatus } from 'features/Call/slice'
@@ -13,27 +13,17 @@ import { useVideoSettings } from 'features/Settings/VideoSettings'
 import { useMicSettings } from 'features/Settings/MicSettings'
 import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
 import { ScreenshareButton } from 'features/Screenshare/Provider'
-import {
-  add,
-  Entity,
-  PresenceMode,
-  Statuses,
-  toStateEntity,
-} from 'state/entities'
+import { PresenceMode } from 'state/entities'
 import { ConnectionState, setInternetConnectionStatus } from './slice'
 import { Dropdown } from 'components/DropdownMenu'
 import {
   setAudioInputDeviceId,
-  setAudioInputOff,
   setAudioOutputDeviceId,
-  setAudioOutputOff,
   setBackgroundBlur,
   setVideoInputDeviceId,
-  setVideoInputOff,
 } from 'features/Settings/slice'
 import { useBackgroundBlurSettings } from 'features/Settings/BackgroundBlur'
 import { usePresenceSettings } from 'features/Settings/PresenceSettings'
-import { useUserSocket } from 'features/UserSocket'
 import { usePresence } from 'features/Presence/use-presence'
 
 interface Props {
@@ -57,10 +47,7 @@ export function Dock(props: Props) {
   const [
     localUser,
     localPresence,
-    workspaceId,
-    isCameraOn,
-    isMicOn,
-    isSpeakerOn,
+    isActive,
     isOnAirpods,
     allVideoInputDevices,
     selectedVideoInputDeviceId,
@@ -72,10 +59,7 @@ export function Dock(props: Props) {
   ] = useSelector((state) => [
     selectors.users.getSelf(state),
     selectors.presence.getSelfStatus(state),
-    selectors.memberships.getSelfMembership(state)?.workspace_id,
-    selectors.dock.isVideoInputOn(state),
-    selectors.dock.isAudioInputOn(state),
-    selectors.dock.isAudioOutputOn(state),
+    selectors.presence.isLocalUserActive(state),
     selectors.settings.isOnAirpods(state),
     selectors.settings.allVideoInputDevices(state),
     selectors.settings.getVideoInputDeviceId(state),
@@ -129,24 +113,16 @@ export function Dock(props: Props) {
         <Dropdown.Content>
           <Dropdown.Label>Choose your flow</Dropdown.Label>
           <Dropdown.Item
-            icon={localPresence.is_active ? 'checkmark' : ''}
+            icon={isActive ? 'checkmark' : ''}
             label="Active"
-            kbd={!localPresence.is_active ? ['Space'] : []}
-            onClick={() =>
-              presence.setActive(!localPresence.is_active, workspaceId || '')
-            }
+            kbd={!isActive ? ['Space'] : []}
+            onClick={() => presence.setActive(true)}
           />
           {presence.modes.map((p) => (
             <Dropdown.Item
-              icon={
-                localPresence.status === p && !localPresence.is_active
-                  ? 'checkmark'
-                  : ''
-              }
+              icon={localPresence.status === p && !isActive ? 'checkmark' : ''}
               label={p}
-              onClick={() =>
-                presence.setMode(p, localPresence.room_id, workspaceId || '')
-              }
+              onClick={() => presence.setMode(p)}
             />
           ))}
           <Dropdown.Separator />
@@ -162,10 +138,12 @@ export function Dock(props: Props) {
         <Dropdown.Menu>
           <Dropdown.Trigger>
             <Button
-              icon={!isCameraOn ? 'video-off' : 'video'}
+              icon={!localPresence.camera_on ? 'video-off' : 'video'}
               label="Camera"
-              off={!isCameraOn}
-              tooltipLabel={isCameraOn ? 'Turn off camera' : 'Turn on camera'}
+              off={!localPresence.camera_on}
+              tooltipLabel={
+                localPresence.camera_on ? 'Turn off camera' : 'Turn on camera'
+              }
               tooltipShortcut={['cmd', 'e']}
             />
           </Dropdown.Trigger>
@@ -173,6 +151,7 @@ export function Dock(props: Props) {
             <Dropdown.Label>Camera</Dropdown.Label>
             {allVideoInputDevices.map((d) => (
               <Dropdown.Item
+                key={d.id}
                 label={d.label}
                 icon={d.id === selectedVideoInputDeviceId ? 'checkmark' : ''}
                 onClick={changeVideoInputDevice(d.id)}
@@ -181,16 +160,16 @@ export function Dock(props: Props) {
             <Dropdown.Separator />
             <Dropdown.Label>Status</Dropdown.Label>
             <Dropdown.Item
-              icon={isCameraOn ? 'checkmark' : ''}
+              icon={localPresence.camera_on ? 'checkmark' : ''}
               label="On"
-              kbd={!isCameraOn ? ['Cmd', 'e'] : []}
-              onClick={changeVideoInputStatus(true)}
+              kbd={!localPresence.camera_on ? ['Cmd', 'e'] : []}
+              onClick={() => presence.setMedia({ camera: true })}
             />
             <Dropdown.Item
-              icon={!isCameraOn ? 'checkmark' : ''}
+              icon={!localPresence.camera_on ? 'checkmark' : ''}
               label="Off"
-              kbd={isCameraOn ? ['Cmd', 'e'] : []}
-              onClick={changeVideoInputStatus(false)}
+              kbd={localPresence.camera_on ? ['Cmd', 'e'] : []}
+              onClick={() => presence.setMedia({ camera: false })}
             />
             <Dropdown.Separator />
             <Dropdown.Label>Filters</Dropdown.Label>
@@ -213,10 +192,18 @@ export function Dock(props: Props) {
         <Dropdown.Menu>
           <Dropdown.Trigger>
             <Button
-              icon={!isMicOn ? 'mic-off' : isOnAirpods ? 'airpods' : 'mic'}
+              icon={
+                !localPresence.mic_on
+                  ? 'mic-off'
+                  : isOnAirpods
+                  ? 'airpods'
+                  : 'mic'
+              }
               label="Microphone"
-              off={!isMicOn}
-              tooltipLabel={isMicOn ? 'Turn off mic' : 'Turn on mic'}
+              off={!localPresence.mic_on}
+              tooltipLabel={
+                localPresence.mic_on ? 'Turn off mic' : 'Turn on mic'
+              }
               tooltipShortcut={['cmd', 'd']}
             />
           </Dropdown.Trigger>
@@ -224,6 +211,7 @@ export function Dock(props: Props) {
             <Dropdown.Label>Microphone</Dropdown.Label>
             {allAudioInputDevices.map((d) => (
               <Dropdown.Item
+                key={d.id}
                 label={d.label}
                 icon={d.id === selectedAudioInputDeviceId ? 'checkmark' : ''}
                 onClick={changeAudioInputDevice(d.id)}
@@ -232,16 +220,16 @@ export function Dock(props: Props) {
             <Dropdown.Separator />
             <Dropdown.Label>Status</Dropdown.Label>
             <Dropdown.Item
-              icon={isMicOn ? 'checkmark' : ''}
+              icon={localPresence.mic_on ? 'checkmark' : ''}
               label="On"
-              kbd={!isMicOn ? ['Cmd', 'd'] : []}
-              onClick={changeAudioInputStatus(true)}
+              kbd={!localPresence.mic_on ? ['Cmd', 'd'] : []}
+              onClick={() => presence.setMedia({ mic: true })}
             />
             <Dropdown.Item
-              icon={!isMicOn ? 'checkmark' : ''}
+              icon={!localPresence.mic_on ? 'checkmark' : ''}
               label="Off"
-              kbd={isMicOn ? ['Cmd', 'd'] : []}
-              onClick={changeAudioInputStatus(false)}
+              kbd={localPresence.mic_on ? ['Cmd', 'd'] : []}
+              onClick={() => presence.setMedia({ mic: false })}
             />
             <Dropdown.Separator />
             <Dropdown.Item
@@ -255,12 +243,18 @@ export function Dock(props: Props) {
         <Dropdown.Menu>
           <Dropdown.Trigger>
             <Button
-              icon={!isSpeakerOn ? 'speaker-off' : 'speaker-volume-high'}
+              icon={
+                !localPresence.speaker_on
+                  ? 'speaker-off'
+                  : 'speaker-volume-high'
+              }
               label="Speaker"
               onClick={speakerSettings.open}
-              off={!isSpeakerOn}
+              off={!localPresence.speaker_on}
               tooltipLabel={
-                isSpeakerOn ? 'Turn off speaker' : 'Turn on speaker'
+                localPresence.speaker_on
+                  ? 'Turn off speaker'
+                  : 'Turn on speaker'
               }
               tooltipShortcut={['ctrl', 'm']}
             />
@@ -269,6 +263,7 @@ export function Dock(props: Props) {
             <Dropdown.Label>Speaker</Dropdown.Label>
             {allAudioOutputDevices.map((d) => (
               <Dropdown.Item
+                key={d.id}
                 label={d.label}
                 icon={d.id === selectedAudioOutputDeviceId ? 'checkmark' : ''}
                 onClick={changeAudioOutputDevice(d.id)}
@@ -277,16 +272,16 @@ export function Dock(props: Props) {
             <Dropdown.Separator />
             <Dropdown.Label>Status</Dropdown.Label>
             <Dropdown.Item
-              icon={isSpeakerOn ? 'checkmark' : ''}
+              icon={localPresence.speaker_on ? 'checkmark' : ''}
               label="On"
-              kbd={!isSpeakerOn ? ['control', 'm'] : []}
-              onClick={changeAudioOutputStatus(true)}
+              kbd={!localPresence.speaker_on ? ['control', 'm'] : []}
+              onClick={() => presence.setMedia({ speaker: true })}
             />
             <Dropdown.Item
-              icon={!isSpeakerOn ? 'checkmark' : ''}
+              icon={!localPresence.speaker_on ? 'checkmark' : ''}
               label="Off"
-              kbd={isSpeakerOn ? ['control', 'm'] : []}
-              onClick={changeAudioOutputStatus(false)}
+              kbd={localPresence.speaker_on ? ['control', 'm'] : []}
+              onClick={() => presence.setMedia({ speaker: false })}
             />
             <Dropdown.Separator />
             <Dropdown.Item
@@ -337,21 +332,9 @@ export function Dock(props: Props) {
     }
   }
 
-  function changeVideoInputStatus(on: boolean) {
-    return function () {
-      dispatch(setVideoInputOff(!on))
-    }
-  }
-
   function changeAudioInputDevice(id: string) {
     return function () {
       dispatch(setAudioInputDeviceId(id))
-    }
-  }
-
-  function changeAudioInputStatus(on: boolean) {
-    return function () {
-      dispatch(setAudioInputOff(!on))
     }
   }
 
@@ -361,13 +344,8 @@ export function Dock(props: Props) {
     }
   }
 
-  function changeAudioOutputStatus(on: boolean) {
-    return function () {
-      dispatch(setAudioOutputOff(!on))
-    }
-  }
-
   function toggleBlurValue(checked: boolean) {
+    log.info(';; checked', checked)
     dispatch(setBackgroundBlur(checked ? 50 : 0))
   }
 

@@ -49,7 +49,7 @@ defmodule Sway.Statuses do
       _ ->
 	user = Sway.Accounts.get_user!(user_id)
 	room = Sway.Rooms.get_default_room(workspace_id)
-	with {:ok, %Status{} = status} <- create_status(%{ user_id: user_id, room_id: room.id, status: :focus, workspace_id: workspace_id }) do
+	with {:ok, %Status{} = status} <- create_status(%{ user_id: user_id, room_id: room.id, status: :focus, workspace_id: workspace_id, speaker_on: true }) do
 	  status
       end
     end

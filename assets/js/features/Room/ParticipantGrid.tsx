@@ -22,21 +22,11 @@ export function ParticipantGrid(props: Props) {
     const localUserId = selectors.users.getSelf(state)?.id
 
     const activeUsers = users
-      .filter(
-        (uid) =>
-          selectors.presence.getStatusByUserId(state, uid).is_active ||
-          selectors.presence.getStatusByUserId(state, uid).status ===
-            PresenceMode.Social
-      )
+      .filter((uid) => selectors.presence.isUserActiveOrVisible(state, uid))
       .filter((userId) => isSharingScreen || userId !== localUserId)
 
     const inactiveUsers = users
-      .filter(
-        (uid) =>
-          !selectors.presence.getStatusByUserId(state, uid).is_active &&
-          selectors.presence.getStatusByUserId(state, uid).status !==
-            PresenceMode.Social
-      )
+      .filter((uid) => !selectors.presence.isUserActiveOrVisible(state, uid))
       .filter((userId) => isSharingScreen || userId !== localUserId)
 
     return [

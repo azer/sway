@@ -5,7 +5,9 @@ defmodule Sway.Statuses.Status do
   schema "statuses" do
     field :message, :string
     field :status, Ecto.Enum, values: [:social, :solo, :focus, :zen]
-    field :is_active, :boolean
+    field :camera_on, :boolean, default: false
+    field :mic_on, :boolean, default: false
+    field :speaker_on, :boolean, default: false
 
     belongs_to :user, Sway.Accounts.User
     belongs_to :room, Sway.Rooms.Room
@@ -17,7 +19,7 @@ defmodule Sway.Statuses.Status do
   @doc false
   def changeset(status, attrs) do
     status
-    |> cast(attrs, [:status, :message, :user_id, :room_id, :workspace_id, :is_active])
+    |> cast(attrs, [:status, :message, :user_id, :room_id, :workspace_id, :camera_on, :mic_on, :speaker_on])
     |> validate_required([:status, :user_id, :room_id, :workspace_id])
   end
 end

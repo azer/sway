@@ -16,7 +16,9 @@ export function Switch(props: Props) {
       <StyledRoot
         defaultChecked={props.checked}
         id={props.id}
-        onCheckedChange={props.onCheckedChange}
+        onCheckedChange={(checked) => {
+          props.onCheckedChange(checked)
+        }}
       >
         <StyledThumb />
       </StyledRoot>

@@ -3,11 +3,6 @@ import selectors from 'selectors'
 import { logger } from 'lib/log'
 import { useSelector, useDispatch } from 'state'
 import { PresenceModeIcon } from 'components/PresenceModeIcon'
-import {
-  setAudioInputOff,
-  setAudioOutputOff,
-  setVideoInputOff,
-} from 'features/Settings/slice'
 import { styled } from 'themes'
 import { usePresenceSettings } from 'features/Settings/PresenceSettings'
 import { Tooltip } from 'components/Tooltip'
@@ -17,27 +12,24 @@ interface Props {}
 const log = logger('status/presence')
 
 export function PresenceModeButton(props: Props) {
-  const dispatch = useDispatch()
-
   const presenceSettings = usePresenceSettings()
 
-  const [presence] = useSelector((state) => [
+  const [presence, isActive] = useSelector((state) => [
     selectors.presence.getSelfStatus(state),
+    selectors.presence.isLocalUserActive(state),
   ])
 
   return (
     <Button onClick={presenceSettings.open}>
       <Tooltip
         content={
-          !presence.is_active
-            ? 'Become active'
-            : `Switch to ${presence.status} mode`
+          !isActive ? 'Become active' : `Switch to ${presence.status} mode`
         }
         shortcut={['Space']}
       >
         <Circle>
           <PresenceModeIcon
-            active={presence.is_active}
+            active={isActive}
             mode={presence.status}
             onClick={presenceSettings.open}
           />

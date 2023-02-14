@@ -8,34 +8,35 @@ import {
   useCommandPalette,
 } from 'features/CommandPalette'
 import { logger } from 'lib/log'
-import { setVideoInputDeviceId, setVideoInputOff } from './slice'
+import { setVideoInputDeviceId } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { VideoSettingsPreview } from './VideoSettingsPreview'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { usePresence } from 'features/Presence/use-presence'
 
 const log = logger('settings/video')
 const dialogId = 'camera-settings'
 
 export function useVideoSettings() {
   const dispatch = useDispatch()
-  const [isOff, selectedDeviceId, allDevices] = useSelector((state) => [
-    selectors.settings.isVideoInputOff(state),
+  const [isOn, selectedDeviceId, allDevices] = useSelector((state) => [
+    selectors.presence.getSelfStatus(state).camera_on,
     selectors.settings.getVideoInputDeviceId(state),
     selectors.settings.allVideoInputDevices(state),
   ])
 
-  const currentSelectedId = isOff ? 'off' : selectedDeviceId
   const commandPalette = useCommandPalette()
   const { useRegister } = useCommandRegistry()
+  const presence = usePresence()
 
   useHotkeys(
     'meta+e',
-    toggle,
+    () => presence.setMedia({ camera: !isOn }),
     {
       enableOnFormTags: true,
       preventDefault: true,
     },
-    [toggle, isOff]
+    [isOn, presence.setMedia]
   )
 
   useEffect(() => {
@@ -55,19 +56,27 @@ export function useVideoSettings() {
         },
       })
 
-      register(`Turn off the camera`, turnCamOff, {
-        icon: 'video-off',
-        shortcut: ['cmd', 'e'],
-        type: CommandType.Settings,
-        when: !isOff,
-      })
+      register(
+        `Turn off the camera`,
+        () => presence.setMedia({ camera: false }),
+        {
+          icon: 'video-off',
+          shortcut: ['cmd', 'e'],
+          type: CommandType.Settings,
+          when: isOn,
+        }
+      )
 
-      register(`Turn on the camera`, turnCamOn, {
-        shortcut: ['cmd', 'e'],
-        icon: 'video',
-        type: CommandType.Settings,
-        when: isOff,
-      })
+      register(
+        `Turn on the camera`,
+        () => presence.setMedia({ camera: true }),
+        {
+          shortcut: ['cmd', 'e'],
+          icon: 'video',
+          type: CommandType.Settings,
+          when: !isOn,
+        }
+      )
 
       for (const device of allDevices) {
         register(`Switch camera to ${device.label}`, switchDevice(device.id), {
@@ -77,7 +86,7 @@ export function useVideoSettings() {
         })
       }
     },
-    [isOff, selectedDeviceId, allDevices]
+    [isOn, selectedDeviceId, allDevices]
   )
 
   return {
@@ -96,7 +105,7 @@ export function useVideoSettings() {
       title: 'Camera Settings',
       icon: 'video',
       placeholder: 'Choose your lens.',
-      selectedId: currentSelectedId,
+      selectedId: selectedDeviceId,
       preview: (props: { selectedValue?: unknown }) => (
         <VideoSettingsPreview deviceId={props.selectedValue as string} />
       ),
@@ -110,7 +119,7 @@ export function useVideoSettings() {
     const commands: Command[] = [
       {
         id: 'back',
-        value: currentSelectedId,
+        value: selectedDeviceId,
         icon: 'undo',
         name: 'Back',
         pin: true,
@@ -121,43 +130,18 @@ export function useVideoSettings() {
       commands.push({
         id: device.id,
         value: device.id,
-        icon: currentSelectedId == device.id ? 'checkmark' : '',
+        icon: selectedDeviceId == device.id ? 'checkmark' : '',
         name: device.label,
         callback: switchDevice(device.id),
       })
     }
 
-    commands.push({
-      id: 'off',
-      value: 'off',
-      icon: isOff ? 'checkmark' : '',
-      name: 'Off',
-      callback: turnCamOff,
-    })
-
     return commands
-  }
-
-  function turnCamOff() {
-    dispatch(setVideoInputOff(true))
-  }
-
-  function turnCamOn() {
-    dispatch(setVideoInputOff(false))
-  }
-
-  function toggle() {
-    if (isOff) {
-      turnCamOn()
-    } else {
-      turnCamOff()
-    }
   }
 
   function switchDevice(deviceId: string) {
     return function () {
       dispatch(setVideoInputDeviceId(deviceId))
-      dispatch(setVideoInputOff(false))
     }
   }
 }

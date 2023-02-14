@@ -12,9 +12,9 @@ import {
 } from 'state/entities'
 import selectors from 'selectors'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { setAudioInputOff, setVideoInputOff } from 'features/Settings/slice'
 import { useCommandPalette } from 'features/CommandPalette'
 import { useSelector, useDispatch } from 'state'
+import { usePresence } from './use-presence'
 
 interface Props {
   children?: React.ReactNode
@@ -33,29 +33,15 @@ export default function PresenceProvider(props: Props) {
   })
 
   const commandPalette = useCommandPalette()
+  const presence = usePresence()
 
-  const [
-    mode,
-    isActive,
-    isCameraOff,
-    isMicOff,
-    pushToTalkVideo,
-    roomId,
-    workspaceId,
-  ] = useSelector((state) => {
-    const status = selectors.presence.getSelfStatus(state)
-    return [
-      status?.status,
-      status?.is_active,
-      selectors.settings.isVideoInputOff(state),
-      !status?.is_active || selectors.settings.isAudioInputOff(state),
-      selectors.settings.isPushToTalkVideoOn(state),
-      status?.room_id,
-      selectors.memberships.getSelfMembership(state)?.workspace_id,
-    ]
-  })
+  const [localStatus, isActive, pushToTalkVideo] = useSelector((state) => [
+    selectors.presence.getSelfStatus(state),
+    selectors.presence.isLocalUserActive(state),
+    selectors.settings.isPushToTalkVideoOn(state),
+  ])
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (mode === PresenceMode.Social && isCameraOff) {
       setMode(PresenceMode.Focus, roomId)
     }
@@ -65,7 +51,7 @@ export default function PresenceProvider(props: Props) {
     if (isActive && isCameraOff) {
       setAsInactive()
     }
-  }, [mode, isActive, isCameraOff, workspaceId])
+  }, [mode, isActive, isCameraOff, workspaceId])*/
 
   useEffect(() => {
     if (!channel) return
@@ -86,51 +72,46 @@ export default function PresenceProvider(props: Props) {
 
   useHotkeys(
     'space',
-    toggleMicAndCam,
+    toggle,
     {
-      enabled: mode !== PresenceMode.Solo && !commandPalette.isOpen,
+      enabled:
+        localStatus.status !== PresenceMode.Solo && !commandPalette.isOpen,
       preventDefault: true,
       keyup: true,
     },
-    [channel, isActive, isMicOff, isCameraOff, workspaceId]
+    [channel, localStatus, isActive]
   )
 
   useHotkeys(
     'space',
     startPushToTalk,
     {
-      enabled: mode === PresenceMode.Solo && !commandPalette.isOpen,
+      enabled:
+        localStatus.status === PresenceMode.Solo && !commandPalette.isOpen,
       preventDefault: true,
       keydown: true,
     },
-    [channel, isMicOff, isCameraOff, pushToTalkVideo, workspaceId]
+    [channel, localStatus, pushToTalkVideo]
   )
 
   useHotkeys(
     'space',
     delayStoppingPushToTalk,
     {
-      enabled: mode === PresenceMode.Solo && !commandPalette.isOpen,
+      enabled:
+        localStatus.status === PresenceMode.Solo && !commandPalette.isOpen,
       preventDefault: true,
       keyup: true,
     },
-    [channel, pushToTalk, isMicOff, isCameraOff, workspaceId]
+    [channel, pushToTalk, localStatus]
   )
 
   return <></>
 
-  function toggleMicAndCam() {
-    if (!isActive) {
-      setAsActive()
-    } else {
-      setAsInactive()
-    }
-  }
-
   function startPushToTalk() {
-    if (!isActive || !isMicOff || pushToTalk) return
+    if (pushToTalk) return
     setPushToTalk(true)
-    setAsActive()
+    presence.setMedia({ camera: pushToTalkVideo, mic: true })
   }
 
   function delayStoppingPushToTalk() {
@@ -142,42 +123,22 @@ export default function PresenceProvider(props: Props) {
 
   function stopPushToTalk() {
     if (!pushToTalk) return
-    setAsInactive()
+    presence.setMedia({ camera: false, mic: false })
     setPushToTalk(false)
   }
 
-  function setAsActive() {
-    setMediaSettings({ audioInputOff: isMicOff, videoInputOff: isCameraOff })
+  function toggle() {
+    const turnOn = !isActive
 
-    dispatch(setAudioInputOff(false))
-
-    if (pushToTalkVideo) {
-      dispatch(setVideoInputOff(false))
+    if (localStatus.status === PresenceMode.Social) {
+      presence.setMedia({
+        mic: turnOn,
+      })
+    } else {
+      presence.setMedia({
+        camera: turnOn,
+        mic: turnOn,
+      })
     }
-
-    publishActiveStatus(true)
-  }
-
-  function setAsInactive() {
-    dispatch(setAudioInputOff(mediaSettings.audioInputOff))
-    dispatch(setVideoInputOff(mediaSettings.videoInputOff))
-
-    publishActiveStatus(false)
-  }
-
-  function publishActiveStatus(active: boolean) {
-    channel?.push('user:status', {
-      is_active: active,
-      workspace_id: workspaceId,
-    })
-  }
-
-  function setMode(newMode: PresenceMode, roomId: string) {
-    log.info('set mode', newMode, roomId)
-    channel?.push('user:status', {
-      presence_mode: newMode,
-      room_id: roomId,
-      workspace_id: workspaceId,
-    })
   }
 }

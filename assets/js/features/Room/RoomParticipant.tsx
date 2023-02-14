@@ -22,10 +22,11 @@ const log = logger('room/participant')
 
 export function Participant(props: Props) {
   const socket = useUserSocket()
-  const [user, participant, status] = useSelector((state) => [
+  const [user, participant, status, isActive] = useSelector((state) => [
     selectors.users.getById(state, props.userId),
     selectors.call.getParticipantStatusByUserId(state, props.userId),
     selectors.presence.getStatusByUserId(state, props.userId),
+    selectors.presence.isUserActive(state, props.userId),
   ])
 
   useEffect(() => {
@@ -52,7 +53,7 @@ export function Participant(props: Props) {
       >
         <User mode={status.status}>
           <Mode mode={status.status}>
-            <Icon name={getIcon(status.status, status.is_active)} />
+            <Icon name={getIcon(status.status, isActive)} />
           </Mode>
           <Name>{user?.name.split(' ')[0] || 'Unknown'}</Name>
         </User>

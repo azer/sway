@@ -67,7 +67,9 @@ export interface Status {
   room_id: string
   workspace_id: string
   status: PresenceMode
-  is_active: boolean
+  camera_on: boolean
+  speaker_on: boolean
+  mic_on: boolean
   message: string
   inserted_at: Date
 }

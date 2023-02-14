@@ -15,33 +15,34 @@ export function Mirror(props: Props) {
   const [showStatus, setShowStatus] = useState(true)
 
   // const dispatch = useDispatch()
-  const [user, status, isActive, isOnSocialMode, isCameraOff] = useSelector(
-    (state) => [
+  const [user, presence, connectionStatus, isActive, isOnSocialMode] =
+    useSelector((state) => [
       selectors.users.getSelf(state),
+      selectors.presence.getSelfStatus(state),
       selectors.dock.getStatusMessage(state),
-      selectors.presence.getSelfStatus(state).is_active,
+      selectors.presence.isLocalUserActive(state),
       selectors.presence.getSelfStatus(state).status === PresenceMode.Social,
-      selectors.settings.isVideoInputOff(state),
-    ]
-  )
+    ])
 
   const localParticipant = useLocalParticipant()
   const cameraSettings = useVideoSettings()
 
   useEffect(() => {
-    if (status.status === ConnectionState.Connected) {
+    if (connectionStatus.status === ConnectionState.Connected) {
       setShowStatus(false)
     } else {
       setShowStatus(true)
     }
-  }, [status.status])
+  }, [connectionStatus.status])
 
   return (
     <Container onClick={cameraSettings.open}>
-      <Message status={status.status} visible={showStatus}>
-        {status.msg}
+      <Message status={connectionStatus.status} visible={showStatus}>
+        {connectionStatus.msg}
       </Message>
-      {localParticipant && (isActive || isOnSocialMode) && !isCameraOff ? (
+      {localParticipant &&
+      (isActive || isOnSocialMode) &&
+      presence.camera_on ? (
         <SelfVideo>
           <Video id={localParticipant.session_id} />
         </SelfVideo>
@@ -54,8 +55,8 @@ export function Mirror(props: Props) {
         />
       )}
       <ConnectionIcon
-        status={status.status}
-        title={'Connection:' + status}
+        status={connectionStatus.status}
+        title={'Connection:' + connectionStatus}
         small
       />
     </Container>

@@ -18,6 +18,9 @@ defmodule SwayWeb.StatusView do
       workspace_id: status.workspace_id,
       status: status.status,
       message: status.message,
+      camera_on: status.camera_on,
+      mic_on: status.mic_on,
+      speaker_on: status.speaker_on,
       inserted_at: status.inserted_at
     }
   end

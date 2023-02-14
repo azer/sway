@@ -11,15 +11,15 @@ export function getStatusByUserId(state: RootState, userId: string): Status {
   }
 
   const room = selectors.rooms.getDefaultRoom(state)
-  // @ts-ignore
-  //return undefined
 
   return {
     id: 'default',
     user_id: userId,
     room_id: room?.id || '',
     status: DefaultPresenceMode,
-    is_active: false,
+    camera_on: false,
+    mic_on: false,
+    speaker_on: false,
     message: '',
     // @ts-ignore
     inserted_at: undefined,
@@ -38,4 +38,21 @@ export function getSelfStatusLabel(state: RootState): string {
   if (mode === PresenceMode.Solo) return 'Solo'
   if (mode === PresenceMode.Zen) return 'Zen'
   return 'Focus'
+}
+
+export function isUserActiveOrVisible(
+  state: RootState,
+  userId: string
+): boolean {
+  const status = getStatusByUserId(state, userId)
+  return status.mic_on || status.status === PresenceMode.Social
+}
+
+export function isLocalUserActive(state: RootState): boolean {
+  return getSelfStatus(state)?.mic_on || false
+}
+
+export function isUserActive(state: RootState, userId: string): boolean {
+  const status = getStatusByUserId(state, userId)
+  return status.mic_on
 }

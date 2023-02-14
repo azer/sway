@@ -3,7 +3,7 @@ import selectors from 'selectors'
 import { performSearch } from 'features/CommandRegistry'
 import { Command, ModalProps, useCommandPalette } from 'features/CommandPalette'
 import { logger } from 'lib/log'
-import { setAudioOutputDeviceId, setAudioOutputOff } from './slice'
+import { setAudioOutputDeviceId } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { SpeakerSettingsPreview } from './SpeakerSettingsPreview'
 
@@ -12,13 +12,11 @@ const dialogId = 'speaker-settings'
 
 export function useSpeakerSettings() {
   const dispatch = useDispatch()
-  const [isOff, selectedDeviceId, allDevices] = useSelector((state) => [
-    selectors.settings.isAudioOutputOff(state),
+  const [selectedDeviceId, allDevices] = useSelector((state) => [
     selectors.settings.getAudioOutputDeviceId(state),
     selectors.settings.allAudioOutputDevices(state),
   ])
 
-  const currentSelectedId = isOff ? 'off' : selectedDeviceId
   const commandPalette = useCommandPalette()
 
   useEffect(() => {
@@ -40,7 +38,7 @@ export function useSpeakerSettings() {
       title: 'Speaker Settings',
       icon: 'speaker',
       placeholder: 'Pick your speakers.',
-      selectedId: currentSelectedId,
+      selectedId: selectedDeviceId,
       preview: (props: { selectedValue?: unknown }) => (
         <SpeakerSettingsPreview deviceId={props.selectedValue as string} />
       ),
@@ -54,7 +52,7 @@ export function useSpeakerSettings() {
     const commands: Command[] = [
       {
         id: 'back',
-        value: currentSelectedId,
+        value: selectedDeviceId,
         icon: 'undo',
         name: 'Back',
         pin: true,
@@ -66,25 +64,16 @@ export function useSpeakerSettings() {
       commands.push({
         id: device.id,
         value: device.id,
-        icon: currentSelectedId == device.id ? 'checkmark' : '',
+        icon: selectedDeviceId == device.id ? 'checkmark' : '',
         name: device.label,
         callback: () => setDevice(device.id),
       })
     }
-
-    commands.push({
-      id: 'off',
-      value: 'off',
-      icon: isOff ? 'checkmark' : '',
-      name: 'Off',
-      callback: () => dispatch(setAudioOutputOff(true)),
-    })
 
     return commands
   }
 
   function setDevice(id: string) {
     dispatch(setAudioOutputDeviceId(id))
-    dispatch(setAudioOutputOff(false))
   }
 }

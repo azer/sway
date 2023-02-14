@@ -41,7 +41,7 @@ function UActiveParticipant(props: Props) {
       ? // @ts-ignore
         selectors.users.getById(state, participant.userData.id)
       : undefined,
-    selectors.dock.isAudioOutputOn(state),
+    selectors.presence.getSelfStatus(state).speaker_on,
     // @ts-ignore
     selectors.users.getSelf(state)?.id === participant?.userData?.id,
   ])

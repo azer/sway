@@ -15,9 +15,6 @@ interface State {
   videoInputError?: boolean
   audioInputError?: boolean
   audioOutputError?: boolean
-  videoInputOff: boolean
-  audioInputOff: boolean
-  audioOutputOff: boolean
   videoInputDeviceId?: string
   audioInputDeviceId?: string
   audioOutputDeviceId?: string
@@ -29,9 +26,6 @@ interface State {
 }
 
 export const initialState: State = {
-  videoInputOff: true,
-  audioInputOff: true,
-  audioOutputOff: false,
   pushToTalkVideo: true,
   videoInputDevices: [],
   audioInputDevices: [],
@@ -43,15 +37,6 @@ export const slice = createSlice({
   name,
   initialState,
   reducers: {
-    setVideoInputOff: (state, action: PayloadAction<boolean>) => {
-      state.videoInputOff = action.payload
-    },
-    setAudioInputOff: (state, action: PayloadAction<boolean>) => {
-      state.audioInputOff = action.payload
-    },
-    setAudioOutputOff: (state, action: PayloadAction<boolean>) => {
-      state.audioOutputOff = action.payload
-    },
     setVideoInputDeviceId: (state, action: PayloadAction<string>) => {
       state.videoInputDeviceId = action.payload
     },
@@ -93,11 +78,8 @@ export const {
   setAudioOutputError,
   setVideoInputError,
   setAudioInputDeviceId,
-  setAudioInputOff,
   setAudioOutputDeviceId,
-  setAudioOutputOff,
   setVideoInputDeviceId,
-  setVideoInputOff,
   setAudioInputDevices,
   setAudioOutputDevices,
   setVideoInputDevices,
@@ -162,26 +144,6 @@ export function syncDevices() {
     listDevices('audiooutput').then((allSpeakers) => {
       dispatch(setAudioOutputDevices(allSpeakers))
     })
-  }
-}
-
-export function turnOnCamera() {
-  return (dispatch: AppDispatch, getState: () => RootState) => {
-    log.info('Turning on camera')
-
-    const state = getState()
-    const currentDeviceId = state.settings.videoInputDeviceId
-    if (!currentDeviceId && state.settings.videoInputDevices.length === 0) {
-      return log.error(
-        'Can not enable video. No video input devices.',
-        currentDeviceId,
-        state.settings.videoInputDevices
-      )
-    } else if (!currentDeviceId) {
-      dispatch(setVideoInputDeviceId(state.settings.videoInputDevices[0].id))
-    }
-
-    dispatch(setVideoInputOff(false))
   }
 }
 

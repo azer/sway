@@ -15,7 +15,7 @@ export function PresenceModeIcon(props: Props) {
 
   return (
     <Container active={props.active} mode={props.mode} onClick={props.onClick}>
-      <Icon name={getIcon(props.mode, props.active)} />
+      <Icon name={getIcon(props.mode, props.active || false)} />
     </Container>
   )
 }

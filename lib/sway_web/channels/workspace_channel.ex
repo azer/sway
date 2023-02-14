@@ -154,10 +154,10 @@ defmodule SwayWeb.WorkspaceChannel do
     end
   end
 
-  def handle_in("user:status", %{"is_active" => is_active, "workspace_id" => workspace_id}, socket) do
+  def handle_in("user:status", %{"mode" => mode, "camera_on" => camera_on, "mic_on" => mic_on, "speaker_on" => speaker_on, "room_id" => room_id,  "workspace_id" => workspace_id}, socket) do
     status = Sway.Statuses.get_latest_status(socket.assigns.user, workspace_id)
 
-    case Sway.Statuses.update_status(status, %{is_active: is_active}) do
+    case Sway.Statuses.update_status(status, %{ status: mode, camera_on: camera_on, mic_on: mic_on, speaker_on: speaker_on }) do
       {:ok, status} ->
         broadcast(socket, "user:status", status_broadcastable(status))
         {:noreply, socket}
@@ -220,7 +220,9 @@ defmodule SwayWeb.WorkspaceChannel do
       "room_id" => status.room_id,
       "user_id" => status.user_id,
       "message" => status.message,
-      "is_active" => status.is_active,
+      "camera_on" => status.camera_on,
+      "mic_on" => status.mic_on,
+      "speaker_on" => status.speaker_on,
       "status" => status.status,
       "workspace_id" => status.workspace_id,
       "inserted_at" => status.inserted_at

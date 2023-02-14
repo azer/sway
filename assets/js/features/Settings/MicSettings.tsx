@@ -8,10 +8,11 @@ import {
   useCommandPalette,
 } from 'features/CommandPalette'
 import { logger } from 'lib/log'
-import { setAudioInputDeviceId, setAudioInputOff } from './slice'
+import { setAudioInputDeviceId } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { MicSettingsPreview } from './MicSettingsPreview'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { usePresence } from 'features/Presence/use-presence'
 
 const log = logger('settings/mic')
 const dialogId = 'mic-settings'
@@ -19,23 +20,23 @@ const dialogId = 'mic-settings'
 export function useMicSettings() {
   const { useRegister } = useCommandRegistry()
   const dispatch = useDispatch()
-  const [isOff, selectedDeviceId, allDevices] = useSelector((state) => [
-    selectors.settings.isAudioInputOff(state),
+  const [isOn, selectedDeviceId, allDevices] = useSelector((state) => [
+    selectors.presence.getSelfStatus(state).mic_on,
     selectors.settings.getAudioInputDeviceId(state),
     selectors.settings.allAudioInputDevices(state),
   ])
 
-  const currentSelectedId = isOff ? 'off' : selectedDeviceId
   const commandPalette = useCommandPalette()
+  const presence = usePresence()
 
   useHotkeys(
     'meta+d',
-    toggle,
+    () => presence.setMedia({ mic: !isOn }),
     {
       enableOnFormTags: true,
       preventDefault: true,
     },
-    [isOff]
+    [isOn, presence.setMedia]
   )
 
   useEffect(() => {
@@ -54,18 +55,18 @@ export function useMicSettings() {
         },
       })
 
-      register(`Mute microphone`, turnMicOff, {
+      register(`Mute microphone`, () => presence.setMedia({ mic: false }), {
         icon: 'mic-off',
         type: CommandType.Settings,
         shortcut: ['cmd', 'd'],
-        when: !isOff,
+        when: isOn,
       })
 
-      register(`Unmute microphone`, turnMicOff, {
+      register(`Unmute microphone`, () => presence.setMedia({ mic: true }), {
         icon: 'mic',
         type: CommandType.Settings,
         shortcut: ['cmd', 'd'],
-        when: isOff,
+        when: !isOn,
       })
 
       for (const device of allDevices) {
@@ -80,7 +81,7 @@ export function useMicSettings() {
         )
       }
     },
-    [isOff, selectedDeviceId, allDevices]
+    [isOn, selectedDeviceId, allDevices]
   )
 
   return {
@@ -123,43 +124,18 @@ export function useMicSettings() {
       commands.push({
         id: device.id,
         value: device.id,
-        icon: currentSelectedId == device.id ? 'checkmark' : '',
+        icon: selectedDeviceId == device.id ? 'checkmark' : '',
         name: device.label,
         callback: switchDevice(device.id),
       })
     }
 
-    commands.push({
-      id: 'off',
-      value: 'off',
-      icon: isOff ? 'checkmark' : '',
-      name: 'Off',
-      callback: turnMicOff,
-    })
-
     return commands
-  }
-
-  function turnMicOff() {
-    dispatch(setAudioInputOff(true))
-  }
-
-  function turnMicOn() {
-    dispatch(setAudioInputOff(false))
-  }
-
-  function toggle() {
-    if (isOff) {
-      turnMicOn()
-    } else {
-      turnMicOff()
-    }
   }
 
   function switchDevice(deviceId: string) {
     return function () {
       dispatch(setAudioInputDeviceId(deviceId))
-      dispatch(setAudioInputOff(false))
     }
   }
 }
