@@ -14,14 +14,16 @@ jobs:
       id: get_version
       run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
     - name: Extract Certificate and Private Key
+      working-directory: electron
       run: |
-        echo "${{ secrets.MAC_CERTIFICATE }}" | base64 --decode | tee electron/certificate.p12
+        echo "${{ secrets.MAC_CERTIFICATE }}" | base64 --decode | tee certificate.p12
     - name: Import Certificate and Private Key
+      working-directory: electron
       run: |
         security create-keychain -p '' build.keychain
         security default-keychain -s build.keychain
         security unlock-keychain -p '' build.keychain
-        security import electron/certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }} -A
+        security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }} -A
     - uses: actions/checkout@v2
     - name: Install Node.js and NPM
       uses: actions/setup-node@v1
@@ -42,7 +44,7 @@ jobs:
       with:
         files: |
           electron/dist/Sway-${{ steps.get_version.outputs.VERSION }}.dmg
-          electron/Sway-${{ steps.get_version.outputs.VERSION }}.yml
+          electron/dist/Sway-${{ steps.get_version.outputs.VERSION }}.yml
         tag_name: ${{ github.ref }}
         name: ${{ github.ref }}
         body: Release ${{ github.ref }}
