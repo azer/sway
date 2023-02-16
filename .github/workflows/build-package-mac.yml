@@ -1,0 +1,44 @@
+name: Build and Package for macOS
+
+on:
+  push:
+    tags:
+      - 'v*' # Build on new Git tag starting with 'v'
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Node.js and NPM
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+    - name: Install Dependencies
+      working-directory: electron
+      run: npm install
+    - name: Build App
+      working-directory: electron
+      run: npm run build-mac
+      env:
+        APPLEID: ${{ secrets.APPLEID }}
+        APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+        APPLEIDPASSPHRASE: ${{ secrets.APPLEIDPASSPHRASE }}
+    - name: Sign DMG File
+      working-directory: electron
+      run: codesign --deep --force --verbose --sign ${{ env.CERTIFICATE_NAME }} dist/mac/sway-${{ github.ref }}.dmg
+      env:
+        CERTIFICATE_NAME: ${{ secrets.CERTIFICATE_NAME }}
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          electron/dist/mac/sway-${{ github.ref }}.dmg
+          electron/sway-${{ github.ref }}.yml
+        tag_name: ${{ github.ref }}
+        name: ${{ github.ref }}
+        body: Release ${{ github.ref }}
+        draft: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
