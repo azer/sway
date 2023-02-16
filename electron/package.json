@@ -28,6 +28,7 @@
       "output": "dist"
     },
     "mac": {
+      "identity": "Azer Koculu (7D65EW45T8)",
       "icon": "assets/icon_512x512.png",
       "category": "public.app-category.communication",
       "target": [
