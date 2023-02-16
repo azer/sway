@@ -27,15 +27,15 @@ jobs:
         APPLEIDPASSPHRASE: ${{ secrets.APPLEIDPASSPHRASE }}
     - name: Sign DMG File
       working-directory: electron
-      run: codesign --deep --force --verbose --sign ${{ env.CERTIFICATE_NAME }} dist/mac/sway-${{ github.ref }}.dmg
+      run: codesign --deep --force --verbose --sign ${{ env.CERTIFICATE_NAME }} dist/Sway-${{ github.ref }}.dmg
       env:
         CERTIFICATE_NAME: ${{ secrets.CERTIFICATE_NAME }}
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          electron/dist/mac/sway-${{ github.ref }}.dmg
-          electron/sway-${{ github.ref }}.yml
+          electron/dist/Sway-${{ github.ref }}.dmg
+          electron/Sway-${{ github.ref }}.yml
         tag_name: ${{ github.ref }}
         name: ${{ github.ref }}
         body: Release ${{ github.ref }}
