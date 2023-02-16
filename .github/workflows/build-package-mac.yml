@@ -13,6 +13,11 @@ jobs:
     - name: Get the version
       id: get_version
       run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+    - uses: actions/checkout@v2
+    - name: Install Node.js and NPM
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
     - name: Extract Certificate and Private Key
       working-directory: electron
       run: |
@@ -24,11 +29,6 @@ jobs:
         security default-keychain -s build.keychain
         security unlock-keychain -p '' build.keychain
         security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }} -A
-    - uses: actions/checkout@v2
-    - name: Install Node.js and NPM
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
     - name: Install Dependencies
       working-directory: electron
       run: npm install
