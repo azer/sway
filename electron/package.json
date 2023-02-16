@@ -1,7 +1,6 @@
 {
   "name": "Sway",
-  "packageManager": "yarn@3.4.1",
-  "version": "0.0.1",
+  "version": "v0.0.1",
   "main": "build/index.js",
   "scripts": {
     "electron": "electron build/index.js",
@@ -11,8 +10,10 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
+    "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
-    "electron-devtools-installer": "^3.2.0"
+    "electron-log": "^5.0.0-beta.16",
+    "electron-updater": "^5.3.0"
   },
   "devDependencies": {
     "electron": "^23.0.0",
@@ -29,7 +30,6 @@
     },
     "files": [
       "build/index.js",
-      "!node_modules${/*}",
       "!dist${/*}"
     ],
     "mac": {
@@ -37,8 +37,15 @@
       "icon": "assets/icon_512x512.png",
       "category": "public.app-category.communication",
       "target": [
-        "dmg"
+        "dmg",
+	"zip"
       ]
+    },
+    "publish": {
+      "provider": "generic",
+      "url": "http://downloads.sway.so/releases/",
+      "channel": "latest",
+      "publishAutoUpdate": true
     }
   }
 }

@@ -22,11 +22,30 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 var import_config = require("dotenv/config");
 var import_electron = require("electron");
-var import_electron_devtools_installer = __toESM(require("electron-devtools-installer"));
-var isDev = __toESM(require("electron-is-dev"));
 var path = __toESM(require("path"));
+var import_electron_updater = require("electron-updater");
+const isDev = !import_electron.app.isPackaged;
+import_electron_updater.autoUpdater.logger = require("electron-log");
+import_electron_updater.autoUpdater.logger.transports.file.level = "debug";
+import_electron_updater.autoUpdater.setFeedURL({
+  provider: "generic",
+  url: "http://downloads.sway.so/releases/"
+});
+import_electron_updater.autoUpdater.checkForUpdatesAndNotify();
+import_electron_updater.autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: "info",
+    buttons: ["Restart", "Later"],
+    title: "Application Update",
+    message: process.platform === "win32" ? releaseNotes : releaseName,
+    detail: "A new version has been downloaded. Restart the application to apply the updates."
+  };
+  import_electron.dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0)
+      import_electron_updater.autoUpdater.quitAndInstall();
+  });
+});
 let win = null;
-console.log("file:///" + __dirname + "/../priv/static/images/logo.ico");
 function createWindow() {
   win = new import_electron.BrowserWindow({
     width: 800,
@@ -48,12 +67,13 @@ function createWindow() {
   win.on("closed", () => win = null);
   if (isDev) {
     require("electron-reload")(__dirname, {
-      electron: path.join(__dirname, "node_modules", ".bin", "electron"),
+      electron: path.join(__dirname, "../", "node_modules", ".bin", "electron"),
       forceHardReset: true,
       hardResetMethod: "exit"
     });
+    const devtools = require("electron-devtools-installer");
+    devtools.default(devtools.REACT_DEVELOPER_TOOLS).then((name) => console.log(`Added Extension:  ${name}`)).catch((err) => console.log("An error occurred: ", err));
   }
-  (0, import_electron_devtools_installer.default)(import_electron_devtools_installer.REACT_DEVELOPER_TOOLS).then((name) => console.log(`Added Extension:  ${name}`)).catch((err) => console.log("An error occurred: ", err));
   if (isDev) {
   }
 }
@@ -77,4 +97,5 @@ import_electron.app.whenReady().then(async () => {
   await Promise.all(
     devtoolsExtensions.map((path2) => import_electron.session.defaultSession.loadExtension(path2))
   );
+  setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), 6e5);
 });

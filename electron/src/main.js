@@ -1,15 +1,39 @@
 import "dotenv/config";
-import { app, BrowserWindow, session } from "electron";
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from "electron-devtools-installer";
-import * as isDev from "electron-is-dev";
+import { app, BrowserWindow, session, dialog } from "electron";
+//import * as isDev from "electron-is-dev";
 import * as path from "path";
+
+import { autoUpdater } from "electron-updater";
+
+const isDev = !app.isPackaged;
+
+autoUpdater.logger = require("electron-log");
+autoUpdater.logger.transports.file.level = "debug";
+
+autoUpdater.setFeedURL({
+  provider: "generic",
+  url: "http://downloads.sway.so/releases/",
+});
+
+autoUpdater.checkForUpdatesAndNotify();
+
+autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: "info",
+    buttons: ["Restart", "Later"],
+    title: "Application Update",
+    message: process.platform === "win32" ? releaseNotes : releaseName,
+    detail:
+      "A new version has been downloaded. Restart the application to apply the updates.",
+  };
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall();
+  });
+});
 
 //let win: BrowserWindow | null = null;
 let win = null;
-
-console.log("file:///" + __dirname + "/../priv/static/images/logo.ico");
 
 function createWindow() {
   win = new BrowserWindow({
@@ -38,16 +62,18 @@ function createWindow() {
   if (isDev) {
     // 'node_modules/.bin/electronPath'
     require("electron-reload")(__dirname, {
-      electron: path.join(__dirname, "node_modules", ".bin", "electron"),
+      electron: path.join(__dirname, "../", "node_modules", ".bin", "electron"),
       forceHardReset: true,
       hardResetMethod: "exit",
     });
-  }
 
-  // DevTools
-  installExtension(REACT_DEVELOPER_TOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log("An error occurred: ", err));
+    const devtools = require("electron-devtools-installer");
+    // DevTools
+    devtools
+      .default(devtools.REACT_DEVELOPER_TOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log("An error occurred: ", err));
+  }
 
   if (isDev) {
     //win.webContents.openDevTools()
@@ -79,4 +105,6 @@ app.whenReady().then(async () => {
   await Promise.all(
     devtoolsExtensions.map((path) => session.defaultSession.loadExtension(path))
   );
+
+  setInterval(() => autoUpdater.checkForUpdates(), 600000);
 });
