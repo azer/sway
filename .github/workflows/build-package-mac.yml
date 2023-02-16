@@ -10,6 +10,9 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
     - uses: actions/checkout@v2
     - name: Install Node.js and NPM
       uses: actions/setup-node@v1
@@ -27,15 +30,15 @@ jobs:
         APPLEIDPASSPHRASE: ${{ secrets.APPLEIDPASSPHRASE }}
     - name: Sign DMG File
       working-directory: electron
-      run: codesign --deep --force --verbose --sign ${{ env.CERTIFICATE_NAME }} dist/Sway-${{ github.ref }}.dmg
+      run: codesign --deep --force --verbose --sign ${{ env.CERTIFICATE_NAME }} dist/Sway-${{ steps.get_version.outputs.VERSION }}.dmg
       env:
         CERTIFICATE_NAME: ${{ secrets.CERTIFICATE_NAME }}
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          electron/dist/Sway-${{ github.ref }}.dmg
-          electron/Sway-${{ github.ref }}.yml
+          electron/dist/Sway-${{ steps.get_version.outputs.VERSION }}.dmg
+          electron/Sway-${{ steps.get_version.outputs.VERSION }}.yml
         tag_name: ${{ github.ref }}
         name: ${{ github.ref }}
         body: Release ${{ github.ref }}
