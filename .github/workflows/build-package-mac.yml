@@ -35,10 +35,6 @@ jobs:
     - name: Build App
       working-directory: electron
       run: npm run build-mac
-      env:
-        APPLEID: ${{ secrets.APPLEID }}
-        APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
-        APPLEIDPASSPHRASE: ${{ secrets.APPLEIDPASSPHRASE }}
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
