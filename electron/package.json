@@ -2,7 +2,7 @@
   "name": "Sway",
   "packageManager": "yarn@3.4.1",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "electron": "electron build/index.js",
     "build-mac": "electron-builder",
@@ -28,6 +28,7 @@
       "output": "dist"
     },
     "files": [
+      "build/index.js",
       "!node_modules${/*}",
       "!dist${/*}"
     ],
