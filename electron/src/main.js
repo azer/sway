@@ -38,7 +38,7 @@ let win = null;
 function createWindow() {
   win = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 650,
     title: "Sway",
     titleBarStyle: "hidden",
     trafficLightPosition: { x: 20, y: 12 },
