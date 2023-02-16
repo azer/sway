@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "electron": "electron index.js",
+    "electron": "electron build/index.js",
     "build-mac": "electron-builder",
-    "compile": "./node_modules/.bin/esbuild main.js --outfile=index.js --format=cjs",
-    "watch": "./node_modules/.bin/esbuild main.js --outfile=index.js --format=cjs --watch"
+    "compile": "./node_modules/.bin/esbuild src/main.js --outfile=build/index.js --format=cjs",
+    "watch": "./node_modules/.bin/esbuild src/main.js --outfile=build/index.js --format=cjs --watch"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
@@ -27,6 +27,10 @@
     "directories": {
       "output": "dist"
     },
+    "files": [
+      "!node_modules${/*}",
+      "!dist${/*}"
+    ],
     "mac": {
       "identity": "Azer Koculu (7D65EW45T8)",
       "icon": "assets/icon_512x512.png",
