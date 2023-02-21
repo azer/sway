@@ -1,13 +1,18 @@
 import "dotenv/config";
-import { app, BrowserWindow, session, dialog } from "electron";
+import { app, BrowserWindow, session, dialog, Tray, ipcMain } from "electron";
 //import * as isDev from "electron-is-dev";
 import * as path from "path";
 
 import { autoUpdater } from "electron-updater";
+import log from "electron-log";
 
 const isDev = !app.isPackaged;
+const assetsDir = path.join(__dirname, "../assets");
+let tray;
 
-autoUpdater.logger = require("electron-log");
+log.initialize({ preload: true });
+
+autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = "debug";
 
 autoUpdater.setFeedURL({
@@ -40,14 +45,17 @@ function createWindow() {
     width: 800,
     height: 650,
     title: "Sway",
-    titleBarStyle: "hidden",
-    trafficLightPosition: { x: 20, y: 12 },
+    trafficLightPosition: { x: 12, y: 12 },
+    titleBarStyle: "customButtonsOnHover",
     transparent: true,
     icon: "file:///" + __dirname + "/../priv/static/images/logo.ico",
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
+
+  win.setMinimumSize(800, 600);
 
   if (isDev) {
     win.loadURL("http://localhost:4000/");
@@ -58,8 +66,11 @@ function createWindow() {
 
   win.on("closed", () => (win = null));
 
+  createTray();
+  console.log(tray);
+
   // Hot Reloading
-  if (isDev) {
+  /*if (isDev) {
     // 'node_modules/.bin/electronPath'
     require("electron-reload")(__dirname, {
       electron: path.join(__dirname, "../", "node_modules", ".bin", "electron"),
@@ -73,7 +84,7 @@ function createWindow() {
       .default(devtools.REACT_DEVELOPER_TOOLS)
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((err) => console.log("An error occurred: ", err));
-  }
+  }*/
 
   if (isDev) {
     //win.webContents.openDevTools()
@@ -95,16 +106,38 @@ app.on("activate", () => {
 });
 
 app.whenReady().then(async () => {
-  return;
-  const devtoolsStr = (process.env.DEVTOOLS_EXTENSIONS || "").trim();
+  if (isDev) {
+    const devtoolsStr = (process.env.DEVTOOLS_EXTENSIONS || "").trim();
 
-  if (!devtoolsStr) return;
+    if (!devtoolsStr) return;
 
-  const devtoolsExtensions = devtoolsStr.split(/\s*,\s*/);
+    const devtoolsExtensions = devtoolsStr.split(/\s*,\s*/);
 
-  await Promise.all(
-    devtoolsExtensions.map((path) => session.defaultSession.loadExtension(path))
-  );
+    await Promise.all(
+      devtoolsExtensions.map((path) =>
+        session.defaultSession.loadExtension(path)
+      )
+    );
+  }
 
   setInterval(() => autoUpdater.checkForUpdates(), 600000);
 });
+
+ipcMain.on("tray", (event, options) => {
+  log.info("Setting tray", options);
+
+  const parsed = JSON.parse(options);
+  tray.setImage(path.join(assetsDir, parsed.image));
+  tray.setTitle(parsed.title);
+  tray.setToolTip(parsed.tooltip);
+});
+
+function createTray() {
+  tray = new Tray(path.join(assetsDir, "tray_icon_emptyTemplate.png"));
+  tray.setToolTip("Sway");
+
+  tray.on("click", () => {
+    win.show();
+    win.focus();
+  });
+}

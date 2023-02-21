@@ -6,22 +6,17 @@ import { logger } from 'lib/log'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { RoomButton } from './RoomButton'
 import { UserButton } from './UserButton'
-import { useUserSocket } from 'features/UserSocket'
-import { useNavigate } from 'react-router-dom'
 import { useRooms } from 'features/Room/use-rooms'
 import { RoomNavigationProvider } from 'features/Room/Provider'
 import { useInvitePeople } from 'features/Settings/InvitePeople'
 import Icon from 'components/Icon'
+import { isElectron } from 'lib/electron'
 
 interface Props {}
 
 const log = logger('navigation')
 
 export function Navigation(props: Props) {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { channel } = useUserSocket()
-
   const inviteModal = useInvitePeople()
 
   const [workspace, activeRoomIds, focusedRoom, allUsers, prevRoom] =
@@ -41,7 +36,6 @@ export function Navigation(props: Props) {
       ]
     })
 
-  const { useRegister } = useCommandRegistry()
   const rooms = useRooms()
 
   useEffect(() => {
@@ -53,8 +47,8 @@ export function Navigation(props: Props) {
   }, [workspace, focusedRoom?.is_active, !!prevRoom])
 
   return (
-    <Container>
-      <Header>
+    <Container electron={isElectron}>
+      <Header electron={isElectron}>
         {workspace?.logoUrl ? (
           <ImageLogo src={workspace?.logoUrl || ''} />
         ) : (
@@ -64,7 +58,7 @@ export function Navigation(props: Props) {
         )}
         <OrgName>{workspace?.name}</OrgName>
       </Header>
-      <Rooms>
+      <Rooms electron={isElectron}>
         <RoomNavigationProvider />
         <Title>Your Rooms</Title>
         {activeRoomIds.map((id) => (
@@ -76,7 +70,7 @@ export function Navigation(props: Props) {
           />
         ))}
       </Rooms>
-      <Rooms>
+      <Rooms electron={isElectron}>
         <Title>People</Title>
         {allUsers.map((uid) => (
           <UserButton key={uid} id={uid} />
@@ -104,22 +98,31 @@ export function Navigation(props: Props) {
   }
 }
 
+export const navigationBlur1 = `radial-gradient(
+      60vh at 0 0,
+      $navigationBlur1,
+      transparent
+)`
+
+export const navigationBlur2 = `radial-gradient(
+      40vh at calc(100% + 100px) 65%,
+      $navigationBlur2,
+      transparent
+)`
+
 const Container = styled('nav', {
   position: 'relative',
   borderRight: '1px solid $shellBorderColor',
   width: '220px',
-  height: '100%',
   color: '$navigationFg',
-  background: `radial-gradient(
-      60vh at 0 0,
-      $navigationBlur1,
-      transparent
-    ),
-    radial-gradient(
-      40vh at calc(100% + 100px) 65%,
-      $navigationBlur2,
-      transparent
-    )`,
+  background: `${navigationBlur1}, ${navigationBlur2}`,
+  variants: {
+    electron: {
+      true: {
+        background: `${navigationBlur2}`,
+      },
+    },
+  },
 })
 
 const Header = styled('header', {
@@ -130,6 +133,13 @@ const Header = styled('header', {
   gridColumnGap: '8px',
   space: { outer: [0, 5] },
   color: '$headerFg',
+  variants: {
+    electron: {
+      true: {
+        display: 'none',
+      },
+    },
+  },
 })
 
 const ImageLogo = styled('img', {
@@ -162,6 +172,13 @@ const OrgName = styled('div', {
 
 const Rooms = styled('section', {
   space: { outer: [9, 5, 0, 5] }, // { outer: [6, 5, 0, 5] },
+  variants: {
+    electron: {
+      true: {
+        marginTop: '28px',
+      },
+    },
+  },
 })
 
 const Title = styled('div', {

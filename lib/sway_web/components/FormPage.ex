@@ -3,7 +3,6 @@ defmodule SwayWeb.FormPageComponent do
   alias SwayWeb.Router.Helpers, as: Routes
 
   def form(assigns) do
-
     ~H"""
     <div class="page">
     <div class="form">
@@ -22,9 +21,16 @@ defmodule SwayWeb.FormPageComponent do
 
     ~H"""
     <header>
-    <div class="logo">
+    <div class="titlebar">
+    <div class="traffic-lights">
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    </div>
+    <div class="title">Sway</div></div>
+    <a class="logo" href='/'>
 	<img src={Routes.static_path(assigns.conn, "/images/logo_small.png")} />
-      </div>
+      </a>
       <h1><%= @title %></h1>
       <%= if assigns[:inner_block] do %>
       <%= render_slot(@inner_block) %>
@@ -36,7 +42,6 @@ defmodule SwayWeb.FormPageComponent do
       <div class="alert error"><%= alert %></div>
       <% end %>
       </header>
-
     """
   end
 

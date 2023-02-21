@@ -5,15 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="csrf-token" content={csrf_token_value()}>
-
     <%= if assigns[:page_title] do %>
     <%= live_title_tag assigns[:page_title], suffix: " · Sway" %>
     <% else %>
     <%= live_title_tag "Sway" %>
     <% end %>
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
+
   </head>
   <body class={assigns[:body_class] || ""}>
     <%= @inner_content %>
   </body>
+  <script type="text/javascript" charset="utf-8">
+
+    window.isElectron = /electron/i.test(navigator.userAgent)
+    if (window.isElectron) {
+      document.body.classList.add('electron')
+    }
+
+    if (!document.hasFocus()) {
+      document.body.classList.add('blurred')
+    }
+
+    if (window.isElectron) {
+      window.electron = require('electron')
+    }
+
+    window.addEventListener('blur', function() {
+      document.body.classList.add('blurred');
+    });
+
+    window.addEventListener('focus', function() {
+      document.body.classList.remove('blurred');
+    });
+    </script>
 </html>

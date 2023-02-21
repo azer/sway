@@ -24,8 +24,12 @@ var import_config = require("dotenv/config");
 var import_electron = require("electron");
 var path = __toESM(require("path"));
 var import_electron_updater = require("electron-updater");
+var import_electron_log = __toESM(require("electron-log"));
 const isDev = !import_electron.app.isPackaged;
-import_electron_updater.autoUpdater.logger = require("electron-log");
+const assetsDir = path.join(__dirname, "../assets");
+let tray;
+import_electron_log.default.initialize({ preload: true });
+import_electron_updater.autoUpdater.logger = import_electron_log.default;
 import_electron_updater.autoUpdater.logger.transports.file.level = "debug";
 import_electron_updater.autoUpdater.setFeedURL({
   provider: "generic",
@@ -49,31 +53,26 @@ let win = null;
 function createWindow() {
   win = new import_electron.BrowserWindow({
     width: 800,
-    height: 600,
+    height: 650,
     title: "Sway",
-    titleBarStyle: "hidden",
-    trafficLightPosition: { x: 20, y: 12 },
+    trafficLightPosition: { x: 12, y: 12 },
+    titleBarStyle: "customButtonsOnHover",
     transparent: true,
     icon: "file:///" + __dirname + "/../priv/static/images/logo.ico",
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     }
   });
+  win.setMinimumSize(800, 600);
   if (isDev) {
     win.loadURL("http://localhost:4000/");
   } else {
     win.loadURL(`https://sway.so`);
   }
   win.on("closed", () => win = null);
-  if (isDev) {
-    require("electron-reload")(__dirname, {
-      electron: path.join(__dirname, "../", "node_modules", ".bin", "electron"),
-      forceHardReset: true,
-      hardResetMethod: "exit"
-    });
-    const devtools = require("electron-devtools-installer");
-    devtools.default(devtools.REACT_DEVELOPER_TOOLS).then((name) => console.log(`Added Extension:  ${name}`)).catch((err) => console.log("An error occurred: ", err));
-  }
+  createTray();
+  console.log(tray);
   if (isDev) {
   }
 }
@@ -89,13 +88,31 @@ import_electron.app.on("activate", () => {
   }
 });
 import_electron.app.whenReady().then(async () => {
-  return;
-  const devtoolsStr = (process.env.DEVTOOLS_EXTENSIONS || "").trim();
-  if (!devtoolsStr)
-    return;
-  const devtoolsExtensions = devtoolsStr.split(/\s*,\s*/);
-  await Promise.all(
-    devtoolsExtensions.map((path2) => import_electron.session.defaultSession.loadExtension(path2))
-  );
+  if (isDev) {
+    const devtoolsStr = (process.env.DEVTOOLS_EXTENSIONS || "").trim();
+    if (!devtoolsStr)
+      return;
+    const devtoolsExtensions = devtoolsStr.split(/\s*,\s*/);
+    await Promise.all(
+      devtoolsExtensions.map(
+        (path2) => import_electron.session.defaultSession.loadExtension(path2)
+      )
+    );
+  }
   setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), 6e5);
 });
+import_electron.ipcMain.on("tray", (event, options) => {
+  import_electron_log.default.info("Setting tray", options);
+  const parsed = JSON.parse(options);
+  tray.setImage(path.join(assetsDir, parsed.image));
+  tray.setTitle(parsed.title);
+  tray.setToolTip(parsed.tooltip);
+});
+function createTray() {
+  tray = new import_electron.Tray(path.join(assetsDir, "tray_icon_emptyTemplate.png"));
+  tray.setToolTip("Sway");
+  tray.on("click", () => {
+    win.show();
+    win.focus();
+  });
+}

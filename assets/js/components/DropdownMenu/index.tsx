@@ -112,7 +112,6 @@ const StyledItemCSS = {
   outline: 'none',
   cursor: 'default',
   round: 'medium',
-  textTransform: 'capitalize',
   '&[data-highlighted]': {
     background: '$dropdownItemHighlightedBg',
   },
@@ -176,7 +175,7 @@ const StyledLabel = styled(Label, {
   vcenter: true,
   color: '$dropdownLabelFg',
   height: '32px',
-  padding: '0 0 0 8px',
+  padding: '0 0 0 28px',
   label: true,
 })
 

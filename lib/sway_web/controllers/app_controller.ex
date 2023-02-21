@@ -17,7 +17,7 @@ defmodule SwayWeb.AppController do
       workspace: workspace,
       status: status,
       rooms: rooms,
-      body_class: "app"
+      body_class: "app",
     )
   end
 
@@ -35,7 +35,6 @@ defmodule SwayWeb.AppController do
 
     # FIXME:
     # Change the room
-
     render(conn, "app_home.html",
       user: conn.assigns.current_user,
       membership: membership,
@@ -44,7 +43,7 @@ defmodule SwayWeb.AppController do
       rooms: rooms,
       body_class: "app",
       jwt: jwt,
-      fake_state: false
+      fake_state: false,
     )
   end
 

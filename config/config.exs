@@ -49,9 +49,11 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
+  window_handler: Ueberauth.Strategy.Browser,
   providers: [
     google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}
   ]
+
 
 config :sway, Sway.Guardian,
   issuer: "sway",

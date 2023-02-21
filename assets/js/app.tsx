@@ -40,6 +40,8 @@ import { SettingsProvider } from 'features/Settings'
 import { CallProvider } from 'features/Call/Provider'
 import { CallSettingsProvider } from 'features/Settings/CallSettingsProvider'
 import PresenceProvider from 'features/Presence/Provider'
+import * as Tooltip from '@radix-ui/react-tooltip'
+import { ElectronTrayProvider } from 'features/ElectronTray'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -72,7 +74,10 @@ ReactDOM.render(
             <CommandPaletteProvider>
               <SettingsProvider />
               <PresenceProvider />
-              <Routing />
+              <ElectronTrayProvider />
+              <Tooltip.Provider>
+                <Routing />
+              </Tooltip.Provider>
             </CommandPaletteProvider>
           </CallProvider>
         </CommandRegistryProvider>

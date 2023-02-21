@@ -13,7 +13,6 @@ import { useVideoSettings } from 'features/Settings/VideoSettings'
 import { useMicSettings } from 'features/Settings/MicSettings'
 import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
 import { ScreenshareButton } from 'features/Screenshare/Provider'
-import { PresenceMode } from 'state/entities'
 import { ConnectionState, setInternetConnectionStatus } from './slice'
 import { Dropdown } from 'components/DropdownMenu'
 import {
@@ -121,7 +120,7 @@ export function Dock(props: Props) {
           {presence.modes.map((p) => (
             <Dropdown.Item
               icon={localPresence.status === p && !isActive ? 'checkmark' : ''}
-              label={p}
+              label={p.slice(0, 1).toUpperCase() + p.slice(1)}
               onClick={() => presence.setMode(p)}
             />
           ))}
@@ -345,17 +344,8 @@ export function Dock(props: Props) {
   }
 
   function toggleBlurValue(checked: boolean) {
-    log.info(';; checked', checked)
     dispatch(setBackgroundBlur(checked ? 50 : 0))
   }
-
-  function changePresenceMode(mode: PresenceMode) {
-    return function () {
-      //dispatch(setPresence)
-    }
-  }
-
-  function switchToActiveMode() {}
 }
 
 const Container = styled('nav', {

@@ -11,12 +11,17 @@ VERSION := $(shell cat electron/package.json | jq -r '.version' | sed 's/^v//')
 ## electron-dev: Start Electron in development mode
 .PHONY: electron-dev
 electron-dev:
-	@cd electron && $(ELECTRONBIN)/esbuild src/main.js --outfile=build/index.js --format=cjs --watch
+	@cd electron && $(ELECTRONBIN)/electron build/index.js
 
-## electron-compile: Compile Electron
+## electron-compile: Compile Electron code
 .PHONY: electron-compile
 electron-compile:
 	@cd electron && $(ELECTRONBIN)/esbuild src/main.js --outfile=build/index.js --format=cjs
+
+## electron-compile-watch: Compile & watch Electron code
+.PHONY: electron-compile-watch
+electron-compile-watch:
+	@cd electron && $(ELECTRONBIN)/esbuild src/main.js --outfile=build/index.js --format=cjs --watch
 
 ## electron-compile: Compile Electron
 .PHONY: electron-build

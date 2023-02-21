@@ -30,6 +30,7 @@
     },
     "files": [
       "build/index.js",
+      "assets",
       "!dist${/*}"
     ],
     "mac": {

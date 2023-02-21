@@ -12,3 +12,6 @@ export function getWorkspaceFocus(state: RootState): WorkspaceFocus {
 export function isFocusOnWorkspace(state: RootState): boolean {
   return !hasWindowFocus(state)
 }
+export function isElectronWindow(): any {
+  throw new Error('Function not implemented.')
+}

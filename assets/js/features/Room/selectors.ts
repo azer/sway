@@ -77,6 +77,16 @@ export function getUsersInRoom(state: RootState, roomId: string): string[] {
   return state.rooms.userIdsByRoom[roomId] || []
 }
 
+export function getOtherUsersInSameRoom(state: RootState): string[] {
+  const focusedRoomId = getFocusedRoom(state)?.id
+  if (!focusedRoomId) return []
+
+  const users = getUsersInRoom(state, focusedRoomId)
+  const localUserId = selectors.users.getSelf(state)?.id
+
+  return users.filter((id) => id !== localUserId)
+}
+
 export function getRoomBySlug(
   state: RootState,
   slug: string
