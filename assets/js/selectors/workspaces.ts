@@ -16,6 +16,20 @@ export function getSelfWorkspace(
   return membership ? getById(state, membership.workspace_id) : undefined
 }
 
-export function getUsersByOrgId(state: RootState): entities.User[] {
-  return Object.values(state.entities[entities.Users])
+export function listUsersByWorkspaceId(
+  state: RootState,
+  workspaceId: string
+): string[] {
+  return state.workspaces.members[workspaceId] || []
+}
+
+export function getWorkspaceIdByUserId(
+  state: RootState,
+  userId: string
+): string | undefined {
+  for (const workspaceId in state.workspaces.members) {
+    if (state.workspaces.members[workspaceId].includes(userId)) {
+      return workspaceId
+    }
+  }
 }

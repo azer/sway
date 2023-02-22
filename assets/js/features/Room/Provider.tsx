@@ -10,6 +10,12 @@ import {
   setSwayRoomConnectionStatus,
 } from 'features/Dock/slice'
 import { useRooms } from './use-rooms'
+import {
+  addBatch,
+  Membership,
+  Memberships,
+  toStateEntity,
+} from 'state/entities'
 
 const log = logger('room/provider')
 
@@ -37,10 +43,27 @@ export function RoomNavigationProvider(props: Props) {
     if (!channel || !workspace || !navigator.onLine) return
 
     channel
-      .push('workspace:list_users', { workspace_id: workspace?.id })
+      .push('workspace:list_online_users', { workspace_id: workspace?.id })
       .receive('ok', (resp: { [roomId: string]: string[] }) => {
-        log.info('Set workspace users by rooms', resp)
+        log.info('Set online users by rooms', resp)
         dispatch(setAllRoomUserIds(resp))
+      })
+
+    channel
+      .push('workspace:list_workspace_memberships', {
+        workspace_id: workspace?.id,
+      })
+      .receive('ok', (resp: Membership[]) => {
+        log.info('Set all workspace memberships', resp)
+        dispatch(
+          addBatch(
+            resp.map((m) => ({
+              id: m.id,
+              table: Memberships,
+              record: toStateEntity(Memberships, m),
+            }))
+          )
+        )
       })
   }, [channel, workspace, navigator.onLine])
 

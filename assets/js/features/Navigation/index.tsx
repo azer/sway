@@ -39,7 +39,6 @@ export function Navigation(props: Props) {
   const rooms = useRooms()
 
   useEffect(() => {
-    log.info('inactive?', workspace, focusedRoom, prevRoom)
     if (workspace && !focusedRoom?.is_active && prevRoom) {
       log.info('Focused on inactive room. Switch to previous:', prevRoom)
       rooms.enterById(prevRoom.id)

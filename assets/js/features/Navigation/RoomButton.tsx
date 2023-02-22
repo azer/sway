@@ -7,6 +7,7 @@ import { Avatar } from 'features/Avatar'
 
 import { AvatarStack } from 'features/Avatar/AvatarView'
 import { RoomStatus } from 'features/Room/selectors'
+import { RoomStatusIcon } from 'components/RoomStatusIcon'
 // import { useSelector, useDispatch } from 'state'
 
 interface Props {
@@ -31,7 +32,7 @@ export function RoomButton(props: Props) {
       hasUsers={!props.selected && usersInRoom.length > 0}
       onClick={() => props.onClick(props.id)}
     >
-      <PresenceIcon mode={roomStatus} />
+      <RoomStatusIcon mode={roomStatus} />
       <Name>{room?.name || ''}</Name>
       {!props.selected && usersInRoom.length > 0 ? (
         <Users>
@@ -87,24 +88,5 @@ const Users = styled('div', {
     width: '100%',
     top: '-4px',
     height: '12px',
-  },
-})
-
-export const PresenceIcon = styled('div', {
-  width: '8px',
-  height: '8px',
-  round: 'xsmall',
-  variants: {
-    mode: {
-      [RoomStatus.Offline]: {
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      },
-      [RoomStatus.Focus]: {
-        backgroundColor: '$yellow',
-      },
-      [RoomStatus.Active]: {
-        backgroundColor: '$green',
-      },
-    },
   },
 })

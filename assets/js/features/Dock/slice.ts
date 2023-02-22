@@ -28,9 +28,9 @@ export const initialState: State = {
   presence: {},
   connection: {
     // @ts-ignore
-    [window.initialState.session.userId]: {
+    [window.initialState?.session.userId]: {
       // @ts-ignore
-      userId: window.initialState.session.userId,
+      userId: window.initialState?.session.userId,
       internet: navigator.onLine
         ? ConnectionState.Connected
         : ConnectionState.Disconnected,

@@ -109,4 +109,12 @@ export const dark = {
   switchFg: 'rgba(255, 255, 255, 0.65)',
   switchCheckedBg: '$blue',
   switchCheckedFg: '$white',
+  electronTrayWindowBg: 'rgba(20, 22, 28, 0.85)',
+  electronTrayWindowFg: '$white',
+  electronTrayUserTimeFg: '$electronTrayUserStatusFg',
+  electronTrayUsernameFg: 'rgba(255, 255, 255, 0.85)',
+  electronTrayUserStatusFg: 'rgba(255, 255, 255, 0.5)',
+  electronTrayHighlightedUsernameFg: '$white',
+  electronTrayHighlightedUserStatusFg: 'rgba(255, 255, 255, 0.65)',
+  electronTrayHighlightedUserBg: 'rgba(255, 255, 255, 0.04)',
 }

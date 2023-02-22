@@ -10,7 +10,7 @@ interface State {
 
 export const initialState: State = {
   // @ts-ignore
-  userStatuses: window.initialState.status,
+  userStatuses: window.initialState?.status || {},
 }
 
 export const slice = createSlice({

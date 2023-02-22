@@ -85,7 +85,7 @@ const SelfVideo = styled('div', {
   },
 })
 
-const ConnectionIcon = styled('div', {
+export const ConnectionIcon = styled('div', {
   position: 'absolute',
   bottom: '0',
   right: '0',

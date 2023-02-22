@@ -15,7 +15,7 @@ export const useSelector: TypedUseSelectorHook<RootState> = (
   customCompareFn
 ) => useGenericSelector(selector, customCompareFn || shallowEqualForList)
 
-function shallowEqualForList<T>(a: T, b: any): boolean {
+export function shallowEqualForList<T>(a: T, b: any): boolean {
   if (!Array.isArray(a) || !Array.isArray(b)) return shallowEqual(a, b)
 
   if (a.length !== b.length) return false

@@ -2,7 +2,6 @@ import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
-import { PresenceIcon } from 'features/Navigation/RoomButton'
 import { logger } from 'lib/log'
 import { useUserSocket } from 'features/UserSocket'
 import { Command, useCommandPalette } from 'features/CommandPalette'
@@ -18,6 +17,7 @@ import { Channel } from 'phoenix'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { useRooms } from './use-rooms'
 import { Dropdown } from 'components/DropdownMenu'
+import { RoomStatusIcon } from 'components/RoomStatusIcon'
 
 const log = logger('features/rooms/room-button')
 
@@ -70,7 +70,7 @@ export function RoomButton(props: Props) {
     })
 
     channel.on('rooms:create', (payload: { all: Room[]; created: Room }) => {
-      log.info('create message received', payload)
+      log.info('Create message received', payload)
 
       dispatch(
         setWorkspaceRoomIds({
@@ -96,7 +96,7 @@ export function RoomButton(props: Props) {
       <Dropdown.Trigger>
         <Container onClick={openRoomCommands}>
           <RoomButtonBg />
-          <PresenceIcon mode={roomStatus} />
+          <RoomStatusIcon mode={roomStatus} />
           <RoomName>{room?.name}</RoomName>
         </Container>
       </Dropdown.Trigger>
@@ -379,7 +379,7 @@ const Container = styled('div', {
   [`&:hover ${RoomButtonBg}`]: {
     background: 'rgba(220, 230, 255, 0.1)',
   },
-  [`& ${PresenceIcon}`]: {
+  [`& ${RoomStatusIcon}`]: {
     marginTop: '4px',
   },
 })

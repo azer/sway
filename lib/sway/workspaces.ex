@@ -227,6 +227,10 @@ defmodule Sway.Workspaces do
     Membership.changeset(membership, attrs)
   end
 
+  def list_memberships_by_workspace(workspace_id) do
+    Repo.all(Sway.Workspaces.Membership, workspace_id: workspace_id)
+  end
+
   def list_users_by_workspace(workspace_id) do
     from(u in Sway.Accounts.User,
       join: m in Sway.Workspaces.Membership,

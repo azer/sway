@@ -134,7 +134,7 @@ export function getRoomStatus(
     return RoomStatus.Offline
   }
 
-  if (statuses.some((s) => s.is_active)) return RoomStatus.Active
+  if (statuses.some((s) => s.mic_on)) return RoomStatus.Active
 
   return RoomStatus.Focus
 }

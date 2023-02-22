@@ -12,14 +12,14 @@ interface Props {
 
 export function Avatar(props: Props) {
   return (
-    <StyledRoot>
-      <Image src={props.src} alt={props.alt} />
+    <AvatarRoot>
+      <StyledImage src={props.src} alt={props.alt} />
       <Fallback>{props.fallback}</Fallback>
-    </StyledRoot>
+    </AvatarRoot>
   )
 }
 
-const StyledRoot = styled(Root, {
+export const AvatarRoot = styled(Root, {
   center: true,
   display: 'inline-flex',
   overflow: 'hidden',
@@ -31,4 +31,8 @@ const StyledRoot = styled(Root, {
   fontWeight: '500',
   'border-radius': '30%',
   'background-color': '$red',
+})
+
+const StyledImage = styled(Image, {
+  width: '100%',
 })

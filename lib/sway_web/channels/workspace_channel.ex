@@ -38,9 +38,14 @@ defmodule SwayWeb.WorkspaceChannel do
     {:reply, {:ok, user_broadcastable(user)}, socket}
   end
 
-  def handle_in("workspace:list_users", %{ "workspace_id" => workspace_id }, socket) do
+  def handle_in("workspace:list_online_users", %{ "workspace_id" => workspace_id }, socket) do
     users_by_rooms = list_online_users_by_rooms(socket, workspace_id)
     {:reply, {:ok, users_by_rooms}, socket}
+  end
+
+  def handle_in("workspace:list_workspace_memberships", %{ "workspace_id" => workspace_id }, socket) do
+    memberships = Sway.Workspaces.list_memberships_by_workspace(workspace_id)
+    {:reply, {:ok, Enum.map(memberships, fn membership -> membership_broadcastable(membership) end)}, socket}
   end
 
   def handle_in("rooms:join", %{"id" => id, "workspace_id" => workspace_id}, socket) do
@@ -226,6 +231,16 @@ defmodule SwayWeb.WorkspaceChannel do
       "status" => status.status,
       "workspace_id" => status.workspace_id,
       "inserted_at" => status.inserted_at
+    }
+  end
+
+  def membership_broadcastable(membership) do
+    %{
+      "id" => membership.id,
+      "user_id" => membership.user_id,
+      "workspace_id" => membership.workspace_id,
+      "is_admin" => membership.is_admin,
+      "inserted_at" => membership.inserted_at
     }
   end
 

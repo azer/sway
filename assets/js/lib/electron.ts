@@ -4,8 +4,13 @@ export const isElectron = /electron/i.test(window.navigator.userAgent)
 const log = logger('electron')
 
 // @ts-ignore
-const ipcRenderer = window.electron?.ipcRenderer as {
+export const ipcRenderer = window.electron?.ipcRenderer as {
   send: (chan: string, payload: unknown) => void
+  on: (chan: string, cb: (event: Event, msg: string) => void) => void
+  removeListener: (
+    chan: string,
+    cb: (event: Event, msg: string) => void
+  ) => void
 }
 
 export function sendMessage(chan: string, payload: unknown) {

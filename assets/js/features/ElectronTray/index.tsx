@@ -2,15 +2,16 @@ import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
-import { setTray } from 'lib/electron'
+import { sendMessage, setTray } from 'lib/electron'
 
 interface Props {}
 
 export function ElectronTrayProvider(props: Props) {
   // const dispatch = useDispatch()
-  const [isActive, users] = useSelector((state) => [
+  const [isActive, users, snapshotForTrayWindow] = useSelector((state) => [
     selectors.presence.isLocalUserActive(state),
-    selectors.rooms.getOtherUsersInSameRoom(state).length,
+    selectors.rooms.getOtherUsersInSameRoom(state),
+    selectors.electronTray.snapshotForTrayWindow(state),
   ])
 
   useEffect(() => {
@@ -19,12 +20,14 @@ export function ElectronTrayProvider(props: Props) {
         image: users
           ? 'tray_icon_not_emptyTemplate.png'
           : 'tray_icon_emptyTemplate.png',
-        tooltip: users ? `${users} in the room` : 'Open Sway',
+        tooltip: users.length ? `${users} in the room` : 'Open Sway',
       })
     } else {
       setTray({ image: 'tray_icon_activeTemplate.png', tooltip: 'Open Sway' })
     }
-  }, [isActive])
+
+    sendMessage('tray-window', { state: snapshotForTrayWindow })
+  }, [snapshotForTrayWindow])
 
   return <></>
 }

@@ -91,7 +91,7 @@ export interface Participant {
   screen: boolean
 }
 
-const initialState = {
+export const initialState = {
   [Users]: initial<User>(Users),
   [Memberships]: initial<Membership>(Memberships),
   [Workspaces]: initial<Workspace>(Workspaces),
@@ -211,7 +211,7 @@ function initial<T>(table: Table): Record<string, T> {
   const result: Record<string, T> = {}
 
   // @ts-ignore
-  if (window.initialState.entities[table]) {
+  if (window.initialState && window.initialState.entities[table]) {
     // @ts-ignore
     for (const r of window.initialState.entities[table]) {
       // @ts-ignore

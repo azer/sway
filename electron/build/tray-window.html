@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sway</title>
+    <style type="text/css">
+      :root {
+          --sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    text-rendering: optimizeLegibility;
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    touch-action: manipulation;
+    font-size: 14px;
+    font-family: var(--sans);
+}
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+      <script type="text/javascript" charset="utf-8">
+
+    window.isElectron = /electron/i.test(navigator.userAgent)
+    if (window.isElectron) {
+      document.body.classList.add('electron')
+    }
+
+    if (!document.hasFocus()) {
+      document.body.classList.add('blurred')
+    }
+
+    if (window.isElectron) {
+      window.electron = require('electron')
+      console.log(';l;',  require('electron'))
+    }
+
+    window.addEventListener('blur', function() {
+      document.body.classList.add('blurred');
+    });
+
+    window.addEventListener('focus', function() {
+      document.body.classList.remove('blurred');
+    });
+    </script>
+    <script type="text/javascript" src="./tray-window.js"></script>
+  </body>
+</html>

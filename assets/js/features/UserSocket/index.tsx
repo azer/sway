@@ -53,16 +53,6 @@ export default function UserSocket(props: Props) {
   }, [])
 
   useEffect(() => {
-    if (
-      status?.swaySocket === ConnectionState.Disconnected &&
-      status.internet === ConnectionState.Connected
-    ) {
-      //log.info('Try connecting to the user socket again')
-      //socket.connect()
-    }
-  }, [status?.internet, status?.swaySocket])
-
-  useEffect(() => {
     if (!workspaceId || !userId) return
 
     socket.onClose(() => {

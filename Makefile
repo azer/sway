@@ -23,6 +23,11 @@ electron-compile:
 electron-compile-watch:
 	@cd electron && $(ELECTRONBIN)/esbuild src/main.js --outfile=build/index.js --format=cjs --watch
 
+## tray-watch: Compile & watch Electron Tray Window code
+.PHONY: tray-compile-watch
+tray-compile-watch:
+	@cd electron && $(ELECTRONBIN)/esbuild --bundle ../assets/js/features/ElectronTrayWindow/index.tsx --outfile=build/tray-window.js --format=iife --watch --target=es6
+
 ## electron-compile: Compile Electron
 .PHONY: electron-build
 electron-build:

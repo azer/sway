@@ -1,9 +1,11 @@
 import { styled } from 'themes'
-import React from 'react'
+import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import Icon from 'components/Icon'
 import { getIcon } from 'components/PresenceModeIcon'
+import { useUserSocket } from 'features/UserSocket'
+import { Users } from 'state/entities'
 
 interface Props {
   id: string
@@ -11,12 +13,19 @@ interface Props {
 
 export function UserButton(props: Props) {
   // const dispatch = useDispatch()
+  const socket = useUserSocket()
   const [user, presence] = useSelector((state) => [
     selectors.users.getById(state, props.id),
     selectors.presence.getStatusByUserId(state, props.id),
   ])
 
-  const icon = getIcon(presence?.status, presence.is_active)
+  useEffect(() => {
+    if (!user) {
+      socket.fetchEntity(Users, props.id)
+    }
+  }, [!user])
+
+  const icon = getIcon(presence?.status, presence.mic_on)
 
   return (
     <Container>
