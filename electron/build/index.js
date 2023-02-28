@@ -106,7 +106,7 @@ function createTrayWindow() {
   import_electron_log.default.info("Creating tray window");
   const win = new import_electron.BrowserWindow({
     width: 300,
-    height: 450,
+    height: 350,
     fullscreenable: false,
     resizable: false,
     show: false,

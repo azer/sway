@@ -7,7 +7,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { logger } from 'lib/log'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { PresenceMode } from 'state/entities'
 
 interface Props {}
 
@@ -19,7 +18,7 @@ export function ScreenshareProvider(props: Props) {
     useScreenShare()
 
   const [isActive] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state)?.is_active,
+    selectors.presence.isLocalUserActive(state),
   ])
 
   useHotkeys(

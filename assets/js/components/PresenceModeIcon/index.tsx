@@ -1,56 +1,45 @@
 import { styled } from 'themes'
 import React from 'react'
 import Icon from 'components/Icon'
-import { PresenceMode } from 'state/entities'
+import { PresenceStatus } from 'state/presence'
+import { findModeByStatus } from 'state/presence'
 
 interface Props {
-  mode: PresenceMode
+  mode: PresenceStatus
   active?: boolean
   onClick?: () => void
 }
 
 export function PresenceModeIcon(props: Props) {
-  // const dispatch = useDispatch()
-  // const [] = useSelector((state) => [])
+  const icon = getIcon(props.mode, props.active || false)
 
   return (
-    <Container active={props.active} mode={props.mode} onClick={props.onClick}>
-      <Icon name={getIcon(props.mode, props.active || false)} />
+    <Container
+      status={props.active ? 'active' : props.mode}
+      onClick={props.onClick}
+    >
+      {icon ? <Icon name={icon} /> : null}
     </Container>
   )
 }
 
-export function getIcon(mode: string, active: boolean): string {
+export function getIcon(
+  status: PresenceStatus,
+  active: boolean
+): string | undefined {
   if (active) return 'phoneCall'
-  if (mode === PresenceMode.Social) return 'eye'
-  if (mode === PresenceMode.Solo) return 'incognito'
-  if (mode === PresenceMode.Zen) return 'sunrise'
-  return 'headphones'
-}
-
-export function getLabel(mode: string): string {
-  if (mode === PresenceMode.Social) return 'Social'
-  if (mode === PresenceMode.Solo) return 'Solo'
-  if (mode === PresenceMode.Zen) return 'Zen'
-  return 'Focus'
-}
-
-export function getDesc(mode: string): string {
-  if (mode === PresenceMode.Social) return 'Be present, visible.'
-  if (mode === PresenceMode.Solo) return 'Private and selective.'
-  if (mode === PresenceMode.Zen) return 'Calm, undisturbed.'
-  return 'Productive and responsive.'
+  return findModeByStatus(status)?.icon
 }
 
 export const Container = styled('div', {
   variants: {
-    mode: {
-      solo: {
+    status: {
+      active: {
         '& svg': {
-          color: '$presenceModelineSoloFg',
+          color: '$presenceModelineActiveFg',
         },
         '& svg path': {
-          filter: 'drop-shadow(0px 0px 4px rgba(255, 93, 224, 0.7))',
+          filter: 'drop-shadow(0px 0px 4px rgba(38, 181, 206, 0.9))',
         },
       },
       focus: {
@@ -61,9 +50,9 @@ export const Container = styled('div', {
           filter: 'drop-shadow(0px 0px 4px rgba(242, 201, 76, 0.9))',
         },
       },
-      social: {
+      online: {
         '& svg': {
-          color: '$presenceModelineSocialFg',
+          color: '$presenceModelineOnlineFg',
         },
         '& svg path': {
           filter: 'drop-shadow(0px 0px 4px rgba(38, 181, 206, 0.9))',
@@ -75,16 +64,6 @@ export const Container = styled('div', {
         },
         '& svg path': {
           filter: 'drop-shadow(0px 0px 4px rgba(235, 87, 87, 0.9))',
-        },
-      },
-    },
-    active: {
-      true: {
-        '& svg': {
-          color: '$presenceModelineActiveFg',
-        },
-        '& svg path': {
-          filter: 'drop-shadow(0px 0px 4px rgba(38, 181, 206, 0.9))',
         },
       },
     },

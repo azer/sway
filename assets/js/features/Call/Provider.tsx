@@ -16,7 +16,7 @@ import {
 } from '@daily-co/daily-react-hooks'
 import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
-import { PresenceMode, User } from 'state/entities'
+import { User } from 'state/entities'
 import {
   ConnectionState,
   setDailyCallConnectionStatus,
@@ -284,7 +284,7 @@ function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
 
   const [localPresence, videoInputId, audioInputId, audioOutputId] =
     useSelector((state) => [
-      selectors.presence.getSelfStatus(state),
+      selectors.statuses.getLocalStatus(state),
       selectors.settings.getVideoInputDeviceId(state),
       selectors.settings.getAudioInputDeviceId(state),
       selectors.settings.getAudioOutputDeviceId(state),

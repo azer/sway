@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { ConnectionState } from './slice'
-import { useDaily, useLocalParticipant } from '@daily-co/daily-react-hooks'
+import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import { Video } from 'features/Call/Video'
 import { AvatarView } from 'features/Avatar/AvatarView'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
-import { PresenceMode } from 'state/entities'
 
 interface Props {}
 
@@ -15,14 +14,14 @@ export function Mirror(props: Props) {
   const [showStatus, setShowStatus] = useState(true)
 
   // const dispatch = useDispatch()
-  const [user, presence, connectionStatus, isActive, isOnSocialMode] =
-    useSelector((state) => [
+  const [user, localStatus, connectionStatus, isActive] = useSelector(
+    (state) => [
       selectors.users.getSelf(state),
-      selectors.presence.getSelfStatus(state),
+      selectors.statuses.getLocalStatus(state),
       selectors.dock.getStatusMessage(state),
       selectors.presence.isLocalUserActive(state),
-      selectors.presence.getSelfStatus(state).status === PresenceMode.Social,
-    ])
+    ]
+  )
 
   const localParticipant = useLocalParticipant()
   const cameraSettings = useVideoSettings()
@@ -40,9 +39,7 @@ export function Mirror(props: Props) {
       <Message status={connectionStatus.status} visible={showStatus}>
         {connectionStatus.msg}
       </Message>
-      {localParticipant &&
-      (isActive || isOnSocialMode) &&
-      presence.camera_on ? (
+      {localParticipant && isActive && localStatus.camera_on ? (
         <SelfVideo>
           <Video id={localParticipant.session_id} />
         </SelfVideo>
@@ -85,7 +82,7 @@ const SelfVideo = styled('div', {
   },
 })
 
-export const ConnectionIcon = styled('div', {
+const ConnectionIcon = styled('div', {
   position: 'absolute',
   bottom: '0',
   right: '0',
@@ -116,6 +113,9 @@ export const ConnectionIcon = styled('div', {
       },
       connected: {
         background: '$dockIconConnectedBg',
+      },
+      timeout: {
+        background: '$dockIconFailedBg',
       },
     },
   },
@@ -149,6 +149,12 @@ const Message = styled('div', {
       },
       connected: {
         color: '$dockIconConnectedBg',
+      },
+      connecting: {
+        color: 'rgba(255, 255, 255, 0.35)',
+      },
+      timeout: {
+        background: '$dockIconFailedFg',
       },
     },
   },

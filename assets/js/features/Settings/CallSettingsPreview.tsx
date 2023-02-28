@@ -19,7 +19,7 @@ const log = logger('settings/preview')
 
 export function CallSettingsPreview(props: Props) {
   const call = useDaily()
-  const videoElement = useRef()
+  const videoElement = useRef<HTMLVideoElement>(null)
   const localParticipant = useLocalParticipant()
   const videoTrack = useVideoTrack(localParticipant?.session_id || '')
 
@@ -37,7 +37,7 @@ export function CallSettingsPreview(props: Props) {
     blurLabel,
     blurValue,
   ] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state).is_active,
+    selectors.presence.isLocalUserActive(state),
     selectors.settings.isVideoInputOff(state),
     selectors.settings.getVideoInputDeviceId(state),
     selectors.settings.getVideoInputDeviceLabelById(

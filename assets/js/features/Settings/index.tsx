@@ -18,7 +18,6 @@ import debounce from 'debounce-fn'
 import { usePushToTalkSettings } from './PushToTalkSettings'
 import { useBackgroundBlurSettings } from './BackgroundBlur'
 import { usePresenceSettings } from './PresenceSettings'
-import { useNavigate } from 'react-router-dom'
 import { useInvitePeople } from './InvitePeople'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -74,7 +73,7 @@ export function useSettings() {
     ),
     selectors.settings.isPushToTalkVideoOn(state),
     selectors.settings.getBackgroundBlurLabel(state),
-    selectors.presence.getSelfStatusLabel(state),
+    selectors.presence.getLocalPresenceLabel(state),
   ])
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { useUserSocket } from 'features/UserSocket'
 import selectors from 'selectors'
-import { PresenceMode } from 'state/entities'
+import { PresenceStatus } from 'state/presence'
 import { useSelector } from 'state'
 import { logger } from 'lib/log'
 
@@ -9,54 +9,29 @@ const log = logger('presence/use-presence')
 export function usePresence() {
   const { channel } = useUserSocket()
 
-  const [localPresence, workspaceId, roomId] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state),
+  const [localStatus, workspaceId, roomId] = useSelector((state) => [
+    selectors.statuses.getLocalStatus(state),
     selectors.workspaces.getSelfWorkspace(state)?.id,
     selectors.rooms.getFocusedRoom(state)?.id,
   ])
 
   return {
-    modes: [
-      PresenceMode.Focus,
-      PresenceMode.Social,
-      PresenceMode.Zen,
-      PresenceMode.Solo,
-    ],
     setMode,
     setActive,
     setMedia,
   }
 
   function setMedia(options: {
-    mode?: PresenceMode
+    mode?: PresenceStatus
     camera?: boolean
     mic?: boolean
     speaker?: boolean
   }) {
     const settings = {
-      mode: options.mode || localPresence.status,
-      camera_on: or<boolean>(options.camera, localPresence.camera_on),
-      mic_on: or<boolean>(options.mic, localPresence.mic_on),
-      speaker_on: or<boolean>(options.speaker, localPresence.speaker_on),
-    }
-
-    if (
-      settings.mode !== PresenceMode.Social &&
-      settings.camera_on &&
-      !settings.mic_on
-    ) {
-      // User turns on camera manually
-      settings.mode = PresenceMode.Social
-    } else if (
-      localPresence.status === PresenceMode.Social &&
-      !settings.camera_on
-    ) {
-      // User turns off the video on social mode
-      settings.mode = PresenceMode.Focus
-    } else if (options.mode === PresenceMode.Social) {
-      // User switches to social mode when camera is off
-      settings.camera_on = true
-      settings.mic_on = false
+      mode: options.mode || localStatus.status,
+      camera_on: or<boolean>(options.camera, localStatus.camera_on),
+      mic_on: or<boolean>(options.mic, localStatus.mic_on),
+      speaker_on: or<boolean>(options.speaker, localStatus.speaker_on),
     }
 
     // User turns on mic & forgetting speaker off
@@ -73,14 +48,14 @@ export function usePresence() {
     })
   }
 
-  function setMode(newMode: PresenceMode) {
+  function setMode(newMode: PresenceStatus) {
     log.info('Setting presence mode as', newMode)
 
     setMedia({
       mode: newMode,
-      speaker: newMode !== PresenceMode.Zen,
+      speaker: newMode !== PresenceStatus.Zen,
       mic: false,
-      camera: newMode === PresenceMode.Social,
+      camera: false,
     })
   }
 

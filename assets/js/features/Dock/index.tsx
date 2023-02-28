@@ -24,6 +24,8 @@ import {
 import { useBackgroundBlurSettings } from 'features/Settings/BackgroundBlur'
 import { usePresenceSettings } from 'features/Settings/PresenceSettings'
 import { usePresence } from 'features/Presence/use-presence'
+import { titleCase } from 'lib/string'
+import { PresenceModes } from 'state/presence'
 
 interface Props {
   roomId: string
@@ -57,7 +59,7 @@ export function Dock(props: Props) {
     blurValue,
   ] = useSelector((state) => [
     selectors.users.getSelf(state),
-    selectors.presence.getSelfStatus(state),
+    selectors.statuses.getLocalStatus(state),
     selectors.presence.isLocalUserActive(state),
     selectors.settings.isOnAirpods(state),
     selectors.settings.allVideoInputDevices(state),
@@ -117,11 +119,16 @@ export function Dock(props: Props) {
             kbd={!isActive ? ['Space'] : []}
             onClick={() => presence.setActive(true)}
           />
-          {presence.modes.map((p) => (
+          {PresenceModes.map((p, ind) => (
             <Dropdown.Item
-              icon={localPresence.status === p && !isActive ? 'checkmark' : ''}
-              label={p.slice(0, 1).toUpperCase() + p.slice(1)}
-              onClick={() => presence.setMode(p)}
+              key={ind}
+              icon={
+                localPresence.status === p.status && !isActive
+                  ? 'checkmark'
+                  : ''
+              }
+              label={titleCase(p.label)}
+              onClick={() => presence.setMode(p.status)}
             />
           ))}
           <Dropdown.Separator />

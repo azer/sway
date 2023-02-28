@@ -14,8 +14,8 @@ const log = logger('status/presence')
 export function PresenceModeButton(props: Props) {
   const presenceSettings = usePresenceSettings()
 
-  const [presence, isActive] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state),
+  const [localStatus, isActive] = useSelector((state) => [
+    selectors.statuses.getLocalStatus(state),
     selectors.presence.isLocalUserActive(state),
   ])
 
@@ -23,14 +23,14 @@ export function PresenceModeButton(props: Props) {
     <Button onClick={presenceSettings.open}>
       <Tooltip
         content={
-          !isActive ? 'Become active' : `Switch to ${presence.status} mode`
+          !isActive ? 'Become active' : `Switch to ${localStatus.status} mode`
         }
         shortcut={['Space']}
       >
         <Circle>
           <PresenceModeIcon
             active={isActive}
-            mode={presence.status}
+            mode={localStatus.status}
             onClick={presenceSettings.open}
           />
         </Circle>

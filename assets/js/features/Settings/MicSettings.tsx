@@ -21,7 +21,7 @@ export function useMicSettings() {
   const { useRegister } = useCommandRegistry()
   const dispatch = useDispatch()
   const [isOn, selectedDeviceId, allDevices] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state).mic_on,
+    selectors.statuses.getLocalStatus(state).mic_on,
     selectors.settings.getAudioInputDeviceId(state),
     selectors.settings.allAudioInputDevices(state),
   ])
@@ -98,7 +98,7 @@ export function useMicSettings() {
       title: 'Microphone Settings',
       icon: 'mic',
       placeholder: 'Tune your mic.',
-      selectedId: currentSelectedId,
+      selectedId: selectedDeviceId,
       preview: (props: { selectedValue?: unknown }) => (
         <MicSettingsPreview deviceId={props.selectedValue as string} />
       ),
@@ -112,7 +112,7 @@ export function useMicSettings() {
     const commands: Command[] = [
       {
         id: 'back',
-        value: currentSelectedId,
+        value: selectedDeviceId,
         icon: 'undo',
         name: 'Back',
         pin: true,

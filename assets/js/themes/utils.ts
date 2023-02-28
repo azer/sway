@@ -8,18 +8,22 @@ export const utils = {
   }) => {
     const ret: { [k: string]: string } = {}
 
-    const margin = !Array.isArray(options.outer)
-      ? [options.outer]
-      : options.outer
+    const margin = options.outer
+      ? !Array.isArray(options.outer)
+        ? [options.outer]
+        : options.outer
+      : undefined
 
-    if (options.outer)
+    if (margin)
       ret['margin'] = margin.map((n) => `${n * BASELINE_UNIT}px`).join(' ')
 
-    const padding = !Array.isArray(options.inner)
-      ? [options.inner]
-      : options.inner
+    const padding = options.inner
+      ? !Array.isArray(options.inner)
+        ? [options.inner]
+        : options.inner
+      : undefined
 
-    if (options.inner)
+    if (padding)
       ret['padding'] = padding.map((n) => `${n * BASELINE_UNIT}px`).join(' ')
 
     if (options.gap) ret['gap'] = `${options.gap * BASELINE_UNIT}px`

@@ -16,11 +16,6 @@ export const Video = React.memo(UVideo, function (prev: Props, next: Props) {
 })
 
 function UVideo(props: Props) {
-  // const dispatch = useDispatch()
-  const [isActive, isSpeakerOff] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state).is_active,
-    selectors.settings.isAudioOutputOff(state),
-  ])
   const track = useMediaTrack(props.id, 'video')
   const el = useRef<HTMLVideoElement | null>(null)
 
@@ -45,20 +40,12 @@ function UVideo(props: Props) {
     video.srcObject = new MediaStream([track?.persistentTrack])
   }, [track?.persistentTrack?.id])
 
-  log.info('Rendering video player', props.id, isActive, isSpeakerOff)
+  log.info('Rendering video element', props.id)
 
   const videoEl = useMemo(() => {
-    log.info('Re-render element', isActive, isSpeakerOff)
-
-    return (
-      <Player
-        autoPlay
-        muted={!isActive || !isSpeakerOff}
-        playsInline
-        ref={el}
-      />
-    )
-  }, [isActive, isSpeakerOff])
+    log.info('Re-render element')
+    return <Player autoPlay muted playsInline ref={el} />
+  }, [])
 
   return videoEl
 }

@@ -108,7 +108,7 @@ function createTrayWindow() {
 
   const win = new BrowserWindow({
     width: 300,
-    height: 450,
+    height: 350,
     fullscreenable: false,
     resizable: false,
     show: false,

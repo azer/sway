@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PresenceStatus } from './presence'
 
 export type Entity = User | Workspace | Room | Status | Participant | Membership
 
@@ -53,34 +54,29 @@ export interface Room {
   is_active: boolean
 }
 
-export enum PresenceMode {
-  Social = 'social',
-  Focus = 'focus',
-  Solo = 'solo',
-  Zen = 'zen',
-}
-
 export const Statuses = 'statuses'
 export interface Status {
   id: string
   user_id: string
   room_id: string
   workspace_id: string
-  status: PresenceMode
+  status: PresenceStatus
   camera_on: boolean
   speaker_on: boolean
   mic_on: boolean
   message: string
+  timezone: string
+  emoji: string
   inserted_at: Date
 }
 
-export const Presences = 'presences'
+/*export const Presences = 'presences'
 export interface Presence {
   id: string
   user_id: string
   is_online: boolean
   last_seen_at: string
-}
+}*/
 
 export const Participants = 'daily_participants'
 export interface Participant {

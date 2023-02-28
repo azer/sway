@@ -1,15 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { setStatusId } from './slice'
 import { useUserSocket } from 'features/UserSocket'
-import { useDispatch, useSelector } from 'state'
 import { logger } from 'lib/log'
-import {
-  add,
-  PresenceMode,
-  Status,
-  Statuses,
-  toStateEntity,
-} from 'state/entities'
+import { add, Status, Statuses, toStateEntity } from 'state/entities'
 import selectors from 'selectors'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useCommandPalette } from 'features/CommandPalette'
@@ -36,22 +29,10 @@ export default function PresenceProvider(props: Props) {
   const presence = usePresence()
 
   const [localStatus, isActive, pushToTalkVideo] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state),
+    selectors.statuses.getLocalStatus(state),
     selectors.presence.isLocalUserActive(state),
     selectors.settings.isPushToTalkVideoOn(state),
   ])
-
-  /*useEffect(() => {
-    if (mode === PresenceMode.Social && isCameraOff) {
-      setMode(PresenceMode.Focus, roomId)
-    }
-  }, [mode, isCameraOff, roomId, workspaceId])
-
-  useEffect(() => {
-    if (isActive && isCameraOff) {
-      setAsInactive()
-    }
-  }, [mode, isActive, isCameraOff, workspaceId])*/
 
   useEffect(() => {
     if (!channel) return
@@ -74,20 +55,19 @@ export default function PresenceProvider(props: Props) {
     'space',
     toggle,
     {
-      enabled:
-        localStatus.status !== PresenceMode.Solo && !commandPalette.isOpen,
+      enabled: !commandPalette.isOpen,
       preventDefault: true,
       keyup: true,
     },
     [channel, localStatus, isActive]
   )
 
-  useHotkeys(
+  /*useHotkeys(
     'space',
     startPushToTalk,
     {
       enabled:
-        localStatus.status === PresenceMode.Solo && !commandPalette.isOpen,
+        localStatus.status === PresenceStatus.Solo && !commandPalette.isOpen,
       preventDefault: true,
       keydown: true,
     },
@@ -99,16 +79,25 @@ export default function PresenceProvider(props: Props) {
     delayStoppingPushToTalk,
     {
       enabled:
-        localStatus.status === PresenceMode.Solo && !commandPalette.isOpen,
+        localStatus.status === PresenceStatus.Solo && !commandPalette.isOpen,
       preventDefault: true,
       keyup: true,
     },
     [channel, pushToTalk, localStatus]
-  )
+  )*/
 
   return <></>
 
-  function startPushToTalk() {
+  function toggle() {
+    const turnOn = !isActive
+
+    presence.setMedia({
+      camera: turnOn,
+      mic: turnOn,
+    })
+  }
+
+  /*function startPushToTalk() {
     if (pushToTalk) return
     setPushToTalk(true)
     presence.setMedia({ camera: pushToTalkVideo, mic: true })
@@ -125,20 +114,5 @@ export default function PresenceProvider(props: Props) {
     if (!pushToTalk) return
     presence.setMedia({ camera: false, mic: false })
     setPushToTalk(false)
-  }
-
-  function toggle() {
-    const turnOn = !isActive
-
-    if (localStatus.status === PresenceMode.Social) {
-      presence.setMedia({
-        mic: turnOn,
-      })
-    } else {
-      presence.setMedia({
-        camera: turnOn,
-        mic: turnOn,
-      })
-    }
-  }
+  }*/
 }

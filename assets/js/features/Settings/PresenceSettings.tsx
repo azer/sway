@@ -6,21 +6,22 @@ import {
   useCommandPalette,
 } from 'features/CommandPalette'
 import { performSearch, useCommandRegistry } from 'features/CommandRegistry'
-import { PresenceMode } from 'state/entities'
+import {
+  findModeByStatus,
+  PresenceMode,
+  PresenceModes,
+  PresenceStatus,
+} from 'state/presence'
 import selectors from 'selectors'
 import React, { useEffect } from 'react'
 import { Desc, Title } from './PushToTalkSettings'
-import {
-  getDesc,
-  getIcon,
-  getLabel,
-  PresenceModeIcon,
-} from 'components/PresenceModeIcon'
+
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Prop, Table, Value } from './CallSettingsPreview'
 import { useUserSocket } from 'features/UserSocket'
 import { useDispatch, useSelector } from 'state'
 import { usePresence } from 'features/Presence/use-presence'
+import { PresenceModeIcon } from 'components/PresenceModeIcon'
 
 const dialogId = 'presence-settings'
 
@@ -33,10 +34,8 @@ export function usePresenceSettings() {
   const { channel } = useUserSocket()
   const presence = usePresence()
 
-  const [roomId, workspaceId, mode] = useSelector((state) => [
-    selectors.rooms.getFocusedRoomId(state),
-    selectors.memberships.getSelfMembership(state)?.workspace_id,
-    selectors.presence.getSelfStatus(state).status,
+  const [presenceMode] = useSelector((state) => [
+    selectors.statuses.getLocalStatus(state).status,
   ])
 
   useEffect(() => {
@@ -50,7 +49,7 @@ export function usePresenceSettings() {
     {
       preventDefault: true,
     },
-    [mode, channel]
+    [presenceMode, channel]
   )
 
   useRegister(
@@ -65,33 +64,18 @@ export function usePresenceSettings() {
         },
       })
 
-      register('Focus mode', () => setMode(PresenceMode.Focus), {
-        icon: 'headphones',
-        type: CommandType.AlterMode,
-        shortcut: ['alt', 'f'],
-        when: mode !== PresenceMode.Focus,
-      })
-
-      register('Social mode', () => setMode(PresenceMode.Social), {
-        icon: 'eye',
-        type: CommandType.AlterMode,
-        when: mode !== PresenceMode.Social,
-      })
-
-      register('Solo mode', () => setMode(PresenceMode.Solo), {
-        icon: 'incognito',
-        type: CommandType.AlterMode,
-        when: mode !== PresenceMode.Solo,
-      })
-
-      register('Zen mode', () => setMode(PresenceMode.Zen), {
-        icon: 'sunrise',
-        shortcut: ['alt', 'z'],
-        type: CommandType.AlterMode,
-        when: mode !== PresenceMode.Zen,
-      })
+      for (const p of PresenceModes) {
+        register(p.label, () => presence.setMode(p.status), {
+          prefix: 'Set your status as:',
+          icon: p.icon,
+          type: CommandType.AlterMode,
+          shortcut: p.shortcut,
+          keywords: p.keywords,
+          when: presenceMode !== p.status,
+        })
+      }
     },
-    [mode, channel]
+    [presenceMode, channel]
   )
 
   return {
@@ -110,31 +94,27 @@ export function usePresenceSettings() {
       title: 'Presence Settings',
       icon: 'livestream',
       placeholder: 'Choose your flow.',
-      selectedId: mode,
+      selectedId: presenceMode,
       preview: (props: { selectedValue?: unknown }) => {
-        const mode = props.selectedValue as PresenceMode
-        const label = getLabel(mode)
-        const desc = getDesc(mode)
-        const cameraOff = mode === PresenceMode.Social ? false : true
+        const status = props.selectedValue as PresenceStatus
+        const mode = findModeByStatus(status) as PresenceMode
+        const label = mode?.label
+        const desc = mode?.desc
+
+        if (!mode) return
 
         return (
           <Preview>
             <IconWrapper>
-              <PresenceModeIcon mode={props.selectedValue as PresenceMode} />
+              <PresenceModeIcon mode={props.selectedValue as PresenceStatus} />
             </IconWrapper>
             <Title>{label} Mode</Title>
             <Desc>{desc}</Desc>
 
             <Table>
-              <Prop>Camera</Prop>
-              <Value off={cameraOff}>{cameraOff ? 'Off' : 'On'}</Value>
               <Prop>Notifications</Prop>
-              <Value off={mode === PresenceMode.Zen}>
-                {mode === PresenceMode.Zen ? 'Off' : 'On'}
-              </Value>
-              <Prop>Push-to-talk</Prop>
-              <Value>
-                {mode === PresenceMode.Solo ? 'Hold' : 'Press'} <kbd>Space</kbd>
+              <Value off={!mode.notifications}>
+                {!mode.notifications ? 'Off' : 'On'}
               </Value>
             </Table>
           </Preview>
@@ -157,37 +137,15 @@ export function usePresenceSettings() {
       },
     ]
 
-    commands.push({
-      id: 'social',
-      value: PresenceMode.Social,
-      icon: mode === PresenceMode.Social ? 'checkmark' : '',
-      name: 'Social',
-      callback: () => presence.setMode(PresenceMode.Social),
-    })
-
-    commands.push({
-      id: 'focus',
-      value: PresenceMode.Focus,
-      icon: mode === PresenceMode.Focus ? 'checkmark' : '',
-      name: 'Focus',
-      callback: () => presence.setMode(PresenceMode.Focus),
-    })
-
-    commands.push({
-      id: 'zen',
-      value: PresenceMode.Zen,
-      icon: mode === PresenceMode.Zen ? 'checkmark' : '',
-      name: 'Zen',
-      callback: () => presence.setMode(PresenceMode.Zen),
-    })
-
-    commands.push({
-      id: 'solo',
-      value: PresenceMode.Solo,
-      icon: mode === PresenceMode.Solo ? 'checkmark' : '',
-      name: 'Solo',
-      callback: () => presence.setMode(PresenceMode.Solo),
-    })
+    for (const p of PresenceModes) {
+      commands.push({
+        id: p.status,
+        value: p.status,
+        icon: presenceMode === p.status ? 'checkmark' : '',
+        name: p.label,
+        callback: () => presence.setMode(p.status),
+      })
+    }
 
     return commands
   }

@@ -14,9 +14,9 @@ interface Props {
 export function UserButton(props: Props) {
   // const dispatch = useDispatch()
   const socket = useUserSocket()
-  const [user, presence] = useSelector((state) => [
+  const [user, presenceIcon] = useSelector((state) => [
     selectors.users.getById(state, props.id),
-    selectors.presence.getStatusByUserId(state, props.id),
+    selectors.presence.getLocalPresenceIcon(state),
   ])
 
   useEffect(() => {
@@ -25,12 +25,10 @@ export function UserButton(props: Props) {
     }
   }, [!user])
 
-  const icon = getIcon(presence?.status, presence.mic_on)
-
   return (
     <Container>
       <Status>
-        <Icon name={icon} />
+        <Icon name={presenceIcon} />
       </Status>
       <Name>{user?.name}</Name>
     </Container>

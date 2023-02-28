@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { PresenceMode } from 'state/entities'
 
 export const name = 'presence'
-export const DefaultPresenceMode = PresenceMode.Focus
 
 interface State {
   userStatuses: { [userId: string]: string }

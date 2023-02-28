@@ -17,10 +17,11 @@ import { Root as SwitchRoot } from '@radix-ui/react-switch'
 
 interface Props {
   children: React.ReactNode
+  onOpenChange?: (open: boolean) => void
 }
 
 export function DropdownMenu(props: Props) {
-  return <Root>{props.children}</Root>
+  return <Root onOpenChange={props.onOpenChange}>{props.children}</Root>
 }
 
 interface ContentProps {
@@ -31,9 +32,9 @@ interface ContentProps {
 export function DropdownContent(props: ContentProps) {
   return (
     <Portal>
-      <StyledContent side={props.side || 'top'} sideOffset={5}>
+      <StyledDropdownContent side={props.side || 'top'} sideOffset={5}>
         {props.children}
-      </StyledContent>
+      </StyledDropdownContent>
     </Portal>
   )
 }
@@ -133,7 +134,7 @@ const StyledItemCSS = {
 const StyledItem = styled(Item, StyledItemCSS)
 const StyledSwitchItem = styled('div', StyledItemCSS)
 
-const StyledContent = styled(Content, {
+export const StyledDropdownContent = styled(Content, {
   colors: {
     bg: '$dropdownBg',
     fg: '$dropdownFg',

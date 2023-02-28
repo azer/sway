@@ -1,7 +1,6 @@
 import { logger } from 'lib/log'
 import selectors from 'selectors'
 import { RootState } from 'state'
-import { PresenceMode, Status } from 'state/entities'
 import { ConnectionStatus, ConnectionState } from './slice'
 
 const log = logger('dock/selectors')

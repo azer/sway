@@ -30,9 +30,9 @@ function UActiveParticipant(props: Props) {
   const audioTrack = useMediaTrack(props.participantId, 'audio')
   const audioElement = useRef<HTMLAudioElement>()
 
-  // @ts-ignore
   const participant = window.fakeState
-    ? window.fakeState.useParticipant(props.participantId)
+    ? // @ts-ignore
+      window.fakeState.useParticipant(props.participantId)
     : useParticipant(props.participantId)
   const screensharing = participant && participant.screen
 
@@ -41,7 +41,7 @@ function UActiveParticipant(props: Props) {
       ? // @ts-ignore
         selectors.users.getById(state, participant.userData.id)
       : undefined,
-    selectors.presence.getSelfStatus(state).speaker_on,
+    selectors.statuses.getLocalStatus(state).speaker_on,
     // @ts-ignore
     selectors.users.getSelf(state)?.id === participant?.userData?.id,
   ])

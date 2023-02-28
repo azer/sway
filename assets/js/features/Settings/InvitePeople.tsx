@@ -9,11 +9,6 @@ import {
 import { useCommandRegistry } from 'features/CommandRegistry'
 import selectors from 'selectors'
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  getDesc,
-  getLabel,
-  PresenceModeIcon,
-} from 'components/PresenceModeIcon'
 import { useUserSocket } from 'features/UserSocket'
 import { useDispatch, useSelector } from 'state'
 import { logger } from 'lib/log'

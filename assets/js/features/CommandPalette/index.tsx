@@ -34,6 +34,7 @@ export interface Command {
   hint?: string
   error?: string
   suffix?: string
+  prefix?: string
   keywords?: string[]
   when?: boolean
   pin?: boolean

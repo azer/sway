@@ -99,6 +99,7 @@ export default function CommandPaletteModal(props: Props) {
                       {cmd.icon ? <Icon name={cmd.icon} /> : null}
                     </CommandIcon>
                     <Name>
+                      {cmd.prefix ? <Prefix>{cmd.prefix}</Prefix> : null}
                       {cmd.name}
                       {cmd.suffix ? <Suffix>{cmd.suffix}</Suffix> : null}
                     </Name>
@@ -370,6 +371,11 @@ const Name = styled('div', {
 const Suffix = styled('label', {
   color: '$gray9',
   marginLeft: '4px',
+})
+
+const Prefix = styled('label', {
+  color: '$gray9',
+  marginRight: '4px',
 })
 
 const Hint = styled('div', {

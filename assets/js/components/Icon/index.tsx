@@ -37,6 +37,8 @@ import { PassportIcon } from './Passport'
 import { NewHireIcon } from './NewHire'
 import { SendIcon } from './Send'
 import { LightBulbIcon } from './LightBulb'
+import { EmojiIcon } from './Emoji'
+import { SearchIcon } from './Search'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -78,7 +80,9 @@ const icons: {
   passport: PassportIcon,
   newHire: NewHireIcon,
   send: SendIcon,
+  emoji: EmojiIcon,
   lightbulb: LightBulbIcon,
+  search: SearchIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {

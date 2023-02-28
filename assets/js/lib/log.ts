@@ -1,6 +1,6 @@
 interface Logger {
-  info: (msg, ...props: any[]) => void
-  error: (msg, ...props: any[]) => void
+  info: (msg: string, ...props: unknown[]) => void
+  error: (msg: string, ...props: unknown[]) => void
 }
 
 let c = 0

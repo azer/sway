@@ -120,7 +120,7 @@ export function RoomButton(props: Props) {
             channel &&
             localWorkspaceId &&
             commandPalette.open(
-              deleteRoomCmd(channel, room),
+              deleteRoomCmd(channel, room, localWorkspaceId),
               deleteRoomModal(channel, room, localWorkspaceId)
             )
           }
@@ -133,6 +133,7 @@ export function RoomButton(props: Props) {
             channel &&
             localWorkspaceId &&
             commandPalette.open(
+              // @ts-ignore
               () => [],
               createRoomModal(channel, localWorkspaceId)
             )

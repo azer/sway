@@ -1,12 +1,10 @@
 import React from 'react'
 import { styled } from 'themes'
-import Sidebar from 'features/Sidebar'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { Navigation, navigationBlur1 } from 'features/Navigation'
-import { PresenceMode } from 'state/entities'
+import { PresenceStatus } from 'state/presence'
 import { Titlebar } from 'features/Titlebar'
-import { topBlurEffect } from 'features/Room'
 import { globalCss } from '@stitches/react'
 import { isElectron } from 'lib/electron'
 
@@ -15,8 +13,8 @@ interface Props {
 }
 
 export function Shell(props: Props) {
-  const [presenceMode] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state),
+  const [localStatus] = useSelector((state) => [
+    selectors.statuses.getLocalStatus(state),
   ])
 
   globalStyles()
@@ -24,7 +22,7 @@ export function Shell(props: Props) {
   return (
     <Viewport electron={isElectron}>
       {isElectron ? <Titlebar /> : null}
-      <Container electron={isElectron} mode={presenceMode?.status}>
+      <Container electron={isElectron} status={localStatus.status}>
         <Navigation />
         {props.children}
       </Container>
@@ -72,17 +70,14 @@ const Container = styled('main', {
         minHeight: 'calc(100vh - 40px)',
       },
     },
-    mode: {
-      [PresenceMode.Social]: {
+    status: {
+      [PresenceStatus.Online]: {
         backgroundImage: `${bottomBlurEffect('$presenceModelineSocialBlur')}`,
       },
-      [PresenceMode.Solo]: {
-        backgroundImage: `${bottomBlurEffect('$presenceModelineSoloBlur')}`,
-      },
-      [PresenceMode.Zen]: {
+      [PresenceStatus.Zen]: {
         backgroundImage: `${bottomBlurEffect('$presenceModelineZenBlur')}`,
       },
-      [PresenceMode.Focus]: {
+      [PresenceStatus.Focus]: {
         backgroundImage: `${bottomBlurEffect('$presenceModelineFocusBlur')}`,
       },
     },

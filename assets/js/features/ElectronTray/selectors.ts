@@ -1,7 +1,7 @@
 import { RoomStatus } from 'features/Room/selectors'
 import selectors from 'selectors'
 import { RootState } from 'state'
-import { initialState } from 'state/entities'
+import { initialState, PresenceMode } from 'state/entities'
 
 export interface TrayWindowState {
   entities: typeof initialState
@@ -11,6 +11,7 @@ export interface TrayWindowState {
   userStatuses: { [id: string]: string }
   focusedRoomMode?: RoomStatus
   onlineUsers: string[]
+  usersByRooms: { [id: string]: string[] }
 }
 
 export function snapshotForTrayWindow(state: RootState): TrayWindowState {
@@ -27,5 +28,6 @@ export function snapshotForTrayWindow(state: RootState): TrayWindowState {
     otherUsers: otherUsers,
     userStatuses: state.presence.userStatuses,
     onlineUsers: state.userSocket.onlineUsers,
+    usersByRooms: state.rooms.userIdsByRoom,
   }
 }

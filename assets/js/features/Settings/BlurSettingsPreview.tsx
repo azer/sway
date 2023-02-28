@@ -34,7 +34,7 @@ export function BlurSettingsPreview(props: Props) {
 
   const [isOff, isActive, deviceId, deviceLabel] = useSelector((state) => [
     selectors.settings.isVideoInputOff(state),
-    selectors.presence.getSelfStatus(state).is_active,
+    selectors.presence.isLocalUserActive(state),
     selectors.settings.getVideoInputDeviceId(state),
     selectors.settings.getVideoInputDeviceLabelById(
       state,

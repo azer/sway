@@ -4,15 +4,11 @@ import { useSelector, useDispatch } from 'state'
 import { ActiveParticipant } from 'features/Call/ActiveParticipant'
 import { logger } from 'lib/log'
 import { styled } from 'themes'
-import {
-  getIcon,
-  getLabel,
-  PresenceModeIcon,
-} from 'components/PresenceModeIcon'
 import Icon from 'components/Icon'
 import { AvatarView } from 'features/Avatar/AvatarView'
-import { PresenceMode, Users } from 'state/entities'
+import { Users } from 'state/entities'
 import { useUserSocket } from 'features/UserSocket'
+import { findModeByStatus } from 'state/presence'
 
 interface Props {
   userId: string
@@ -22,12 +18,15 @@ const log = logger('room/participant')
 
 export function Participant(props: Props) {
   const socket = useUserSocket()
-  const [user, participant, status, isActive] = useSelector((state) => [
-    selectors.users.getById(state, props.userId),
-    selectors.call.getParticipantStatusByUserId(state, props.userId),
-    selectors.presence.getStatusByUserId(state, props.userId),
-    selectors.presence.isUserActive(state, props.userId),
-  ])
+  const [user, participant, status, isActive, presenceIcon] = useSelector(
+    (state) => [
+      selectors.users.getById(state, props.userId),
+      selectors.call.getParticipantStatusByUserId(state, props.userId),
+      selectors.statuses.getByUserId(state, props.userId),
+      selectors.presence.isUserActive(state, props.userId),
+      selectors.presence.getPresenceIconByUserId(state, props.userId),
+    ]
+  )
 
   useEffect(() => {
     if (!user) {
@@ -35,26 +34,17 @@ export function Participant(props: Props) {
     }
   }, [!user])
 
-  if (
-    participant &&
-    participant.dailyUserId &&
-    (participant.cameraOn ||
-      participant?.micOn ||
-      status.status === PresenceMode.Social)
-  ) {
+  if (participant && participant.dailyUserId && isActive) {
     return <ActiveParticipant participantId={participant.dailyUserId} />
   }
 
   return (
     <Border>
-      <InactiveParticipant
-        data-user-id={props.userId}
-        title={getLabel(status.status)}
-      >
-        <User mode={status.status}>
-          <Mode mode={status.status}>
-            <Icon name={getIcon(status.status, isActive)} />
-          </Mode>
+      <InactiveParticipant data-user-id={props.userId}>
+        <User>
+          <PresenceModeIcon status={status.status}>
+            <Icon name={presenceIcon} />
+          </PresenceModeIcon>
           <Name>{user?.name.split(' ')[0] || 'Unknown'}</Name>
         </User>
         <AvatarView
@@ -112,31 +102,6 @@ export const User = styled('footer', {
   ellipsis: true,
   gap: '8px',
   padding: '4px 14px 2px 14px',
-  [`& ${PresenceModeIcon}`]: {
-    height: '24px',
-  },
-  [`& label`]: {},
-
-  variants: {
-    mode: {
-      /*focus: {
-        color: '$participantFocusFg',
-        background: '$participantFocusBg',
-      },
-      active: {
-        color: '$participantActiveFg',
-        background: '$participantActiveBg',
-      },
-      away: {
-        color: '$participantAwayFg',
-        background: '$participantAwayBg',
-      },
-      dnd: {
-        color: '$participantDndFg',
-        background: '$participantDndBg',
-      },*/
-    },
-  },
 })
 
 export const Name = styled('label', {
@@ -146,7 +111,7 @@ export const Name = styled('label', {
   vcenter: true,
 })
 
-const Mode = styled('div', {
+const PresenceModeIcon = styled('div', {
   vcenter: true,
   label: true,
   height: '100%',
@@ -154,15 +119,12 @@ const Mode = styled('div', {
     width: '14px',
   },
   variants: {
-    mode: {
+    status: {
       focus: {
         color: '$participantFocusBg',
       },
-      social: {
+      online: {
         color: '$participantSocialBg',
-      },
-      solo: {
-        color: '$participantSoloBg',
       },
       zen: {
         color: '$participantZenBg',

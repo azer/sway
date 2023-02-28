@@ -20,7 +20,7 @@ const dialogId = 'camera-settings'
 export function useVideoSettings() {
   const dispatch = useDispatch()
   const [isOn, selectedDeviceId, allDevices] = useSelector((state) => [
-    selectors.presence.getSelfStatus(state).camera_on,
+    selectors.statuses.getLocalStatus(state).camera_on,
     selectors.settings.getVideoInputDeviceId(state),
     selectors.settings.allVideoInputDevices(state),
   ])

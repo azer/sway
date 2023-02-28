@@ -21,6 +21,8 @@ defmodule SwayWeb.StatusView do
       camera_on: status.camera_on,
       mic_on: status.mic_on,
       speaker_on: status.speaker_on,
+      timezone: status.timezone,
+      emoji: status.emoji,
       inserted_at: status.inserted_at
     }
   end

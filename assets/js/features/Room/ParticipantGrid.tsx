@@ -5,7 +5,6 @@ import { useSelector } from 'state'
 import { Border, InactiveParticipant, Participant } from './RoomParticipant'
 import { logger } from 'lib/log'
 import { useMediaTrack, useScreenShare } from '@daily-co/daily-react-hooks'
-import { PresenceMode } from 'state/entities'
 import { CallTile } from 'features/Call/Tile'
 
 interface Props {
@@ -22,11 +21,11 @@ export function ParticipantGrid(props: Props) {
     const localUserId = selectors.users.getSelf(state)?.id
 
     const activeUsers = users
-      .filter((uid) => selectors.presence.isUserActiveOrVisible(state, uid))
+      .filter((uid) => selectors.presence.isUserActive(state, uid))
       .filter((userId) => isSharingScreen || userId !== localUserId)
 
     const inactiveUsers = users
-      .filter((uid) => !selectors.presence.isUserActiveOrVisible(state, uid))
+      .filter((uid) => !selectors.presence.isUserActive(state, uid))
       .filter((userId) => isSharingScreen || userId !== localUserId)
 
     return [

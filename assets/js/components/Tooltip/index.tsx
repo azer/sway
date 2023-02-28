@@ -10,9 +10,9 @@ interface Props {
   shortcut?: string[]
 }
 
-export function Tooltip(props: Props) {
+export function Tooltip(props: Props): JSX.Element {
   if (!props.content) {
-    return props.children
+    return <>props.children</>
   }
 
   return (
@@ -42,6 +42,6 @@ const StyledContent = styled(Content, {
   fontWeight: '$medium',
   gap: '$space4',
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-  backdropFilter: { blur: 10, saturate: 190, contrast: 70, brightness: 80 },
+  backdrop: { blur: 10, saturate: 190, contrast: 70, brightness: 80 },
   cursor: 'default',
 })
