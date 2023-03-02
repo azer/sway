@@ -1,8 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, RootState } from 'app/state'
 import { initialWorkspaceFocus, WorkspaceFocus } from 'features/Workspace/focus'
+import { logger } from 'lib/log'
 
 export const name = 'focus'
+
+const log = logger('focus/slice')
 
 interface State {
   windowHasFocus: boolean
@@ -39,5 +42,11 @@ export function updateWorkspaceFocus(
 
     updateFn(draft, getState)
     dispatch(setWorkspaceFocus(draft))
+  }
+}
+
+export function switchFocus(id: string) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    log.info('Switch focus to ', id)
   }
 }

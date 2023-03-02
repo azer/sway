@@ -36,6 +36,9 @@ export default function PresenceProvider(props: Props) {
 
   useEffect(() => {
     if (!channel) return
+
+    log.info('Listening user status updates')
+
     channel.on('user:status', (payload: Status) => {
       log.info('Received new user status', payload)
 

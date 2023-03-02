@@ -24,7 +24,7 @@ import '../css/fonts.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Routing from 'features/Routing'
-import UserSocketProvider from 'features/UserSocket'
+import { UserSocketProvider } from 'features/UserSocket'
 import CommandRegistryProvider from 'features/CommandRegistry'
 import { Provider } from 'react-redux'
 import { store } from 'state/store'
@@ -38,14 +38,14 @@ import topbar from '../vendor/topbar'
 import CommandPaletteProvider from 'features/CommandPalette'
 import { SettingsProvider } from 'features/Settings'
 import { CallProvider } from 'features/Call/Provider'
-import { CallSettingsProvider } from 'features/Settings/CallSettingsProvider'
 import PresenceProvider from 'features/Presence/Provider'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { ElectronTrayProvider } from 'features/ElectronTray'
+import { EmojiProvider } from 'features/Emoji/Provider'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
-  .getAttribute('content')
+  ?.getAttribute('content')
 
 let liveSocket = new LiveSocket('/live', Socket, {
   params: { _csrf_token: csrfToken },
@@ -75,6 +75,7 @@ ReactDOM.render(
               <SettingsProvider />
               <PresenceProvider />
               <ElectronTrayProvider />
+              <EmojiProvider />
               <Tooltip.Provider>
                 <Routing />
               </Tooltip.Provider>

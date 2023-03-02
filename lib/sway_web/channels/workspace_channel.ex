@@ -140,6 +140,39 @@ defmodule SwayWeb.WorkspaceChannel do
     end
   end
 
+  def handle_in("user:status", %{"timezone" => timezone, "workspace_id" => workspace_id}, socket) do
+    status = Sway.Statuses.get_latest_status(socket.assigns.user, workspace_id)
+    case Sway.Statuses.update_status(status, %{ timezone: timezone }) do
+      {:ok, status} ->
+        broadcast(socket, "user:status", status_broadcastable(status))
+        {:noreply, socket}
+      {:error, reason} ->
+        {:error, %{reason: reason}}
+    end
+  end
+
+  def handle_in("user:status", %{"emoji" => emoji, "workspace_id" => workspace_id}, socket) do
+    status = Sway.Statuses.get_latest_status(socket.assigns.user, workspace_id)
+    case Sway.Statuses.update_status(status, %{ emoji: emoji }) do
+      {:ok, status} ->
+        broadcast(socket, "user:status", status_broadcastable(status))
+        {:noreply, socket}
+      {:error, reason} ->
+        {:error, %{reason: reason}}
+    end
+  end
+
+  def handle_in("user:status", %{"message" => message, "workspace_id" => workspace_id}, socket) do
+    status = Sway.Statuses.get_latest_status(socket.assigns.user, workspace_id)
+    case Sway.Statuses.update_status(status, %{ message: message }) do
+      {:ok, status} ->
+        broadcast(socket, "user:status", status_broadcastable(status))
+        {:noreply, socket}
+      {:error, reason} ->
+        {:error, %{reason: reason}}
+    end
+  end
+
   def handle_in("user:status", %{"presence_mode" => presence_mode, "room_id" => room_id, "workspace_id" => workspace_id }, socket) do
     {room_id_int, ""} = Integer.parse(room_id)
     {workspace_id_int, ""} = Integer.parse(workspace_id)

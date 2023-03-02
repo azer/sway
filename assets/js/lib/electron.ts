@@ -14,10 +14,10 @@ export const ipcRenderer = window.electron?.ipcRenderer as {
 }
 
 export function sendMessage(chan: string, payload: unknown) {
-  log.info('Sending message', chan, payload)
-
   if (!isElectron) return
   if (!ipcRenderer) log.error('ipcRenderer undefined')
+
+  log.info('Sending message', chan, payload)
 
   ipcRenderer.send(chan, JSON.stringify(payload))
 }

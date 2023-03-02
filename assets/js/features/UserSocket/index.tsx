@@ -12,6 +12,7 @@ import {
   ConnectionState,
   setSwaySocketConnectionStatus,
 } from 'features/Dock/slice'
+import { timezone } from 'lib/datetime'
 // import useUserSocket, { context, initialState } from './use-user-socket'
 // import { useSelector, useDispatch } from 'app/state'
 
@@ -31,7 +32,7 @@ const context = React.createContext<{
 
 const log = logger('user-socket')
 
-export default function UserSocket(props: Props) {
+export function UserSocketProvider(props: Props) {
   const dispatch = useDispatch()
   const [channel, setChannel] = useState<Channel>()
   const [presence, setPresence] = useState<Presence>()
@@ -51,6 +52,25 @@ export default function UserSocket(props: Props) {
     log.info('Open connection')
     socket.connect()
   }, [])
+
+  useEffect(() => {
+    log.info('Connection status', {
+      ...status,
+      channel: channel?.state,
+    })
+
+    if (
+      status?.swaySocket === ConnectionState.Connected &&
+      channel?.state === 'joined'
+    ) {
+      log.info('Sync timezone:', timezone())
+
+      channel.push('user:status', {
+        workspace_id: workspaceId,
+        timezone: timezone(),
+      })
+    }
+  }, [status?.swaySocket, channel?.state])
 
   useEffect(() => {
     if (!workspaceId || !userId) return

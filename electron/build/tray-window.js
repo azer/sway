@@ -6395,14 +6395,14 @@
             16
           );
           var clz32 = Math.clz32 ? Math.clz32 : clz32Fallback;
-          var log5 = Math.log;
+          var log6 = Math.log;
           var LN2 = Math.LN2;
           function clz32Fallback(x5) {
             var asUint = x5 >>> 0;
             if (asUint === 0) {
               return 32;
             }
-            return 31 - (log5(asUint) / LN2 | 0) | 0;
+            return 31 - (log6(asUint) / LN2 | 0) | 0;
           }
           var TotalLanes = 31;
           var NoLanes = (
@@ -24606,8 +24606,8 @@
           t5.constructor !== Object || t5.$$typeof ? null == n5.type && (n5.type = t5) : n5.composers.add(C(t5, e3));
     return null == n5.type && (n5.type = "span"), n5.composers.size || n5.composers.add(["PJLV", {}, [], [], {}, []]), P(e3, n5, t4);
   });
-  var C = (_a4, i5) => {
-    var _b2 = _a4, { variants: e3, compoundVariants: t4, defaultVariants: r5 } = _b2, n5 = __objRest(_b2, ["variants", "compoundVariants", "defaultVariants"]);
+  var C = (_a3, i5) => {
+    var _b2 = _a3, { variants: e3, compoundVariants: t4, defaultVariants: r5 } = _b2, n5 = __objRest(_b2, ["variants", "compoundVariants", "defaultVariants"]);
     const o5 = `${S(i5.prefix)}c-${z(n5)}`, l5 = [], s5 = [], d5 = /* @__PURE__ */ Object.create(null), g5 = [];
     for (const e4 in r5)
       d5[e4] = String(r5[e4]);
@@ -24625,7 +24625,7 @@
     var p5, u5;
     if ("object" == typeof t4 && t4)
       for (const e4 of t4) {
-        let _a5 = e4, { css: t5 } = _a5, r6 = __objRest(_a5, ["css"]);
+        let _a4 = e4, { css: t5 } = _a4, r6 = __objRest(_a4, ["css"]);
         t5 = "object" == typeof t5 && t5 || {};
         for (const e5 in r6)
           r6[e5] = String(r6[e5]);
@@ -24646,7 +24646,7 @@
       return t5[T] = [], t5.rules = {}, W.forEach((e5) => t5.rules[e5] = { apply: (r6) => t5[T].push([e5, r6]) }), t5;
     })(r5) : null, d5 = (c6 || r5).rules, g5 = `.${n5}${i5.length > 1 ? `:where(.${i5.slice(1).join(".")})` : ""}`, p5 = (l5) => {
       l5 = "object" == typeof l5 && l5 || A;
-      const _a4 = l5, { css: s5 } = _a4, p6 = __objRest(_a4, ["css"]), u5 = {};
+      const _a3 = l5, { css: s5 } = _a3, p6 = __objRest(_a3, ["css"]), u5 = {};
       for (const e4 in o5)
         if (delete p6[e4], e4 in l5) {
           let t5 = l5[e4];
@@ -24880,8 +24880,8 @@
     navigationFg: "rgba(255, 255, 255, 0.6)",
     navigationBlur2: "rgba(126, 33, 50, 0.125)",
     navigationBlur1: "rgba(15, 100, 222, 0.125)",
-    dockBg: "rgba(255,255,255,0.03)",
-    dockBorderColor: "rgba(255, 255, 255, 0.04)",
+    dockBg: "rgb(34, 37, 42)",
+    dockBorderColor: "rgba(255, 255, 255, 0.07)",
     dockFg: "$white",
     dockIconBorderColor: "$gray2",
     dockIconReadyBg: "$gray3",
@@ -25031,7 +25031,6 @@
       xlarge: "24px",
       circle: "100%"
     },
-    shadows: {},
     zIndices: {
       base: 10,
       aboveBase: 20,
@@ -25053,11 +25052,11 @@
   var utils = {
     space: (options) => {
       const ret = {};
-      const margin = !Array.isArray(options.outer) ? [options.outer] : options.outer;
-      if (options.outer)
+      const margin = options.outer ? !Array.isArray(options.outer) ? [options.outer] : options.outer : void 0;
+      if (margin)
         ret["margin"] = margin.map((n5) => `${n5 * BASELINE_UNIT}px`).join(" ");
-      const padding = !Array.isArray(options.inner) ? [options.inner] : options.inner;
-      if (options.inner)
+      const padding = options.inner ? !Array.isArray(options.inner) ? [options.inner] : options.inner : void 0;
+      if (padding)
         ret["padding"] = padding.map((n5) => `${n5 * BASELINE_UNIT}px`).join(" ");
       if (options.gap)
         ret["gap"] = `${options.gap * BASELINE_UNIT}px`;
@@ -26309,12 +26308,12 @@
           }
           var promise2 = function() {
             return __async2(this, null, function() {
-              var _a4, _b2, finalAction, conditionResult, err_1, skipDispatch;
+              var _a3, _b2, finalAction, conditionResult, err_1, skipDispatch;
               return __generator(this, function(_c) {
                 switch (_c.label) {
                   case 0:
                     _c.trys.push([0, 4, , 5]);
-                    conditionResult = (_a4 = options == null ? void 0 : options.condition) == null ? void 0 : _a4.call(options, arg, { getState, extra });
+                    conditionResult = (_a3 = options == null ? void 0 : options.condition) == null ? void 0 : _a3.call(options, arg, { getState, extra });
                     if (!isThenable(conditionResult))
                       return [3, 2];
                     return [4, conditionResult];
@@ -26442,31 +26441,6 @@
   var Memberships = "memberships";
   var Workspaces = "workspaces";
   var Rooms = "rooms";
-  var PresenceModes = [
-    {
-      mode: "online" /* Online */,
-      icon: "headphones",
-      color: "$online",
-      label: "Online",
-      keywords: ["available", "present"],
-      desc: "Be present"
-    },
-    {
-      mode: "focus" /* Focus */,
-      icon: "headphones",
-      color: "$focus",
-      label: "Focus",
-      desc: "Productive and responsive"
-    },
-    {
-      mode: "zen" /* Zen */,
-      icon: "zen",
-      color: "$zen",
-      label: "Zen",
-      keywords: ["Do not disturb"],
-      desc: "Calm, undisturbed"
-    }
-  ];
   var Statuses = "statuses";
   var Participants = "daily_participants";
   var initialState = {
@@ -26493,8 +26467,8 @@
         }
       },
       addInitialState: (state, action) => {
-        var _a4;
-        const entities = (_a4 = window.initialState) == null ? void 0 : _a4.entities;
+        var _a3;
+        const entities = (_a3 = window.initialState) == null ? void 0 : _a3.entities;
         if (!entities)
           return;
         for (const table in entities) {
@@ -26585,12 +26559,12 @@
       error
     };
     function info(msg, ...props) {
-      log5(console.info, msg, props);
+      log6(console.info, msg, props);
     }
     function error(msg, ...props) {
-      log5(console.error, msg, props);
+      log6(console.error, msg, props);
     }
-    function log5(fn2, msg, props) {
+    function log6(fn2, msg, props) {
       const args = [
         `%c<${name3}>%c ${msg}`,
         `color: ${color};font-weight: bold;`,
@@ -26612,18 +26586,59 @@
   var _a;
   var ipcRenderer = (_a = window.electron) == null ? void 0 : _a.ipcRenderer;
   function sendMessage(chan, payload) {
-    log.info("Sending message", chan, payload);
     if (!isElectron)
       return;
     if (!ipcRenderer)
       log.error("ipcRenderer undefined");
+    log.info("Sending message", chan, payload);
     ipcRenderer.send(chan, JSON.stringify(payload));
   }
 
-  // ../assets/js/features/Dock/slice.ts
-  var name = "status";
-  var _a2, _b;
+  // ../assets/js/features/Dock/focus.ts
+  var initialDockFocus = {
+    region: "workspace.room.dock.message" /* Message */,
+    dropdownOpen: false
+  };
+
+  // ../assets/js/features/Room/focus.ts
+  var initialRoomFocus = {
+    roomId: window.initialState.focus.roomId,
+    dock: initialDockFocus
+  };
+
+  // ../assets/js/features/Workspace/focus.ts
+  var initialWorkspaceFocus = {
+    // @ts-ignore
+    workspaceId: window.initialState.focus.workspaceId,
+    room: initialRoomFocus
+  };
+
+  // ../assets/js/features/Focus/slice.ts
+  var name = "focus";
+  var log2 = logger("focus/slice");
   var initialState2 = {
+    windowHasFocus: document.hasFocus(),
+    workspace: initialWorkspaceFocus
+  };
+  var slice2 = createSlice({
+    name,
+    initialState: initialState2,
+    reducers: {
+      setWindowFocus: (state, action) => {
+        state.windowHasFocus = action.payload;
+      },
+      setWorkspaceFocus: (state, action) => {
+        state.workspace = action.payload;
+      }
+    }
+  });
+  var { setWindowFocus, setWorkspaceFocus } = slice2.actions;
+  var slice_default = slice2.reducer;
+
+  // ../assets/js/features/Dock/slice.ts
+  var name2 = "status";
+  var _a2, _b;
+  var initialState3 = {
     presence: {},
     connection: {
       // @ts-ignore
@@ -26634,9 +26649,9 @@
       }
     }
   };
-  var slice2 = createSlice({
-    name,
-    initialState: initialState2,
+  var slice3 = createSlice({
+    name: name2,
+    initialState: initialState3,
     reducers: {
       setSwaySocketConnectionStatus: (state, action) => {
         state.connection[action.payload.userId] = __spreadProps(__spreadValues({}, state.connection[action.payload.userId]), {
@@ -26673,31 +26688,41 @@
     setSwaySocketConnectionStatus,
     setDailyCallConnectionStatus,
     setInternetConnectionStatus
-  } = slice2.actions;
-  var slice_default = slice2.reducer;
+  } = slice3.actions;
+  var slice_default2 = slice3.reducer;
 
   // ../assets/js/features/Dock/selectors.ts
-  var log2 = logger("dock/selectors");
+  var log3 = logger("dock/selectors");
 
-  // ../assets/js/features/Presence/slice.ts
-  var name2 = "presence";
-  var DefaultPresenceMode = "online" /* Online */;
-  var _a3;
-  var initialState3 = {
-    // @ts-ignore
-    userStatuses: ((_a3 = window.initialState) == null ? void 0 : _a3.status) || {}
+  // ../assets/js/state/presence.ts
+  var Online = {
+    status: "online" /* Online */,
+    icon: "headphones",
+    color: "$online",
+    label: "Online",
+    keywords: ["available", "present"],
+    desc: "Be present",
+    notifications: true
   };
-  var slice3 = createSlice({
-    name: name2,
-    initialState: initialState3,
-    reducers: {
-      setStatusId: (state, action) => {
-        state.userStatuses[action.payload.userId] = action.payload.statusId;
-      }
-    }
-  });
-  var { setStatusId: setStatusId2 } = slice3.actions;
-  var slice_default2 = slice3.reducer;
+  var Focus = {
+    status: "focus" /* Focus */,
+    icon: "headphones",
+    color: "$focus",
+    label: "Focus",
+    desc: "Productive and responsive",
+    keywords: [],
+    notifications: true
+  };
+  var Zen = {
+    status: "zen" /* Zen */,
+    icon: "sunrise",
+    color: "$zen",
+    label: "Zen",
+    desc: "Calm, undisturbed",
+    keywords: ["mindful", "meditation", "dnd", "do not disturb"],
+    notifications: false
+  };
+  var PresenceModes = [Online, Focus, Zen];
 
   // ../assets/js/components/RoomStatusIcon/index.tsx
   var RoomStatusIcon = styled("div", {
@@ -27066,7 +27091,7 @@
         defaultContext
       ];
       function Provider(props) {
-        const _a4 = props, { scope, children } = _a4, context = __objRest(_a4, ["scope", "children"]);
+        const _a3 = props, { scope, children } = _a3, context = __objRest(_a3, ["scope", "children"]);
         const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
         const value = (0, import_react4.useMemo)(
           () => context,
@@ -27194,7 +27219,7 @@
 
   // ../assets/node_modules/@radix-ui/react-slot/dist/index.module.js
   var $5e63c961fc1ce211$export$8c6ed5c666ac1360 = /* @__PURE__ */ (0, import_react8.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { children } = _a4, slotProps = __objRest(_a4, ["children"]);
+    const _a3 = props, { children } = _a3, slotProps = __objRest(_a3, ["children"]);
     const childrenArray = import_react8.Children.toArray(children);
     const slottable = childrenArray.find($5e63c961fc1ce211$var$isSlottable);
     if (slottable) {
@@ -27217,7 +27242,7 @@
   });
   $5e63c961fc1ce211$export$8c6ed5c666ac1360.displayName = "Slot";
   var $5e63c961fc1ce211$var$SlotClone = /* @__PURE__ */ (0, import_react8.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { children } = _a4, slotProps = __objRest(_a4, ["children"]);
+    const _a3 = props, { children } = _a3, slotProps = __objRest(_a3, ["children"]);
     if (/* @__PURE__ */ (0, import_react8.isValidElement)(children))
       return /* @__PURE__ */ (0, import_react8.cloneElement)(children, __spreadProps(__spreadValues({}, $5e63c961fc1ce211$var$mergeProps(slotProps, children.props)), {
         ref: $6ed0406888f73fc4$export$43e446d32b3d21af(forwardedRef, children.ref)
@@ -27275,7 +27300,7 @@
   ];
   var $8927f6f2acc4f386$export$250ffa63cdc0d034 = $8927f6f2acc4f386$var$NODES.reduce((primitive, node) => {
     const Node = /* @__PURE__ */ (0, import_react9.forwardRef)((props, forwardedRef) => {
-      const _a4 = props, { asChild } = _a4, primitiveProps = __objRest(_a4, ["asChild"]);
+      const _a3 = props, { asChild } = _a3, primitiveProps = __objRest(_a3, ["asChild"]);
       const Comp = asChild ? $5e63c961fc1ce211$export$8c6ed5c666ac1360 : node;
       (0, import_react9.useEffect)(() => {
         window[Symbol.for("radix-ui")] = true;
@@ -27301,7 +27326,7 @@
   var [$cddcb0b647441e34$var$createAvatarContext, $cddcb0b647441e34$export$90370d16b488820f] = $c512c27ab02ef895$export$50c7b4e9d9f19c1($cddcb0b647441e34$var$AVATAR_NAME);
   var [$cddcb0b647441e34$var$AvatarProvider, $cddcb0b647441e34$var$useAvatarContext] = $cddcb0b647441e34$var$createAvatarContext($cddcb0b647441e34$var$AVATAR_NAME);
   var $cddcb0b647441e34$export$e2255cf6045e8d47 = /* @__PURE__ */ (0, import_react10.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeAvatar } = _a4, avatarProps = __objRest(_a4, ["__scopeAvatar"]);
+    const _a3 = props, { __scopeAvatar } = _a3, avatarProps = __objRest(_a3, ["__scopeAvatar"]);
     const [imageLoadingStatus, setImageLoadingStatus] = (0, import_react10.useState)("idle");
     return /* @__PURE__ */ (0, import_react10.createElement)($cddcb0b647441e34$var$AvatarProvider, {
       scope: __scopeAvatar,
@@ -27313,8 +27338,8 @@
   });
   var $cddcb0b647441e34$var$IMAGE_NAME = "AvatarImage";
   var $cddcb0b647441e34$export$2cd8ae1985206fe8 = /* @__PURE__ */ (0, import_react10.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeAvatar, src, onLoadingStatusChange = () => {
-    } } = _a4, imageProps = __objRest(_a4, ["__scopeAvatar", "src", "onLoadingStatusChange"]);
+    const _a3 = props, { __scopeAvatar, src, onLoadingStatusChange = () => {
+    } } = _a3, imageProps = __objRest(_a3, ["__scopeAvatar", "src", "onLoadingStatusChange"]);
     const context = $cddcb0b647441e34$var$useAvatarContext($cddcb0b647441e34$var$IMAGE_NAME, __scopeAvatar);
     const imageLoadingStatus = $cddcb0b647441e34$var$useImageLoadingStatus(src);
     const handleLoadingStatusChange = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a((status) => {
@@ -27335,7 +27360,7 @@
   });
   var $cddcb0b647441e34$var$FALLBACK_NAME = "AvatarFallback";
   var $cddcb0b647441e34$export$69fffb6a9571fbfe = /* @__PURE__ */ (0, import_react10.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeAvatar, delayMs } = _a4, fallbackProps = __objRest(_a4, ["__scopeAvatar", "delayMs"]);
+    const _a3 = props, { __scopeAvatar, delayMs } = _a3, fallbackProps = __objRest(_a3, ["__scopeAvatar", "delayMs"]);
     const context = $cddcb0b647441e34$var$useAvatarContext($cddcb0b647441e34$var$FALLBACK_NAME, __scopeAvatar);
     const [canRender, setCanRender] = (0, import_react10.useState)(delayMs === void 0);
     (0, import_react10.useEffect)(() => {
@@ -31433,7 +31458,7 @@
     lightbulb: LightBulbIcon,
     search: SearchIcon
   };
-  var log3 = logger("icons");
+  var log4 = logger("icons");
   function Icon(props) {
     if (!props.name)
       return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_jsx_runtime42.Fragment, {});
@@ -31443,7 +31468,7 @@
     if (IconComponent) {
       return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(IconComponent, __spreadValues({}, props));
     } else {
-      log3.error("Can not find icon", props.name, Object.keys(icons));
+      log4.error("Can not find icon", props.name, Object.keys(icons));
     }
     return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_jsx_runtime42.Fragment, {});
   }
@@ -31550,7 +31575,7 @@
     const ITEM_SLOT_NAME = name3 + "CollectionItemSlot";
     const ITEM_DATA_ATTR = "data-radix-collection-item";
     const CollectionItemSlot = /* @__PURE__ */ import_react12.default.forwardRef((props, forwardedRef) => {
-      const _a4 = props, { scope, children } = _a4, itemData = __objRest(_a4, ["scope", "children"]);
+      const _a3 = props, { scope, children } = _a3, itemData = __objRest(_a3, ["scope", "children"]);
       const ref = import_react12.default.useRef(null);
       const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, ref);
       const context = useCollectionContext(ITEM_SLOT_NAME, scope);
@@ -31637,7 +31662,7 @@
   });
   var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react15.forwardRef)((props, forwardedRef) => {
     var _node$ownerDocument;
-    const _a4 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a4, layerProps = __objRest(_a4, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
+    const _a3 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a3, layerProps = __objRest(_a3, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
     const context = (0, import_react15.useContext)($5cb92bef7577960e$var$DismissableLayerContext);
     const [node1, setNode] = (0, import_react15.useState)(null);
     const ownerDocument = (_node$ownerDocument = node1 === null || node1 === void 0 ? void 0 : node1.ownerDocument) !== null && _node$ownerDocument !== void 0 ? _node$ownerDocument : globalThis === null || globalThis === void 0 ? void 0 : globalThis.document;
@@ -31867,7 +31892,7 @@
     cancelable: true
   };
   var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react17.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a4, scopeProps = __objRest(_a4, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
+    const _a3 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a3, scopeProps = __objRest(_a3, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
     const [container1, setContainer] = (0, import_react17.useState)(null);
     const onMountAutoFocus = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onMountAutoFocusProp);
     const onUnmountAutoFocus = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onUnmountAutoFocusProp);
@@ -32220,7 +32245,7 @@
     return void 0 === e3 && (e3 = {}), { name: "flip", options: e3, fn(n5) {
       return __async(this, null, function* () {
         var r5;
-        const { placement: i5, middlewareData: o5, rects: a5, initialPlacement: l5, platform: c6, elements: f5 } = n5, _a5 = e3, { mainAxis: u5 = true, crossAxis: m5 = true, fallbackPlacements: g5, fallbackStrategy: h5 = "bestFit", flipAlignment: x5 = true } = _a5, w5 = __objRest(_a5, ["mainAxis", "crossAxis", "fallbackPlacements", "fallbackStrategy", "flipAlignment"]), v5 = t3(i5), b5 = g5 || (v5 === l5 || !x5 ? [d3(l5)] : function(t4) {
+        const { placement: i5, middlewareData: o5, rects: a5, initialPlacement: l5, platform: c6, elements: f5 } = n5, _a4 = e3, { mainAxis: u5 = true, crossAxis: m5 = true, fallbackPlacements: g5, fallbackStrategy: h5 = "bestFit", flipAlignment: x5 = true } = _a4, w5 = __objRest(_a4, ["mainAxis", "crossAxis", "fallbackPlacements", "fallbackStrategy", "flipAlignment"]), v5 = t3(i5), b5 = g5 || (v5 === l5 || !x5 ? [d3(l5)] : function(t4) {
           const e4 = d3(t4);
           return [y3(t4), e4, y3(e4)];
         }(l5)), R5 = [l5, ...b5], A4 = yield s3(n5, w5), P4 = [];
@@ -32259,7 +32284,7 @@
     return x3.some((e3) => t4[e3] >= 0);
   }
   var P3 = function(t4) {
-    let _a4 = void 0 === t4 ? {} : t4, { strategy: e3 = "referenceHidden" } = _a4, n5 = __objRest(_a4, ["strategy"]);
+    let _a3 = void 0 === t4 ? {} : t4, { strategy: e3 = "referenceHidden" } = _a3, n5 = __objRest(_a3, ["strategy"]);
     return { name: "hide", fn(t5) {
       return __async(this, null, function* () {
         const { rects: r5 } = t5;
@@ -32298,10 +32323,10 @@
   var D3 = function(e3) {
     return void 0 === e3 && (e3 = {}), { name: "shift", options: e3, fn(r5) {
       return __async(this, null, function* () {
-        const { x: i5, y: o5, placement: a5 } = r5, _a5 = e3, { mainAxis: l5 = true, crossAxis: c6 = false, limiter: f5 = { fn: (t4) => {
+        const { x: i5, y: o5, placement: a5 } = r5, _a4 = e3, { mainAxis: l5 = true, crossAxis: c6 = false, limiter: f5 = { fn: (t4) => {
           let { x: e4, y: n5 } = t4;
           return { x: e4, y: n5 };
-        } } } = _a5, m5 = __objRest(_a5, ["mainAxis", "crossAxis", "limiter"]), g5 = { x: i5, y: o5 }, d5 = yield s3(r5, m5), p5 = n3(t3(a5)), h5 = O3(p5);
+        } } } = _a4, m5 = __objRest(_a4, ["mainAxis", "crossAxis", "limiter"]), g5 = { x: i5, y: o5 }, d5 = yield s3(r5, m5), p5 = n3(t3(a5)), h5 = O3(p5);
         let y5 = g5[p5], x5 = g5[h5];
         if (l5) {
           const t4 = "y" === p5 ? "bottom" : "right";
@@ -32336,7 +32361,7 @@
   var k3 = function(n5) {
     return void 0 === n5 && (n5 = {}), { name: "size", options: n5, fn(r5) {
       return __async(this, null, function* () {
-        const { placement: i5, rects: o5, platform: a5, elements: l5 } = r5, _a5 = n5, { apply: c6 } = _a5, u5 = __objRest(_a5, ["apply"]), m5 = yield s3(r5, u5), g5 = t3(i5), d5 = e2(i5);
+        const { placement: i5, rects: o5, platform: a5, elements: l5 } = r5, _a4 = n5, { apply: c6 } = _a4, u5 = __objRest(_a4, ["apply"]), m5 = yield s3(r5, u5), g5 = t3(i5), d5 = e2(i5);
         let p5, h5;
         "top" === g5 || "bottom" === g5 ? (p5 = g5, h5 = d5 === ((yield null == a5.isRTL ? void 0 : a5.isRTL(l5.floating)) ? "start" : "end") ? "left" : "right") : (h5 = g5, p5 = "end" === d5 ? "top" : "bottom");
         const y5 = f3(m5.left, 0), x5 = f3(m5.right, 0), w5 = f3(m5.top, 0), v5 = f3(m5.bottom, 0), b5 = { availableHeight: o5.floating.height - (["left", "right"].includes(i5) ? 2 * (0 !== w5 || 0 !== v5 ? w5 + v5 : f3(m5.top, m5.bottom)) : m5[p5]), availableWidth: o5.floating.width - (["top", "bottom"].includes(i5) ? 2 * (0 !== y5 || 0 !== x5 ? y5 + x5 : f3(m5.left, m5.right)) : m5[h5]) }, R5 = yield a5.getDimensions(l5.floating);
@@ -32800,7 +32825,7 @@
   };
   var $cf1ac5d9fe0e8206$var$ANCHOR_NAME = "PopperAnchor";
   var $cf1ac5d9fe0e8206$export$ecd4e1ccab6ed6d = /* @__PURE__ */ (0, import_react20.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopePopper, virtualRef } = _a4, anchorProps = __objRest(_a4, ["__scopePopper", "virtualRef"]);
+    const _a3 = props, { __scopePopper, virtualRef } = _a3, anchorProps = __objRest(_a3, ["__scopePopper", "virtualRef"]);
     const context = $cf1ac5d9fe0e8206$var$usePopperContext($cf1ac5d9fe0e8206$var$ANCHOR_NAME, __scopePopper);
     const ref = (0, import_react20.useRef)(null);
     const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, ref);
@@ -32819,7 +32844,7 @@
   });
   var $cf1ac5d9fe0e8206$export$bc4ae5855d3c4fc = /* @__PURE__ */ (0, import_react20.forwardRef)((props, forwardedRef) => {
     var _arrowSize$width, _arrowSize$height, _middlewareData$arrow, _middlewareData$arrow2, _middlewareData$arrow3, _middlewareData$hide, _middlewareData$trans, _middlewareData$trans2;
-    const _a4 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a4, contentProps = __objRest(_a4, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
+    const _a3 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a3, contentProps = __objRest(_a3, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
     const context = $cf1ac5d9fe0e8206$var$usePopperContext($cf1ac5d9fe0e8206$var$CONTENT_NAME, __scopePopper);
     const [content, setContent] = (0, import_react20.useState)(null);
     const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(
@@ -33049,7 +33074,7 @@
   var import_react_dom3 = __toESM(require_react_dom());
   var $f1701beae083dbae$export$602eac185826482c = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
     var _globalThis$document;
-    const _a4 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a4, portalProps = __objRest(_a4, ["container"]);
+    const _a3 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a3, portalProps = __objRest(_a3, ["container"]);
     return container ? /* @__PURE__ */ import_react_dom3.default.createPortal(/* @__PURE__ */ (0, import_react21.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends2({}, portalProps, {
       ref: forwardedRef
     })), container) : null;
@@ -33193,7 +33218,7 @@
     }))));
   });
   var $d7bdfb9eb0fdf311$var$RovingFocusGroupImpl = /* @__PURE__ */ (0, import_react23.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a4, groupProps = __objRest(_a4, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
+    const _a3 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a3, groupProps = __objRest(_a3, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
     const ref = (0, import_react23.useRef)(null);
     const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, ref);
     const direction = $f631663db3294ace$export$b39126d51d94e6f3(dir);
@@ -33291,7 +33316,7 @@
   });
   var $d7bdfb9eb0fdf311$var$ITEM_NAME = "RovingFocusGroupItem";
   var $d7bdfb9eb0fdf311$export$ab9df7c53fe8454 = /* @__PURE__ */ (0, import_react23.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a4, itemProps = __objRest(_a4, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
+    const _a3 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a3, itemProps = __objRest(_a3, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
     const autoId = $1746a345f3d73bb7$export$f680877a34711e37();
     const id = tabStopId || autoId;
     const context = $d7bdfb9eb0fdf311$var$useRovingFocusContext($d7bdfb9eb0fdf311$var$ITEM_NAME, __scopeRovingFocusGroup);
@@ -33707,8 +33732,8 @@
 
   // ../assets/node_modules/use-sidecar/dist/es2015/exports.js
   var React2 = __toESM(require_react());
-  var SideCar = function(_a4) {
-    var sideCar = _a4.sideCar, rest = __rest(_a4, ["sideCar"]);
+  var SideCar = function(_a3) {
+    var sideCar = _a3.sideCar, rest = __rest(_a3, ["sideCar"]);
     if (!sideCar) {
       throw new Error("Sidecar: please provide `sideCar` property to import the right car");
     }
@@ -33733,11 +33758,11 @@
   };
   var RemoveScroll = React3.forwardRef(function(props, parentRef) {
     var ref = React3.useRef(null);
-    var _a4 = React3.useState({
+    var _a3 = React3.useState({
       onScrollCapture: nothing,
       onWheelCapture: nothing,
       onTouchMoveCapture: nothing
-    }), callbacks = _a4[0], setCallbacks = _a4[1];
+    }), callbacks = _a3[0], setCallbacks = _a3[1];
     var forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b2 = props.as, Container2 = _b2 === void 0 ? "div" : _b2, rest = __rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noIsolation", "inert", "allowPinchZoom", "as"]);
     var SideCar2 = sideCar;
     var containerRef = useMergeRefs([ref, parentRef]);
@@ -33842,8 +33867,8 @@
   // ../assets/node_modules/react-style-singleton/dist/es2015/component.js
   var styleSingleton = function() {
     var useStyle = styleHookSingleton();
-    var Sheet = function(_a4) {
-      var styles = _a4.styles, dynamic = _a4.dynamic;
+    var Sheet = function(_a3) {
+      var styles = _a3.styles, dynamic = _a3.dynamic;
       useStyle(styles, dynamic);
       return null;
     };
@@ -33887,8 +33912,8 @@
 
   // ../assets/node_modules/react-remove-scroll-bar/dist/es2015/component.js
   var Style = styleSingleton();
-  var getStyles = function(_a4, allowRelative, gapMode, important) {
-    var left = _a4.left, top = _a4.top, right = _a4.right, gap = _a4.gap;
+  var getStyles = function(_a3, allowRelative, gapMode, important) {
+    var left = _a3.left, top = _a3.top, right = _a3.right, gap = _a3.gap;
     if (gapMode === void 0) {
       gapMode = "margin";
     }
@@ -33899,7 +33924,7 @@
     ].filter(Boolean).join(""), "\n  }\n  \n  .").concat(zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(zeroRightClassName, " .").concat(zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " .").concat(fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body {\n    ").concat(removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
   };
   var RemoveScrollBar = function(props) {
-    var noRelative = props.noRelative, noImportant = props.noImportant, _a4 = props.gapMode, gapMode = _a4 === void 0 ? "margin" : _a4;
+    var noRelative = props.noRelative, noImportant = props.noImportant, _a3 = props.gapMode, gapMode = _a3 === void 0 ? "margin" : _a3;
     var gap = React5.useMemo(function() {
       return getGapWidth(gapMode);
     }, [gapMode]);
@@ -33951,7 +33976,7 @@
       }
       var isScrollable = elementCouldBeScrolled(axis, current);
       if (isScrollable) {
-        var _a4 = getScrollVariables(axis, current), s5 = _a4[1], d5 = _a4[2];
+        var _a3 = getScrollVariables(axis, current), s5 = _a3[1], d5 = _a3[2];
         if (s5 > d5) {
           return true;
         }
@@ -33960,16 +33985,16 @@
     } while (current && current !== document.body);
     return false;
   };
-  var getVScrollVariables = function(_a4) {
-    var scrollTop = _a4.scrollTop, scrollHeight = _a4.scrollHeight, clientHeight = _a4.clientHeight;
+  var getVScrollVariables = function(_a3) {
+    var scrollTop = _a3.scrollTop, scrollHeight = _a3.scrollHeight, clientHeight = _a3.clientHeight;
     return [
       scrollTop,
       scrollHeight,
       clientHeight
     ];
   };
-  var getHScrollVariables = function(_a4) {
-    var scrollLeft = _a4.scrollLeft, scrollWidth = _a4.scrollWidth, clientWidth = _a4.clientWidth;
+  var getHScrollVariables = function(_a3) {
+    var scrollLeft = _a3.scrollLeft, scrollWidth = _a3.scrollWidth, clientWidth = _a3.clientWidth;
     return [
       scrollLeft,
       scrollWidth,
@@ -33995,7 +34020,7 @@
     var availableScroll = 0;
     var availableScrollTop = 0;
     do {
-      var _a4 = getScrollVariables(axis, target), position = _a4[0], scroll_1 = _a4[1], capacity = _a4[2];
+      var _a3 = getScrollVariables(axis, target), position = _a3[0], scroll_1 = _a3[1], capacity = _a3[2];
       var elementScroll = scroll_1 - capacity - directionFactor * position;
       if (position || elementScroll) {
         if (elementCouldBeScrolled(axis, target)) {
@@ -34278,7 +34303,7 @@
     }, children)));
   };
   var $6cc32821e9371a1c$export$9fa5ebd18bee4d43 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeMenu } = _a4, anchorProps = __objRest(_a4, ["__scopeMenu"]);
+    const _a3 = props, { __scopeMenu } = _a3, anchorProps = __objRest(_a3, ["__scopeMenu"]);
     const popperScope = $6cc32821e9371a1c$var$usePopperScope(__scopeMenu);
     return /* @__PURE__ */ (0, import_react25.createElement)($cf1ac5d9fe0e8206$export$b688253958b8dfe7, _extends2({}, popperScope, anchorProps, {
       ref: forwardedRef
@@ -34305,7 +34330,7 @@
   var [$6cc32821e9371a1c$var$MenuContentProvider, $6cc32821e9371a1c$var$useMenuContentContext] = $6cc32821e9371a1c$var$createMenuContext($6cc32821e9371a1c$var$CONTENT_NAME);
   var $6cc32821e9371a1c$export$479f0f2f71193efe = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
     const portalContext = $6cc32821e9371a1c$var$usePortalContext($6cc32821e9371a1c$var$CONTENT_NAME, props.__scopeMenu);
-    const _a4 = props, { forceMount = portalContext.forceMount } = _a4, contentProps = __objRest(_a4, ["forceMount"]);
+    const _a3 = props, { forceMount = portalContext.forceMount } = _a3, contentProps = __objRest(_a3, ["forceMount"]);
     const context = $6cc32821e9371a1c$var$useMenuContext($6cc32821e9371a1c$var$CONTENT_NAME, props.__scopeMenu);
     const rootContext = $6cc32821e9371a1c$var$useMenuRootContext($6cc32821e9371a1c$var$CONTENT_NAME, props.__scopeMenu);
     return /* @__PURE__ */ (0, import_react25.createElement)($6cc32821e9371a1c$var$Collection.Provider, {
@@ -34355,7 +34380,7 @@
     }));
   });
   var $6cc32821e9371a1c$var$MenuContentImpl = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll } = _a4, contentProps = __objRest(_a4, ["__scopeMenu", "loop", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEntryFocus", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss", "disableOutsideScroll"]);
+    const _a3 = props, { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll } = _a3, contentProps = __objRest(_a3, ["__scopeMenu", "loop", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEntryFocus", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss", "disableOutsideScroll"]);
     const context = $6cc32821e9371a1c$var$useMenuContext($6cc32821e9371a1c$var$CONTENT_NAME, __scopeMenu);
     const rootContext = $6cc32821e9371a1c$var$useMenuRootContext($6cc32821e9371a1c$var$CONTENT_NAME, __scopeMenu);
     const popperScope = $6cc32821e9371a1c$var$usePopperScope(__scopeMenu);
@@ -34528,7 +34553,7 @@
     })))))));
   });
   var $6cc32821e9371a1c$export$dd37bec0e8a99143 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeMenu } = _a4, labelProps = __objRest(_a4, ["__scopeMenu"]);
+    const _a3 = props, { __scopeMenu } = _a3, labelProps = __objRest(_a3, ["__scopeMenu"]);
     return /* @__PURE__ */ (0, import_react25.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends2({}, labelProps, {
       ref: forwardedRef
     }));
@@ -34536,7 +34561,7 @@
   var $6cc32821e9371a1c$var$ITEM_NAME = "MenuItem";
   var $6cc32821e9371a1c$var$ITEM_SELECT = "menu.itemSelect";
   var $6cc32821e9371a1c$export$2ce376c2cc3355c8 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { disabled = false, onSelect } = _a4, itemProps = __objRest(_a4, ["disabled", "onSelect"]);
+    const _a3 = props, { disabled = false, onSelect } = _a3, itemProps = __objRest(_a3, ["disabled", "onSelect"]);
     const ref = (0, import_react25.useRef)(null);
     const rootContext = $6cc32821e9371a1c$var$useMenuRootContext($6cc32821e9371a1c$var$ITEM_NAME, props.__scopeMenu);
     const contentContext = $6cc32821e9371a1c$var$useMenuContentContext($6cc32821e9371a1c$var$ITEM_NAME, props.__scopeMenu);
@@ -34589,7 +34614,7 @@
     }));
   });
   var $6cc32821e9371a1c$var$MenuItemImpl = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeMenu, disabled = false, textValue } = _a4, itemProps = __objRest(_a4, ["__scopeMenu", "disabled", "textValue"]);
+    const _a3 = props, { __scopeMenu, disabled = false, textValue } = _a3, itemProps = __objRest(_a3, ["__scopeMenu", "disabled", "textValue"]);
     const contentContext = $6cc32821e9371a1c$var$useMenuContentContext($6cc32821e9371a1c$var$ITEM_NAME, __scopeMenu);
     const rovingFocusGroupScope = $6cc32821e9371a1c$var$useRovingFocusGroupScope(__scopeMenu);
     const ref = (0, import_react25.useRef)(null);
@@ -34655,7 +34680,7 @@
     checked: false
   });
   var $6cc32821e9371a1c$export$1cec7dcdd713e220 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeMenu } = _a4, separatorProps = __objRest(_a4, ["__scopeMenu"]);
+    const _a3 = props, { __scopeMenu } = _a3, separatorProps = __objRest(_a3, ["__scopeMenu"]);
     return /* @__PURE__ */ (0, import_react25.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends2({
       role: "separator",
       "aria-orientation": "horizontal"
@@ -34775,7 +34800,7 @@
   };
   var $d08ef79370b62062$var$TRIGGER_NAME = "DropdownMenuTrigger";
   var $d08ef79370b62062$export$d2469213b3befba9 = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeDropdownMenu, disabled = false } = _a4, triggerProps = __objRest(_a4, ["__scopeDropdownMenu", "disabled"]);
+    const _a3 = props, { __scopeDropdownMenu, disabled = false } = _a3, triggerProps = __objRest(_a3, ["__scopeDropdownMenu", "disabled"]);
     const context = $d08ef79370b62062$var$useDropdownMenuContext($d08ef79370b62062$var$TRIGGER_NAME, __scopeDropdownMenu);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$b688253958b8dfe7, _extends2({
@@ -34818,13 +34843,13 @@
     })));
   });
   var $d08ef79370b62062$export$cd369b4d4d54efc9 = (props) => {
-    const _a4 = props, { __scopeDropdownMenu } = _a4, portalProps = __objRest(_a4, ["__scopeDropdownMenu"]);
+    const _a3 = props, { __scopeDropdownMenu } = _a3, portalProps = __objRest(_a3, ["__scopeDropdownMenu"]);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$602eac185826482c, _extends2({}, menuScope, portalProps));
   };
   var $d08ef79370b62062$var$CONTENT_NAME = "DropdownMenuContent";
   var $d08ef79370b62062$export$6e76d93a37c01248 = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeDropdownMenu } = _a4, contentProps = __objRest(_a4, ["__scopeDropdownMenu"]);
+    const _a3 = props, { __scopeDropdownMenu } = _a3, contentProps = __objRest(_a3, ["__scopeDropdownMenu"]);
     const context = $d08ef79370b62062$var$useDropdownMenuContext($d08ef79370b62062$var$CONTENT_NAME, __scopeDropdownMenu);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     const hasInteractedOutsideRef = (0, import_react26.useRef)(false);
@@ -34854,21 +34879,21 @@
     }));
   });
   var $d08ef79370b62062$export$76e48c5b57f24495 = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeDropdownMenu } = _a4, labelProps = __objRest(_a4, ["__scopeDropdownMenu"]);
+    const _a3 = props, { __scopeDropdownMenu } = _a3, labelProps = __objRest(_a3, ["__scopeDropdownMenu"]);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$b04be29aa201d4f5, _extends2({}, menuScope, labelProps, {
       ref: forwardedRef
     }));
   });
   var $d08ef79370b62062$export$ed97964d1871885d = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeDropdownMenu } = _a4, itemProps = __objRest(_a4, ["__scopeDropdownMenu"]);
+    const _a3 = props, { __scopeDropdownMenu } = _a3, itemProps = __objRest(_a3, ["__scopeDropdownMenu"]);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$6d08773d2e66f8f2, _extends2({}, menuScope, itemProps, {
       ref: forwardedRef
     }));
   });
   var $d08ef79370b62062$export$da160178fd3bc7e9 = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeDropdownMenu } = _a4, separatorProps = __objRest(_a4, ["__scopeDropdownMenu"]);
+    const _a3 = props, { __scopeDropdownMenu } = _a3, separatorProps = __objRest(_a3, ["__scopeDropdownMenu"]);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$1ff3c3f08ae963c0, _extends2({}, menuScope, separatorProps, {
       ref: forwardedRef
@@ -34950,7 +34975,7 @@
   var [$6be4966fd9bbc698$var$createSwitchContext, $6be4966fd9bbc698$export$cf7f5f17f69cbd43] = $c512c27ab02ef895$export$50c7b4e9d9f19c1($6be4966fd9bbc698$var$SWITCH_NAME);
   var [$6be4966fd9bbc698$var$SwitchProvider, $6be4966fd9bbc698$var$useSwitchContext] = $6be4966fd9bbc698$var$createSwitchContext($6be4966fd9bbc698$var$SWITCH_NAME);
   var $6be4966fd9bbc698$export$b5d5cf8927ab7262 = /* @__PURE__ */ (0, import_react28.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeSwitch, name: name3, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange } = _a4, switchProps = __objRest(_a4, ["__scopeSwitch", "name", "checked", "defaultChecked", "required", "disabled", "value", "onCheckedChange"]);
+    const _a3 = props, { __scopeSwitch, name: name3, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange } = _a3, switchProps = __objRest(_a3, ["__scopeSwitch", "name", "checked", "defaultChecked", "required", "disabled", "value", "onCheckedChange"]);
     const [button, setButton] = (0, import_react28.useState)(null);
     const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(
       forwardedRef,
@@ -35003,7 +35028,7 @@
   });
   var $6be4966fd9bbc698$var$THUMB_NAME = "SwitchThumb";
   var $6be4966fd9bbc698$export$4d07bf653ea69106 = /* @__PURE__ */ (0, import_react28.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { __scopeSwitch } = _a4, thumbProps = __objRest(_a4, ["__scopeSwitch"]);
+    const _a3 = props, { __scopeSwitch } = _a3, thumbProps = __objRest(_a3, ["__scopeSwitch"]);
     const context = $6be4966fd9bbc698$var$useSwitchContext($6be4966fd9bbc698$var$THUMB_NAME, __scopeSwitch);
     return /* @__PURE__ */ (0, import_react28.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.span, _extends2({
       "data-state": $6be4966fd9bbc698$var$getState(context.checked),
@@ -35013,7 +35038,7 @@
     }));
   });
   var $6be4966fd9bbc698$var$BubbleInput = (props) => {
-    const _a4 = props, { control, checked, bubbles = true } = _a4, inputProps = __objRest(_a4, ["control", "checked", "bubbles"]);
+    const _a3 = props, { control, checked, bubbles = true } = _a3, inputProps = __objRest(_a3, ["control", "checked", "bubbles"]);
     const ref = (0, import_react28.useRef)(null);
     const prevChecked = $010c2913dbd2fe3d$export$5cae361ad82dce8b(checked);
     const controlSize = $db6c3485150b8e66$export$1ab7ae714698c4b8(control);
@@ -35253,7 +35278,7 @@
   // ../assets/node_modules/@radix-ui/react-toggle/dist/index.module.js
   var import_react29 = __toESM(require_react());
   var $b3bbe2732c13b576$export$bea8ebba691c5813 = /* @__PURE__ */ (0, import_react29.forwardRef)((props, forwardedRef) => {
-    const _a4 = props, { pressed: pressedProp, defaultPressed = false, onPressedChange } = _a4, buttonProps = __objRest(_a4, ["pressed", "defaultPressed", "onPressedChange"]);
+    const _a3 = props, { pressed: pressedProp, defaultPressed = false, onPressedChange } = _a3, buttonProps = __objRest(_a3, ["pressed", "defaultPressed", "onPressedChange"]);
     const [pressed = false, setPressed] = $71cd76cc60e0454e$export$6f32135080cb4c3({
       prop: pressedProp,
       onChange: onPressedChange,
@@ -35280,7 +35305,7 @@
   ]);
   var $6c1fd9e6a8969628$var$useRovingFocusGroupScope = $d7bdfb9eb0fdf311$export$c7109489551a4f4();
   var $6c1fd9e6a8969628$export$af3ec21f6cfb5e30 = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a4 = props, { type } = _a4, toggleGroupProps = __objRest(_a4, ["type"]);
+    const _a3 = props, { type } = _a3, toggleGroupProps = __objRest(_a3, ["type"]);
     if (type === "single") {
       const singleProps = toggleGroupProps;
       return /* @__PURE__ */ import_react30.default.createElement($6c1fd9e6a8969628$var$ToggleGroupImplSingle, _extends2({}, singleProps, {
@@ -35297,8 +35322,8 @@
   });
   var [$6c1fd9e6a8969628$var$ToggleGroupValueProvider, $6c1fd9e6a8969628$var$useToggleGroupValueContext] = $6c1fd9e6a8969628$var$createToggleGroupContext($6c1fd9e6a8969628$var$TOGGLE_GROUP_NAME);
   var $6c1fd9e6a8969628$var$ToggleGroupImplSingle = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a4 = props, { value: valueProp, defaultValue, onValueChange = () => {
-    } } = _a4, toggleGroupSingleProps = __objRest(_a4, ["value", "defaultValue", "onValueChange"]);
+    const _a3 = props, { value: valueProp, defaultValue, onValueChange = () => {
+    } } = _a3, toggleGroupSingleProps = __objRest(_a3, ["value", "defaultValue", "onValueChange"]);
     const [value, setValue] = $71cd76cc60e0454e$export$6f32135080cb4c3({
       prop: valueProp,
       defaultProp: defaultValue,
@@ -35322,8 +35347,8 @@
     })));
   });
   var $6c1fd9e6a8969628$var$ToggleGroupImplMultiple = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a4 = props, { value: valueProp, defaultValue, onValueChange = () => {
-    } } = _a4, toggleGroupMultipleProps = __objRest(_a4, ["value", "defaultValue", "onValueChange"]);
+    const _a3 = props, { value: valueProp, defaultValue, onValueChange = () => {
+    } } = _a3, toggleGroupMultipleProps = __objRest(_a3, ["value", "defaultValue", "onValueChange"]);
     const [value1 = [], setValue] = $71cd76cc60e0454e$export$6f32135080cb4c3({
       prop: valueProp,
       defaultProp: defaultValue,
@@ -35362,7 +35387,7 @@
   });
   var [$6c1fd9e6a8969628$var$ToggleGroupContext, $6c1fd9e6a8969628$var$useToggleGroupContext] = $6c1fd9e6a8969628$var$createToggleGroupContext($6c1fd9e6a8969628$var$TOGGLE_GROUP_NAME);
   var $6c1fd9e6a8969628$var$ToggleGroupImpl = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a4 = props, { __scopeToggleGroup, disabled = false, rovingFocus = true, orientation, dir, loop = true } = _a4, toggleGroupProps = __objRest(_a4, ["__scopeToggleGroup", "disabled", "rovingFocus", "orientation", "dir", "loop"]);
+    const _a3 = props, { __scopeToggleGroup, disabled = false, rovingFocus = true, orientation, dir, loop = true } = _a3, toggleGroupProps = __objRest(_a3, ["__scopeToggleGroup", "disabled", "rovingFocus", "orientation", "dir", "loop"]);
     const rovingFocusGroupScope = $6c1fd9e6a8969628$var$useRovingFocusGroupScope(__scopeToggleGroup);
     const direction = $f631663db3294ace$export$b39126d51d94e6f3(dir);
     const commonProps = __spreadValues({
@@ -35410,7 +35435,7 @@
     }));
   });
   var $6c1fd9e6a8969628$var$ToggleGroupItemImpl = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a4 = props, { __scopeToggleGroup, value } = _a4, itemProps = __objRest(_a4, ["__scopeToggleGroup", "value"]);
+    const _a3 = props, { __scopeToggleGroup, value } = _a3, itemProps = __objRest(_a3, ["__scopeToggleGroup", "value"]);
     const valueContext = $6c1fd9e6a8969628$var$useToggleGroupValueContext($6c1fd9e6a8969628$var$ITEM_NAME, __scopeToggleGroup);
     const singleProps = {
       role: "radio",
@@ -35603,7 +35628,7 @@
 
   // ../assets/js/features/ElectronTrayWindow/index.tsx
   var import_jsx_runtime47 = __toESM(require_jsx_runtime());
-  var log4 = logger("electron-tray-window");
+  var log5 = logger("electron-tray-window");
   var fakeState = `{
     "state": {
         "entities": {
@@ -35871,28 +35896,28 @@
       }
     }, [!!inputRef.current]);
     (0, import_react31.useEffect)(() => {
-      log4.info("Updating emoji search results", emojiQuery);
+      log5.info("Updating emoji search results", emojiQuery);
       if (emojiQuery.trim().length === 0) {
         setEmojiResults(commonEmojis);
         return;
       }
       $c4d155af13ad4d4b$export$2e2bcd8739ae039.search(emojiQuery, { maxResults: 25 }).then((results) => {
-        log4.info("Update emoji results", results);
+        log5.info("Update emoji results", results);
         setEmojiResults(results || []);
         setSelectedEmojiIndex(results.length ? 0 : -1);
       }).catch((err) => {
-        log4.error("Something went wrong with emoji search", err);
+        log5.error("Something went wrong with emoji search", err);
       });
     }, [emojiQuery]);
     (0, import_react31.useEffect)(() => {
-      var _a4;
-      log4.info("Listen tray state");
-      (_a4 = ipcRenderer) == null ? void 0 : _a4.on("tray-window", onMessage);
+      var _a3;
+      log5.info("Listen tray state");
+      (_a3 = ipcRenderer) == null ? void 0 : _a3.on("tray-window", onMessage);
       onMessage(null, fakeState);
-      log4.info("Fetching emoji data");
+      log5.info("Fetching emoji data");
       fetch("https://cdn.jsdelivr.net/npm/@emoji-mart/data").then((resp) => __async(this, null, function* () {
         $7adb23b0109cc36a$export$2cd8252107eb640b({ data: yield resp.json() });
-      })).catch((err) => log4.error("can't load emojis", err));
+      })).catch((err) => log5.error("can't load emojis", err));
       return () => {
         ipcRenderer.removeListener("tray-window", onMessage);
       };
@@ -35906,7 +35931,7 @@
         setUserStatuses(parsed.state.userStatuses);
         if (parsed.state.focusedRoomMode)
           setFocusedRoomMode(parsed.state.focusedRoomMode);
-        log4.info("Updated tray window state", parsed, entities, localUserId);
+        log5.info("Updated tray window state", parsed, entities, localUserId);
       }
     }, []);
     return /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Container, { children: [
@@ -35915,12 +35940,12 @@
         /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(RoomName, { children: room == null ? void 0 : room.name })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(UserList, { children: userList.map((u5) => {
-        var _a4, _b2, _c, _d;
+        var _a3, _b2, _c, _d;
         return /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(User, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
             Avatar,
             {
-              src: ((_a4 = u5.user) == null ? void 0 : _a4.photoUrl) || "",
+              src: ((_a3 = u5.user) == null ? void 0 : _a3.photoUrl) || "",
               fallback: (_b2 = u5.user) == null ? void 0 : _b2.name.slice(0),
               alt: (_c = u5.user) == null ? void 0 : _c.name
             }
@@ -35928,7 +35953,7 @@
           /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(UserStatusIcon, { status: userStatus(u5.isOnline, u5.status) }),
           /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(UserInfo, { children: [
             /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Username, { children: (_d = u5.user) == null ? void 0 : _d.name }),
-            /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Status2, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Status, { children: [
               /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(LocalTime, { children: u5.localTime }),
               " ",
               userStatusLabel(u5.isOnline, u5.status)
@@ -35950,17 +35975,17 @@
         ),
         /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(StatusDropdown, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Dropdown.Label, { children: "Set your flow" }),
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ToggleGroup.Root, { value: NewPresenceMode.Online, children: PresenceModes.map((m5) => /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ToggleGroup.Root, { value: "online" /* Online */, children: PresenceModes.map((m5) => /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(
             ToggleGroup.Item,
             {
-              "data-mode": m5.mode,
-              value: m5.mode,
+              "data-mode": m5.status,
+              value: m5.status,
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ModeIcon, { mode: m5.mode }),
-                /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ToggleGroup.Label, { children: titleCase(m5.mode) })
+                /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ModeIcon, { mode: m5.status }),
+                /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ToggleGroup.Label, { children: titleCase(m5.status) })
               ]
             },
-            m5.mode
+            m5.status
           )) }),
           /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Separator, {}),
           /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(SearchField, { children: [
@@ -35998,7 +36023,7 @@
       setEmojiQuery(e3.currentTarget.value);
     }
     function handleEmojiSelect() {
-      log4.info("selected emoji", emojiResults[selectedEmojiIndex]);
+      log5.info("selected emoji", emojiResults[selectedEmojiIndex]);
     }
     function handleDropdownState(open) {
       setIsDropdownOpen(open);
@@ -36068,7 +36093,7 @@
     color: "$electronTrayUsernameFg",
     fontWeight: "$medium"
   });
-  var Status2 = styled("div", {
+  var Status = styled("div", {
     label: true,
     color: "$electronTrayUserStatusFg",
     fontWeight: "$medium",
@@ -36091,7 +36116,7 @@
     [`&:hover ${Username}`]: {
       color: "$electronTrayHighlightedUsernameFg"
     },
-    [`&:hover ${Status2}`]: {
+    [`&:hover ${Status}`]: {
       color: "$electronTrayHighlightedUserStatusFg"
     }
   });
@@ -36270,13 +36295,13 @@
     marginTop: "2px",
     variants: {
       mode: {
-        [NewPresenceMode.Online]: {
+        ["online" /* Online */]: {
           background: "$green"
         },
-        [NewPresenceMode.Focus]: {
+        ["focus" /* Focus */]: {
           background: "$yellow"
         },
-        [NewPresenceMode.Zen]: {
+        ["zen" /* Zen */]: {
           background: "$red"
         }
       }

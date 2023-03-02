@@ -67,7 +67,7 @@ const Container = styled('main', {
   variants: {
     electron: {
       true: {
-        minHeight: 'calc(100vh - 40px)',
+        minHeight: 'calc(100vh - 48px)',
       },
     },
     status: {

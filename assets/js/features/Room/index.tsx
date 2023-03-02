@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import selectors from 'selectors'
-import { useSelector } from 'state'
 import { styled } from 'themes'
 import { logger } from 'lib/log'
 import { ParticipantGrid } from './ParticipantGrid'
@@ -9,6 +7,7 @@ import { Dock } from 'features/Dock'
 import { ScreenshareProvider } from 'features/Screenshare/Provider'
 import { RoomButton } from './RoomButton'
 import { isElectron } from 'lib/electron'
+import { Mirror } from 'features/Mirror'
 
 // import { useSelector, useDispatch } from 'app/state'
 
@@ -28,20 +27,14 @@ export function RoomPage(props: Props) {
         </Header>
       ) : null}
       <ParticipantGrid roomId={props.id} />
-      <Dock roomId={props.id} />
+      <Bottom>
+        <Dock roomId={props.id} />
+        <BottomMiddle></BottomMiddle>
+        <Mirror />
+      </Bottom>
     </Container>
   )
 }
-
-const RequestAccess = styled('button', {
-  background: 'transparent',
-  padding: '12px 36px',
-  color: '$white',
-  border: '1px solid $silver',
-  pointer: 'default',
-  fontSize: '$base',
-  round: 'large',
-})
 
 export const topBlurEffect =
   'radial-gradient(1000px at 200px -700px, $shellBlur1, transparent)'
@@ -49,12 +42,12 @@ export const topBlurEffect =
 const Container = styled('main', {
   width: '100%',
   display: 'grid',
-  gridTemplateRows: 'calc(16 * 4px) auto calc(28 * 4px)',
+  gridTemplateRows: 'calc(16 * 4px) auto 80px',
   backgroundImage: topBlurEffect,
   variants: {
     electron: {
       true: {
-        gridTemplateRows: 'auto calc(28 * 4px)',
+        gridTemplateRows: 'auto 80px',
         background: 'none',
       },
     },
@@ -67,4 +60,13 @@ const Header = styled('header', {
   space: { inner: [0, 5] },
   borderBottom: '1px solid $shellBorderColor',
   vcenter: true,
+})
+
+const Bottom = styled('div', {
+  display: 'flex',
+  padding: '8px',
+})
+
+const BottomMiddle = styled('div', {
+  flex: '1',
 })

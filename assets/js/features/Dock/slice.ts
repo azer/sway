@@ -1,4 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { updateWorkspaceFocus } from 'features/Focus'
+import { RootState } from 'state'
+import { DockFocus, DockFocusRegion } from './focus'
 
 export const name = 'status'
 
@@ -99,3 +102,37 @@ export const {
   setInternetConnectionStatus,
 } = slice.actions
 export default slice.reducer
+
+export function setDockFocus(focus: DockFocus) {
+  return updateWorkspaceFocus((wsFocus) => {
+    wsFocus.room.dock = {
+      ...wsFocus.room.dock,
+      ...focus,
+    }
+  })
+}
+
+export function setDockDropdownOpen(open: boolean) {
+  return updateWorkspaceFocus((wsFocus) => {
+    wsFocus.room.dock.dropdownOpen = open
+  })
+}
+
+export function setFocusedDockRow(focus: DockFocusRegion) {
+  return updateWorkspaceFocus((wsFocus) => {
+    wsFocus.room.dock = {
+      ...wsFocus.room.dock,
+      region: focus,
+    }
+  })
+}
+
+export function focusOnMessageInput() {
+  return updateWorkspaceFocus((wsFocus) => {
+    wsFocus.room.dock = {
+      ...wsFocus.room.dock,
+      region: DockFocusRegion.Message,
+      dropdownOpen: true,
+    }
+  })
+}

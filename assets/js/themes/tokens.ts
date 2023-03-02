@@ -56,7 +56,6 @@ export const tokens = {
     xlarge: '24px',
     circle: '100%',
   },
-  shadows: {},
   zIndices: {
     base: 10,
     aboveBase: 20,

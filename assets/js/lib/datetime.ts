@@ -23,3 +23,7 @@ export function now(): DateTime {
     nanoseconds: 0,
   }
 }
+
+export function timezone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone
+}

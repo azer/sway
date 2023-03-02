@@ -1,6 +1,7 @@
 import { logger } from 'lib/log'
 import selectors from 'selectors'
 import { RootState } from 'state'
+import { DockFocus } from './focus'
 import { ConnectionStatus, ConnectionState } from './slice'
 
 const log = logger('dock/selectors')
@@ -106,4 +107,8 @@ export function getStatusMessage(state: RootState): {
 
   //
   return { msg: 'Connected', status: ConnectionState.Connected }
+}
+
+export function getFocus(state: RootState): DockFocus | undefined {
+  return selectors.rooms.getFocus(state).dock
 }

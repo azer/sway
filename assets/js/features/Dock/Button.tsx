@@ -19,19 +19,19 @@ export function Button(props: Props) {
   return (
     <StyledButton onClick={props.onClick} off={props.off} on={props.on}>
       <Tooltip content={props.tooltipLabel} shortcut={props.tooltipShortcut}>
-        <Wrapper>
-          <Icon name={props.icon} />
-        </Wrapper>
+        <Icon name={props.icon} />
       </Tooltip>
     </StyledButton>
   )
 }
 
-export const StyledButton = styled('div', {
-  height: '100%',
+export const StyledButton = styled('button', {
+  border: 0,
+  background: 'transparent',
+  height: '36px',
   aspectRatio: '1',
   center: true,
-  round: 'large',
+  borderRadius: '8px',
   space: { inner: [0, 2], gap: 1 },
   //  border: '1px solid rgba(255, 255, 255, 0.01)',
   colors: {
@@ -39,8 +39,8 @@ export const StyledButton = styled('div', {
     fg: '$dockButtonFg',
   },
   '& svg': {
-    width: '20px',
-    height: '20px',
+    width: '18px',
+    height: '18px',
     margin: '0 auto',
     overflow: 'visible',
   },

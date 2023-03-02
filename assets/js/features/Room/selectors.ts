@@ -2,6 +2,7 @@ import { ShellFocusRegion } from 'features/Shell/focus'
 import selectors from 'selectors'
 import { RootState } from 'state'
 import { PresenceStatus, Room, Rooms } from 'state/entities'
+import { RoomFocus } from './focus'
 
 export function getRoomById(state: RootState, id: string): Room {
   return state.entities[Rooms][id]
@@ -23,8 +24,12 @@ export function listActiveRooms(state: RootState): string[] {
     : []
 }
 
+export function getFocus(state: RootState): RoomFocus {
+  return selectors.focus.getWorkspaceFocus(state).room
+}
+
 export function getFocusedRoomId(state: RootState): string {
-  return selectors.focus.getWorkspaceFocus(state).room.roomId
+  return getFocus(state).roomId
 }
 
 export function getFocusedRoom(state: RootState): Room | undefined {

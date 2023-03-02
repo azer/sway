@@ -311,8 +311,8 @@ export function RoomButton(props: Props) {
           ? [
               {
                 id: 'create-room',
-                name: `Rename ${room?.name} room as:`,
-                suffix: `${query}`,
+                prefix: `Rename "${room?.name}" room as:`,
+                name: `${query}`,
                 icon: 'edit',
                 callback: () => renameRoom(channel, room.id, query),
               },
@@ -326,8 +326,8 @@ export function RoomButton(props: Props) {
     return [
       {
         id: 'rename-room',
-        name: `Rename "${room.name}" room as:`,
-        suffix: `${room.name}`,
+        prefix: `Rename "${room.name}" room as:`,
+        name: `${room.name}`,
         icon: 'edit',
         callback: () => {},
       },

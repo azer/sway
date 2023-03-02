@@ -240,7 +240,7 @@ const fakeState = `{
     }
 }`
 
-interface Props {}
+interface Props { }
 
 export function ElectronTrayWindow(props: Props) {
   globalStyles()
@@ -408,12 +408,12 @@ export function ElectronTrayWindow(props: Props) {
             <ToggleGroup.Root value={PresenceStatus.Online}>
               {PresenceModes.map((m) => (
                 <ToggleGroup.Item
-                  data-mode={m.mode}
-                  value={m.mode}
-                  key={m.mode}
+                  data-mode={m.status}
+                  value={m.status}
+                  key={m.status}
                 >
-                  <ModeIcon mode={m.mode} />
-                  <ToggleGroup.Label>{titleCase(m.mode)}</ToggleGroup.Label>
+                  <ModeIcon mode={m.status} />
+                  <ToggleGroup.Label>{titleCase(m.status)}</ToggleGroup.Label>
                 </ToggleGroup.Item>
               ))}
             </ToggleGroup.Root>
@@ -446,7 +446,7 @@ export function ElectronTrayWindow(props: Props) {
           </StatusDropdown>
         </Dropdown.Menu>
       </Dock>
-    </Container>
+    </Container >
   )
 
   function showMainWindow() {
