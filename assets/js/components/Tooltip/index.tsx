@@ -11,10 +11,6 @@ interface Props {
 }
 
 export function Tooltip(props: Props): JSX.Element {
-  if (!props.content) {
-    return <>props.children</>
-  }
-
   return (
     <Root delayDuration={400}>
       <Trigger asChild>{props.children}</Trigger>

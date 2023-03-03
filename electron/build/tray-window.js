@@ -26596,8 +26596,7 @@
 
   // ../assets/js/features/Dock/focus.ts
   var initialDockFocus = {
-    region: "workspace.room.dock.message" /* Message */,
-    dropdownOpen: false
+    region: "workspace.room.dock.message" /* Message */
   };
 
   // ../assets/js/features/Room/focus.ts
@@ -35142,7 +35141,7 @@
   // ../assets/js/components/DropdownMenu/index.tsx
   var import_jsx_runtime45 = __toESM(require_jsx_runtime());
   function DropdownMenu(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)($d08ef79370b62062$export$be92b6f5f03c0fe9, { onOpenChange: props.onOpenChange, children: props.children });
+    return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)($d08ef79370b62062$export$be92b6f5f03c0fe9, { onOpenChange: props.onOpenChange, open: props.open, children: props.children });
   }
   function DropdownContent(props) {
     return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)($d08ef79370b62062$export$602eac185826482c, { children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(StyledDropdownContent, { side: props.side || "top", sideOffset: 5, children: props.children }) });

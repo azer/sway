@@ -18,7 +18,10 @@ interface Props {
 export function Button(props: Props) {
   return (
     <StyledButton onClick={props.onClick} off={props.off} on={props.on}>
-      <Tooltip content={props.tooltipLabel} shortcut={props.tooltipShortcut}>
+      <Tooltip
+        content={props.tooltipLabel || 'foo'}
+        shortcut={props.tooltipShortcut}
+      >
         <Icon name={props.icon} />
       </Tooltip>
     </StyledButton>
@@ -28,7 +31,7 @@ export function Button(props: Props) {
 export const StyledButton = styled('button', {
   border: 0,
   background: 'transparent',
-  height: '36px',
+  height: '100%',
   aspectRatio: '1',
   center: true,
   borderRadius: '8px',
@@ -39,10 +42,8 @@ export const StyledButton = styled('button', {
     fg: '$dockButtonFg',
   },
   '& svg': {
-    width: '18px',
-    height: '18px',
-    margin: '0 auto',
-    overflow: 'visible',
+    aspectRatio: '1',
+    height: '21px',
   },
   '&:hover': {
     background: '$dockButtonHoverBg',

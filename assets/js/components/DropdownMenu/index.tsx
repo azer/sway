@@ -17,11 +17,16 @@ import { Root as SwitchRoot } from '@radix-ui/react-switch'
 
 interface Props {
   children: React.ReactNode
+  open?: boolean
   onOpenChange?: (open: boolean) => void
 }
 
 export function DropdownMenu(props: Props) {
-  return <Root onOpenChange={props.onOpenChange}>{props.children}</Root>
+  return (
+    <Root onOpenChange={props.onOpenChange} open={props.open}>
+      {props.children}
+    </Root>
+  )
 }
 
 interface ContentProps {

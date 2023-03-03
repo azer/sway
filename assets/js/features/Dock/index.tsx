@@ -9,7 +9,8 @@ import { setParticipantStatus } from 'features/Call/slice'
 
 import {
   ConnectionState,
-  setDockFocus,
+  setFocusAway,
+  setFocusRegion,
   setInternetConnectionStatus,
 } from './slice'
 
@@ -108,8 +109,9 @@ export function Dock(props: Props) {
         emojiQuery={emojiSearch.query}
         setEmojiQuery={emojiSearch.setQuery}
         focus={focus}
+        handleBlur={handleBlur}
         setFocusRegion={(region: DockFocusRegion) =>
-          dispatch(setDockFocus({ region }))
+          dispatch(setFocusRegion(region))
         }
       />
       <CallControls
@@ -172,13 +174,17 @@ export function Dock(props: Props) {
   function toggleBlurValue(checked: boolean) {
     dispatch(setBackgroundBlur(checked ? 50 : 0))
   }
+
+  function handleBlur() {
+    console.log('handle blur')
+    dispatch(setFocusAway())
+  }
 }
 
 const Container = styled('nav', {
   position: 'absolute',
   bottom: '8px',
   width: '250px',
-  height: '100px',
   color: '$dockFg',
   background: '$dockBg',
   border: '1px solid $dockBorderColor',

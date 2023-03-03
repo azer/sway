@@ -2,7 +2,7 @@ import { DockFocus, initialDockFocus } from 'features/Dock/focus'
 
 export interface RoomFocus {
   roomId: string
-  dock: DockFocus
+  dock: DockFocus | undefined
 }
 
 export const initialRoomFocus: RoomFocus = {

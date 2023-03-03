@@ -11,6 +11,7 @@ import { DockFocusRegion } from './focus'
 import { EmojiObject } from 'features/Emoji/use-emoji-search'
 import { User } from 'state/entities'
 import { FocusRegion } from 'components/FocusRegion'
+import { Tooltip } from 'components/Tooltip'
 
 interface Props {
   localUser?: User
@@ -22,20 +23,33 @@ interface Props {
   focusedEmojiId?: string
   focus?: DockFocus
   setFocusRegion: (r: DockFocusRegion) => void
+  handleBlur: () => void
 }
 
 export function StatusControls(props: Props) {
   const messageInputRef = useRef<HTMLInputElement | null>(null)
-
-  useEffect(() => {}, [])
+  const isDropdownOpen =
+    props.focus && props.focus.region !== DockFocusRegion.CallControls
 
   return (
     <Container>
-      <Dropdown.Menu>
-        <MessageRegion name={DockFocusRegion.Message}>
-          <StatusButton>
-            <Icon name="emoji" />
-          </StatusButton>
+      <Dropdown.Menu
+        open={isDropdownOpen}
+        onOpenChange={(o: boolean) => {
+          console.log('dropdown open?', o)
+          if (!o) {
+            props.handleBlur()
+          }
+        }}
+      >
+        <FocusRegion name={DockFocusRegion.Message}>
+          <Dropdown.Trigger>
+            <Tooltip content="Set your flow">
+              <CurrentStatusIcon>
+                <Icon name="emoji" />
+              </CurrentStatusIcon>
+            </Tooltip>
+          </Dropdown.Trigger>
           <MessageInput
             type="text"
             ref={messageInputRef}
@@ -45,10 +59,10 @@ export function StatusControls(props: Props) {
             onFocus={() => props.setFocusRegion(DockFocusRegion.Message)}
             onChange={(e) => props.setMessage(e.currentTarget.value)}
           />
-        </MessageRegion>
+        </FocusRegion>
 
         <StatusDropdown>
-          <StatusRegion name={DockFocusRegion.Status}>
+          <FocusRegion name={DockFocusRegion.Status}>
             <Dropdown.Label>Set your flow</Dropdown.Label>
             <ToggleGroup.Root value={PresenceStatus.Online}>
               {PresenceModes.map((m) => (
@@ -62,9 +76,9 @@ export function StatusControls(props: Props) {
                 </ToggleGroup.Item>
               ))}
             </ToggleGroup.Root>
-          </StatusRegion>
+          </FocusRegion>
           <Separator />
-          <EmojiRegion name={DockFocusRegion.EmojiSearch}>
+          <FocusRegion name={DockFocusRegion.EmojiSearch}>
             <SearchField>
               <Icon name="search" />
               <EmojiSearchInput
@@ -92,7 +106,7 @@ export function StatusControls(props: Props) {
                 ))
               )}
             </EmojiPicker>
-          </EmojiRegion>
+          </FocusRegion>
         </StatusDropdown>
       </Dropdown.Menu>
     </Container>
@@ -100,11 +114,16 @@ export function StatusControls(props: Props) {
 }
 
 const Container = styled('div', {
-  display: 'flex',
-  flexDirection: 'row',
+  vcenter: true,
   height: '44px',
-  padding: '4px',
+  padding: '8px 12px',
   //height: '24px',
+  [`& section[data-region="${DockFocusRegion.Message}"]`]: {
+    display: 'flex',
+    width: '100%',
+    gap: '8px',
+    height: '100%',
+  },
 })
 
 const Dock = styled('div', {
@@ -142,10 +161,12 @@ const Dock = styled('div', {
 })
 
 const StatusDropdown = styled(StyledDropdownContent, {
-  marginLeft: '15px',
-  marginBottom: '8px',
-  background: '$electronTrayDropdownOpenBg',
-  border: '1px solid rgba(255,255,255,0.05)',
+  position: 'absolute',
+  bottom: '35px',
+  left: '-22px',
+  width: '250px',
+  background: '$dockBg',
+  border: '1px solid $dockBorderColor',
   borderBottom: '0',
   borderRadius: '0',
   borderTopLeftRadius: '$medium',
@@ -173,11 +194,14 @@ const StatusDropdown = styled(StyledDropdownContent, {
   },
 })
 
-const StatusButton = styled('div', {
+const CurrentStatusIcon = styled('div', {
   center: true,
-  width: '20px',
   height: '100%',
   color: 'rgba(255, 255, 255, 0.4)',
+  '& svg': {
+    aspectRatio: '1',
+    height: '21px',
+  },
 })
 
 const EmojiPicker = styled('div', {
@@ -207,10 +231,6 @@ const Emoji = styled('span', {
     },
   },
 })
-
-const StatusRegion = styled(FocusRegion, {})
-const EmojiRegion = styled(FocusRegion, {})
-const MessageRegion = styled(FocusRegion, {})
 
 const NoEmoji = styled('div', {
   textAlign: 'center',

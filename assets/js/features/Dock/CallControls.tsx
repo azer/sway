@@ -10,6 +10,8 @@ import { useMicSettings } from 'features/Settings/MicSettings'
 import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
 import { ScreenshareButton } from 'features/Screenshare/Provider'
 import { useBackgroundBlurSettings } from 'features/Settings/BackgroundBlur'
+import { FocusRegion } from 'components/FocusRegion'
+import { DockFocusRegion } from './focus'
 
 interface Props {
   cameraOn: boolean
@@ -43,164 +45,161 @@ export function CallControls(props: Props) {
   const blurSettings = useBackgroundBlurSettings()
 
   return (
-    <Container>
-      <Dropdown.Menu>
-        <Dropdown.Trigger>
-          <Button
-            icon={props.cameraOn ? 'video-off' : 'video'}
-            label="Camera"
-            off={props.cameraOn}
-            tooltipLabel={props.cameraOn ? 'Turn off camera' : 'Turn on camera'}
-            tooltipShortcut={['cmd', 'e']}
-          />
-        </Dropdown.Trigger>
-        <Dropdown.Content>
-          <Dropdown.Label>Camera</Dropdown.Label>
-          {props.cameras.map((d) => (
-            <Dropdown.Item
-              key={d.id}
-              label={d.label}
-              icon={d.id === props.selectedCameraId ? 'checkmark' : ''}
-              onClick={() => props.selectCamera(d.id)}
+    <FocusRegion name={DockFocusRegion.CallControls}>
+      <Container>
+        <Dropdown.Menu>
+          <Dropdown.Trigger>
+            <Button
+              icon={props.cameraOn ? 'video-off' : 'video'}
+              label="Camera"
+              off={props.cameraOn}
+              tooltipLabel={
+                props.cameraOn ? 'Turn off camera' : 'Turn on camera'
+              }
+              tooltipShortcut={['cmd', 'e']}
             />
-          ))}
-          <Dropdown.Separator />
-          <Dropdown.Label>Status</Dropdown.Label>
-          <Dropdown.Item
-            icon={props.cameraOn ? 'checkmark' : ''}
-            label="On"
-            kbd={props.cameraOn ? ['Cmd', 'e'] : []}
-            onClick={() => props.setCameraOn(true)}
-          />
-          <Dropdown.Item
-            icon={!props.cameraOn ? 'checkmark' : ''}
-            label="Off"
-            kbd={!props.cameraOn ? ['Cmd', 'e'] : []}
-            onClick={() => props.setCameraOn(false)}
-          />
-          <Dropdown.Separator />
-          <Dropdown.Label>Filters</Dropdown.Label>
-          <Dropdown.Switch
-            icon="dots"
-            label="Blur background"
-            id="blur"
-            checked={props.blurValue !== 0}
-            onCheckedChange={props.toggleBlur}
-          />
-          <Dropdown.Item label="Customize blur" onClick={blurSettings.open} />
-          <Dropdown.Separator />
-          <Dropdown.Item
-            label="Camera settings"
-            icon="sliders"
-            onClick={cameraSettings.open}
-          />
-        </Dropdown.Content>
-      </Dropdown.Menu>
-      <Dropdown.Menu>
-        <Dropdown.Trigger>
-          <Button
-            icon={
-              !props.micOn ? 'mic-off' : props.isOnAirpods ? 'airpods' : 'mic'
-            }
-            label="Microphone"
-            off={!props.micOn}
-            tooltipLabel={props.micOn ? 'Turn off mic' : 'Turn on mic'}
-            tooltipShortcut={['cmd', 'd']}
-          />
-        </Dropdown.Trigger>
-        <Dropdown.Content>
-          <Dropdown.Label>Microphone</Dropdown.Label>
-          {props.mics.map((d) => (
+          </Dropdown.Trigger>
+          <Dropdown.Content>
+            <Dropdown.Label>Camera</Dropdown.Label>
+            {props.cameras.map((d) => (
+              <Dropdown.Item
+                key={d.id}
+                label={d.label}
+                icon={d.id === props.selectedCameraId ? 'checkmark' : ''}
+                onClick={() => props.selectCamera(d.id)}
+              />
+            ))}
+            <Dropdown.Separator />
+            <Dropdown.Label>Status</Dropdown.Label>
             <Dropdown.Item
-              key={d.id}
-              label={d.label}
-              icon={d.id === props.selectedMicId ? 'checkmark' : ''}
-              onClick={() => props.selectMic(d.id)}
+              icon={props.cameraOn ? 'checkmark' : ''}
+              label="On"
+              kbd={props.cameraOn ? ['Cmd', 'e'] : []}
+              onClick={() => props.setCameraOn(true)}
             />
-          ))}
-          <Dropdown.Separator />
-          <Dropdown.Label>Status</Dropdown.Label>
-          <Dropdown.Item
-            icon={props.micOn ? 'checkmark' : ''}
-            label="On"
-            kbd={!props.micOn ? ['Cmd', 'd'] : []}
-            onClick={() => props.setMicOn(true)}
-          />
-          <Dropdown.Item
-            icon={!props.micOn ? 'checkmark' : ''}
-            label="Off"
-            kbd={props.micOn ? ['Cmd', 'd'] : []}
-            onClick={() => props.setMicOn(false)}
-          />
-          <Dropdown.Separator />
-          <Dropdown.Item
-            label="Microphone settings"
-            icon="sliders"
-            onClick={micSettings.open}
-          />
-        </Dropdown.Content>
-      </Dropdown.Menu>
-      <ScreenshareButton />
-      <Dropdown.Menu>
-        <Dropdown.Trigger>
-          <Button
-            icon={!props.speakerOn ? 'speaker-off' : 'speaker-volume-high'}
-            label="Speaker"
-            onClick={speakerSettings.open}
-            off={!props.speakerOn}
-            tooltipLabel={
-              props.speakerOn ? 'Turn off speaker' : 'Turn on speaker'
-            }
-            tooltipShortcut={['ctrl', 'm']}
-          />
-        </Dropdown.Trigger>
-        <Dropdown.Content>
-          <Dropdown.Label>Speaker</Dropdown.Label>
-          {props.speakers.map((d) => (
             <Dropdown.Item
-              key={d.id}
-              label={d.label}
-              icon={d.id === props.selectedSpeakerId ? 'checkmark' : ''}
-              onClick={() => props.selectSpeaker(d.id)}
+              icon={!props.cameraOn ? 'checkmark' : ''}
+              label="Off"
+              kbd={!props.cameraOn ? ['Cmd', 'e'] : []}
+              onClick={() => props.setCameraOn(false)}
             />
-          ))}
-          <Dropdown.Separator />
-          <Dropdown.Label>Status</Dropdown.Label>
-          <Dropdown.Item
-            icon={props.speakerOn ? 'checkmark' : ''}
-            label="On"
-            kbd={!props.speakerOn ? ['control', 'm'] : []}
-            onClick={() => props.setSpeakerOn(true)}
-          />
-          <Dropdown.Item
-            icon={!props.speakerOn ? 'checkmark' : ''}
-            label="Off"
-            kbd={props.speakerOn ? ['control', 'm'] : []}
-            onClick={() => props.setSpeakerOn(false)}
-          />
-          <Dropdown.Separator />
-          <Dropdown.Item
-            label="Speaker settings"
-            icon="sliders"
-            onClick={speakerSettings.open}
-          />
-        </Dropdown.Content>
-      </Dropdown.Menu>
-      <ScreenshareButton />
-    </Container>
+            <Dropdown.Separator />
+            <Dropdown.Label>Filters</Dropdown.Label>
+            <Dropdown.Switch
+              icon="dots"
+              label="Blur background"
+              id="blur"
+              checked={props.blurValue !== 0}
+              onCheckedChange={props.toggleBlur}
+            />
+            <Dropdown.Item label="Customize blur" onClick={blurSettings.open} />
+            <Dropdown.Separator />
+            <Dropdown.Item
+              label="Camera settings"
+              icon="sliders"
+              onClick={cameraSettings.open}
+            />
+          </Dropdown.Content>
+        </Dropdown.Menu>
+        <Dropdown.Menu>
+          <Dropdown.Trigger>
+            <Button
+              icon={
+                !props.micOn ? 'mic-off' : props.isOnAirpods ? 'airpods' : 'mic'
+              }
+              label="Microphone"
+              off={!props.micOn}
+              tooltipLabel={props.micOn ? 'Turn off mic' : 'Turn on mic'}
+              tooltipShortcut={['cmd', 'd']}
+            />
+          </Dropdown.Trigger>
+          <Dropdown.Content>
+            <Dropdown.Label>Microphone</Dropdown.Label>
+            {props.mics.map((d) => (
+              <Dropdown.Item
+                key={d.id}
+                label={d.label}
+                icon={d.id === props.selectedMicId ? 'checkmark' : ''}
+                onClick={() => props.selectMic(d.id)}
+              />
+            ))}
+            <Dropdown.Separator />
+            <Dropdown.Label>Status</Dropdown.Label>
+            <Dropdown.Item
+              icon={props.micOn ? 'checkmark' : ''}
+              label="On"
+              kbd={!props.micOn ? ['Cmd', 'd'] : []}
+              onClick={() => props.setMicOn(true)}
+            />
+            <Dropdown.Item
+              icon={!props.micOn ? 'checkmark' : ''}
+              label="Off"
+              kbd={props.micOn ? ['Cmd', 'd'] : []}
+              onClick={() => props.setMicOn(false)}
+            />
+            <Dropdown.Separator />
+            <Dropdown.Item
+              label="Microphone settings"
+              icon="sliders"
+              onClick={micSettings.open}
+            />
+          </Dropdown.Content>
+        </Dropdown.Menu>
+        <ScreenshareButton />
+        <Dropdown.Menu>
+          <Dropdown.Trigger>
+            <Button
+              icon={!props.speakerOn ? 'speaker-off' : 'speaker-volume-high'}
+              label="Speaker"
+              onClick={speakerSettings.open}
+              off={!props.speakerOn}
+              tooltipLabel={
+                props.speakerOn ? 'Turn off speaker' : 'Turn on speaker'
+              }
+              tooltipShortcut={['ctrl', 'm']}
+            />
+          </Dropdown.Trigger>
+          <Dropdown.Content>
+            <Dropdown.Label>Speaker</Dropdown.Label>
+            {props.speakers.map((d) => (
+              <Dropdown.Item
+                key={d.id}
+                label={d.label}
+                icon={d.id === props.selectedSpeakerId ? 'checkmark' : ''}
+                onClick={() => props.selectSpeaker(d.id)}
+              />
+            ))}
+            <Dropdown.Separator />
+            <Dropdown.Label>Status</Dropdown.Label>
+            <Dropdown.Item
+              icon={props.speakerOn ? 'checkmark' : ''}
+              label="On"
+              kbd={!props.speakerOn ? ['control', 'm'] : []}
+              onClick={() => props.setSpeakerOn(true)}
+            />
+            <Dropdown.Item
+              icon={!props.speakerOn ? 'checkmark' : ''}
+              label="Off"
+              kbd={props.speakerOn ? ['control', 'm'] : []}
+              onClick={() => props.setSpeakerOn(false)}
+            />
+            <Dropdown.Separator />
+            <Dropdown.Item
+              label="Speaker settings"
+              icon="sliders"
+              onClick={speakerSettings.open}
+            />
+          </Dropdown.Content>
+        </Dropdown.Menu>
+        <ScreenshareButton />
+      </Container>
+    </FocusRegion>
   )
-
-  /* <Button
-        icon="sliders"
-        label="Options"
-        onClick={settings.open}
-        tooltipLabel="Settings"
-        tooltipShortcut={['Cmd', 's']}
-      />*/
 }
 
 const Container = styled('div', {
   display: 'flex',
+  vcenter: true,
+  padding: '4px 4px',
   gap: '8px',
-  padding: '4px',
 })

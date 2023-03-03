@@ -103,36 +103,17 @@ export const {
 } = slice.actions
 export default slice.reducer
 
-export function setDockFocus(focus: DockFocus) {
+export function setFocusRegion(region: DockFocusRegion) {
   return updateWorkspaceFocus((wsFocus) => {
     wsFocus.room.dock = {
       ...wsFocus.room.dock,
-      ...focus,
+      region,
     }
   })
 }
 
-export function setDockDropdownOpen(open: boolean) {
+export function setFocusAway() {
   return updateWorkspaceFocus((wsFocus) => {
-    wsFocus.room.dock.dropdownOpen = open
-  })
-}
-
-export function setFocusedDockRow(focus: DockFocusRegion) {
-  return updateWorkspaceFocus((wsFocus) => {
-    wsFocus.room.dock = {
-      ...wsFocus.room.dock,
-      region: focus,
-    }
-  })
-}
-
-export function focusOnMessageInput() {
-  return updateWorkspaceFocus((wsFocus) => {
-    wsFocus.room.dock = {
-      ...wsFocus.room.dock,
-      region: DockFocusRegion.Message,
-      dropdownOpen: true,
-    }
+    wsFocus.room.dock = undefined
   })
 }

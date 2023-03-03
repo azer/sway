@@ -12,12 +12,14 @@ export function FocusRegion(props: Props) {
   const dispatch = useDispatch()
 
   return (
-    <section data-region={props.name} onClick={handleClick}>
+    <StyledFocusRegion data-region={props.name} onClick={handleClick}>
       {props.children}
-    </section>
+    </StyledFocusRegion>
   )
 
   function handleClick() {
     dispatch(switchFocus(props.name))
   }
 }
+
+const StyledFocusRegion = styled('section', {})
