@@ -75,7 +75,10 @@ export function Navigation(props: Props) {
           <UserButton key={uid} id={uid} />
         ))}
       </Rooms>
-      <Bottom>
+    </Container>
+  )
+
+  /*<Bottom>
         <Button onClick={inviteModal.open}>
           <ButtonIcon>
             <Icon name="avatar" />
@@ -88,9 +91,7 @@ export function Navigation(props: Props) {
           </ButtonIcon>
           <ButtonLabel>Share feedback</ButtonLabel>
         </Button>
-      </Bottom>
-    </Container>
-  )
+      </Bottom>*/
 
   function mail() {
     window.location.href = 'mailto:azer@sway.so'
