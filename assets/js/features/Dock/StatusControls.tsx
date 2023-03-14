@@ -1,177 +1,377 @@
 import { styled } from 'themes'
-import React, { useEffect, useRef } from 'react'
-import selectors from 'selectors'
-import { Dropdown, StyledDropdownContent } from 'components/DropdownMenu'
+import React, { useEffect, useRef, useState } from 'react'
 import Icon from 'components/Icon'
 import { firstName, titleCase } from 'lib/string'
-import { useSelector, useDispatch } from 'state'
 import { ToggleGroup } from 'components/ToggleGroup'
 import { PresenceModes, PresenceStatus } from 'state/presence'
-import { DockFocusRegion } from './focus'
+import { DockFocus, DockFocusRegion } from './focus'
 import { EmojiObject } from 'features/Emoji/use-emoji-search'
-import { User } from 'state/entities'
-import { FocusRegion } from 'components/FocusRegion'
+import { Status, User } from 'state/entities'
+import { FocusRegion, StyledFocusRegion } from 'components/FocusRegion'
 import { Tooltip } from 'components/Tooltip'
+import { logger } from 'lib/log'
+import * as Popover from '@radix-ui/react-popover'
+import { DockSection } from './CallControls'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { StatusCircle, StatusIcon } from './StatusIcon'
 
 interface Props {
+  localStatus: Status
   localUser?: User
   message: string
   setMessage: (m: string) => void
+  saveMessage: () => void
+  resetMessage: () => void
   emojiQuery: string
   setEmojiQuery: (q: string) => void
+  selectEmoji: (emoji: string | undefined) => void
   emojiResults: EmojiObject[]
-  focusedEmojiId?: string
   focus?: DockFocus
   setFocusRegion: (r: DockFocusRegion) => void
-  handleBlur: () => void
+  setFocusedEmojiId: (id: string | undefined) => void
+  handleBlur: (e: Event) => void
+  setPresence: (p: PresenceStatus) => void
+  isDropdownOpen: boolean
+  setDropdownOpen: (o: boolean) => void
+  setFocusAway: () => void
 }
+
+const log = logger('dock/status-controls')
 
 export function StatusControls(props: Props) {
   const messageInputRef = useRef<HTMLInputElement | null>(null)
-  const isDropdownOpen =
-    props.focus && props.focus.region !== DockFocusRegion.CallControls
+  const emojiInputRef = useRef<HTMLInputElement | null>(null)
+  const triggerRef = useRef<HTMLDivElement | null>(null)
+  const statusItemRef = useRef<HTMLElement | null>(null)
+  const focusedEmojiId =
+    props.focus?.region === DockFocusRegion.EmojiSearch
+      ? props.focus?.emoji?.id
+      : undefined
+
+  useEffect(() => {
+    if (!props.focus) {
+      messageInputRef.current?.blur()
+      return
+    }
+
+    switch (props.focus.region) {
+      case DockFocusRegion.Message:
+        setTimeout(() => {
+          messageInputRef.current?.focus()
+        }, 100)
+        break
+      case DockFocusRegion.EmojiSearch:
+        emojiInputRef.current?.focus()
+        if (!props.isDropdownOpen) {
+          props.setDropdownOpen(true)
+        }
+        break
+      case DockFocusRegion.Status:
+        statusItemRef.current?.focus()
+
+        if (!props.isDropdownOpen) {
+          props.setDropdownOpen(true)
+        }
+        break
+      case DockFocusRegion.CallControls:
+        break
+    }
+  }, [props.focus])
+
+  useEffect(() => {
+    if (
+      props.focus?.region === DockFocusRegion.Message &&
+      props.isDropdownOpen
+    ) {
+      messageInputRef.current?.focus()
+    }
+  }, [props.focus, props.isDropdownOpen])
+
+  useEffect(() => {
+    if (!props.isDropdownOpen) return
+
+    if (props.emojiResults.length > 0) {
+      log.info('Focus on first emoji')
+      props.setFocusedEmojiId(props.emojiResults[0].id)
+    } else {
+      log.info('Clean up emoji focus')
+      props.setFocusedEmojiId(undefined)
+    }
+  }, [props.isDropdownOpen, props.emojiResults])
+
+  useHotkeys(
+    'left',
+    moveEmoji(-1),
+    {
+      enabled: props.focus?.region === DockFocusRegion.EmojiSearch,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [props.focus]
+  )
+
+  useHotkeys(
+    'right',
+    moveEmoji(1),
+    {
+      enabled: props.focus?.region === DockFocusRegion.EmojiSearch,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [props.focus]
+  )
+
+  useHotkeys(
+    'enter',
+    () => props.selectEmoji(focusedEmojiId),
+    {
+      enabled: props.focus?.region === DockFocusRegion.EmojiSearch,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [props.focus]
+  )
+
+  useHotkeys(
+    'enter',
+    () => props.saveMessage(),
+    {
+      enabled: props.focus?.region === DockFocusRegion.Message,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [props.focus, props.message]
+  )
+
+  useHotkeys(
+    'esc',
+    () => props.resetMessage(),
+    {
+      enabled: props.focus?.region === DockFocusRegion.Message,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [props.focus]
+  )
+
+  useHotkeys(
+    'esc',
+    () => {
+      if (props.isDropdownOpen) {
+        props.setDropdownOpen(false)
+      } else {
+        props.setFocusAway()
+      }
+    },
+    {
+      enabled: !!focus,
+      enableOnFormTags: true,
+    },
+    [props.isDropdownOpen]
+  )
 
   return (
     <Container>
-      <Dropdown.Menu
-        open={isDropdownOpen}
-        onOpenChange={(o: boolean) => {
-          console.log('dropdown open?', o)
-          if (!o) {
-            props.handleBlur()
-          }
-        }}
+      <Popover.Root
+        open={props.isDropdownOpen}
+        onOpenChange={props.setDropdownOpen}
       >
-        <FocusRegion name={DockFocusRegion.Message}>
-          <Dropdown.Trigger>
-            <Tooltip content="Set your flow">
-              <CurrentStatusIcon>
-                <Icon name="emoji" />
-              </CurrentStatusIcon>
+        <FocusRegion
+          regionId={DockFocusRegion.Message}
+          focusSwitcher={props.setFocusRegion}
+          regionRef={triggerRef}
+        >
+          <StyledAnchor />
+          <MessageSection
+            focused={props.focus?.region === DockFocusRegion.Message}
+          >
+            <Tooltip content="Set emoji & flow">
+              <Popover.Trigger asChild>
+                <CurrentStatusIcon>
+                  {props.localStatus.emoji ? (
+                    <StatusIcon status={props.localStatus} />
+                  ) : (
+                    <Icon name="emoji" />
+                  )}
+                </CurrentStatusIcon>
+              </Popover.Trigger>
             </Tooltip>
-          </Dropdown.Trigger>
-          <MessageInput
-            type="text"
-            ref={messageInputRef}
-            placeholder={`What's cookin, ${firstName(
-              props.localUser?.name || ''
-            )}?`}
-            onFocus={() => props.setFocusRegion(DockFocusRegion.Message)}
-            onChange={(e) => props.setMessage(e.currentTarget.value)}
-          />
+            <MessageInput
+              type="text"
+              ref={messageInputRef}
+              placeholder={`What's cookin, ${firstName(
+                props.localUser?.name || ''
+              )}?`}
+              value={props.message}
+              onChange={(e) => props.setMessage(e.currentTarget.value)}
+            />
+          </MessageSection>
         </FocusRegion>
 
-        <StatusDropdown>
-          <FocusRegion name={DockFocusRegion.Status}>
-            <Dropdown.Label>Set your flow</Dropdown.Label>
-            <ToggleGroup.Root value={PresenceStatus.Online}>
-              {PresenceModes.map((m) => (
-                <ToggleGroup.Item
-                  data-mode={m.status}
-                  value={m.status}
-                  key={m.status}
+        <Popover.Portal>
+          <Popover.Content
+            onFocusOutside={handleFocusOutside}
+            onPointerDownOutside={handlePointerDownOutside}
+            asChild
+          >
+            <ControlMenu>
+              <FocusRegion
+                regionId={DockFocusRegion.EmojiSearch}
+                focusSwitcher={props.setFocusRegion}
+              >
+                <DockSection
+                  focused={props.focus?.region === DockFocusRegion.EmojiSearch}
                 >
-                  <ModeIcon mode={m.status} />
-                  <ToggleGroup.Label>{titleCase(m.status)}</ToggleGroup.Label>
-                </ToggleGroup.Item>
-              ))}
-            </ToggleGroup.Root>
-          </FocusRegion>
-          <Separator />
-          <FocusRegion name={DockFocusRegion.EmojiSearch}>
-            <SearchField>
-              <Icon name="search" />
-              <EmojiSearchInput
-                value={props.emojiQuery}
-                onChange={(e) => props.setEmojiQuery(e.currentTarget.value)}
-                placeholder="Emoji search"
-                onFocus={() =>
-                  props.setFocusRegion(DockFocusRegion.EmojiSearch)
-                }
-              />
-            </SearchField>
-
-            <EmojiPicker>
-              {props.emojiResults.length === 0 ? (
-                <NoEmoji>No emojis found</NoEmoji>
-              ) : (
-                props.emojiResults.slice(0, 10).map((e, ind) => (
-                  <Emoji
-                    role="img"
-                    aria-label={e.id}
-                    highlighted={e.id === props.focusedEmojiId}
+                  <Label
+                    focused={
+                      props.focus?.region === DockFocusRegion.EmojiSearch
+                    }
                   >
-                    {e.skins[0].native}
-                  </Emoji>
-                ))
-              )}
-            </EmojiPicker>
-          </FocusRegion>
-        </StatusDropdown>
-      </Dropdown.Menu>
+                    Emoji
+                  </Label>
+                  <SearchField>
+                    <Icon name="search" />
+                    <EmojiSearchInput
+                      value={props.emojiQuery}
+                      onChange={(e) =>
+                        props.setEmojiQuery(e.currentTarget.value)
+                      }
+                      placeholder="Search"
+                      ref={emojiInputRef}
+                    />
+                  </SearchField>
+                  <EmojiPicker>
+                    {props.emojiResults.length === 0 ? (
+                      <NoEmoji>No emojis found</NoEmoji>
+                    ) : (
+                      props.emojiResults.slice(0, 10).map((e, ind) => (
+                        <Emoji
+                          role="img"
+                          aria-label={e.id}
+                          highlighted={e.id === focusedEmojiId}
+                          onMouseOver={() => props.setFocusedEmojiId(e.id)}
+                          onClick={() => props.selectEmoji(e.id)}
+                        >
+                          {e.skins[0].native}
+                        </Emoji>
+                      ))
+                    )}
+                  </EmojiPicker>
+                </DockSection>
+              </FocusRegion>
+              <FocusRegion
+                regionId={DockFocusRegion.Status}
+                focusSwitcher={props.setFocusRegion}
+              >
+                <DockSection
+                  focused={props.focus?.region === DockFocusRegion.Status}
+                >
+                  <Label
+                    focused={props.focus?.region === DockFocusRegion.Status}
+                  >
+                    Set your flow
+                  </Label>
+                  <ToggleGroup.Root
+                    value={props.localPresence}
+                    onValueChange={(presence: PresenceStatus) =>
+                      props.setPresence(presence)
+                    }
+                    rovingFocus={props.focus?.region === DockFocusRegion.Status}
+                  >
+                    {PresenceModes.map((m) => (
+                      <ToggleGroup.Item
+                        data-mode={m.status}
+                        value={m.status}
+                        key={m.status}
+                        itemRef={
+                          m.status === PresenceStatus.Online
+                            ? statusItemRef
+                            : undefined
+                        }
+                      >
+                        <ModeIcon presence={m.status} />
+                        <ToggleGroup.Label>
+                          {titleCase(m.status)}
+                        </ToggleGroup.Label>
+                      </ToggleGroup.Item>
+                    ))}
+                  </ToggleGroup.Root>
+                </DockSection>
+              </FocusRegion>
+            </ControlMenu>
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
     </Container>
   )
+
+  function handleFocusOutside(event: Event) {
+    if (triggerRef.current?.contains(event.target as Element)) {
+      event.preventDefault()
+    } else {
+      props.handleBlur(event)
+    }
+  }
+
+  function handlePointerDownOutside(event: Event) {
+    if (triggerRef.current?.contains(event.target as Element)) {
+      event.preventDefault()
+    }
+  }
+
+  function moveEmoji(add: number) {
+    return () => {
+      const ind = props.emojiResults.findIndex(
+        (e) => e.id === props.focus?.emoji?.id
+      )
+
+      const nextInd = (ind + add) % props.emojiResults.length
+      const next =
+        props.emojiResults[
+          nextInd < 0 ? props.emojiResults.length - 1 : nextInd
+        ]
+
+      props.setFocusedEmojiId(next.id)
+    }
+  }
 }
 
 const Container = styled('div', {
   vcenter: true,
-  height: '44px',
-  padding: '8px 12px',
-  //height: '24px',
-  [`& section[data-region="${DockFocusRegion.Message}"]`]: {
-    display: 'flex',
-    width: '100%',
-    gap: '8px',
-    height: '100%',
+  overflow: 'hidden',
+  [`& ${DockSection}`]: {
+    padding: '8px 8px 8px 5.5px',
+    borderTop: '1px solid rgba(255, 255, 255, 0.025)',
   },
 })
 
-const Dock = styled('div', {
-  position: 'absolute',
-  left: '15px',
-  bottom: '15px',
-  width: 'calc(100% - 30px)',
-  height: '44px',
-  padding: '0 12px',
-  vcenter: true,
-  background: '$electronTrayDockBg',
-  borderRadius: '$medium',
-  border: '1px solid transparent',
+export const MessageSection = styled(DockSection, {
   display: 'flex',
-  flexDirection: 'row',
-  gap: '8px',
-  '&:focus-within': {
-    borderTop: '0',
-    border: '1px solid rgba(255,255,255,0.05)',
-    boxShadow: 'rgb(0 0 0 / 10%) 0px 3px 8px',
-    background: '$electronTrayDockOpenBg',
-  },
-  variants: {
-    open: {
-      true: {
-        border: '1px solid rgba(255,255,255,0.05)',
-        boxShadow: 'rgb(0 0 0 / 10%) 0px 3px 8px',
-        background: '$electronTrayDockOpenBg',
-        borderTopLeftRadius: '0',
-        borderTopRightRadius: '0',
-        borderTop: '0',
-      },
-    },
-  },
+  alignItems: 'center',
+  padding: '0 0 0 0 !important',
+  borderTop: '0 !important',
+  gap: '6px',
 })
 
-const StatusDropdown = styled(StyledDropdownContent, {
+const StyledAnchor = styled(Popover.Anchor, {
   position: 'absolute',
-  bottom: '35px',
-  left: '-22px',
-  width: '250px',
+  left: '50%',
+  bottom: '0',
+  width: '0',
+  height: '0',
+})
+
+const ControlMenu = styled('div', {
+  padding: '0',
+  width: '300px',
+  overflow: 'hidden',
   background: '$dockBg',
+  backdropFilter: 'blur(20px) saturate(190%) contrast(70%) brightness(45%)',
   border: '1px solid $dockBorderColor',
-  borderBottom: '0',
+  borderTop: '0',
   borderRadius: '0',
-  borderTopLeftRadius: '$medium',
-  borderTopRightRadius: '$medium',
-  backdropFilter: 'none',
+  borderBottomLeftRadius: '$medium',
+  borderBottomRightRadius: '$medium',
   boxShadow: 'rgb(0 0 0 / 10%) 0px -10px 8px',
   [`& ${ToggleGroup.StyledRoot}`]: {
     width: '100%',
@@ -187,20 +387,17 @@ const StatusDropdown = styled(StyledDropdownContent, {
     center: true,
     flexDirection: 'row',
   },
-  [`& ${Dropdown.Label}`]: {
-    paddingLeft: '6px',
-    fontSize: '$base',
-    color: 'rgba(255, 255, 255, 0.5)',
+  [`& ${DockSection}`]: {
+    borderTop: '1px solid rgba(255, 255, 255, 0.03)',
   },
 })
 
-const CurrentStatusIcon = styled('div', {
-  center: true,
-  height: '100%',
-  color: 'rgba(255, 255, 255, 0.4)',
+const CurrentStatusIcon = styled('label', {
+  display: 'flex',
   '& svg': {
     aspectRatio: '1',
     height: '21px',
+    color: 'rgba(255, 255, 255, 0.3)',
   },
 })
 
@@ -250,6 +447,9 @@ const MessageInput = styled('input', {
   color: '$electronTrayTextFieldFg',
   fontWeight: '$medium',
   caretColor: '$electronTrayTextFieldCaret',
+  '&:focus': {
+    color: '$electronTrayTextFieldFocusFg',
+  },
   '&::selection': {
     background: '$electronTrayTextFieldSelectionBg',
   },
@@ -258,25 +458,10 @@ const MessageInput = styled('input', {
   },
 })
 
-const ModeIcon = styled('div', {
+const ModeIcon = styled(StatusCircle, {
   width: '8px',
   aspectRatio: '1',
-  round: true,
-  background: '$green',
   marginTop: '2px',
-  variants: {
-    mode: {
-      [PresenceStatus.Online]: {
-        background: '$green',
-      },
-      [PresenceStatus.Focus]: {
-        background: '$yellow',
-      },
-      [PresenceStatus.Zen]: {
-        background: '$red',
-      },
-    },
-  },
 })
 
 const SearchField = styled('div', {
@@ -294,18 +479,22 @@ const SearchField = styled('div', {
   },
 })
 
-const LocalPresenceMode = styled('div', {
-  height: '24px',
-  '& div': {
-    height: '100%',
+const Label = styled('div', {
+  vcenter: true,
+  display: 'flex',
+  fontSize: '$small',
+  fontWeight: '$medium',
+  color: 'rgba(255, 255, 255, 0.4)',
+  height: '28px',
+  marginBottom: '8px',
+  label: true,
+  variants: {
+    focused: {
+      true: {
+        color: 'rgba(255, 255, 255, 0.6)',
+      },
+    },
   },
-})
-
-const Separator = styled('div', {
-  height: '1px',
-  background: 'rgba(255, 255, 255, 0.05)',
-  width: 'calc(100% + 12px)',
-  margin: '4px 0 8px -6px',
 })
 
 const EmojiSearchInput = styled('input', {

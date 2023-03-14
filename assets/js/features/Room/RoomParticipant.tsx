@@ -4,11 +4,11 @@ import { useSelector, useDispatch } from 'state'
 import { ActiveParticipant } from 'features/Call/ActiveParticipant'
 import { logger } from 'lib/log'
 import { styled } from 'themes'
-import Icon from 'components/Icon'
-import { AvatarView } from 'features/Avatar/AvatarView'
 import { Users } from 'state/entities'
 import { useUserSocket } from 'features/UserSocket'
-import { findModeByStatus } from 'state/presence'
+import { Avatar, AvatarRoot } from 'components/Avatar'
+import { StatusIcon } from 'features/Dock/StatusIcon'
+import { ParticipantLabel } from 'components/ParticipantLabel'
 
 interface Props {
   userId: string
@@ -41,17 +41,12 @@ export function Participant(props: Props) {
   return (
     <Border>
       <InactiveParticipant data-user-id={props.userId}>
-        <User>
-          <PresenceModeIcon status={status.status}>
-            <Icon name={presenceIcon} />
-          </PresenceModeIcon>
-          <Name>{user?.name.split(' ')[0] || 'Unknown'}</Name>
-        </User>
-        <AvatarView
-          name={user?.name || ''}
-          photoUrl={user?.photoUrl}
-          fill
-          round="medium"
+        <ParticipantLabel id={props.userId} username={user?.name}>
+          <StatusIcon status={status} />
+        </ParticipantLabel>
+        <Avatar
+          src={user?.photoUrl}
+          fallback={user?.name || 'User ' + props.userId}
         />
       </InactiveParticipant>
     </Border>
@@ -60,8 +55,8 @@ export function Participant(props: Props) {
 
 export const Border = styled('div', {
   padding: '4px',
-  border: '1px solid rgba(150, 190, 255, 0.1)',
-  round: 'large',
+  border: '1px solid $participantBorder',
+  round: 'xlarge',
   variants: {
     active: {
       true: {
@@ -81,54 +76,13 @@ export const Border = styled('div', {
 export const InactiveParticipant = styled('div', {
   position: 'relative',
   center: true,
+  borderRadius: '1.25rem',
   width: '150px',
   aspectRatio: '1',
-})
-
-export const User = styled('footer', {
-  maxWidth: '130px',
-  height: '24px',
-  background: '$participantUsernameBg',
-  borderBottom: '0',
-  color: '$participantUsernameFg',
-  position: 'absolute',
-  bottom: '0',
-  borderRadius: '$small $small 0 0',
-  display: 'flex',
-  flexDirection: 'row',
-  fontSize: '$small',
-  fontWeight: '$medium',
-  overflow: 'hidden',
-  ellipsis: true,
-  gap: '8px',
-  padding: '4px 14px 2px 14px',
-})
-
-export const Name = styled('label', {
-  display: 'block',
-  label: true,
-  fontWeight: '$medium',
-  vcenter: true,
-})
-
-const PresenceModeIcon = styled('div', {
-  vcenter: true,
-  label: true,
-  height: '100%',
-  '& svg': {
-    width: '14px',
-  },
-  variants: {
-    status: {
-      focus: {
-        color: '$participantFocusBg',
-      },
-      online: {
-        color: '$participantSocialBg',
-      },
-      zen: {
-        color: '$participantZenBg',
-      },
-    },
+  background: '$participantBg',
+  [`& ${AvatarRoot}`]: {
+    marginTop: '-10px',
+    height: '60px',
+    round: true,
   },
 })

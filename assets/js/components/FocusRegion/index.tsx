@@ -1,25 +1,26 @@
 import { styled } from 'themes'
-import React from 'react'
-import { useSelector, useDispatch } from 'state'
-import { switchFocus } from 'features/Focus/slice'
+import React, { Ref } from 'react'
 
 interface Props {
-  name: string
+  regionId: string
   children: React.ReactNode
+  focusSwitcher: (regionId: any) => void
+  regionRef?: Ref<HTMLDivElement>
 }
 
 export function FocusRegion(props: Props) {
-  const dispatch = useDispatch()
-
   return (
-    <StyledFocusRegion data-region={props.name} onClick={handleClick}>
+    <StyledFocusRegion
+      data-region-id={props.regionId}
+      onClick={() => props.focusSwitcher(props.regionId)}
+      ref={props.regionRef}
+    >
       {props.children}
     </StyledFocusRegion>
   )
-
-  function handleClick() {
-    dispatch(switchFocus(props.name))
-  }
 }
 
-const StyledFocusRegion = styled('section', {})
+export const StyledFocusRegion = styled('section', {
+  display: 'block',
+  width: '100%',
+})

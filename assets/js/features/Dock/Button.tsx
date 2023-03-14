@@ -17,38 +17,37 @@ interface Props {
 
 export function Button(props: Props) {
   return (
-    <StyledButton onClick={props.onClick} off={props.off} on={props.on}>
-      <Tooltip
-        content={props.tooltipLabel || 'foo'}
-        shortcut={props.tooltipShortcut}
-      >
-        <Icon name={props.icon} />
-      </Tooltip>
-    </StyledButton>
+    <Tooltip
+      content={props.tooltipLabel || 'foo'}
+      shortcut={props.tooltipShortcut}
+    >
+      <Container>
+        <StyledButton onClick={props.onClick} off={props.off} on={props.on}>
+          <Icon name={props.icon} />
+        </StyledButton>
+      </Container>
+    </Tooltip>
   )
 }
 
+const shadow = 'rgba(0,0,0, 0.05)'
+
 export const StyledButton = styled('button', {
-  border: 0,
-  background: 'transparent',
+  outline: '2px solid transparent',
+  boxShadow: `0px 1px 0px -1px ${shadow}, 0px 1px 1px -1px ${shadow}, 0px 1px 2px -1px ${shadow}, 0px 2px 4px -2px ${shadow}, 0px 3px 6px -3px ${shadow}`,
+  border: '1px solid rgba(20, 22, 26, 0.7)',
   height: '100%',
   aspectRatio: '1',
   center: true,
   borderRadius: '8px',
-  space: { inner: [0, 2], gap: 1 },
-  //  border: '1px solid rgba(255, 255, 255, 0.01)',
+  padding: '12px',
   colors: {
-    //    bg: '$dockButtonBg',
+    bg: 'rgba(49, 49, 49, 0.7)',
     fg: '$dockButtonFg',
   },
   '& svg': {
     aspectRatio: '1',
-    height: '21px',
-  },
-  '&:hover': {
-    background: '$dockButtonHoverBg',
-    color: '$dockButtonHoverFg',
-    borderColor: 'rgba(255, 255, 255, 0.03),',
+    height: '20px',
   },
   '&[data-state=open]': {
     background: '$dockButtonHoverBg',
@@ -69,8 +68,17 @@ export const StyledButton = styled('button', {
   },
 })
 
-const Wrapper = styled('div', {
-  width: '100%',
-  height: '100%',
-  center: true,
+const Container = styled('div', {
+  position: 'relative',
+  '&::after': {
+    content: ' ',
+    position: 'absolute',
+    width: 'calc(100% - 2px)',
+    height: 'calc(100% - 2px)',
+    top: '1px',
+    left: '1px',
+    borderRadius: '0.5rem',
+    boxShadow:
+      '0 0 #0000, 0 0 #0000, inset 0px 0px 0px 1px rgb(255 255 255 / 0.05)',
+  },
 })

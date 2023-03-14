@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { styled } from 'themes'
 import { logger } from 'lib/log'
 import { ParticipantGrid } from './ParticipantGrid'
@@ -7,7 +7,7 @@ import { Dock } from 'features/Dock'
 import { ScreenshareProvider } from 'features/Screenshare/Provider'
 import { RoomButton } from './RoomButton'
 import { isElectron } from 'lib/electron'
-import { Mirror } from 'features/Mirror'
+import { CallDock } from 'features/CallDock'
 
 // import { useSelector, useDispatch } from 'app/state'
 
@@ -26,11 +26,12 @@ export function RoomPage(props: Props) {
           <RoomButton roomId={props.id} />
         </Header>
       ) : null}
+      <Top>
+        <Dock roomId={props.id} />
+      </Top>
       <ParticipantGrid roomId={props.id} />
       <Bottom>
-        <Dock roomId={props.id} />
-        <BottomMiddle></BottomMiddle>
-        <Mirror />
+        <CallDock />
       </Bottom>
     </Container>
   )
@@ -41,14 +42,16 @@ export const topBlurEffect =
 
 const Container = styled('main', {
   width: '100%',
-  display: 'grid',
-  gridTemplateRows: 'calc(16 * 4px) auto 80px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
   backgroundImage: topBlurEffect,
   variants: {
     electron: {
       true: {
-        gridTemplateRows: 'auto 80px',
+        gridTemplateRows: '80px auto 80px',
         background: 'none',
+        paddingTop: '12px',
       },
     },
   },
@@ -56,17 +59,20 @@ const Container = styled('main', {
 
 const Header = styled('header', {
   width: '100%',
+  height: '48px',
   display: 'flex',
   space: { inner: [0, 5] },
   borderBottom: '1px solid $shellBorderColor',
   vcenter: true,
 })
 
-const Bottom = styled('div', {
-  display: 'flex',
-  padding: '8px',
+const Top = styled('div', {
+  center: true,
 })
 
-const BottomMiddle = styled('div', {
-  flex: '1',
+const Bottom = styled('div', {
+  display: 'flex',
+  justifyContent: 'center',
+  padding: '8px',
+  marginBottom: '12px',
 })

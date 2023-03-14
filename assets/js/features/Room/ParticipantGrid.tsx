@@ -61,7 +61,7 @@ const Container = styled('div', {
   display: 'flex',
   space: { inner: [4] },
   gap: '8px',
-  height: 'calc(100vh - 200px)',
+  flexGrow: '1',
   overflow: 'hidden',
   variants: {
     divide: {
@@ -76,7 +76,7 @@ const Container = styled('div', {
 
 const InviteForm = styled('div', {
   width: '100%',
-  height: '100%',
+  flexGrow: '1',
   center: true,
   label: true,
   color: 'rgba(255, 255, 255, 0.7)',

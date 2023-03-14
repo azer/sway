@@ -40,15 +40,7 @@ export function updateWorkspaceFocus(
     const current = getState().focus.workspace
     const draft = JSON.parse(JSON.stringify(current))
 
-    console.log('1. set workspace focus:', draft)
     updateFn(draft, getState)
-    console.log('2. set workspace focus:', draft)
     dispatch(setWorkspaceFocus(draft))
-  }
-}
-
-export function switchFocus(id: string) {
-  return (dispatch: AppDispatch, getState: () => RootState) => {
-    log.info('Switch focus to ', id)
   }
 }

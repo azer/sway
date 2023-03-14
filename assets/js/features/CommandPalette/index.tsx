@@ -4,6 +4,9 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { logger } from 'lib/log'
 import Modal from './Modal'
 import { performSearch } from 'features/CommandRegistry'
+import selectors from 'selectors'
+import { useDispatch, useSelector } from 'state'
+import { setOpen, setSelectedId } from './slice'
 
 const log = logger('command-palette')
 
@@ -74,8 +77,6 @@ const defaultModal: ModalProps = {
 }
 
 const context = React.createContext<{
-  isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   modal: ModalProps
   setModal: React.Dispatch<React.SetStateAction<ModalProps>>
   commands: Command[]
@@ -84,10 +85,8 @@ const context = React.createContext<{
   setFullScreen: React.Dispatch<React.SetStateAction<boolean>>
   setQuery: React.Dispatch<React.SetStateAction<string>>
 }>({
-  isOpen: false,
   fullScreen: false,
   setFullScreen: noop,
-  setIsOpen: noop,
   modal: defaultModal,
   setModal: noop,
   commands: [],
@@ -95,8 +94,13 @@ const context = React.createContext<{
   setQuery: noop,
 })
 
-export default function CommandPaletteProvider(props: Props) {
-  const [isOpen, setIsOpen] = useState(false)
+export function CommandPaletteProvider(props: Props) {
+  const dispatch = useDispatch()
+  const [isOpen, selectedId] = useSelector((state) => [
+    selectors.commandPalette.isOpen(state),
+    selectors.commandPalette.getSelectedId(state),
+  ])
+
   const [fullScreen, setFullScreen] = useState(false)
   const [modalProps, setModalProps] = useState<ModalProps>({
     ...defaultModal,
@@ -105,9 +109,6 @@ export default function CommandPaletteProvider(props: Props) {
   const [query, setQuery] = useState('')
   const [commands, setCommands] = useState<Command[]>([])
   const [results, setResults] = useState<Command[]>([])
-  const [selectedId, setSelectedId] = useState<string | undefined>(
-    modalProps.selectedId
-  )
 
   const selectedCmd = commands.find((c) => c.id === selectedId)
   const selectedValue: unknown =
@@ -166,12 +167,12 @@ export default function CommandPaletteProvider(props: Props) {
     setResults(rows)
 
     if (!rows.find((r) => r.id === selectedId) && query === '') {
-      setSelectedId(modalProps.selectedId || rows[0]?.id)
+      dispatch(setSelectedId(modalProps.selectedId || rows[0]?.id))
     }
   }, [commands, query])
 
   useEffect(() => {
-    setSelectedId(results[0]?.id)
+    dispatch(setSelectedId(results[0]?.id))
   }, [results])
 
   useEffect(() => {
@@ -184,8 +185,6 @@ export default function CommandPaletteProvider(props: Props) {
   return (
     <context.Provider
       value={{
-        isOpen,
-        setIsOpen,
         commands,
         setCommands,
         setQuery,
@@ -204,7 +203,7 @@ export default function CommandPaletteProvider(props: Props) {
           selectedId={selectedId}
           initiallySelectedId={modalProps.selectedId}
           selectedValue={selectedValue}
-          setSelectedId={setSelectedId}
+          setSelectedId={(id: string) => dispatch(setSelectedId(id))}
           selectAndProceed={selectAndProceed}
           close={close}
           query={query}
@@ -227,21 +226,21 @@ export default function CommandPaletteProvider(props: Props) {
 
   function close() {
     log.info('Close command palette', modalProps.id)
-    setIsOpen(false)
+    dispatch(setOpen(false))
     setQuery('')
   }
 
   function previous() {
     const prevId = getNextIndexId(-1)
     if (prevId) {
-      setSelectedId(prevId)
+      dispatch(setSelectedId(prevId))
     }
   }
 
   function next() {
     const nextId = getNextIndexId()
     if (nextId) {
-      setSelectedId(nextId)
+      dispatch(setSelectedId(nextId))
     }
   }
 
@@ -319,10 +318,10 @@ export default function CommandPaletteProvider(props: Props) {
 
     nextModalProps.prevModal = modalProps
 
-    setIsOpen(true)
+    dispatch(setOpen(true))
     setQuery('')
     //setResults([])
-    setSelectedId(nextModalProps.selectedId)
+    dispatch(setSelectedId(nextModalProps.selectedId))
     setModalProps(nextModalProps)
   }
 
@@ -332,9 +331,12 @@ export default function CommandPaletteProvider(props: Props) {
 }
 
 export function useCommandPalette() {
+  const dispatch = useDispatch()
+  const [isOpen] = useSelector((state) => [
+    selectors.commandPalette.isOpen(state),
+  ])
+
   const {
-    isOpen,
-    setIsOpen,
     setModal,
     modal,
     commands,
@@ -365,7 +367,7 @@ export function useCommandPalette() {
     setCommands(commands)
     setModal(modalProps)
     setFullScreen(false)
-    setIsOpen(true)
+    dispatch(setOpen(true))
   }
 
   function close() {
@@ -374,7 +376,7 @@ export function useCommandPalette() {
     if (modal.parentModal) {
       setModal(modal.parentModal())
     } else {
-      setIsOpen(false)
+      dispatch(setOpen(false))
     }
   }
 

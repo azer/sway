@@ -228,7 +228,7 @@ const IconWrapper = styled('aside', {
   '& svg': {},
 })
 
-const Title = styled('header', {
+export const Title = styled('header', {
   display: 'inline-flex',
   space: { outer: [5, 5, 2, 5], inner: [0, 2], gap: 2 },
   round: 'small',

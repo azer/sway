@@ -262,6 +262,7 @@ defmodule SwayWeb.WorkspaceChannel do
       "mic_on" => status.mic_on,
       "speaker_on" => status.speaker_on,
       "status" => status.status,
+      "emoji" => status.emoji,
       "workspace_id" => status.workspace_id,
       "inserted_at" => status.inserted_at
     }

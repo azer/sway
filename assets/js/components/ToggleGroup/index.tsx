@@ -1,5 +1,5 @@
 import { styled } from 'themes'
-import React from 'react'
+import React, { Ref } from 'react'
 import Icon from '../Icon'
 import { Root, Item } from '@radix-ui/react-toggle-group'
 
@@ -8,11 +8,18 @@ import { Root, Item } from '@radix-ui/react-toggle-group'
 interface RootProps {
   children: React.ReactNode
   value: string
+  rovingFocus?: boolean
+  onValueChange?: (v: string) => void
 }
 
 function ToggleRoot(props: RootProps) {
   return (
-    <StyledRoot type="single" defaultValue={props.value}>
+    <StyledRoot
+      type="single"
+      defaultValue={props.value}
+      rovingFocus={props.rovingFocus}
+      onValueChange={props.onValueChange}
+    >
       {props.children}
     </StyledRoot>
   )
@@ -23,11 +30,13 @@ interface ItemProps {
   label?: string
   value: string
   children: React.ReactNode
+  itemRef?: Ref<Element>
 }
 
 function ToggleItem(props: ItemProps) {
   return (
-    <StyledItem value={props.value}>
+    // @ts-ignore
+    <StyledItem value={props.value} ref={props.itemRef}>
       {props.children ? props.children : null}
       {props.icon ? <Icon name={props.icon} /> : null}
       {props.label ? <Label>{props.label}</Label> : null}
@@ -46,6 +55,14 @@ const StyledItem = styled(Item, {
   color: 'rgba(255, 255, 255, 0.6)',
   flexGrow: '1',
   outline: 'none',
+  '&:focus': {
+    background: 'rgba(255, 255, 255, 0.1)',
+    color: '$white',
+  },
+  '&:hover': {
+    background: 'rgba(255, 255, 255, 0.1)',
+    color: '$white',
+  },
   "&[data-state='on']": {
     background: 'rgba(115, 120, 125, 0.4)',
     color: '$white',

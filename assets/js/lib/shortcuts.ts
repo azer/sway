@@ -5,6 +5,8 @@ const shortcutMap: Record<string, string> = {
   shift: '⇧',
   ctrl: '⌃',
   control: '⌃',
+  up: '↑',
+  down: '↓',
 }
 
 export function keySymbol(key: string): string {

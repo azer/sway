@@ -1,53 +1,35 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { updateWorkspaceFocus } from 'features/Focus'
+import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 
 export const name = 'command-palette'
 
-interface ModalState {
-  icon: string
-  isOpen: boolean
-  isFullscreen: boolean
-  placeholder?: string
-  query: string
-  selectedId?: string
-  value?: unknown
-}
+interface State {}
 
-interface State {
-  modal: ModalState
-}
-
-export const initialState: State = {
-  modal: {
-    icon: '',
-    isOpen: false,
-    query: '',
-    placeholder: '',
-    isFullscreen: false,
-  },
-}
+export const initialState: State = {}
 
 export const slice = createSlice({
   name,
   initialState,
-  reducers: {
-    open: (state, action: PayloadAction<ModalState>) => {
-      state.modal = {
-        ...state.modal,
-        ...action.payload,
-        isOpen: true,
-      }
-    },
-    close: (state, action: PayloadAction<undefined>) => {
-      state.modal = {
-        ...initialState.modal,
-        isOpen: false,
-      }
-    },
-    setValue: (state, action: PayloadAction<unknown>) => {
-      state.modal.value = action.payload
-    },
-  },
+  reducers: {},
 })
 
 export const {} = slice.actions
 export default slice.reducer
+
+export function setOpen(open: boolean) {
+  return updateWorkspaceFocus((wsFocus) => {
+    wsFocus.region = open
+      ? WorkspaceFocusRegion.CommandPalette
+      : WorkspaceFocusRegion.Room
+  })
+}
+
+export function setSelectedId(selectedItemId: string | undefined) {
+  return updateWorkspaceFocus((wsFocus) => {
+    wsFocus.commandPalette = {
+      ...wsFocus.commandPalette,
+      selectedItemId,
+    }
+  })
+}

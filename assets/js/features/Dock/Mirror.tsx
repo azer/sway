@@ -7,6 +7,7 @@ import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import { Video } from 'features/Call/Video'
 import { AvatarView } from 'features/Avatar/AvatarView'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
+import { StatusCircle, StatusIcon, StyledStatusIcon } from './StatusIcon'
 
 interface Props {}
 
@@ -51,21 +52,26 @@ export function Mirror(props: Props) {
           fill
         />
       )}
-      <ConnectionIcon
-        status={connectionStatus.status}
-        title={'Connection:' + connectionStatus}
-        small
-      />
+      <StatusIcon status={localStatus} noEmoji />
     </Container>
   )
 }
 
 const Container = styled('div', {
   position: 'relative',
-  height: '100%',
+  height: '68px',
   aspectRatio: '1 / 1',
   '& img': {
     boxShadow: 'rgb(0 0 0 / 20%) 0px 0px 4px',
+  },
+  [`& ${StatusCircle}`]: {
+    position: 'absolute',
+    bottom: '0',
+    right: '0',
+    width: '16px',
+    height: '16px',
+    aspectRatio: '1',
+    border: '2px solid $dockIconBorderColor',
   },
 })
 

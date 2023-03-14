@@ -42,7 +42,7 @@ const globalStyles = globalCss({
 })
 
 const bottomBlurEffect = (color: string) =>
-  `radial-gradient(440px at 50% calc(100vh + 300px), ${color}, transparent)`
+  `radial-gradient(440px at calc(50% + 100px) calc(100vh + 300px), ${color}, transparent)`
 
 const Viewport = styled('div', {
   width: '100vw',

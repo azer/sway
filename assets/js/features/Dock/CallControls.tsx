@@ -11,7 +11,7 @@ import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
 import { ScreenshareButton } from 'features/Screenshare/Provider'
 import { useBackgroundBlurSettings } from 'features/Settings/BackgroundBlur'
 import { FocusRegion } from 'components/FocusRegion'
-import { DockFocusRegion } from './focus'
+import { DockFocus, DockFocusRegion } from './focus'
 
 interface Props {
   cameraOn: boolean
@@ -22,6 +22,7 @@ interface Props {
   mics: DeviceInfo[]
   speakers: DeviceInfo[]
   blurValue: number
+  focus?: DockFocus
   selectedCameraId: string | undefined
   selectedMicId: string | undefined
   selectedSpeakerId: string | undefined
@@ -32,6 +33,7 @@ interface Props {
   selectCamera: (deviceId: string) => void
   selectMic: (deviceId: string) => void
   selectSpeaker: (deviceId: string) => void
+  setFocusRegion: (r: DockFocusRegion) => void
 }
 
 export function CallControls(props: Props) {
@@ -45,14 +47,17 @@ export function CallControls(props: Props) {
   const blurSettings = useBackgroundBlurSettings()
 
   return (
-    <FocusRegion name={DockFocusRegion.CallControls}>
-      <Container>
+    <FocusRegion
+      regionId={DockFocusRegion.CallControls}
+      focusSwitcher={props.setFocusRegion}
+    >
+      <Container focused={props.focus?.region === DockFocusRegion.CallControls}>
         <Dropdown.Menu>
           <Dropdown.Trigger>
             <Button
-              icon={props.cameraOn ? 'video-off' : 'video'}
+              icon={!props.cameraOn ? 'video-off' : 'video'}
               label="Camera"
-              off={props.cameraOn}
+              off={!props.cameraOn}
               tooltipLabel={
                 props.cameraOn ? 'Turn off camera' : 'Turn on camera'
               }
@@ -197,9 +202,27 @@ export function CallControls(props: Props) {
   )
 }
 
-const Container = styled('div', {
+export const DockSection = styled('div', {
+  width: '100%',
+  height: '100%',
+  padding: '8px 8px 8px 5.5px',
+  borderLeft: '2.5px solid transparent',
+  variants: {
+    focused: {
+      true: {
+        borderColor: '$dockFocusBorderColor',
+        background: '$dockFocusSectionBg',
+      },
+    },
+  },
+})
+
+const Container = styled(DockSection, {
   display: 'flex',
-  vcenter: true,
+  center: true,
+  flexDirection: 'row',
   padding: '4px 4px',
   gap: '8px',
+  borderTop: '1px solid $dockSeparator',
+  //background: 'rgb(28, 31, 36)',
 })

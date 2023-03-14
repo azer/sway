@@ -6,7 +6,7 @@ import { Root, Image, Fallback } from '@radix-ui/react-avatar'
 
 interface Props {
   alt?: string
-  src: string
+  src?: string
   fallback: string
 }
 

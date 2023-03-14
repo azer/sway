@@ -1,3 +1,4 @@
+import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 import selectors from 'selectors'
 import { RootState } from 'state'
 import { findModeByStatus } from 'state/presence'
@@ -52,5 +53,12 @@ export function getPresenceLabelByUserId(
   return (
     findModeByStatus(selectors.statuses.getByUserId(state, userId).status)
       ?.label || ''
+  )
+}
+
+export function isSpaceButtonEnabled(state: RootState): boolean {
+  return (
+    state.focus.workspace.region === WorkspaceFocusRegion.Room &&
+    !state.focus.workspace.room.dock
   )
 }

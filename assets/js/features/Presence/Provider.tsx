@@ -28,11 +28,13 @@ export default function PresenceProvider(props: Props) {
   const commandPalette = useCommandPalette()
   const presence = usePresence()
 
-  const [localStatus, isActive, pushToTalkVideo] = useSelector((state) => [
-    selectors.statuses.getLocalStatus(state),
-    selectors.presence.isLocalUserActive(state),
-    selectors.settings.isPushToTalkVideoOn(state),
-  ])
+  const [localStatus, isActive, pushToTalkVideo, isSpaceButtonEnabled] =
+    useSelector((state) => [
+      selectors.statuses.getLocalStatus(state),
+      selectors.presence.isLocalUserActive(state),
+      selectors.settings.isPushToTalkVideoOn(state),
+      selectors.presence.isSpaceButtonEnabled(state),
+    ])
 
   useEffect(() => {
     if (!channel) return
@@ -58,7 +60,7 @@ export default function PresenceProvider(props: Props) {
     'space',
     toggle,
     {
-      enabled: !commandPalette.isOpen,
+      enabled: isSpaceButtonEnabled,
       preventDefault: true,
       keyup: true,
     },
@@ -66,7 +68,7 @@ export default function PresenceProvider(props: Props) {
   )
 
   /*useHotkeys(
-    'space',
+    'spacpfce',
     startPushToTalk,
     {
       enabled:

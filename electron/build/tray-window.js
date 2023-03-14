@@ -6395,14 +6395,14 @@
             16
           );
           var clz32 = Math.clz32 ? Math.clz32 : clz32Fallback;
-          var log6 = Math.log;
+          var log7 = Math.log;
           var LN2 = Math.LN2;
           function clz32Fallback(x5) {
             var asUint = x5 >>> 0;
             if (asUint === 0) {
               return 32;
             }
-            return 31 - (log6(asUint) / LN2 | 0) | 0;
+            return 31 - (log7(asUint) / LN2 | 0) | 0;
           }
           var TotalLanes = 31;
           var NoLanes = (
@@ -24881,7 +24881,10 @@
     navigationBlur2: "rgba(126, 33, 50, 0.125)",
     navigationBlur1: "rgba(15, 100, 222, 0.125)",
     dockBg: "rgb(34, 37, 42)",
+    dockFocusBg: "rgb(37, 40, 45)",
     dockBorderColor: "rgba(255, 255, 255, 0.07)",
+    dockFocusBorderColor: "rgba(255, 255, 255, 0.1)",
+    dockSeparator: "rgba(255, 255, 255, 0.05)",
     dockFg: "$white",
     dockIconBorderColor: "$gray2",
     dockIconReadyBg: "$gray3",
@@ -26559,12 +26562,12 @@
       error
     };
     function info(msg, ...props) {
-      log6(console.info, msg, props);
+      log7(console.info, msg, props);
     }
     function error(msg, ...props) {
-      log6(console.error, msg, props);
+      log7(console.error, msg, props);
     }
-    function log6(fn2, msg, props) {
+    function log7(fn2, msg, props) {
       const args = [
         `%c<${name3}>%c ${msg}`,
         `color: ${color};font-weight: bold;`,
@@ -26594,22 +26597,18 @@
     ipcRenderer.send(chan, JSON.stringify(payload));
   }
 
-  // ../assets/js/features/Dock/focus.ts
-  var initialDockFocus = {
-    region: "workspace.room.dock.message" /* Message */
-  };
-
   // ../assets/js/features/Room/focus.ts
   var initialRoomFocus = {
     roomId: window.initialState.focus.roomId,
-    dock: initialDockFocus
+    dock: void 0
   };
 
   // ../assets/js/features/Workspace/focus.ts
   var initialWorkspaceFocus = {
     // @ts-ignore
     workspaceId: window.initialState.focus.workspaceId,
-    room: initialRoomFocus
+    room: initialRoomFocus,
+    region: "room" /* Room */
   };
 
   // ../assets/js/features/Focus/slice.ts
@@ -26635,6 +26634,7 @@
   var slice_default = slice2.reducer;
 
   // ../assets/js/features/Dock/slice.ts
+  var log3 = logger("dock/slice");
   var name2 = "status";
   var _a2, _b;
   var initialState3 = {
@@ -26691,7 +26691,7 @@
   var slice_default2 = slice3.reducer;
 
   // ../assets/js/features/Dock/selectors.ts
-  var log3 = logger("dock/selectors");
+  var log4 = logger("dock/selectors");
 
   // ../assets/js/state/presence.ts
   var Online = {
@@ -31457,7 +31457,7 @@
     lightbulb: LightBulbIcon,
     search: SearchIcon
   };
-  var log4 = logger("icons");
+  var log5 = logger("icons");
   function Icon(props) {
     if (!props.name)
       return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_jsx_runtime42.Fragment, {});
@@ -31467,7 +31467,7 @@
     if (IconComponent) {
       return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(IconComponent, __spreadValues({}, props));
     } else {
-      log4.error("Can not find icon", props.name, Object.keys(icons));
+      log5.error("Can not find icon", props.name, Object.keys(icons));
     }
     return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_jsx_runtime42.Fragment, {});
   }
@@ -34913,7 +34913,9 @@
     alt: "\u2387",
     shift: "\u21E7",
     ctrl: "\u2303",
-    control: "\u2303"
+    control: "\u2303",
+    up: "\u2191",
+    down: "\u2193"
   };
   function keySymbol(key) {
     return shortcutMap[key] || shortcutMap[key.toLowerCase()] || key;
@@ -35458,14 +35460,26 @@
   // ../assets/js/components/ToggleGroup/index.tsx
   var import_jsx_runtime46 = __toESM(require_jsx_runtime());
   function ToggleRoot(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(StyledRoot2, { type: "single", defaultValue: props.value, children: props.children });
+    return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
+      StyledRoot2,
+      {
+        type: "single",
+        defaultValue: props.value,
+        rovingFocus: props.rovingFocus,
+        onValueChange: props.onValueChange,
+        children: props.children
+      }
+    );
   }
   function ToggleItem(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(StyledItem2, { value: props.value, children: [
-      props.children ? props.children : null,
-      props.icon ? /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(Icon, { name: props.icon }) : null,
-      props.label ? /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(Label2, { children: props.label }) : null
-    ] });
+    return (
+      // @ts-ignore
+      /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(StyledItem2, { value: props.value, ref: props.itemRef, children: [
+        props.children ? props.children : null,
+        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(Icon, { name: props.icon }) : null,
+        props.label ? /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(Label2, { children: props.label }) : null
+      ] })
+    );
   }
   var StyledItem2 = styled($6c1fd9e6a8969628$export$6d08773d2e66f8f2, {
     display: "flex",
@@ -35478,6 +35492,14 @@
     color: "rgba(255, 255, 255, 0.6)",
     flexGrow: "1",
     outline: "none",
+    "&:focus": {
+      background: "rgba(255, 255, 255, 0.1)",
+      color: "$white"
+    },
+    "&:hover": {
+      background: "rgba(255, 255, 255, 0.1)",
+      color: "$white"
+    },
     "&[data-state='on']": {
       background: "rgba(115, 120, 125, 0.4)",
       color: "$white"
@@ -35627,7 +35649,7 @@
 
   // ../assets/js/features/ElectronTrayWindow/index.tsx
   var import_jsx_runtime47 = __toESM(require_jsx_runtime());
-  var log5 = logger("electron-tray-window");
+  var log6 = logger("electron-tray-window");
   var fakeState = `{
     "state": {
         "entities": {
@@ -35895,28 +35917,28 @@
       }
     }, [!!inputRef.current]);
     (0, import_react31.useEffect)(() => {
-      log5.info("Updating emoji search results", emojiQuery);
+      log6.info("Updating emoji search results", emojiQuery);
       if (emojiQuery.trim().length === 0) {
         setEmojiResults(commonEmojis);
         return;
       }
       $c4d155af13ad4d4b$export$2e2bcd8739ae039.search(emojiQuery, { maxResults: 25 }).then((results) => {
-        log5.info("Update emoji results", results);
+        log6.info("Update emoji results", results);
         setEmojiResults(results || []);
         setSelectedEmojiIndex(results.length ? 0 : -1);
       }).catch((err) => {
-        log5.error("Something went wrong with emoji search", err);
+        log6.error("Something went wrong with emoji search", err);
       });
     }, [emojiQuery]);
     (0, import_react31.useEffect)(() => {
       var _a3;
-      log5.info("Listen tray state");
+      log6.info("Listen tray state");
       (_a3 = ipcRenderer) == null ? void 0 : _a3.on("tray-window", onMessage);
       onMessage(null, fakeState);
-      log5.info("Fetching emoji data");
+      log6.info("Fetching emoji data");
       fetch("https://cdn.jsdelivr.net/npm/@emoji-mart/data").then((resp) => __async(this, null, function* () {
         $7adb23b0109cc36a$export$2cd8252107eb640b({ data: yield resp.json() });
-      })).catch((err) => log5.error("can't load emojis", err));
+      })).catch((err) => log6.error("can't load emojis", err));
       return () => {
         ipcRenderer.removeListener("tray-window", onMessage);
       };
@@ -35930,7 +35952,7 @@
         setUserStatuses(parsed.state.userStatuses);
         if (parsed.state.focusedRoomMode)
           setFocusedRoomMode(parsed.state.focusedRoomMode);
-        log5.info("Updated tray window state", parsed, entities, localUserId);
+        log6.info("Updated tray window state", parsed, entities, localUserId);
       }
     }, []);
     return /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Container, { children: [
@@ -36022,7 +36044,7 @@
       setEmojiQuery(e3.currentTarget.value);
     }
     function handleEmojiSelect() {
-      log5.info("selected emoji", emojiResults[selectedEmojiIndex]);
+      log6.info("selected emoji", emojiResults[selectedEmojiIndex]);
     }
     function handleDropdownState(open) {
       setIsDropdownOpen(open);

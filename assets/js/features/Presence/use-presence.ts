@@ -19,6 +19,8 @@ export function usePresence() {
     setMode,
     setActive,
     setMedia,
+    setEmoji,
+    setMessage,
   }
 
   function setMedia(options: {
@@ -56,6 +58,24 @@ export function usePresence() {
       speaker: newMode !== PresenceStatus.Zen,
       mic: false,
       camera: false,
+    })
+  }
+
+  function setEmoji(emoji: string | undefined) {
+    log.info('Setting status emoji as', emoji)
+
+    channel?.push('user:status', {
+      workspace_id: workspaceId,
+      emoji: emoji,
+    })
+  }
+
+  function setMessage(message: string) {
+    log.info('Setting status message as', message)
+
+    channel?.push('user:status', {
+      workspace_id: workspaceId,
+      message,
     })
   }
 

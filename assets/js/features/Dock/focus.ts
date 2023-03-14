@@ -1,14 +1,14 @@
 export enum DockFocusRegion {
-  Status = 'workspace.room.dock.status',
-  EmojiSearch = 'workspace.room.dock.emoji',
-  Message = 'workspace.room.dock.message',
-  CallControls = 'workspace.room.dock.call_controls',
+  Status = 'status',
+  EmojiSearch = 'emoji',
+  Message = 'message',
+  CallControls = 'call_controls',
 }
 
 export interface DockFocus {
   region: DockFocusRegion
   emoji?: {
-    id: ''
+    id: string | undefined
   }
 }
 

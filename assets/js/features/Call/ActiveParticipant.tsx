@@ -6,9 +6,10 @@ import { Video } from './Video'
 import { logger } from 'lib/log'
 import { useDispatch, useSelector } from 'state'
 import { AvatarView } from 'features/Avatar/AvatarView'
-import { Border, Name, User } from 'features/Room/RoomParticipant'
+import { Border } from 'features/Room/RoomParticipant'
 import { ScreenshareVideo } from 'features/Screenshare/Video'
 import Icon from 'components/Icon'
+import { ParticipantLabel } from 'components/ParticipantLabel'
 
 interface Props {
   participantId: string
@@ -69,20 +70,17 @@ function UActiveParticipant(props: Props) {
           </MuteIcon>
         ) : null}
         {screensharing ? (
-          <Info screensharing>
-            <Name>{isSelf ? 'Your Screen' : `${firstName}'s Screen`}</Name>
-          </Info>
+          <ParticipantLabel
+            id={props.participantId}
+            username={isSelf ? 'Your screen' : `${user?.name}'s screen`}
+          />
         ) : null}
         <Inner screensharing={!!screensharing}>
           {!screensharing ? (
-            <Info>
-              <AvatarView
-                photoUrl={user?.photoUrl}
-                name={user?.name}
-                round="small"
-              />
-              <Name>{user?.name.split(' ')[0]}</Name>
-            </Info>
+            <ParticipantLabel
+              id={props.participantId}
+              username={user?.name}
+            ></ParticipantLabel>
           ) : null}
 
           <Video id={props.participantId} />

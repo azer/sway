@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { updateWorkspaceFocus } from 'features/Focus'
+import { logger } from 'lib/log'
 import { RootState } from 'state'
 import { DockFocus, DockFocusRegion } from './focus'
+
+const log = logger('dock/slice')
 
 export const name = 'status'
 
@@ -105,6 +108,8 @@ export default slice.reducer
 
 export function setFocusRegion(region: DockFocusRegion) {
   return updateWorkspaceFocus((wsFocus) => {
+    log.info('Set dock focus', region)
+
     wsFocus.room.dock = {
       ...wsFocus.room.dock,
       region,
@@ -114,6 +119,20 @@ export function setFocusRegion(region: DockFocusRegion) {
 
 export function setFocusAway() {
   return updateWorkspaceFocus((wsFocus) => {
+    log.info('set focus away')
     wsFocus.room.dock = undefined
+  })
+}
+
+export function setFocusedEmojiId(id: string | undefined) {
+  return updateWorkspaceFocus((wsFocus) => {
+    log.info('set focused emoji', id)
+    wsFocus.room.dock = {
+      region: wsFocus.room.dock?.region || DockFocusRegion.EmojiSearch,
+      ...wsFocus.room.dock,
+      emoji: {
+        id,
+      },
+    }
   })
 }

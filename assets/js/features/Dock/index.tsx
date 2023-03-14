@@ -3,13 +3,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch, entities } from 'state'
 import { logger } from 'lib/log'
-import { Button, StyledButton } from './Button'
 import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import { setParticipantStatus } from 'features/Call/slice'
 
 import {
   ConnectionState,
   setFocusAway,
+  setFocusedEmojiId,
   setFocusRegion,
   setInternetConnectionStatus,
 } from './slice'
@@ -21,10 +21,14 @@ import {
   setVideoInputDeviceId,
 } from 'features/Settings/slice'
 import { usePresence } from 'features/Presence/use-presence'
-import { CallControls } from './CallControls'
-import { StatusControls } from './StatusControls'
+import { MessageSection, StatusControls } from './StatusControls'
 import { useEmojiSearch } from 'features/Emoji/use-emoji-search'
 import { DockFocusRegion } from './focus'
+import { commonEmojis } from 'features/ElectronTrayWindow/selectors'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { Mirror } from './Mirror'
+import { DockSection } from './CallControls'
+import { findModeByStatus } from 'state/presence'
 
 interface Props {
   roomId: string
@@ -37,35 +41,42 @@ export function Dock(props: Props) {
 
   const localParticipant = useLocalParticipant()
   const presence = usePresence()
-
   const emojiSearch = useEmojiSearch()
-  const [message, setMessage] = useState('')
 
-  const [
-    localUser,
-    localPresence,
-    isOnAirpods,
-    allVideoInputDevices,
-    selectedVideoInputDeviceId,
-    allAudioInputDevices,
-    selectedAudioInputDeviceId,
-    allAudioOutputDevices,
-    selectedAudioOutputDeviceId,
-    blurValue,
-    focus,
-  ] = useSelector((state) => [
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  const [localUser, localStatus, focus] = useSelector((state) => [
     selectors.users.getSelf(state),
     selectors.statuses.getLocalStatus(state),
-    selectors.settings.isOnAirpods(state),
-    selectors.settings.allVideoInputDevices(state),
-    selectors.settings.getVideoInputDeviceId(state),
-    selectors.settings.allAudioInputDevices(state),
-    selectors.settings.getAudioInputDeviceId(state),
-    selectors.settings.allAudioOutputDevices(state),
-    selectors.settings.getAudioOutputDeviceId(state),
-    selectors.settings.getBackgroundBlurValue(state),
     selectors.dock.getFocus(state),
   ])
+
+  const [message, setMessage] = useState(localStatus?.message || '')
+
+  /**/
+
+  useHotkeys(
+    'up',
+    moveFocus(-1),
+    {
+      enabled: !!focus,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [focus]
+  )
+
+  useHotkeys(
+    'down',
+    moveFocus(1),
+    {
+      enabled: !!focus,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [focus]
+  )
 
   useEffect(() => {
     if (!localParticipant || !localUser) return
@@ -99,41 +110,62 @@ export function Dock(props: Props) {
     }
   }, [localUser?.id])
 
+  useEffect(() => {
+    document.addEventListener('mousedown', handleMouseDown, false)
+
+    if (!isDropdownOpen) {
+      emojiSearch.setQuery('')
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown, false)
+    }
+  }, [isDropdownOpen])
+
   return (
-    <Container>
-      <StatusControls
-        localUser={localUser}
-        message={message}
-        setMessage={setMessage}
-        emojiResults={emojiSearch.results}
-        emojiQuery={emojiSearch.query}
-        setEmojiQuery={emojiSearch.setQuery}
-        focus={focus}
-        handleBlur={handleBlur}
-        setFocusRegion={(region: DockFocusRegion) =>
-          dispatch(setFocusRegion(region))
-        }
-      />
-      <CallControls
-        cameraOn={localPresence.camera_on}
-        micOn={localPresence.mic_on}
-        speakerOn={localPresence.speaker_on}
-        selectedCameraId={selectedVideoInputDeviceId}
-        selectedMicId={selectedAudioInputDeviceId}
-        selectedSpeakerId={selectedAudioOutputDeviceId}
-        selectCamera={changeVideoInputDevice}
-        selectMic={changeAudioInputDevice}
-        selectSpeaker={changeAudioOutputDevice}
-        isOnAirpods={isOnAirpods}
-        cameras={allVideoInputDevices}
-        mics={allAudioInputDevices}
-        speakers={allAudioOutputDevices}
-        blurValue={blurValue}
-        toggleBlur={toggleBlurValue}
-        setCameraOn={(camera: boolean) => presence.setMedia({ camera })}
-        setMicOn={(mic: boolean) => presence.setMedia({ mic })}
-        setSpeakerOn={(speaker: boolean) => presence.setMedia({ speaker })}
-      />
+    <Container
+      ref={containerRef}
+      isDropdownOpen={isDropdownOpen}
+      hasFocus={!!focus}
+    >
+      <MainDockRow focused={focus?.region === DockFocusRegion.Message}>
+        <Left>
+          <Mirror />
+        </Left>
+        <Right>
+          <StatusControls
+            localStatus={localStatus}
+            localUser={localUser}
+            message={message}
+            setMessage={setMessage}
+            resetMessage={() => setMessage(localStatus.message)}
+            saveMessage={() => presence.setMessage(message)}
+            emojiResults={
+              emojiSearch.results.length > 0
+                ? emojiSearch.results
+                : commonEmojis
+            }
+            emojiQuery={emojiSearch.query}
+            setEmojiQuery={emojiSearch.setQuery}
+            selectEmoji={presence.setEmoji}
+            focus={focus}
+            handleBlur={handleBlur}
+            setFocusRegion={(region: DockFocusRegion) =>
+              dispatch(setFocusRegion(region))
+            }
+            setPresence={(p) => presence.setMode(p)}
+            isDropdownOpen={isDropdownOpen}
+            setDropdownOpen={setIsDropdownOpen}
+            setFocusedEmojiId={(id: string | undefined) =>
+              dispatch(setFocusedEmojiId(id))
+            }
+            setFocusAway={() => dispatch(setFocusAway())}
+          />
+          <PresenceStatus>
+            {findModeByStatus(localStatus?.status)?.label}
+          </PresenceStatus>
+        </Right>
+      </MainDockRow>
     </Container>
   )
 
@@ -159,64 +191,108 @@ export function Dock(props: Props) {
     )
   }
 
-  function changeVideoInputDevice(id: string) {
-    dispatch(setVideoInputDeviceId(id))
-  }
-
-  function changeAudioInputDevice(id: string) {
-    dispatch(setAudioInputDeviceId(id))
-  }
-
-  function changeAudioOutputDevice(id: string) {
-    dispatch(setAudioOutputDeviceId(id))
-  }
-
-  function toggleBlurValue(checked: boolean) {
-    dispatch(setBackgroundBlur(checked ? 50 : 0))
-  }
-
-  function handleBlur() {
-    console.log('handle blur')
+  function handleBlur(e: Event) {
     dispatch(setFocusAway())
+  }
+
+  function handleMouseDown(e: Event) {
+    if (
+      !isDropdownOpen &&
+      !containerRef.current?.contains(e.target as Element)
+    ) {
+      dispatch(setFocusAway())
+    }
+  }
+
+  function moveFocus(shiftBy: number) {
+    return () => {
+      if (!focus) return
+
+      const order = [
+        DockFocusRegion.Message,
+        DockFocusRegion.EmojiSearch,
+        DockFocusRegion.Status,
+      ]
+
+      const ind = order.indexOf(focus?.region)
+      let next = ind + shiftBy
+      if (next === -1) {
+        next = 0
+      } else if (next === order.length) {
+        next = order.length - 1
+      }
+
+      dispatch(setFocusRegion(order[next]))
+    }
   }
 }
 
 const Container = styled('nav', {
-  position: 'absolute',
-  bottom: '8px',
-  width: '250px',
+  display: 'flex',
+  position: 'relative',
+  width: '300px',
   color: '$dockFg',
   background: '$dockBg',
   border: '1px solid $dockBorderColor',
   round: 'large',
-  boxShadow: 'rgb(0 0 0 / 10%) 0px 0 8px',
-})
-
-const Separator = styled('div', {
-  width: '1px',
-  height: 'calc(100% - 16px)',
-  background: 'rgba(255, 255, 255, 0.05)',
-  margin: '8px 12px',
+  overflow: 'hidden',
+  boxShadow: 'rgb(0 0 0 / 20%) 0px 0 8px',
   variants: {
-    group: {
+    hasFocus: {
       true: {
-        background: 'transparent',
-        margin: '8px 4px',
+        background: '$dockFocusBg',
+        borderColor: '$dockFocusBorderColor',
+      },
+    },
+    isDropdownOpen: {
+      true: {
+        borderBottomColor: 'transparent',
+        borderBottomRightRadius: '0',
+        borderBottomLeftRadius: '0',
       },
     },
   },
+
+  [`& ${MessageSection}`]: {
+    background: 'transparent',
+    border: '0',
+  },
 })
 
-const Buttonset = styled('div', {
+const MainDockRow = styled(DockSection, {
   display: 'flex',
-  flexDirection: 'row',
-  gap: '16px',
-  height: '48px',
-  background: 'rgba(255, 255, 255, 0.04)',
-  borderRadius: '$large',
-  [`& div[data-state=open] ${StyledButton}`]: {
-    background: '$dockButtonHoverBg',
-    color: '$dockButtonHoverFg',
-    borderColor: 'rgba(255, 255, 255, 0.03),',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingTop: '0',
+  paddingBottom: '0',
+})
+
+const Left = styled('div', {
+  padding: '8px 0',
+  center: true,
+  marginRight: '10px',
+  paddingRight: '10px',
+  position: 'relative',
+  '&::after': {
+    content: ' ',
+    position: 'absolute',
+    top: '16px',
+    right: '0',
+    width: '1px',
+    height: 'calc(100% - 32px)',
+    background: 'rgba(255, 255, 255, 0.08)',
   },
+})
+
+const Right = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  height: '40px',
+})
+
+const PresenceStatus = styled('div', {
+  color: '$dockPresenceFg',
+  fontSize: '$small',
+  marginLeft: '26px',
+  label: true,
 })
