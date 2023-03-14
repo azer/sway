@@ -40,7 +40,7 @@ export function UserButton(props: Props) {
 }
 
 const Container = styled('div', {
-  unitHeight: 6,
+  unitHeight: 8,
   vcenter: true,
   gap: '6px',
   [`& ${StyledStatusIcon}`]: {
