@@ -127,6 +127,13 @@ export function Dock(props: Props) {
       ref={containerRef}
       isDropdownOpen={isDropdownOpen}
       hasFocus={!!focus}
+      onClick={() => {
+        if (!isDropdownOpen && !focus) {
+          dispatch(setFocusRegion(DockFocusRegion.Message))
+        } else if (focus && !isDropdownOpen) {
+          setIsDropdownOpen(true)
+        }
+      }}
     >
       <MainDockRow focused={focus?.region === DockFocusRegion.Message}>
         <Left>
@@ -161,7 +168,7 @@ export function Dock(props: Props) {
             }
             setFocusAway={() => dispatch(setFocusAway())}
           />
-          <PresenceStatus>
+          <PresenceStatus onClick={() => setIsDropdownOpen(true)}>
             {findModeByStatus(localStatus?.status)?.label}
           </PresenceStatus>
         </Right>
@@ -235,7 +242,6 @@ const Container = styled('nav', {
   background: '$dockBg',
   border: '1px solid $dockBorderColor',
   round: 'large',
-  overflow: 'hidden',
   boxShadow: 'rgb(0 0 0 / 20%) 0px 0 8px',
   variants: {
     hasFocus: {

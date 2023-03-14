@@ -52,7 +52,11 @@ export function Mirror(props: Props) {
           fill
         />
       )}
-      <StatusIcon status={localStatus} noEmoji />
+      <StatusIcon
+        status={localStatus}
+        noEmoji
+        isOnline={connectionStatus.status === ConnectionState.Connected}
+      />
     </Container>
   )
 }
@@ -129,8 +133,8 @@ const ConnectionIcon = styled('div', {
 
 const Message = styled('div', {
   position: 'absolute',
+  bottom: '-32px',
   width: '200px',
-  top: '-35px',
   left: 0,
   color: 'rgba(255, 255, 255, 0.35)',
   fontSize: '$small',

@@ -62,3 +62,7 @@ export function isSpaceButtonEnabled(state: RootState): boolean {
     !state.focus.workspace.room.dock
   )
 }
+
+export function isUserOnline(state: RootState, userId: string): boolean {
+  return state.userSocket.onlineUsers.indexOf(userId) > -1
+}

@@ -7,15 +7,19 @@ import { styled } from 'themes'
 interface Props {
   status: Status
   noEmoji?: boolean
+  isOnline?: boolean
 }
 
 export function StatusIcon(props: Props) {
   return (
     <StyledStatusIcon>
-      {props.status.emoji && !props.noEmoji ? (
+      {props.status.emoji && !props.noEmoji && props.isOnline !== false ? (
         <Emoji id={props.status.emoji} size="1.35em" />
       ) : (
-        <StatusCircle presence={props.status.status} />
+        <StatusCircle
+          presence={props.status.status}
+          isOnline={props.isOnline}
+        />
       )}
     </StyledStatusIcon>
   )
@@ -39,6 +43,11 @@ export const StatusCircle = styled('div', {
       },
       [PresenceStatus.Zen]: {
         background: '$statusIconZenBg',
+      },
+    },
+    isOnline: {
+      false: {
+        background: '$statusIconOfflineBg !important',
       },
     },
   },

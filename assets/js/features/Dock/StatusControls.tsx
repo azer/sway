@@ -54,6 +54,8 @@ export function StatusControls(props: Props) {
       return
     }
 
+    log.info('focus region changed', props.focus?.region)
+
     switch (props.focus.region) {
       case DockFocusRegion.Message:
         setTimeout(() => {
@@ -79,13 +81,15 @@ export function StatusControls(props: Props) {
   }, [props.focus])
 
   useEffect(() => {
+    log.info('focus region / dropdown status changed', props.focus?.region)
+
     if (
       props.focus?.region === DockFocusRegion.Message &&
       props.isDropdownOpen
     ) {
       messageInputRef.current?.focus()
     }
-  }, [props.focus, props.isDropdownOpen])
+  }, [props.focus?.region, props.isDropdownOpen])
 
   useEffect(() => {
     if (!props.isDropdownOpen) return
