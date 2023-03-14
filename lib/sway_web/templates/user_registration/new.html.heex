@@ -1,7 +1,9 @@
 <SwayWeb.FormPageComponent.form>
   <SwayWeb.FormPageComponent.header title="Join Sway" conn={@conn} />
 
-    <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
+  <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
+    <input type="hidden" name="invite_token" value={@invite_token}>
+
       <a href={Routes.user_oauth_path(@conn, :request, "google")} class="oauth-button">
 	<div class="logo">
 	  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" width="100%" height="100%" style="display:inline-flex; align-items:center;">
@@ -25,7 +27,10 @@
       <% end %>
 
       <div class="fieldset">
-	<%= email_input f, :email, required: true, placeholder: "Email" %>
+	<%= text_input f, :name, required: true, placeholder: "Your name", value: @invite.name %>
+	<%= error_tag f, :name %>
+
+	<%= email_input f, :email, required: true, placeholder: "Email", value: @invite.email %>
 	<%= error_tag f, :email %>
 
 	<%= password_input f, :password, required: true, placeholder: "Password" %>

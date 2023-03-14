@@ -1,6 +1,7 @@
 import { styled } from 'themes'
 import React from 'react'
 import { Root, Image, Fallback } from '@radix-ui/react-avatar'
+import { initials } from 'lib/string'
 
 // import { useSelector, useDispatch } from 'state'
 
@@ -14,7 +15,7 @@ export function Avatar(props: Props) {
   return (
     <AvatarRoot>
       <StyledImage src={props.src} alt={props.alt} />
-      <Fallback>{props.fallback}</Fallback>
+      <Fallback>{initials(props.fallback)}</Fallback>
     </AvatarRoot>
   )
 }

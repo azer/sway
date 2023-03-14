@@ -43,6 +43,20 @@ defmodule Sway.Invites do
     Repo.get_by(Invite, email: email) |> Repo.preload(preloads)
   end
 
+  def get_invite_by_token(token) do
+    cond do
+      token ->
+	case Phoenix.Token.verify(SwayWeb.Endpoint, "salt", token, max_age: 604800) do
+	  {:ok, claims} ->
+	    [Sway.Invites.get_invite!(claims, [:workspace, :created_by]), false]
+	  _ ->
+	    [nil, true]
+	end
+      true ->
+        [nil, true]
+    end
+  end
+
   @doc """
   Creates a invite.
 

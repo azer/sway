@@ -56,8 +56,6 @@ function UActiveParticipant(props: Props) {
     }
   }, [audioTrack])
 
-  const firstName = user?.name.split(' ')[0]
-
   return (
     <Border active>
       <Container data-participant-id={props.participantId}>

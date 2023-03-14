@@ -7,8 +7,10 @@
       jwt: "<%= @jwt %>",
     },
     focus: {
+      <%= if @status != nil do %>
       roomId: "<%= @status.room_id %>",
       workspaceId: "<%= @status.workspace_id %>",
+      <%= end %>
     },
     room: {
       userIdsByRoom: {},

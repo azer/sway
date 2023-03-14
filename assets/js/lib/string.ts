@@ -5,3 +5,10 @@ export function titleCase(text: string): string {
 export function firstName(fullName: string): string {
   return fullName.split(' ')[0]
 }
+
+export function initials(fullName: string): string {
+  return fullName
+    .split(' ')
+    .map((f) => f.slice(0, 1).toUpperCase())
+    .join('')
+}

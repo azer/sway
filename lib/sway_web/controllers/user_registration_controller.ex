@@ -6,19 +6,7 @@ defmodule SwayWeb.UserRegistrationController do
   alias SwayWeb.UserAuth
 
   def new(conn, params) do
-    [invite, invite_invalid] =
-      case params["invite"] do
-        nil ->
-          [nil, nil]
-
-        invite_token ->
-          case Phoenix.Token.verify(SwayWeb.Endpoint, "salt", invite_token, max_age: 604800) do
-            {:ok, claims} ->
-	      [Sway.Invites.get_invite!(claims, [:workspace, :created_by]), false]
-            _ ->
-	      [nil, true]
-          end
-      end
+    [invite, invite_invalid] = Sway.Invites.get_invite_by_token(params["invite"])
 
     changeset = Accounts.change_user_registration(%User{})
     oauth_google_url = ElixirAuthGoogle.generate_oauth_url(conn)
@@ -34,11 +22,12 @@ defmodule SwayWeb.UserRegistrationController do
 	conn
     end
 
-    render(conn, "new.html", changeset: changeset, invite: invite, invite_invalid: invite_invalid, oauth_google_url: oauth_google_url)
-
+    render(conn, "new.html", changeset: changeset, invite_token: params["invite"], invite: invite, invite_invalid: invite_invalid, oauth_google_url: oauth_google_url)
   end
 
   def create(conn, %{"user" => user_params}) do
+    [invite, invite_invalid] = Sway.Invites.get_invite_by_token(conn.params["invite_token"])
+
     case Accounts.register_user(user_params) do
       {:ok, user} ->
         {:ok, _} =
@@ -46,6 +35,12 @@ defmodule SwayWeb.UserRegistrationController do
             user,
             &Routes.user_confirmation_url(conn, :edit, &1)
           )
+
+	{:ok, membership} =
+          Sway.Workspaces.create_membership(%{
+            workspace_id: invite.workspace_id,
+            user_id: user.id
+          })
 
         conn
         |> put_flash(:info, "User created successfully.")

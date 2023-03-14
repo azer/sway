@@ -82,6 +82,7 @@ export const InactiveParticipant = styled('div', {
   background: '$participantBg',
   [`& ${AvatarRoot}`]: {
     marginTop: '-10px',
+    fontSize: '18px',
     height: '60px',
     round: true,
   },
