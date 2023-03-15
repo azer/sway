@@ -49,7 +49,14 @@ export function CallDock(props: Props) {
         },
       })
     )
-  }, [isSharingScreen, localParticipant])
+  }, [
+    isSharingScreen,
+    localParticipant?.video,
+    localParticipant?.audio,
+    localParticipant?.screen,
+    localParticipant?.session_id,
+    localParticipant?.user_id,
+  ])
 
   const [
     localUser,

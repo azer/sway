@@ -22,6 +22,7 @@ export function Titlebar(props: Props) {
         <TrafficLight />
         <TrafficLight />
         <TrafficLight />
+        <Separator />
       </TrafficLights>
       <Left>
         <Workspace>
@@ -33,6 +34,7 @@ export function Titlebar(props: Props) {
             <WorkspaceName>{workspace?.name}</WorkspaceName>
           </Tooltip>
         </Workspace>
+        <Separator />
       </Left>
       <Right>
         <Room>
@@ -53,12 +55,21 @@ const Container = styled('div', {
   '-webkit-app-region': 'drag',
 })
 
+const Separator = styled('div', {
+  position: 'absolute',
+  right: '0',
+  top: '20%',
+  height: '60%',
+  width: '1px',
+  background: '$shellBorderColor',
+})
+
 const TrafficLights = styled('div', {
+  position: 'relative',
   display: 'flex',
   height: '100%',
   gap: '8px',
   padding: '14px 13px 0 13px',
-  borderRight: '1px solid $shellBorderColor',
 })
 
 const TrafficLight = styled('div', {
@@ -71,13 +82,13 @@ const TrafficLight = styled('div', {
 })
 
 const Left = styled('div', {
+  position: 'relative',
   display: 'flex',
   height: '100%',
 })
 
 const Workspace = styled('div', {
-  borderRight: '1px solid $shellBorderColor',
-  width: '141px',
+  width: '142px',
   padding: '0 12px',
   height: '100%',
   display: 'flex',

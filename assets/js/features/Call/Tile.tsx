@@ -103,7 +103,7 @@ function calcTileSize(
   let columns = Math.ceil(Math.sqrt(numParticipants))
   let rows = Math.ceil(numParticipants / columns)
 
-  if (screenWidth < screenHeight && screenWidth / screenHeight < 0.6) {
+  if (screenWidth < screenHeight && screenWidth / screenHeight < 0.75) {
     columns = 1
     rows = numParticipants
   }

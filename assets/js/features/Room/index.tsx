@@ -68,13 +68,6 @@ export function RoomPage(props: Props) {
           ?.dailyUserId
       : undefined
 
-    log.info(
-      'Screensharing?',
-      screensharing,
-      focusedUserId,
-      focusedParticipantId
-    )
-
     return [
       selectors.session.getUserId(state),
       selectors.presence.isLocalUserActive(state),
@@ -100,7 +93,7 @@ export function RoomPage(props: Props) {
           <Dock roomId={props.id} />
         )}
         {minimizedParticipants?.map((uid) => (
-          <Participant userId={uid} dock />
+          <Participant userId={uid} />
         ))}
       </Top>
       <Middle>
@@ -141,6 +134,7 @@ const Container = styled('main', {
     },
     electron: {
       true: {
+        height: 'calc(100vh - 48px)',
         gridTemplateRows: '86px auto 80px',
         background: 'none',
         paddingTop: '12px',
