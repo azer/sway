@@ -29,6 +29,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { Mirror } from './Mirror'
 import { DockSection } from './CallControls'
 import { findModeByStatus } from 'state/presence'
+import { ConnectionStatus } from './ConnectionStatus'
 
 interface Props {
   roomId: string
@@ -122,7 +123,7 @@ export function Dock(props: Props) {
     }
   }, [isDropdownOpen, focus])
 
-  return (
+  return [
     <Container
       ref={containerRef}
       isDropdownOpen={isDropdownOpen}
@@ -173,8 +174,9 @@ export function Dock(props: Props) {
           </PresenceStatus>
         </Right>
       </MainDockRow>
-    </Container>
-  )
+    </Container>,
+    <ConnectionStatus />,
+  ]
 
   function handleOnline() {
     if (!localUser) return
@@ -239,6 +241,7 @@ export function Dock(props: Props) {
 const Container = styled('nav', {
   display: 'flex',
   position: 'relative',
+  overflow: 'hidden',
   width: '300px',
   color: '$dockFg',
   background: '$dockBg',

@@ -68,6 +68,7 @@ const Header = styled('header', {
 
 const Top = styled('div', {
   center: true,
+  position: 'relative',
 })
 
 const Bottom = styled('div', {

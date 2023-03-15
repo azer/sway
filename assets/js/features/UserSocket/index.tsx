@@ -1,11 +1,9 @@
-import { styled } from '@stitches/react'
 import { entities, useSelector } from 'state'
 import { syncOnline } from './slice'
 import React, { useContext, useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { Socket, Presence, Channel } from 'phoenix'
 import { useDispatch } from 'react-redux'
-import { setAllRoomUserIds, setWorkspaceRoomIds } from 'features/Room/slice'
 import { add, Entity, toStateEntity } from 'state/entities'
 import { logger } from 'lib/log'
 import {
@@ -96,6 +94,15 @@ export function UserSocketProvider(props: Props) {
           state: ConnectionState.Connected,
         })
       )
+    })
+
+    socket.onMessage((msg) => {
+      log.info('received msg:', msg)
+
+      if (msg.event === 'phx:pong') {
+        const latency = Date.now() - msg.payload.sent_at
+        log.info('latency:', latency)
+      }
     })
 
     dispatch(

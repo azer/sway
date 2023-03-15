@@ -5,15 +5,13 @@ import { useSelector } from 'state'
 import { ConnectionState } from './slice'
 import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import { Video } from 'features/Call/Video'
-import { AvatarView } from 'features/Avatar/AvatarView'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
 import { StatusCircle, StatusIcon, StyledStatusIcon } from './StatusIcon'
+import { Avatar, AvatarRoot } from 'components/Avatar'
 
 interface Props {}
 
 export function Mirror(props: Props) {
-  const [showStatus, setShowStatus] = useState(true)
-
   // const dispatch = useDispatch()
   const [user, localStatus, connectionStatus, isActive] = useSelector(
     (state) => [
@@ -27,30 +25,14 @@ export function Mirror(props: Props) {
   const localParticipant = useLocalParticipant()
   const cameraSettings = useVideoSettings()
 
-  useEffect(() => {
-    if (connectionStatus.status === ConnectionState.Connected) {
-      setShowStatus(false)
-    } else {
-      setShowStatus(true)
-    }
-  }, [connectionStatus.status])
-
   return (
     <Container onClick={cameraSettings.open}>
-      <Message status={connectionStatus.status} visible={showStatus}>
-        {connectionStatus.msg}
-      </Message>
       {localParticipant && isActive && localStatus.camera_on ? (
         <SelfVideo>
           <Video id={localParticipant.session_id} />
         </SelfVideo>
       ) : (
-        <AvatarView
-          photoUrl={user?.photoUrl}
-          name={user?.name}
-          round="large"
-          fill
-        />
+        <Avatar src={user?.photoUrl} fallback={user?.name || 'You'} />
       )}
       <StatusIcon
         status={localStatus}
@@ -67,6 +49,10 @@ const Container = styled('div', {
   aspectRatio: '1 / 1',
   '& img': {
     boxShadow: 'rgb(0 0 0 / 20%) 0px 0px 4px',
+  },
+  [`& ${AvatarRoot}`]: {
+    height: '100%',
+    borderRadius: '0.75rem',
   },
   [`& ${StatusCircle}`]: {
     position: 'absolute',
@@ -89,83 +75,5 @@ const SelfVideo = styled('div', {
   '& video': {
     width: 'auto',
     height: '100%',
-  },
-})
-
-const ConnectionIcon = styled('div', {
-  position: 'absolute',
-  bottom: '0',
-  right: '0',
-  width: '18px',
-  aspectRatio: '1 / 1',
-  background: '$dockIconReadyBg',
-  border: '2px solid $dockIconBorderColor',
-  round: 'circle',
-  borderBox: '',
-  variants: {
-    small: {
-      true: {
-        width: '14px',
-      },
-    },
-    status: {
-      ready: {
-        background: '$dockIconReadyBg',
-      },
-      connecting: {
-        background: '$dockIconConnectingBg',
-      },
-      failed: {
-        background: '$dockIconFailedBg',
-      },
-      disconnected: {
-        background: '$dockIconFailedBg',
-      },
-      connected: {
-        background: '$dockIconConnectedBg',
-      },
-      timeout: {
-        background: '$dockIconFailedBg',
-      },
-    },
-  },
-})
-
-const Message = styled('div', {
-  position: 'absolute',
-  bottom: '-32px',
-  width: '200px',
-  left: 0,
-  color: 'rgba(255, 255, 255, 0.35)',
-  fontSize: '$small',
-  opacity: '0',
-  fade: { props: ['opacity'], time: 0.1 },
-  label: true,
-  variants: {
-    visible: {
-      true: {
-        opacity: '1',
-      },
-    },
-    status: {
-      ready: {
-        color: '$dockIconReadyBg',
-      },
-      failed: {
-        color: '$dockIconFailedBg',
-      },
-      disconnected: {
-        color: '$dockIconFailedBg',
-      },
-      connected: {
-        color: '$dockIconConnectedBg',
-      },
-      connecting: {
-        color: 'rgba(255, 255, 255, 0.35)',
-      },
-      timeout: {
-        background: '$dockIconFailedFg',
-      },
-    },
   },
 })
