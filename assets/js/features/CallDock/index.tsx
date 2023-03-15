@@ -1,5 +1,5 @@
 import { styled } from 'themes'
-import React from 'react'
+import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { CallControls } from './CallControls'
 import { useSelector, useDispatch } from 'state'
@@ -12,12 +12,44 @@ import {
   setBackgroundBlur,
   setVideoInputDeviceId,
 } from 'features/Settings/slice'
+import {
+  useLocalParticipant,
+  useScreenShare,
+} from '@daily-co/daily-react-hooks'
+import { setParticipantStatus } from 'features/Call/slice'
+import { logger } from 'lib/log'
 
 interface Props {}
+
+const log = logger('call-dock')
 
 export function CallDock(props: Props) {
   const dispatch = useDispatch()
   const presence = usePresence()
+
+  const localParticipant = useLocalParticipant()
+  const { isSharingScreen, startScreenShare, stopScreenShare } =
+    useScreenShare()
+
+  useEffect(() => {
+    if (!localParticipant || !localUser) return
+
+    log.info('Sync local participant props', localParticipant, isSharingScreen)
+
+    dispatch(
+      setParticipantStatus({
+        userId: localUser.id,
+        status: {
+          dailyUserId: localParticipant.user_id,
+          swayUserId: localUser.id,
+          sessionId: localParticipant?.session_id,
+          cameraOn: localParticipant.video,
+          screenOn: isSharingScreen,
+          micOn: localParticipant.audio,
+        },
+      })
+    )
+  }, [isSharingScreen, localParticipant])
 
   const [
     localUser,

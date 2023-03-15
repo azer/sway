@@ -3,8 +3,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch, entities } from 'state'
 import { logger } from 'lib/log'
-import { useLocalParticipant } from '@daily-co/daily-react-hooks'
-import { setParticipantStatus } from 'features/Call/slice'
 
 import {
   ConnectionState,
@@ -14,12 +12,6 @@ import {
   setInternetConnectionStatus,
 } from './slice'
 
-import {
-  setAudioInputDeviceId,
-  setAudioOutputDeviceId,
-  setBackgroundBlur,
-  setVideoInputDeviceId,
-} from 'features/Settings/slice'
 import { usePresence } from 'features/Presence/use-presence'
 import { MessageSection, StatusControls } from './StatusControls'
 import { useEmojiSearch } from 'features/Emoji/use-emoji-search'
@@ -40,7 +32,6 @@ const log = logger('dock')
 export function Dock(props: Props) {
   const dispatch = useDispatch()
 
-  const localParticipant = useLocalParticipant()
   const presence = usePresence()
   const emojiSearch = useEmojiSearch()
 
@@ -79,26 +70,6 @@ export function Dock(props: Props) {
     },
     [focus]
   )
-
-  useEffect(() => {
-    if (!localParticipant || !localUser) return
-
-    log.info('Sync local participant props', localParticipant)
-
-    dispatch(
-      setParticipantStatus({
-        userId: localUser.id,
-        status: {
-          dailyUserId: localParticipant.user_id,
-          swayUserId: localUser.id,
-          sessionId: localParticipant?.session_id,
-          cameraOn: localParticipant.video,
-          screenOn: localParticipant.screen,
-          micOn: localParticipant.audio,
-        },
-      })
-    )
-  }, [localParticipant])
 
   useEffect(() => {
     if (!localUser) return

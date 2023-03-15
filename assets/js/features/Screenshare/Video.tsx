@@ -19,12 +19,18 @@ export function ScreenshareVideo(props: Props) {
     video.srcObject = new MediaStream([videoTrack?.persistentTrack])
   }, [videoTrack?.persistentTrack])
 
-  return <Video autoPlay muted playsInline ref={videoElement}></Video>
+  return (
+    <ScreenshareVideoRoot
+      autoPlay
+      muted
+      playsInline
+      ref={videoElement}
+    ></ScreenshareVideoRoot>
+  )
 }
 
-const Video = styled('video', {
+export const ScreenshareVideoRoot = styled('video', {
   width: '100%',
   height: '100%',
   'object-fit': 'contain',
-  background: `rgba(255, 255, 255, 0.03)`,
 })

@@ -62,7 +62,7 @@ export function CallTile(props: Props) {
 
   return (
     <Container ref={gridRef} css={tileSizeVars}>
-      {props.ids.map((id) => (
+      {props.ids.map((id, ind) => (
         <Participant data-id={id} key={id} userId={id} />
       ))}
     </Container>

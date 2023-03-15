@@ -152,3 +152,12 @@ export function getRoomStatus(
 
   return RoomStatus.Focus
 }
+
+export function isSomeoneScreenSharing(
+  state: RootState,
+  roomId: string
+): boolean {
+  return getUsersInRoom(state, roomId).some(
+    (userId: string) => state.call.participantStatus[userId]?.screenOn
+  )
+}

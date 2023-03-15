@@ -17,3 +17,15 @@ export function shouldReconnect(state: RootState): boolean {
     status.internet === ConnectionState.Connected
   )
 }
+
+export function isUserScreensharing(state: RootState, userId: string): boolean {
+  return state.call.participantStatus[userId]?.screenOn || false
+}
+
+export function filterScreensharingUsers(
+  state: RootState
+): (userId: string) => boolean {
+  return function (userId: string) {
+    return isUserScreensharing(state, userId)
+  }
+}

@@ -139,3 +139,19 @@ export const dark = {
   electronTrayTextFieldSelectionBg: 'rgba(255, 225, 250, 0.25)',
   electronTrayTextFieldPlaceholder: 'rgba(255, 245, 255, 0.3)',
 }
+
+export const participantLabelBg = [
+  'rgb(94, 106, 210)',
+  'rgb(38, 150, 255)',
+  'rgb(56, 163, 110)',
+  'rgb(209, 114, 100)',
+  'rgb(235, 87, 87)',
+  'rgb(36, 143, 90)',
+  /*dark.blue,
+  dark.green,
+  dark.teal,
+  dark.orange,
+  dark.red,
+  dark.purple,
+  dark.candy,*/
+]

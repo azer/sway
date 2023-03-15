@@ -13,8 +13,12 @@ import { useSelector, useDispatch } from 'state'
 import selectors from 'selectors'
 import { Participant, RoomParticipantRoot } from './RoomParticipant'
 import { ParticipantLabelRoot } from 'components/ParticipantLabel'
-import { ActiveParticipantRoot } from 'features/Call/ActiveParticipant'
+import {
+  ActiveParticipant,
+  ActiveParticipantRoot,
+} from 'features/Call/ActiveParticipant'
 import { AvatarRoot } from 'components/Avatar'
+import { CallTile } from 'features/Call/Tile'
 
 interface Props {
   id: string
@@ -23,23 +27,63 @@ interface Props {
 const log = logger('room')
 
 export function RoomPage(props: Props) {
-  const [localUserId, isLocalActive, minimizedParticipants] = useSelector(
-    (state) => {
-      const users = selectors.rooms.getOtherUsersInRoom(state, props.id)
-      const active = users.filter(
-        selectors.presence.filterActiveUsers(state, true)
-      )
-      const inactive = active.length
-        ? users.filter(selectors.presence.filterActiveUsers(state, false))
+  const [
+    localUserId,
+    isLocalActive,
+    focusedUserId,
+    focusedParticipantId,
+    mainParticipants,
+    minimizedParticipants,
+  ] = useSelector((state) => {
+    const users = selectors.rooms.getOtherUsersInRoom(state, props.id)
+
+    const active = users.filter(
+      selectors.presence.filterActiveUsers(state, true)
+    )
+    const inactive = users.filter(
+      selectors.presence.filterActiveUsers(state, false)
+    )
+
+    const screensharing = selectors.rooms
+      .getUsersInRoom(state, props.id)
+      .filter(selectors.call.filterScreensharingUsers(state))
+
+    const minimizedParticipants =
+      screensharing.length > 0
+        ? [...active, ...inactive]
+        : active.length > 0
+        ? inactive
         : undefined
 
-      return [
-        selectors.session.getUserId(state),
-        selectors.presence.isLocalUserActive(state),
-        inactive,
-      ]
-    }
-  )
+    const mainParticipants =
+      screensharing.length > 0
+        ? screensharing
+        : active.length > 0
+        ? active
+        : inactive
+
+    const focusedUserId = screensharing ? screensharing[0] : undefined
+    const focusedParticipantId = focusedUserId
+      ? selectors.call.getParticipantStatusByUserId(state, focusedUserId)
+          ?.dailyUserId
+      : undefined
+
+    log.info(
+      'Screensharing?',
+      screensharing,
+      focusedUserId,
+      focusedParticipantId
+    )
+
+    return [
+      selectors.session.getUserId(state),
+      selectors.presence.isLocalUserActive(state),
+      focusedUserId,
+      focusedParticipantId,
+      mainParticipants,
+      minimizedParticipants,
+    ]
+  })
 
   return (
     <Container electron={isElectron} isLocalActive={isLocalActive}>
@@ -56,10 +100,20 @@ export function RoomPage(props: Props) {
           <Dock roomId={props.id} />
         )}
         {minimizedParticipants?.map((uid) => (
-          <Participant userId={uid} />
+          <Participant userId={uid} dock />
         ))}
       </Top>
-      <ParticipantGrid roomId={props.id} />
+      <Middle>
+        {focusedUserId && focusedParticipantId ? (
+          <ActiveParticipant
+            userId={focusedUserId}
+            participantId={focusedParticipantId}
+            showScreen
+          />
+        ) : !focusedUserId && mainParticipants.length ? (
+          <CallTile ids={mainParticipants} />
+        ) : null}
+      </Middle>
       <Bottom>
         <CallDock />
       </Bottom>
@@ -116,12 +170,12 @@ const Top = styled('div', {
     height: 'calc(100% - 4px)',
     round: 'large',
     [`& ${AvatarRoot}`]: {
-      height: '35%',
+      height: '40%',
     },
   },
   [`& ${ParticipantLabelRoot}`]: {
     background: 'transparent',
-    height: 'auto',
+    height: '22px',
   },
   [`& ${ActiveParticipantRoot}`]: {
     width: 'auto',
@@ -138,6 +192,12 @@ const Top = styled('div', {
       },
     },
   },
+})
+
+const Middle = styled('section', {
+  display: 'flex',
+  overflow: 'hidden',
+  padding: '0 20px',
 })
 
 const Bottom = styled('div', {

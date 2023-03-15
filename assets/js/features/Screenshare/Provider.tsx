@@ -89,7 +89,7 @@ export function ScreenshareButton(props: {}) {
     selectors.presence.isLocalUserActive(state),
   ])
 
-  if (!isActive) return
+  if (!isActive) return <></>
 
   const label = isSharingScreen
     ? 'Stop presenting your screen'

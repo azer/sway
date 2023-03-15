@@ -274,7 +274,13 @@ function SubscribeToRemoteParticipant(props: { id: string }) {
         },
       })
     )
-  }, [participant])
+  }, [
+    participant?.user_id,
+    participant?.video,
+    participant?.screen,
+    participant?.audio,
+    participant?.session_id,
+  ])
 
   return <></>
 }

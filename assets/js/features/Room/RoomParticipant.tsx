@@ -35,7 +35,12 @@ export function Participant(props: Props) {
   }, [!user])
 
   if (participant && participant.dailyUserId && isActive) {
-    return <ActiveParticipant participantId={participant.dailyUserId} />
+    return (
+      <ActiveParticipant
+        userId={participant.swayUserId}
+        participantId={participant.dailyUserId}
+      />
+    )
   }
 
   return (
