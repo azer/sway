@@ -8,6 +8,7 @@ interface Props {
   status: Status
   noEmoji?: boolean
   isOnline?: boolean
+  isActive?: boolean
 }
 
 export function StatusIcon(props: Props) {
@@ -19,6 +20,7 @@ export function StatusIcon(props: Props) {
         <StatusCircle
           presence={props.status.status}
           isOnline={props.isOnline}
+          isActive={props.isActive}
         />
       )}
     </StyledStatusIcon>
@@ -43,6 +45,11 @@ export const StatusCircle = styled('div', {
       },
       [PresenceStatus.Zen]: {
         background: '$statusIconZenBg',
+      },
+    },
+    isActive: {
+      true: {
+        background: '$statusIconActiveBg !important',
       },
     },
     isOnline: {

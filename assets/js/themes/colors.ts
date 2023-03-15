@@ -56,6 +56,7 @@ export const dark = {
   dockButtonOffFg: '$red',
   dockButtonOnFg: '$green',
   statusIconOnlineBg: '$green',
+  statusIconActiveBg: '$green',
   statusIconFocusBg: '$yellow',
   statusIconZenBg: '$purple',
   statusIconOfflineBg: 'rgb(50, 54, 61, 1)',

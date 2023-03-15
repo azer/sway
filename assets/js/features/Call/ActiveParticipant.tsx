@@ -10,6 +10,7 @@ import { Border } from 'features/Room/RoomParticipant'
 import { ScreenshareVideo } from 'features/Screenshare/Video'
 import Icon from 'components/Icon'
 import { ParticipantLabel } from 'components/ParticipantLabel'
+import { Avatar, AvatarRoot } from 'components/Avatar'
 
 interface Props {
   participantId: string
@@ -31,13 +32,10 @@ function UActiveParticipant(props: Props) {
   const audioTrack = useMediaTrack(props.participantId, 'audio')
   const audioElement = useRef<HTMLAudioElement>()
 
-  const participant = window.fakeState
-    ? // @ts-ignore
-      window.fakeState.useParticipant(props.participantId)
-    : useParticipant(props.participantId)
+  const participant = useParticipant(props.participantId)
   const screensharing = participant && participant.screen
 
-  const [user, isSpeakerOn, isSelf] = useSelector((state) => [
+  const [user, isLocalSpeakerOn, isSelf] = useSelector((state) => [
     participant?.userData
       ? // @ts-ignore
         selectors.users.getById(state, participant.userData.id)
@@ -57,112 +55,71 @@ function UActiveParticipant(props: Props) {
   }, [audioTrack])
 
   return (
-    <Border active>
-      <Container data-participant-id={props.participantId}>
-        {screensharing ? (
-          <ScreenshareVideo sessionId={participant?.session_id} />
-        ) : null}
-        {!participant?.audio ? (
+    <ActiveParticipantRoot data-participant-id={props.participantId}>
+      <Container>
+        {!participant?.audio && participant?.video ? (
           <MuteIcon>
             <Icon name="mic-off" />
           </MuteIcon>
         ) : null}
-        {screensharing ? (
-          <ParticipantLabel
-            id={props.participantId}
-            label={isSelf ? 'Your screen' : `${user?.name}'s screen`}
-          />
+        {!participant?.video ? (
+          <MuteIcon>
+            <Icon name="video-off" />
+          </MuteIcon>
         ) : null}
-        <Inner screensharing={!!screensharing}>
-          {!screensharing ? (
-            <ParticipantLabel
-              id={props.participantId}
-              username={user?.name}
-            ></ParticipantLabel>
-          ) : null}
 
+        <ParticipantLabel id={props.participantId} username={user?.name} />
+
+        {participant?.video ? (
           <Video id={props.participantId} />
-          {audioTrack && !isSelf && (
-            <audio
-              autoPlay
-              playsInline
-              muted={props.muted || !isSpeakerOn}
-              ref={audioElement as React.RefObject<HTMLAudioElement>}
-            />
-          )}
-        </Inner>
+        ) : (
+          <Avatar
+            src={user?.photoUrl}
+            fallback={user?.name || 'User ' + props.participantId}
+          />
+        )}
+        {audioTrack && !isSelf && (
+          <audio
+            autoPlay
+            playsInline
+            muted={props.muted || !isLocalSpeakerOn}
+            ref={audioElement as React.RefObject<HTMLAudioElement>}
+          />
+        )}
       </Container>
-    </Border>
+    </ActiveParticipantRoot>
   )
 }
 
+export const ActiveParticipantRoot = styled('div', {
+  width: 'var(--tile-width)',
+  height: 'var(--tile-height)',
+  maxWidth: '100%',
+  maxHeight: '100%',
+  display: 'flex',
+  aspectRatio: '1.25 / 1',
+  'object-fit': 'cover',
+  background: '$participantBg',
+  round: 'xlarge',
+  overflow: 'hidden',
+  [`& ${AvatarRoot}`]: {
+    marginTop: '-10px',
+    fontSize: '18px',
+    height: '50%',
+    round: true,
+  },
+})
+
 const Container = styled('div', {
   position: 'relative',
-  round: 'large',
   overflow: 'hidden',
   center: true,
+  width: '100%',
   height: '100%',
   maxWidth: '100%',
   maxHeight: '100%',
   aspectRatio: '1.25 / 1',
   'object-fit': 'cover',
-})
-
-const Inner = styled('div', {
-  width: '100%',
-  height: '100%',
-  center: true,
-  overflow: 'hidden',
-  variants: {
-    screensharing: {
-      true: {
-        position: 'absolute',
-        width: '15%',
-        height: '15%',
-        bottom: '16px',
-        right: '0',
-        '& video': {
-          round: 'large',
-          background: 'rgba(0, 0, 0, 1)',
-          width: 'auto',
-          height: 'auto',
-          maxWidth: '100%',
-          maxHeight: '100%',
-          boxShadow: 'rgb(0 0 0 / 50%) 0px 0px 20px',
-          'object-fit': 'cover',
-          aspectRatio: '1',
-        },
-      },
-    },
-  },
-})
-
-const Info = styled('div', {
-  position: 'absolute',
-  display: 'flex',
-  flexDirection: 'row',
-  height: '24px',
-  bottom: '12px',
-  left: '16px',
-  gap: '6px',
-  [`& label`]: {
-    textShadow: 'rgba(0,0,0,0.3) 1px 1px 1px',
-  },
-  variants: {
-    screensharing: {
-      true: {
-        left: 'auto',
-        bottom: '0',
-        background: '$shellBg',
-        borderRadius: '$small $small 0 0',
-        padding: '0 8px',
-        fontSize: '12px',
-        '& img': {
-          round: 'small 0 0 0',
-        },
-      },
-    },
-  },
 })
 
 const MuteIcon = styled('div', {
@@ -171,4 +128,5 @@ const MuteIcon = styled('div', {
   right: '16px',
   width: '16px',
   height: '16px',
+  color: 'rgba(255, 255, 255, 0.6)',
 })

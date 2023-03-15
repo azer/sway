@@ -26,7 +26,7 @@ export function Mirror(props: Props) {
   const cameraSettings = useVideoSettings()
 
   return (
-    <Container onClick={cameraSettings.open}>
+    <MirrorRoot onClick={cameraSettings.open}>
       {localParticipant && isActive && localStatus.camera_on ? (
         <SelfVideo>
           <Video id={localParticipant.session_id} />
@@ -38,12 +38,13 @@ export function Mirror(props: Props) {
         status={localStatus}
         noEmoji
         isOnline={connectionStatus.status === ConnectionState.Connected}
+        isActive={isActive}
       />
-    </Container>
+    </MirrorRoot>
   )
 }
 
-const Container = styled('div', {
+export const MirrorRoot = styled('div', {
   position: 'relative',
   height: '68px',
   aspectRatio: '1 / 1',

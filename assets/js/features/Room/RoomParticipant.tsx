@@ -39,51 +39,33 @@ export function Participant(props: Props) {
   }
 
   return (
-    <Border>
-      <InactiveParticipant data-user-id={props.userId}>
-        <ParticipantLabel id={props.userId} username={user?.name}>
-          <StatusIcon status={status} />
-        </ParticipantLabel>
-        <Avatar
-          src={user?.photoUrl}
-          fallback={user?.name || 'User ' + props.userId}
-        />
-      </InactiveParticipant>
-    </Border>
+    <RoomParticipantRoot data-user-id={props.userId}>
+      <ParticipantLabel id={props.userId} username={user?.name}>
+        <StatusIcon status={status} noEmoji />
+      </ParticipantLabel>
+      <Avatar
+        src={user?.photoUrl}
+        fallback={user?.name || 'User ' + props.userId}
+      />
+    </RoomParticipantRoot>
   )
 }
 
-export const Border = styled('div', {
-  padding: '4px',
-  border: '1px solid $participantBorder',
-  round: 'xlarge',
-  variants: {
-    active: {
-      true: {
-        border: '0',
-        display: 'flex',
-        width: 'var(--tile-width)',
-        height: 'var(--tile-height)',
-        maxWidth: '100%',
-        maxHeight: '100%',
-        aspectRatio: '1.25 / 1',
-        'object-fit': 'cover',
-      },
-    },
-  },
-})
-
-export const InactiveParticipant = styled('div', {
+export const RoomParticipantRoot = styled('div', {
+  width: 'var(--tile-width)',
+  height: 'var(--tile-height)',
+  maxWidth: '100%',
+  maxHeight: '100%',
   position: 'relative',
   center: true,
   borderRadius: '1.25rem',
-  width: '150px',
   aspectRatio: '1',
+  round: 'xlarge',
   background: '$participantBg',
   [`& ${AvatarRoot}`]: {
     marginTop: '-10px',
     fontSize: '18px',
-    height: '60px',
+    height: '50%',
     round: true,
   },
 })

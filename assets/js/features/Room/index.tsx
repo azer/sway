@@ -9,7 +9,12 @@ import { RoomButton } from './RoomButton'
 import { isElectron } from 'lib/electron'
 import { CallDock } from 'features/CallDock'
 
-// import { useSelector, useDispatch } from 'app/state'
+import { useSelector, useDispatch } from 'state'
+import selectors from 'selectors'
+import { Participant, RoomParticipantRoot } from './RoomParticipant'
+import { ParticipantLabelRoot } from 'components/ParticipantLabel'
+import { ActiveParticipantRoot } from 'features/Call/ActiveParticipant'
+import { AvatarRoot } from 'components/Avatar'
 
 interface Props {
   id: string
@@ -18,16 +23,41 @@ interface Props {
 const log = logger('room')
 
 export function RoomPage(props: Props) {
+  const [localUserId, isLocalActive, minimizedParticipants] = useSelector(
+    (state) => {
+      const users = selectors.rooms.getOtherUsersInRoom(state, props.id)
+      const active = users.filter(
+        selectors.presence.filterActiveUsers(state, true)
+      )
+      const inactive = active.length
+        ? users.filter(selectors.presence.filterActiveUsers(state, false))
+        : undefined
+
+      return [
+        selectors.session.getUserId(state),
+        selectors.presence.isLocalUserActive(state),
+        inactive,
+      ]
+    }
+  )
+
   return (
-    <Container electron={isElectron}>
+    <Container electron={isElectron} isLocalActive={isLocalActive}>
       <ScreenshareProvider />
       {!isElectron ? (
         <Header>
           <RoomButton roomId={props.id} />
         </Header>
       ) : null}
-      <Top>
-        <Dock roomId={props.id} />
+      <Top isLocalActive={isLocalActive}>
+        {localUserId && isLocalActive ? (
+          <Participant userId={localUserId} />
+        ) : (
+          <Dock roomId={props.id} />
+        )}
+        {minimizedParticipants?.map((uid) => (
+          <Participant userId={uid} />
+        ))}
       </Top>
       <ParticipantGrid roomId={props.id} />
       <Bottom>
@@ -42,14 +72,22 @@ export const topBlurEffect =
 
 const Container = styled('main', {
   width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
+  height: '100vh',
+  //display: 'flex',
+  //flexDirection: 'column',
+  display: 'grid',
+  gridTemplateRows: '48px 86px auto 72px',
   gap: '12px',
   backgroundImage: topBlurEffect,
   variants: {
+    isLocalActive: {
+      true: {
+        gridTemplateRows: '48px 118px auto 72px',
+      },
+    },
     electron: {
       true: {
-        gridTemplateRows: '80px auto 80px',
+        gridTemplateRows: '86px auto 80px',
         background: 'none',
         paddingTop: '12px',
       },
@@ -69,11 +107,41 @@ const Header = styled('header', {
 const Top = styled('div', {
   center: true,
   position: 'relative',
+  flexDirection: 'row',
+  overflowX: 'scroll',
+  gap: '8px',
+  height: '90px',
+  [`& ${RoomParticipantRoot}`]: {
+    width: 'auto',
+    height: 'calc(100% - 4px)',
+    round: 'large',
+    [`& ${AvatarRoot}`]: {
+      height: '35%',
+    },
+  },
+  [`& ${ParticipantLabelRoot}`]: {
+    background: 'transparent',
+    height: 'auto',
+  },
+  [`& ${ActiveParticipantRoot}`]: {
+    width: 'auto',
+    height: '100%',
+    round: 'large',
+  },
+  variants: {
+    isLocalActive: {
+      true: {
+        height: '118px',
+        [`& ${RoomParticipantRoot}`]: {
+          height: '100%',
+        },
+      },
+    },
+  },
 })
 
 const Bottom = styled('div', {
   display: 'flex',
   justifyContent: 'center',
-  padding: '8px',
   marginBottom: '12px',
 })

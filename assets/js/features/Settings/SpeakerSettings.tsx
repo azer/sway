@@ -6,23 +6,40 @@ import { logger } from 'lib/log'
 import { setAudioOutputDeviceId } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { SpeakerSettingsPreview } from './SpeakerSettingsPreview'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { usePresence } from 'features/Presence/use-presence'
 
 const log = logger('settings/speaker')
 const dialogId = 'speaker-settings'
 
 export function useSpeakerSettings() {
   const dispatch = useDispatch()
-  const [selectedDeviceId, allDevices] = useSelector((state) => [
+  const [selectedDeviceId, allDevices, isOn] = useSelector((state) => [
     selectors.settings.getAudioOutputDeviceId(state),
     selectors.settings.allAudioOutputDevices(state),
+    selectors.statuses.getLocalStatus(state).speaker_on,
   ])
 
   const commandPalette = useCommandPalette()
+  const presence = usePresence()
 
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== dialogId) return
     commandPalette.setCommands(buildCommandList())
   }, [commandPalette.isOpen, commandPalette.id, allDevices])
+
+  useHotkeys(
+    'ctrl+shift+m, alt+m',
+    () => {
+      presence.setMedia({ speaker: !isOn })
+    },
+    {
+      enabled: true,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [isOn, presence.setMedia]
+  )
 
   return {
     commands: buildCommandList,

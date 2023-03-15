@@ -1,15 +1,13 @@
 import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
-import { useSelector, useDispatch, entities } from 'state'
+import { useSelector } from 'state'
 import { logger } from 'lib/log'
-import { useCommandRegistry } from 'features/CommandRegistry'
 import { RoomButton } from './RoomButton'
 import { UserButton } from './UserButton'
 import { useRooms } from 'features/Room/use-rooms'
 import { RoomNavigationProvider } from 'features/Room/Provider'
 import { useInvitePeople } from 'features/Settings/InvitePeople'
-import Icon from 'components/Icon'
 import { isElectron } from 'lib/electron'
 
 interface Props {}
@@ -31,6 +29,7 @@ export function Navigation(props: Props) {
           ? selectors.memberships
               .listByWorkspaceId(state, workspace.id)
               .map((m) => m.user_id)
+              .sort(selectors.presence.sortUsersByPresence(state))
           : [],
         selectors.rooms.getPrevRoom(state),
       ]

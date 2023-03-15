@@ -2,7 +2,7 @@ import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { Border, InactiveParticipant, Participant } from './RoomParticipant'
+import { Border, RoomParticipantRoot, Participant } from './RoomParticipant'
 import { logger } from 'lib/log'
 import { useMediaTrack, useScreenShare } from '@daily-co/daily-react-hooks'
 import { CallTile } from 'features/Call/Tile'
@@ -16,7 +16,7 @@ const log = logger('rooms/participant-grid')
 export function ParticipantGrid(props: Props) {
   const { isSharingScreen } = useScreenShare()
 
-  const [activeUsers, inactiveUsers, divide] = useSelector((state) => {
+  const [activeUsers, inactiveUsers] = useSelector((state) => {
     const users = selectors.rooms.getUsersInRoom(state, props.roomId)
     const localUserId = selectors.users.getSelf(state)?.id
 
@@ -28,11 +28,7 @@ export function ParticipantGrid(props: Props) {
       .filter((uid) => !selectors.presence.isUserActive(state, uid))
       .filter((userId) => isSharingScreen || userId !== localUserId)
 
-    return [
-      activeUsers,
-      inactiveUsers,
-      activeUsers.length > 0 && inactiveUsers.length > 0,
-    ]
+    return [activeUsers, inactiveUsers]
   })
 
   const alone = inactiveUsers.length + activeUsers.length === 0
@@ -44,14 +40,10 @@ export function ParticipantGrid(props: Props) {
   }
 
   return (
-    <Container divide={divide}>
+    <Container>
       {activeUsers.length ? <CallTile ids={activeUsers} /> : null}
-      {inactiveUsers.length ? (
-        <InactiveGrid minimized={divide}>
-          {inactiveUsers.map((id) => (
-            <Participant key={id} userId={id} />
-          ))}
-        </InactiveGrid>
+      {activeUsers.length === 0 && inactiveUsers.length ? (
+        <CallTile ids={inactiveUsers} />
       ) : null}
     </Container>
   )
@@ -59,54 +51,14 @@ export function ParticipantGrid(props: Props) {
 
 const Container = styled('div', {
   display: 'flex',
-  space: { inner: [4] },
-  gap: '8px',
-  flexGrow: '1',
   overflow: 'hidden',
-  variants: {
-    divide: {
-      true: {
-        display: 'grid',
-        gridTemplateColumns: 'auto 60px',
-        gridColumnGap: '12px',
-      },
-    },
-  },
+  padding: '0 20px',
 })
 
 const InviteForm = styled('div', {
   width: '100%',
-  flexGrow: '1',
   center: true,
   label: true,
   color: 'rgba(255, 255, 255, 0.7)',
   ellipsis: true,
-})
-
-const InactiveGrid = styled('div', {
-  variants: {
-    minimized: {
-      false: {
-        width: '100%',
-        height: '100%',
-        center: true,
-        overflow: 'hidden',
-      },
-      true: {
-        width: '100%',
-        height: '100%',
-        overflowY: 'scroll',
-        [`& ${Border}`]: {
-          width: '100%',
-          [`& ${InactiveParticipant}`]: {
-            width: '100%',
-            height: 'auto',
-          },
-          '& footer': {
-            display: 'none',
-          },
-        },
-      },
-    },
-  },
 })

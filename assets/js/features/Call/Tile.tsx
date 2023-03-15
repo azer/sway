@@ -84,6 +84,7 @@ const Container = styled('main', {
   alignItems: 'center',
   flexWrap: 'wrap',
   alignContent: 'center',
+  gap: '8px',
 })
 
 function calcTileSize(
@@ -118,5 +119,13 @@ function calcTileSize(
     maxWidth = maxHeight * aspectRatio
   }
 
-  return { width: maxWidth, height: maxHeight }
+  log.info('Tile result:', maxWidth, maxHeight, columns, rows, {
+    width: maxWidth - (columns - 1) * 8,
+    height: maxHeight - (rows - 1) * 8,
+  })
+
+  return {
+    width: maxWidth - (columns - 1) * 8,
+    height: maxHeight - (rows - 1) * 8,
+  }
 }

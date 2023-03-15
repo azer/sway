@@ -1,7 +1,6 @@
-import { ShellFocusRegion } from 'features/Shell/focus'
 import selectors from 'selectors'
 import { RootState } from 'state'
-import { PresenceStatus, Room, Rooms } from 'state/entities'
+import { Room, Rooms } from 'state/entities'
 import { RoomFocus } from './focus'
 
 export function getRoomById(state: RootState, id: string): Room {
@@ -80,6 +79,16 @@ export function getPrevRoom(state: RootState): Room | undefined {
 
 export function getUsersInRoom(state: RootState, roomId: string): string[] {
   return state.rooms.userIdsByRoom[roomId] || []
+}
+
+export function getOtherUsersInRoom(
+  state: RootState,
+  roomId: string
+): string[] {
+  const users = getUsersInRoom(state, roomId)
+  const localUserId = selectors.users.getSelf(state)?.id
+
+  return users.filter((id) => id !== localUserId)
 }
 
 export function getOtherUsersInSameRoom(state: RootState): string[] {

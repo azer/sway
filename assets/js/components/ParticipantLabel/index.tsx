@@ -11,18 +11,18 @@ interface Props {
 
 export function ParticipantLabel(props: Props) {
   return (
-    <Container>
+    <ParticipantLabelRoot>
       {props.children}
       <Name>
         {props.username
           ? firstName(props.username)
           : props.label || 'User ' + props.id}
       </Name>
-    </Container>
+    </ParticipantLabelRoot>
   )
 }
 
-const Container = styled('div', {
+export const ParticipantLabelRoot = styled('div', {
   maxWidth: '130px',
   vcenter: true,
   background: '$participantLabelBg',
@@ -42,7 +42,7 @@ const Container = styled('div', {
   height: '28px',
 })
 
-const Name = styled('div', {
+const Name = styled('label', {
   display: 'block',
   label: true,
   fontWeight: '$medium',

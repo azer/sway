@@ -36,4 +36,6 @@ export const AvatarRoot = styled(Root, {
 
 const StyledImage = styled(Image, {
   width: '100%',
+  height: '100%',
+  objectFit: 'cover',
 })

@@ -343,8 +343,7 @@ export function StatusControls(props: Props) {
 
 const Container = styled('div', {
   vcenter: true,
-  overflow: 'hidden',
-  round: 'large',
+
   [`& ${DockSection}`]: {
     padding: '8px 8px 8px 5.5px',
     borderTop: '1px solid rgba(255, 255, 255, 0.025)',
@@ -421,7 +420,6 @@ const Emoji = styled('span', {
   height: '100%',
   center: true,
   fontSize: '21px',
-  borderRadius: '$medium',
   label: true,
   '&:hover': {
     background: 'rgba(255, 255, 255, 0.1)',

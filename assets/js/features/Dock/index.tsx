@@ -26,7 +26,7 @@ import { useEmojiSearch } from 'features/Emoji/use-emoji-search'
 import { DockFocusRegion } from './focus'
 import { commonEmojis } from 'features/ElectronTrayWindow/selectors'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { Mirror } from './Mirror'
+import { Mirror, MirrorRoot } from './Mirror'
 import { DockSection } from './CallControls'
 import { findModeByStatus } from 'state/presence'
 import { ConnectionStatus } from './ConnectionStatus'
@@ -47,10 +47,11 @@ export function Dock(props: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const [localUser, localStatus, focus] = useSelector((state) => [
+  const [localUser, localStatus, focus, isActive] = useSelector((state) => [
     selectors.users.getSelf(state),
     selectors.statuses.getLocalStatus(state),
     selectors.dock.getFocus(state),
+    selectors.presence.isLocalUserActive(state),
   ])
 
   const [message, setMessage] = useState(localStatus?.message || '')
@@ -123,60 +124,69 @@ export function Dock(props: Props) {
     }
   }, [isDropdownOpen, focus])
 
-  return [
-    <Container
-      ref={containerRef}
-      isDropdownOpen={isDropdownOpen}
-      hasFocus={!!focus}
-      onClick={() => {
-        if (!isDropdownOpen && !focus) {
-          dispatch(setFocusRegion(DockFocusRegion.Message))
-        } else if (focus && !isDropdownOpen) {
-          setIsDropdownOpen(true)
-        }
-      }}
-    >
-      <MainDockRow focused={focus?.region === DockFocusRegion.Message}>
-        <Left>
-          <Mirror />
-        </Left>
-        <Right>
-          <StatusControls
-            localStatus={localStatus}
-            localUser={localUser}
-            message={message}
-            setMessage={setMessage}
-            resetMessage={() => setMessage(localStatus.message)}
-            saveMessage={() => presence.setMessage(message)}
-            emojiResults={
-              emojiSearch.results.length > 0
-                ? emojiSearch.results
-                : commonEmojis
-            }
-            emojiQuery={emojiSearch.query}
-            setEmojiQuery={emojiSearch.setQuery}
-            selectEmoji={presence.setEmoji}
-            focus={focus}
-            handleBlur={handleBlur}
-            setFocusRegion={(region: DockFocusRegion) =>
-              dispatch(setFocusRegion(region))
-            }
-            setPresence={(p) => presence.setMode(p)}
-            isDropdownOpen={isDropdownOpen}
-            setDropdownOpen={setIsDropdownOpen}
-            setFocusedEmojiId={(id: string | undefined) =>
-              dispatch(setFocusedEmojiId(id))
-            }
-            setFocusAway={() => dispatch(setFocusAway())}
-          />
-          <PresenceStatus onClick={() => setIsDropdownOpen(true)}>
-            {findModeByStatus(localStatus?.status)?.label}
-          </PresenceStatus>
-        </Right>
-      </MainDockRow>
-    </Container>,
-    <ConnectionStatus />,
-  ]
+  return (
+    <>
+      <Container
+        ref={containerRef}
+        isDropdownOpen={isDropdownOpen}
+        hasFocus={!!focus}
+        isActive={isActive}
+        onClick={() => {
+          if (!isDropdownOpen && !focus) {
+            dispatch(setFocusRegion(DockFocusRegion.Message))
+          } else if (focus && !isDropdownOpen) {
+            setIsDropdownOpen(true)
+          }
+        }}
+      >
+        <MainDockRow focused={focus?.region === DockFocusRegion.Message}>
+          {isActive ? (
+            <Mirror />
+          ) : (
+            <Left>
+              <Mirror />
+            </Left>
+          )}
+          {isActive ? null : (
+            <Right>
+              <StatusControls
+                localStatus={localStatus}
+                localUser={localUser}
+                message={message}
+                setMessage={setMessage}
+                resetMessage={() => setMessage(localStatus.message)}
+                saveMessage={() => presence.setMessage(message)}
+                emojiResults={
+                  emojiSearch.results.length > 0
+                    ? emojiSearch.results
+                    : commonEmojis
+                }
+                emojiQuery={emojiSearch.query}
+                setEmojiQuery={emojiSearch.setQuery}
+                selectEmoji={presence.setEmoji}
+                focus={focus}
+                handleBlur={handleBlur}
+                setFocusRegion={(region: DockFocusRegion) =>
+                  dispatch(setFocusRegion(region))
+                }
+                setPresence={(p) => presence.setMode(p)}
+                isDropdownOpen={isDropdownOpen}
+                setDropdownOpen={setIsDropdownOpen}
+                setFocusedEmojiId={(id: string | undefined) =>
+                  dispatch(setFocusedEmojiId(id))
+                }
+                setFocusAway={() => dispatch(setFocusAway())}
+              />
+              <PresenceStatus onClick={() => setIsDropdownOpen(true)}>
+                {findModeByStatus(localStatus?.status)?.label}
+              </PresenceStatus>
+            </Right>
+          )}
+        </MainDockRow>
+      </Container>
+      <ConnectionStatus />
+    </>
+  )
 
   function handleOnline() {
     if (!localUser) return
@@ -253,6 +263,15 @@ const Container = styled('nav', {
       true: {
         background: '$dockFocusBg',
         borderColor: '$dockFocusBorderColor',
+      },
+    },
+    isActive: {
+      true: {
+        width: 'auto',
+        padding: '8px 0',
+        [`& ${MirrorRoot}`]: {
+          height: '100px',
+        },
       },
     },
     isDropdownOpen: {

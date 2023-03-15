@@ -66,3 +66,33 @@ export function isSpaceButtonEnabled(state: RootState): boolean {
 export function isUserOnline(state: RootState, userId: string): boolean {
   return state.userSocket.onlineUsers.indexOf(userId) > -1
 }
+
+export function sortUsersByPresence(
+  state: RootState
+): (userA: string, userB: string) => number {
+  const onlineMap = createOnlineUsersMap(state)
+
+  return function (a: string, b: string): number {
+    if (onlineMap[a] || !onlineMap[b]) return -1
+    if (!onlineMap[a] || onlineMap[b]) return 1
+    return 0
+  }
+}
+
+export function filterActiveUsers(
+  state: RootState,
+  active: boolean
+): (userId: string) => boolean {
+  return function (userId: string) {
+    return isUserActive(state, userId) === active
+  }
+}
+
+function createOnlineUsersMap(state: RootState): Record<string, boolean> {
+  const onlineMap: Record<string, boolean> = {}
+  for (const id of state.userSocket.onlineUsers) {
+    onlineMap[id] = true
+  }
+
+  return onlineMap
+}

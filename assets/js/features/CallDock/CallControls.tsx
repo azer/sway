@@ -155,7 +155,7 @@ export function CallControls(props: Props) {
             tooltipLabel={
               props.speakerOn ? 'Turn off speaker' : 'Turn on speaker'
             }
-            tooltipShortcut={['ctrl', 'm']}
+            tooltipShortcut={['alt', 'm']}
           />
         </Dropdown.Trigger>
         <Dropdown.Content>
