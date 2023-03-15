@@ -144,7 +144,6 @@ export function CallControls(props: Props) {
           />
         </Dropdown.Content>
       </Dropdown.Menu>
-      <ScreenshareButton />
 
       <Dropdown.Menu>
         <Dropdown.Trigger>
@@ -197,6 +196,7 @@ export function CallControls(props: Props) {
         label="Settings"
         tooltipLabel="Settings"
         tooltipShortcut={['opt', 's']}
+        onClick={settings.open}
       ></Button>
     </Container>
   )

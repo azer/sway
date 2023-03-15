@@ -4,6 +4,7 @@ import { firstName } from 'lib/string'
 
 interface Props {
   id: string
+  label?: string
   username?: string
   children?: React.ReactNode
 }
@@ -13,7 +14,9 @@ export function ParticipantLabel(props: Props) {
     <Container>
       {props.children}
       <Name>
-        {props.username ? firstName(props.username) : 'User ' + props.id}
+        {props.username
+          ? firstName(props.username)
+          : props.label || 'User ' + props.id}
       </Name>
     </Container>
   )

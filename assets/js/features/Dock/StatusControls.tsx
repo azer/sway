@@ -164,6 +164,7 @@ export function StatusControls(props: Props) {
       if (props.isDropdownOpen) {
         props.setDropdownOpen(false)
       } else {
+        log.info('esc')
         props.setFocusAway()
       }
     },

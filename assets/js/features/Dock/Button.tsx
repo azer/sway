@@ -18,10 +18,10 @@ interface Props {
 export function Button(props: Props) {
   return (
     <Tooltip
-      content={props.tooltipLabel || 'foo'}
+      content={props.tooltipLabel || ''}
       shortcut={props.tooltipShortcut}
     >
-      <Container>
+      <Container onClick={props.onClick}>
         <StyledButton onClick={props.onClick} off={props.off} on={props.on}>
           <Icon name={props.icon} />
         </StyledButton>

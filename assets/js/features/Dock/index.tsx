@@ -120,7 +120,7 @@ export function Dock(props: Props) {
     return () => {
       document.removeEventListener('mousedown', handleMouseDown, false)
     }
-  }, [isDropdownOpen])
+  }, [isDropdownOpen, focus])
 
   return (
     <Container
@@ -199,13 +199,15 @@ export function Dock(props: Props) {
   }
 
   function handleBlur(e: Event) {
+    log.info('handle blur')
     dispatch(setFocusAway())
   }
 
   function handleMouseDown(e: Event) {
     if (
       !isDropdownOpen &&
-      !containerRef.current?.contains(e.target as Element)
+      !containerRef.current?.contains(e.target as Element) &&
+      focus
     ) {
       dispatch(setFocusAway())
     }

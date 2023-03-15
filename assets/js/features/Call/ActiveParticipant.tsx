@@ -70,7 +70,7 @@ function UActiveParticipant(props: Props) {
         {screensharing ? (
           <ParticipantLabel
             id={props.participantId}
-            username={isSelf ? 'Your screen' : `${user?.name}'s screen`}
+            label={isSelf ? 'Your screen' : `${user?.name}'s screen`}
           />
         ) : null}
         <Inner screensharing={!!screensharing}>
