@@ -81,17 +81,18 @@ export function ScreenshareProvider(props: Props) {
   }
 }
 
-export function ScreenshareButton(props: {}) {
-  const { isSharingScreen, startScreenShare, stopScreenShare } =
-    useScreenShare()
-
+export function ScreenshareButton(props: {
+  isSharingScreen: boolean
+  startScreenShare: () => void
+  stopScreenShare: () => void
+}) {
   const [isActive] = useSelector((state) => [
     selectors.presence.isLocalUserActive(state),
   ])
 
   if (!isActive) return <></>
 
-  const label = isSharingScreen
+  const label = props.isSharingScreen
     ? 'Stop presenting your screen'
     : 'Present your screen'
 
@@ -99,21 +100,19 @@ export function ScreenshareButton(props: {}) {
     <Button
       icon="projector"
       label={label}
-      off={!isSharingScreen}
-      on={isSharingScreen}
+      on={props.isSharingScreen}
       onClick={toggle}
       tooltipLabel={
-        isSharingScreen ? 'Stop presenting screen' : 'Present your screen'
+        props.isSharingScreen ? 'Stop presenting screen' : 'Present your screen'
       }
     />
   )
 
   function toggle() {
-    log.info('toggle')
-    if (isSharingScreen) {
-      stopScreenShare()
+    if (props.isSharingScreen) {
+      props.stopScreenShare()
     } else {
-      startScreenShare()
+      props.startScreenShare()
     }
   }
 }

@@ -3,7 +3,7 @@ import React from 'react'
 import selectors from 'selectors'
 import { Dropdown } from 'components/DropdownMenu'
 import { DeviceInfo } from 'features/Settings/slice'
-import { Button } from '../Dock/Button'
+import { Button, StyledButton } from '../Dock/Button'
 import { useSettings } from 'features/Settings'
 import { useVideoSettings } from 'features/Settings/VideoSettings'
 import { useMicSettings } from 'features/Settings/MicSettings'
@@ -17,6 +17,7 @@ interface Props {
   cameraOn: boolean
   micOn: boolean
   speakerOn: boolean
+  screenOn: boolean
   isOnAirpods: boolean
   cameras: DeviceInfo[]
   mics: DeviceInfo[]
@@ -34,6 +35,9 @@ interface Props {
   selectMic: (deviceId: string) => void
   selectSpeaker: (deviceId: string) => void
   setFocusRegion: (r: DockFocusRegion) => void
+  startPresentingScreen: () => void
+  stopPresentingScreen: () => void
+  leaveCall: () => void
 }
 
 export function CallControls(props: Props) {
@@ -190,7 +194,11 @@ export function CallControls(props: Props) {
           />
         </Dropdown.Content>
       </Dropdown.Menu>
-      <ScreenshareButton />
+      <ScreenshareButton
+        isSharingScreen={props.screenOn}
+        startScreenShare={props.startPresentingScreen}
+        stopScreenShare={props.stopPresentingScreen}
+      />
       <Button
         icon="sliders"
         label="Settings"
@@ -198,6 +206,17 @@ export function CallControls(props: Props) {
         tooltipShortcut={['opt', 's']}
         onClick={settings.open}
       ></Button>
+      {props.cameraOn || props.micOn ? (
+        <PhoneCallButton>
+          <Button
+            icon="phone-call"
+            label="Leave call"
+            tooltipLabel="Leave call"
+            tooltipShortcut={['space']}
+            onClick={props.leaveCall}
+          ></Button>
+        </PhoneCallButton>
+      ) : null}
     </Container>
   )
 }
@@ -222,4 +241,10 @@ const Container = styled('div', {
   padding: '4px 4px',
   gap: '8px',
   //background: 'rgb(28, 31, 36)',
+})
+
+const PhoneCallButton = styled('div', {
+  [`& ${StyledButton}`]: {
+    color: '$red',
+  },
 })

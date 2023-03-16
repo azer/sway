@@ -155,8 +155,9 @@ export const ActiveParticipantRoot = styled('div', {
           height: '25%',
           right: '20px',
           bottom: '20px',
-          round: true,
+          borderRadius: '30%',
           aspectRatio: '1',
+          boxShadow: '0px 0px 5px rgb(0 0 0 / 10%)',
         },
         [`& ${AvatarRoot}`]: {
           display: 'none',

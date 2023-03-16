@@ -286,7 +286,7 @@ function SubscribeToRemoteParticipant(props: { id: string }) {
 }
 
 function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
-  const { setMicrophone, setCamera, setSpeaker } = useDevices()
+  const { setMicrophone, setCamera, setSpeaker, cameras } = useDevices()
 
   const [localPresence, videoInputId, audioInputId, audioOutputId] =
     useSelector((state) => [
@@ -304,9 +304,15 @@ function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
         videoSource: false,
       })
     } else if (localPresence.camera_on && videoInputId) {
-      log.info('Turn on local video input', videoInputId)
+      log.info('Turn on local video input', videoInputId, cameras)
       props.callObject.setLocalVideo(true)
       setCamera(videoInputId)
+        .then(() => {
+          log.info('Video input updated')
+        })
+        .catch((err) => {
+          log.error('Video input change error', err)
+        })
     }
   }, [localPresence.camera_on, videoInputId])
 
@@ -314,9 +320,10 @@ function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
     if (!localPresence.mic_on) {
       log.info('Turn off audio input device:')
       props.callObject.setLocalAudio(false)
-      props.callObject.setInputDevices({
+      const newCallObj = props.callObject.setInputDevices({
         audioSource: false,
       })
+      debugger
     } else if (localPresence.mic_on && audioInputId) {
       log.info('Turn on local audio input', audioInputId)
       setMicrophone(audioInputId)

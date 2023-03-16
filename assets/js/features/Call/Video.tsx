@@ -43,7 +43,7 @@ function UVideo(props: Props) {
   const videoEl = useMemo(() => {
     log.info('Re-render element')
     return <CallVideoRoot autoPlay muted playsInline ref={el} />
-  }, [])
+  }, [props.id])
 
   return videoEl
 }

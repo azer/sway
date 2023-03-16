@@ -91,6 +91,7 @@ export function CallDock(props: Props) {
         cameraOn={localStatus.camera_on}
         micOn={localStatus.mic_on}
         speakerOn={localStatus.speaker_on}
+        screenOn={isSharingScreen}
         selectedCameraId={selectedVideoInputDeviceId}
         selectedMicId={selectedAudioInputDeviceId}
         selectedSpeakerId={selectedAudioOutputDeviceId}
@@ -103,6 +104,9 @@ export function CallDock(props: Props) {
         speakers={allAudioOutputDevices}
         blurValue={blurValue}
         toggleBlur={toggleBlurValue}
+        startPresentingScreen={startScreenShare}
+        stopPresentingScreen={stopScreenShare}
+        leaveCall={() => presence.setMedia({ camera: false, mic: false })}
         setCameraOn={(camera: boolean) => presence.setMedia({ camera })}
         setMicOn={(mic: boolean) => presence.setMedia({ mic })}
         setSpeakerOn={(speaker: boolean) => presence.setMedia({ speaker })}
