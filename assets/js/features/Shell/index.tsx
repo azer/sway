@@ -7,10 +7,13 @@ import { PresenceStatus } from 'state/presence'
 import { Titlebar } from 'features/Titlebar'
 import { globalCss } from '@stitches/react'
 import { isElectron } from 'lib/electron'
+import { notifications } from 'lib/notifications'
 
 interface Props {
   children?: React.ReactNode
 }
+
+notifications.requestPermission()
 
 export function Shell(props: Props) {
   const [localStatus] = useSelector((state) => [

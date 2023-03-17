@@ -14,12 +14,15 @@ import {
 import { Avatar, AvatarRoot } from 'components/Avatar'
 import { participantLabelBg } from 'themes/colors'
 import { firstName } from 'lib/string'
+import { ContextMenu } from 'components/ContextMenu'
+import { UserHeader } from 'components/UserHeader'
 
 interface Props {
   participantId: string
   userId: string
   muted?: boolean
   showScreen?: boolean
+  tap: (userId: string) => void
 }
 
 const log = logger('call/active-participant')
@@ -41,22 +44,30 @@ function UActiveParticipant(props: Props) {
 
   const dailyParticipant = useParticipant(props.participantId)
 
-  const [user, isVideoOn, isMicOn, isScreenOn, isLocalSpeakerOn, isSelf] =
-    useSelector((state) => {
-      const swayParticipant = selectors.call.getParticipantStatusByUserId(
-        state,
-        props.userId
-      )
+  const [
+    user,
+    status,
+    isVideoOn,
+    isMicOn,
+    isScreenOn,
+    isLocalSpeakerOn,
+    isSelf,
+  ] = useSelector((state) => {
+    const swayParticipant = selectors.call.getParticipantStatusByUserId(
+      state,
+      props.userId
+    )
 
-      return [
-        selectors.users.getById(state, props.userId),
-        swayParticipant?.cameraOn,
-        swayParticipant?.micOn,
-        swayParticipant?.screenOn,
-        selectors.statuses.getLocalStatus(state).speaker_on,
-        selectors.users.getSelf(state)?.id === dailyParticipant?.userData?.id,
-      ]
-    })
+    return [
+      selectors.users.getById(state, props.userId),
+      selectors.statuses.getByUserId(state, props.userId),
+      swayParticipant?.cameraOn,
+      swayParticipant?.micOn,
+      swayParticipant?.screenOn,
+      selectors.statuses.getLocalStatus(state).speaker_on,
+      selectors.users.getSelf(state)?.id === dailyParticipant?.userData?.id,
+    ]
+  })
 
   useEffect(() => {
     if (audioTrack?.state === 'playable') {
@@ -76,50 +87,62 @@ function UActiveParticipant(props: Props) {
   }, [props.participantId])
 
   return (
-    <ActiveParticipantRoot
-      data-participant-id={props.participantId}
-      videoOn={isVideoOn}
-      screenOn={showScreen}
-      css={{ '--participant-bg': labelColor }}
-    >
-      {!isMicOn && isVideoOn ? (
-        <MuteIcon>
-          <Icon name="mic-off" />
-        </MuteIcon>
-      ) : null}
-      {!isVideoOn ? (
-        <MuteIcon>
-          <Icon name="video-off" />
-        </MuteIcon>
-      ) : null}
+    <ContextMenu.Root>
+      <ContextMenu.Trigger asChild>
+        <ActiveParticipantRoot
+          data-participant-id={props.participantId}
+          videoOn={isVideoOn}
+          screenOn={showScreen}
+          css={{ '--participant-bg': labelColor }}
+        >
+          {!isMicOn && isVideoOn ? (
+            <MuteIcon>
+              <Icon name="mic-off" />
+            </MuteIcon>
+          ) : null}
+          {!isVideoOn ? (
+            <MuteIcon>
+              <Icon name="video-off" />
+            </MuteIcon>
+          ) : null}
 
-      <ParticipantLabel
-        id={props.participantId}
-        label={
-          showScreen
-            ? `${firstName(user?.name || 'User')}'s Screen`
-            : firstName(user?.name || 'User')
-        }
-      />
+          <ParticipantLabel
+            id={props.participantId}
+            label={
+              showScreen
+                ? `${firstName(user?.name || 'User')}'s Screen`
+                : firstName(user?.name || 'User')
+            }
+          />
 
-      {showScreen && dailyParticipant?.session_id ? (
-        <ScreenshareVideo sessionId={dailyParticipant?.session_id} />
-      ) : null}
+          {showScreen && dailyParticipant?.session_id ? (
+            <ScreenshareVideo sessionId={dailyParticipant?.session_id} />
+          ) : null}
 
-      {isVideoOn ? (
-        <Video id={props.participantId} />
-      ) : (
-        <Avatar src={user?.photoUrl} fallback={user?.name || 'User'} />
-      )}
-      {audioTrack && !isSelf && (
-        <audio
-          autoPlay
-          playsInline
-          muted={props.muted || !isLocalSpeakerOn}
-          ref={audioElement as React.RefObject<HTMLAudioElement>}
-        />
-      )}
-    </ActiveParticipantRoot>
+          {isVideoOn ? (
+            <Video id={props.participantId} />
+          ) : (
+            <Avatar src={user?.photoUrl} fallback={user?.name || 'User'} />
+          )}
+          {audioTrack && !isSelf && (
+            <audio
+              autoPlay
+              playsInline
+              muted={props.muted || !isLocalSpeakerOn}
+              ref={audioElement as React.RefObject<HTMLAudioElement>}
+            />
+          )}
+        </ActiveParticipantRoot>
+      </ContextMenu.Trigger>
+      <ContextMenu.Content>
+        <UserHeader user={user} status={status} />
+        <ContextMenu.Separator />
+        <ContextMenu.Item emoji="wave" label="Tap" />
+        <ContextMenu.Item icon="bell" label="Notify when available" />
+        <ContextMenu.Item icon="users" label="Go to 1:1 room" />
+        <ContextMenu.Item icon="mail" label="Send message" />
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   )
 }
 

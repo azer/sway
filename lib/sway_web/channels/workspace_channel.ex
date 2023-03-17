@@ -38,6 +38,11 @@ defmodule SwayWeb.WorkspaceChannel do
     {:reply, {:ok, user_broadcastable(user)}, socket}
   end
 
+  def handle_in("users:tap", %{ "from" => tapping_user_id, "to" => tapped_user_id, "room_id" => room_id, "workspace_id" => workspace_id }, socket) do
+    IO.puts "users tap"
+    broadcast(socket, "users:tap", %{ "from" => tapping_user_id, "to" => tapped_user_id, "workspace_id" => workspace_id, "room_id" => room_id })
+  end
+
   def handle_in("workspace:list_online_users", %{ "workspace_id" => workspace_id }, socket) do
     users_by_rooms = list_online_users_by_rooms(socket, workspace_id)
     {:reply, {:ok, users_by_rooms}, socket}

@@ -7,6 +7,7 @@ import { logger } from 'lib/log'
 
 interface Props {
   ids: string[]
+  tap: (userId: string) => void
 }
 
 const log = logger('call/tile')
@@ -63,7 +64,7 @@ export function CallTile(props: Props) {
   return (
     <Container ref={gridRef} css={tileSizeVars}>
       {props.ids.map((id, ind) => (
-        <Participant data-id={id} key={id} userId={id} />
+        <Participant data-id={id} key={id} userId={id} tap={props.tap} />
       ))}
     </Container>
   )

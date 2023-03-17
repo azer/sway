@@ -9,9 +9,11 @@ import { useUserSocket } from 'features/UserSocket'
 import { Avatar, AvatarRoot } from 'components/Avatar'
 import { StatusIcon } from 'features/Dock/StatusIcon'
 import { ParticipantLabel } from 'components/ParticipantLabel'
+import { ContextMenu } from 'components/ContextMenu'
 
 interface Props {
   userId: string
+  tap: (userId: string) => void
 }
 
 const log = logger('room/participant')
@@ -39,20 +41,34 @@ export function Participant(props: Props) {
       <ActiveParticipant
         userId={participant.swayUserId}
         participantId={participant.dailyUserId}
+        tap={props.tap}
       />
     )
   }
 
   return (
-    <RoomParticipantRoot data-user-id={props.userId}>
-      <ParticipantLabel id={props.userId} username={user?.name}>
-        <StatusIcon status={status} noEmoji />
-      </ParticipantLabel>
-      <Avatar
-        src={user?.photoUrl}
-        fallback={user?.name || 'User ' + props.userId}
-      />
-    </RoomParticipantRoot>
+    <ContextMenu.Root>
+      <ContextMenu.Trigger asChild>
+        <RoomParticipantRoot data-user-id={props.userId}>
+          <ParticipantLabel id={props.userId} username={user?.name}>
+            <StatusIcon status={status} noEmoji />
+          </ParticipantLabel>
+          <Avatar
+            src={user?.photoUrl}
+            fallback={user?.name || 'User ' + props.userId}
+          />
+        </RoomParticipantRoot>
+      </ContextMenu.Trigger>
+      <ContextMenu.Content>
+        <ContextMenu.Item
+          emoji="wave"
+          label="Tap"
+          onClick={() => props.tap(props.userId)}
+        />
+        <ContextMenu.Item icon="bell" label="Notify when active" />
+        <ContextMenu.Item icon="users" label="Go to 1:1 room" />
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   )
 }
 

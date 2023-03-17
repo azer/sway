@@ -9,11 +9,14 @@ const log = logger('presence/use-presence')
 export function usePresence() {
   const { channel } = useUserSocket()
 
-  const [localStatus, workspaceId, roomId] = useSelector((state) => [
-    selectors.statuses.getLocalStatus(state),
-    selectors.workspaces.getSelfWorkspace(state)?.id,
-    selectors.rooms.getFocusedRoom(state)?.id,
-  ])
+  const [localStatus, workspaceId, roomId, localUserId] = useSelector(
+    (state) => [
+      selectors.statuses.getLocalStatus(state),
+      selectors.workspaces.getSelfWorkspace(state)?.id,
+      selectors.rooms.getFocusedRoom(state)?.id,
+      selectors.session.getUserId(state),
+    ]
+  )
 
   return {
     setMode,
@@ -21,6 +24,7 @@ export function usePresence() {
     setMedia,
     setEmoji,
     setMessage,
+    tap,
   }
 
   function setMedia(options: {
@@ -82,6 +86,17 @@ export function usePresence() {
   function setActive(active: boolean) {
     log.info('Setting as active / inactive', active)
     setMedia({ camera: active, mic: active, speaker: true })
+  }
+
+  function tap(targetUserId: string) {
+    log.info('Push tap message', targetUserId)
+
+    channel?.push('users:tap', {
+      from: localUserId,
+      to: targetUserId,
+      workspace_id: workspaceId,
+      room_id: roomId,
+    })
   }
 }
 

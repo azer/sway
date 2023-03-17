@@ -323,7 +323,6 @@ function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
       const newCallObj = props.callObject.setInputDevices({
         audioSource: false,
       })
-      debugger
     } else if (localPresence.mic_on && audioInputId) {
       log.info('Turn on local audio input', audioInputId)
       setMicrophone(audioInputId)

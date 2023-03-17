@@ -19,6 +19,7 @@ import {
 } from 'features/Call/ActiveParticipant'
 import { AvatarRoot } from 'components/Avatar'
 import { CallTile } from 'features/Call/Tile'
+import { usePresence } from 'features/Presence/use-presence'
 
 interface Props {
   id: string
@@ -27,6 +28,8 @@ interface Props {
 const log = logger('room')
 
 export function RoomPage(props: Props) {
+  const presence = usePresence()
+
   const [
     localUserId,
     isLocalActive,
@@ -79,7 +82,11 @@ export function RoomPage(props: Props) {
   })
 
   return (
-    <Container electron={isElectron} isLocalActive={isLocalActive}>
+    <Container
+      electron={isElectron}
+      isLocalActive={isLocalActive}
+      activeOnElectron={isElectron && isLocalActive}
+    >
       <ScreenshareProvider />
       {!isElectron ? (
         <Header>
@@ -101,10 +108,11 @@ export function RoomPage(props: Props) {
           <ActiveParticipant
             userId={focusedUserId}
             participantId={focusedParticipantId}
+            tap={presence.tap}
             showScreen
           />
         ) : !focusedUserId && mainParticipants.length ? (
-          <CallTile ids={mainParticipants} />
+          <CallTile ids={mainParticipants} tap={presence.tap} />
         ) : null}
       </Middle>
       <Bottom>
@@ -135,9 +143,14 @@ const Container = styled('main', {
     electron: {
       true: {
         height: 'calc(100vh - 48px)',
-        gridTemplateRows: '86px auto 80px',
+        gridTemplateRows: '86px auto 72px',
         background: 'none',
         paddingTop: '12px',
+      },
+    },
+    activeOnElectron: {
+      true: {
+        gridTemplateRows: '118px auto 72px',
       },
     },
   },

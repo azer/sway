@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { setStatusId } from './slice'
+import { setStatusId, tap } from './slice'
 import { useUserSocket } from 'features/UserSocket'
 import { logger } from 'lib/log'
-import { add, Status, Statuses, toStateEntity } from 'state/entities'
+import { add, Status, Statuses, toStateEntity, Users } from 'state/entities'
 import selectors from 'selectors'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useCommandPalette } from 'features/CommandPalette'
 import { useSelector, useDispatch } from 'state'
 import { usePresence } from './use-presence'
+import { notifications } from 'lib/notifications'
 
 interface Props {
   children?: React.ReactNode
@@ -18,14 +19,15 @@ const log = logger('presence/provider')
 export default function PresenceProvider(props: Props) {
   const { channel } = useUserSocket()
   const dispatch = useDispatch()
-  const pushToTalkStopRef = useRef<NodeJS.Timer | null>(null)
+  const [receivedTap, setReceivedTap] = useState<string | undefined>(undefined)
+  /*const pushToTalkStopRef = useRef<NodeJS.Timer | null>(null)
   const [pushToTalk, setPushToTalk] = useState(false)
   const [mediaSettings, setMediaSettings] = useState({
     audioInputOff: false,
     videoInputOff: false,
   })
 
-  const commandPalette = useCommandPalette()
+  //const commandPalette = useCommandPalette()*/
   const presence = usePresence()
 
   const [localStatus, isActive, pushToTalkVideo, isSpaceButtonEnabled] =
