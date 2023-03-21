@@ -2,8 +2,6 @@ import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
-import Icon from 'components/Icon'
-import { getIcon } from 'components/PresenceModeIcon'
 import { useUserSocket } from 'features/UserSocket'
 import { Users } from 'state/entities'
 import {
@@ -11,7 +9,7 @@ import {
   StatusIcon,
   StyledStatusIcon,
 } from 'features/Dock/StatusIcon'
-import { StyledButton } from 'features/Dock/Button'
+import { UserContextMenu } from 'components/UserContextMenu'
 
 interface Props {
   id: string
@@ -32,11 +30,15 @@ export function UserButton(props: Props) {
   }, [!user])
 
   return (
-    <Container>
-      <StatusIcon status={status} isOnline={isOnline} noEmoji />
-      <Name online={isOnline}>{user?.name}</Name>
-    </Container>
+    <UserContextMenu user={user} status={status} tap={tap}>
+      <Container>
+        <StatusIcon status={status} isOnline={isOnline} noEmoji />
+        <Name online={isOnline}>{user?.name}</Name>
+      </Container>
+    </UserContextMenu>
   )
+
+  function tap() {}
 }
 
 const Container = styled('div', {

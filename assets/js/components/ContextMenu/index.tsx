@@ -7,6 +7,9 @@ import {
   Item,
   Separator,
   ItemIndicator,
+  Sub,
+  SubTrigger,
+  SubContent,
 } from '@radix-ui/react-context-menu'
 
 import { styled } from 'themes'
@@ -113,5 +116,8 @@ export const ContextMenu = {
   Item: LocalItem,
   Label: Label,
   Separator: StyledSeparator,
+  SubContent: SubContent,
   Switch: Item,
+  Sub: Sub,
+  SubTrigger: SubTrigger,
 }

@@ -14,8 +14,7 @@ import {
 import { Avatar, AvatarRoot } from 'components/Avatar'
 import { participantLabelBg } from 'themes/colors'
 import { firstName } from 'lib/string'
-import { ContextMenu } from 'components/ContextMenu'
-import { UserHeader } from 'components/UserHeader'
+import { UserContextMenu } from 'components/UserContextMenu'
 
 interface Props {
   participantId: string
@@ -87,62 +86,52 @@ function UActiveParticipant(props: Props) {
   }, [props.participantId])
 
   return (
-    <ContextMenu.Root>
-      <ContextMenu.Trigger asChild>
-        <ActiveParticipantRoot
-          data-participant-id={props.participantId}
-          videoOn={isVideoOn}
-          screenOn={showScreen}
-          css={{ '--participant-bg': labelColor }}
-        >
-          {!isMicOn && isVideoOn ? (
-            <MuteIcon>
-              <Icon name="mic-off" />
-            </MuteIcon>
-          ) : null}
-          {!isVideoOn ? (
-            <MuteIcon>
-              <Icon name="video-off" />
-            </MuteIcon>
-          ) : null}
+    <UserContextMenu user={user} status={status} tap={props.tap}>
+      <ActiveParticipantRoot
+        data-participant-id={props.participantId}
+        videoOn={isVideoOn}
+        screenOn={showScreen}
+        css={{ '--participant-bg': labelColor }}
+      >
+        {!isMicOn && isVideoOn ? (
+          <MuteIcon>
+            <Icon name="mic-off" />
+          </MuteIcon>
+        ) : null}
+        {!isVideoOn ? (
+          <MuteIcon>
+            <Icon name="video-off" />
+          </MuteIcon>
+        ) : null}
 
-          <ParticipantLabel
-            id={props.participantId}
-            label={
-              showScreen
-                ? `${firstName(user?.name || 'User')}'s Screen`
-                : firstName(user?.name || 'User')
-            }
+        <ParticipantLabel
+          id={props.participantId}
+          label={
+            showScreen
+              ? `${firstName(user?.name || 'User')}'s Screen`
+              : firstName(user?.name || 'User')
+          }
+        />
+
+        {showScreen && dailyParticipant?.session_id ? (
+          <ScreenshareVideo sessionId={dailyParticipant?.session_id} />
+        ) : null}
+
+        {isVideoOn ? (
+          <Video id={props.participantId} />
+        ) : (
+          <Avatar src={user?.photoUrl} fallback={user?.name || 'User'} />
+        )}
+        {audioTrack && !isSelf && (
+          <audio
+            autoPlay
+            playsInline
+            muted={props.muted || !isLocalSpeakerOn}
+            ref={audioElement as React.RefObject<HTMLAudioElement>}
           />
-
-          {showScreen && dailyParticipant?.session_id ? (
-            <ScreenshareVideo sessionId={dailyParticipant?.session_id} />
-          ) : null}
-
-          {isVideoOn ? (
-            <Video id={props.participantId} />
-          ) : (
-            <Avatar src={user?.photoUrl} fallback={user?.name || 'User'} />
-          )}
-          {audioTrack && !isSelf && (
-            <audio
-              autoPlay
-              playsInline
-              muted={props.muted || !isLocalSpeakerOn}
-              ref={audioElement as React.RefObject<HTMLAudioElement>}
-            />
-          )}
-        </ActiveParticipantRoot>
-      </ContextMenu.Trigger>
-      <ContextMenu.Content>
-        <UserHeader user={user} status={status} />
-        <ContextMenu.Separator />
-        <ContextMenu.Item emoji="wave" label="Tap" />
-        <ContextMenu.Item icon="bell" label="Notify when available" />
-        <ContextMenu.Item icon="users" label="Go to 1:1 room" />
-        <ContextMenu.Item icon="mail" label="Send message" />
-      </ContextMenu.Content>
-    </ContextMenu.Root>
+        )}
+      </ActiveParticipantRoot>
+    </UserContextMenu>
   )
 }
 

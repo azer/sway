@@ -11,6 +11,7 @@ import * as statuses from './status'
 import * as presence from 'features/Presence/selectors'
 import * as electronTray from 'features/ElectronTray/selectors'
 import * as commandPalette from 'features/CommandPalette/selectors'
+import * as taps from 'features/Tap/selectors'
 
 export default {
   session,
@@ -26,4 +27,5 @@ export default {
   presence,
   electronTray,
   commandPalette,
+  taps,
 }

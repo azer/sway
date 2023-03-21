@@ -5,6 +5,7 @@ import { firstName } from 'lib/string'
 import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch, entities } from 'state'
+import { PresenceStatus } from 'state/presence'
 
 interface Props {}
 
@@ -22,23 +23,33 @@ export function TapProvider(props: Props) {
   const [lastTappingUserId, setLastTappingUserId] =
     useState<string | undefined>(undefined)
 
-  const [localUser, tappingUser] = useSelector((state) => [
+  const [localUser, tappingUser, localStatus] = useSelector((state) => [
     selectors.users.getSelf(state),
     lastTappingUserId
       ? selectors.users.getById(state, lastTappingUserId)
       : undefined,
+    selectors.statuses.getLocalStatus(state),
   ])
 
   useEffect(() => {
+    log.info('last tapping user?', lastTappingUserId, tappingUser)
     if (!lastTappingUserId || !tappingUser) return
 
     log.info('Show notification for tap', lastTappingUserId)
+
+    if (localStatus.status === PresenceStatus.Zen) {
+      log.info('Silenced tap notification on zen mode')
+      return
+    }
+
     notifications.show({
       title: `${firstName(tappingUser.name)} tapped you`,
       body: 'Jump on Sway to start talking',
       icon: tappingUser.photoUrl,
       badge: tappingUser.photoUrl,
     })
+
+    setLastTappingUserId(undefined)
   }, [lastTappingUserId, !!tappingUser])
 
   useEffect(() => {
