@@ -49,8 +49,11 @@ export function UserContextMenu(props: Props) {
     dispatch(
       setStatusHook({
         userId: props?.user?.id,
-        whenActive: true,
-        whenPresentAs: PresenceStatus?.Online,
+        whenPresentAs:
+          props.status?.status !== PresenceStatus?.Online
+            ? PresenceStatus?.Online
+            : undefined,
+        whenActive: props.status?.status === PresenceStatus?.Online,
       })
     )
   }

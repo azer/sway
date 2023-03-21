@@ -6,7 +6,7 @@ export const name = 'taps'
 export interface StatusHook {
   userId: string
   whenActive?: boolean
-  whenPresentAs: PresenceStatus
+  whenPresentAs?: PresenceStatus
 }
 
 export interface Tap {
@@ -36,8 +36,10 @@ export const slice = createSlice({
     setStatusHook: (state, action: PayloadAction<StatusHook>) => {
       state.statusHooks[action.payload.userId] = action.payload
     },
-    removeStatusHook: (state, action: PayloadAction<string>) => {
-      delete state.statusHooks[action.payload]
+    removeStatusHook: (state, action: PayloadAction<string[]>) => {
+      for (const id of action.payload) {
+        delete state.statusHooks[id]
+      }
     },
   },
 })

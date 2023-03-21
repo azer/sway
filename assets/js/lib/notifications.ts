@@ -36,14 +36,20 @@ export function show(options: Options) {
 
   log.info('Show notification', options)
 
-  const notification = new Notification(options.title, {
-    ...options,
-  })
+  const notification = new Notification(options.title, options)
 
   // @ts-ignore
   notification.onclick = (n: Notification, e: Event) => {
     log.info('User clicked notification', options)
     if (options.onClick) options.onClick(n, e)
+  }
+
+  notification.onerror = (error) => {
+    log.error('An error occurred', error, options)
+  }
+
+  notification.onshow = () => {
+    log.info('Notification was shown')
   }
 
   return notification

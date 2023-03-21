@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { setStatusId, tap } from './slice'
+import { receive, setStatusId, tap } from './slice'
 import { useUserSocket } from 'features/UserSocket'
 import { logger } from 'lib/log'
 import { add, Status, Statuses, toStateEntity, Users } from 'state/entities'
@@ -43,19 +43,7 @@ export default function PresenceProvider(props: Props) {
 
     log.info('Listening user status updates')
 
-    channel.on('user:status', (payload: Status) => {
-      log.info('Received new user status', payload)
-
-      dispatch(
-        add({
-          table: Statuses,
-          id: payload.id,
-          record: toStateEntity(Statuses, payload),
-        })
-      )
-
-      dispatch(setStatusId({ userId: payload.user_id, statusId: payload.id }))
-    })
+    channel.on('user:status', (payload: Status) => dispatch(receive(payload)))
   }, [channel])
 
   useHotkeys(
