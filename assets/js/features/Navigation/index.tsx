@@ -9,6 +9,7 @@ import { useRooms } from 'features/Room/use-rooms'
 import { RoomNavigationProvider } from 'features/Room/Provider'
 import { useInvitePeople } from 'features/Settings/InvitePeople'
 import { isElectron } from 'lib/electron'
+import { useUserSocket } from 'features/UserSocket'
 
 interface Props {}
 
@@ -16,24 +17,32 @@ const log = logger('navigation')
 
 export function Navigation(props: Props) {
   const inviteModal = useInvitePeople()
+  const socket = useUserSocket()
 
-  const [workspace, activeRoomIds, focusedRoom, allUsers, prevRoom] =
-    useSelector((state) => {
-      const workspace = selectors.workspaces.getSelfWorkspace(state)
+  const [
+    workspace,
+    activeRoomIds,
+    focusedRoom,
+    allUsers,
+    prevRoom,
+    localUserId,
+  ] = useSelector((state) => {
+    const workspace = selectors.workspaces.getSelfWorkspace(state)
 
-      return [
-        workspace,
-        selectors.rooms.listActiveRooms(state),
-        selectors.rooms.getFocusedRoom(state),
-        workspace
-          ? selectors.memberships
-              .listByWorkspaceId(state, workspace.id)
-              .map((m) => m.user_id)
-              .sort(selectors.presence.sortUsersByPresence(state))
-          : [],
-        selectors.rooms.getPrevRoom(state),
-      ]
-    })
+    return [
+      workspace,
+      selectors.rooms.listActiveRooms(state),
+      selectors.rooms.getFocusedRoom(state),
+      workspace
+        ? selectors.memberships
+            .listByWorkspaceId(state, workspace.id)
+            .map((m) => m.user_id)
+            .sort(selectors.presence.sortUsersByPresence(state))
+        : [],
+      selectors.rooms.getPrevRoom(state),
+      selectors.session.getUserId(state),
+    ]
+  })
 
   const rooms = useRooms()
 
@@ -71,7 +80,17 @@ export function Navigation(props: Props) {
       <Rooms electron={isElectron}>
         <Title>People</Title>
         {allUsers.map((uid) => (
-          <UserButton key={uid} id={uid} />
+          <UserButton
+            key={uid}
+            id={uid}
+            onClick={() =>
+              localUserId &&
+              createPrivateRoom(localUserId, workspace?.id || '', [
+                localUserId,
+                uid,
+              ])
+            }
+          />
         ))}
       </Rooms>
     </Container>
@@ -94,6 +113,25 @@ export function Navigation(props: Props) {
 
   function mail() {
     window.location.href = 'mailto:azer@sway.so'
+  }
+
+  function createPrivateRoom(
+    localUserId: string,
+    workspaceId: string,
+    users: string[]
+  ) {
+    socket.channel
+      ?.push('rooms:create_private', {
+        workspace_id: workspaceId,
+        created_by: localUserId,
+        users: users,
+      })
+      .receive('ok', (response) => {
+        log.info('created private room', response)
+      })
+      .receive('error', (error) => {
+        log.error('can not create private room', error)
+      })
   }
 }
 

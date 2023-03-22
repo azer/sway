@@ -13,6 +13,7 @@ defmodule SwayWeb.WorkspaceChannel do
     end
   end
 
+
   def handle_info(:after_join, socket) do
     user = Sway.Accounts.get_user!(socket.assigns[:user])
 
@@ -39,7 +40,6 @@ defmodule SwayWeb.WorkspaceChannel do
   end
 
   def handle_in("users:tap", %{ "from" => tapping_user_id, "to" => tapped_user_id, "room_id" => room_id, "workspace_id" => workspace_id }, socket) do
-    IO.puts "users tap"
     broadcast(socket, "users:tap", %{ "from" => tapping_user_id, "to" => tapped_user_id, "workspace_id" => workspace_id, "room_id" => room_id })
   end
 
@@ -85,7 +85,8 @@ defmodule SwayWeb.WorkspaceChannel do
                name: name,
                slug: Slug.slugify(name),
                workspace_id: workspace_id,
-               user_id: socket.assigns.user
+               user_id: socket.assigns.user,
+	       is_private: false
     }
 
     case authorized?(user.id, workspace_id) do
@@ -105,6 +106,28 @@ defmodule SwayWeb.WorkspaceChannel do
 
       false ->
         {:reply, {:error, "No access to specified org"}, socket}
+    end
+  end
+
+  def handle_in("rooms:create_private", %{ "workspace_id" => workspace_id, "created_by" => created_by, "users" => users }, socket) do
+    roomName = Enum.join(Enum.map(users, fn (userId) ->
+      user = Sway.Accounts.get_user!(userId)
+      user.name
+    end), ", ")
+
+    attrs = %{
+      name: roomName,
+      workspace_id: String.to_integer(workspace_id),
+      user_id: String.to_integer(created_by),
+      is_private: true,
+    }
+
+    case Sway.Rooms.create_private_room_with_members(attrs, Enum.map(users, &String.to_integer/1)) do
+      {:ok, %{room: room, members: _members}} ->
+        {:reply, {:ok, %{"room": room_broadcastable(room) }}, socket}
+
+      {:error, _changes_so_far, failed_operation, _changes} ->
+        {:reply, {:error, "Failed to create private room: #{inspect(failed_operation)}"}, socket}
     end
   end
 

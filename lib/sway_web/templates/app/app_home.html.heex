@@ -16,7 +16,10 @@
       userIdsByRoom: {},
       roomIdsByWorkspace: {
 	"<%= @workspace.id %>": [<%= raw(Enum.join(Enum.map(@rooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>],
-      }
+      },
+      privateRooms: [
+	  <%= raw(Enum.join(Enum.map(@privateRooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>
+      ]
     },
     status: {
       "<%= @status.user_id %>": "<%= @status.id %>"

@@ -11,6 +11,7 @@ defmodule Sway.Rooms.Room do
 
     belongs_to :workspace, Sway.Workspaces.Workspace
     belongs_to :user, Sway.Accounts.User
+    has_many :private_members, Sway.Rooms.PrivateMember
 
     timestamps()
   end
@@ -19,7 +20,7 @@ defmodule Sway.Rooms.Room do
   def changeset(room, attrs) do
     room
     |> cast(attrs, [:name, :workspace_id, :user_id, :slug, :is_default, :is_active, :is_private])
-    |> validate_required([:name])
+    |> validate_required([:name, :workspace_id])
     |> unique_constraint(:slug, name: :rooms_slug_workspace_id_index)
   end
 end

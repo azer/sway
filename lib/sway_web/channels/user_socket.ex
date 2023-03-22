@@ -8,6 +8,7 @@ defmodule SwayWeb.UserSocket do
 
   ## Channels
   channel "workspace:*", SwayWeb.WorkspaceChannel
+  channel "user:*", SwayWeb.WorkspaceChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

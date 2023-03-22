@@ -5,6 +5,7 @@ defmodule Sway.Rooms do
 
   import Ecto.Query, warn: false
   alias Sway.Repo
+  alias Sway.Rooms.PrivateMember
 
   alias Sway.Rooms.Room
 
@@ -51,10 +52,23 @@ defmodule Sway.Rooms do
 
   def list_by_workspace_id(workspace_id) do
     from(r in Sway.Rooms.Room,
-        where: r.workspace_id == ^"#{workspace_id}",
-        order_by: r.id
-      )
-      |> Sway.Repo.all()
+      where: r.workspace_id == ^"#{workspace_id}",
+      where: r.is_private == false,
+      order_by: r.id
+    )
+    |> Sway.Repo.all()
+  end
+
+  def list_private_rooms_by_user_id(workspace_id, user_id) do
+    from(r in Room,
+      join: pm in PrivateMember,
+      on: r.id == pm.room_id,
+      where: r.workspace_id == ^workspace_id,
+      where: pm.user_id == ^user_id,
+      where: r.is_private == true,
+      select: r
+    )
+    |> Repo.all()
   end
 
   @doc """
@@ -76,19 +90,21 @@ defmodule Sway.Rooms do
   end
 
   def create_or_activate_room(attrs \\ %{}) do
-    existing = Repo.get_by(Room, workspace_id: attrs[:workspace_id], slug: attrs[:slug], is_active: false)
+    existing =
+      Repo.get_by(Room, workspace_id: attrs[:workspace_id], slug: attrs[:slug], is_active: false)
+
     case existing do
       nil ->
-	create_room(attrs)
+        create_room(attrs)
+
       room ->
-	update_room(room, %{ is_active: true })
+        update_room(room, %{is_active: true})
     end
   end
 
-
   def soft_delete_room(id) do
     room = get_room!(id)
-    update_room(room, %{ is_active: false })
+    update_room(room, %{is_active: false})
   end
 
   @doc """
@@ -136,5 +152,23 @@ defmodule Sway.Rooms do
   """
   def change_room(%Room{} = room, attrs \\ %{}) do
     Room.changeset(room, attrs)
+  end
+
+  def create_private_room_with_members(attrs, user_ids) do
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:room, Room.changeset(%Room{}, Map.put(attrs, :is_private, true)))
+    |> Ecto.Multi.run(:members, fn repo, %{room: room} ->
+      results = user_ids
+      |> Enum.map(fn user_id ->
+        Sway.Rooms.PrivateMember.changeset(%PrivateMember{}, %{
+          room_id: room.id,
+          user_id: user_id
+        })
+      end)
+      |> Enum.map(&repo.insert/1)
+
+      {:ok, results}
+    end)
+    |> Repo.transaction()
   end
 end

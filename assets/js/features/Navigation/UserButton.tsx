@@ -13,6 +13,7 @@ import { UserContextMenu } from 'components/UserContextMenu'
 
 interface Props {
   id: string
+  onClick: () => void
 }
 
 export function UserButton(props: Props) {
@@ -31,7 +32,7 @@ export function UserButton(props: Props) {
 
   return (
     <UserContextMenu user={user} status={status} tap={tap}>
-      <Container>
+      <Container onClick={() => props.onClick()}>
         <StatusIcon status={status} isOnline={isOnline} noEmoji />
         <Name online={isOnline}>{user?.name}</Name>
       </Container>

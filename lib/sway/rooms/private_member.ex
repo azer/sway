@@ -3,8 +3,8 @@ defmodule Sway.Rooms.PrivateMember do
   import Ecto.Changeset
 
   schema "private_room_members" do
-    field :room_id, :id
-    field :user_id, :id
+    belongs_to :room, Sway.Rooms.Room
+    belongs_to :user, Sway.Accounts.User
 
     timestamps()
   end
