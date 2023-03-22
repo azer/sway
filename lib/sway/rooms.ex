@@ -155,8 +155,15 @@ defmodule Sway.Rooms do
   end
 
   def create_private_room_with_members(attrs, user_ids) do
+    attrs = attrs
+    |> Map.put(:is_private, true)
+    |> Map.put(:slug, generate_private_room_slug(user_ids))
+
+    room = %Room{}
+    |> Room.changeset(Map.put(attrs, :is_private, true))
+
     Ecto.Multi.new()
-    |> Ecto.Multi.insert(:room, Room.changeset(%Room{}, Map.put(attrs, :is_private, true)))
+    |> Ecto.Multi.insert(:room, room)
     |> Ecto.Multi.run(:members, fn repo, %{room: room} ->
       results = user_ids
       |> Enum.map(fn user_id ->
@@ -171,4 +178,15 @@ defmodule Sway.Rooms do
     end)
     |> Repo.transaction()
   end
+
+  defp generate_private_room_slug(user_ids) do
+    user_ids
+    |> Enum.sort
+    |> Sway.Accounts.get_users_by_ids
+    |> Enum.map(&(&1.name))
+    |> Enum.join " "
+    |> Slug.slugify
+  end
+
+
 end
