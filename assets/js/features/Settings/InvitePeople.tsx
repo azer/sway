@@ -19,7 +19,7 @@ const emailDialogId = 'invite-email'
 const roleDialogId = 'invite-role'
 
 const log = logger('invite-people')
-const emailRegex = /^[0-9a-z-_\.\+]+@[a-z-_\.]+\.[a-z-_0-9]+$/
+const emailRegex = /^[0-9a-z-_\.\+]+@[a-z-_\.\d]+\.[a-z-_0-9]+$/
 
 export function useInvitePeople() {
   const dispatch = useDispatch()
