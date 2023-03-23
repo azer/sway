@@ -12,12 +12,12 @@ defmodule SwayWeb.AppController do
 
     render(conn, "app_home.html",
       jwt: jwt,
-      user: conn.assigns.current_user,
-      membership: membership,
-      workspace: workspace,
-      status: status,
-      rooms: rooms,
-      privateRooms: privateRooms,
+      user: SwayWeb.UserView.encode(conn.assigns.current_user),
+      membership: SwayWeb.MembershipView.encode(membership),
+      workspace: SwayWeb.WorkspaceView.encode(workspace),
+      status: SwayWeb.StatusView.encode(status),
+      rooms: Enum.map(rooms, fn r-> SwayWeb.RoomView.encode(r) end),
+      privateRooms: Enum.map(privateRooms, fn r -> SwayWeb.RoomView.encode(r) end),
       body_class: "app",
     )
   end
@@ -37,12 +37,12 @@ defmodule SwayWeb.AppController do
     # FIXME:
     # Change the room
     render(conn, "app_home.html",
-      user: conn.assigns.current_user,
-      membership: membership,
-      workspace: workspace,
-      status: status,
-      rooms: rooms,
-      privateRooms: privateRooms,
+      user: SwayWeb.UserView.encode(conn.assigns.current_user),
+      membership: SwayWeb.MembershipView.encode(membership),
+      workspace: SwayWeb.WorkspaceView.encode(workspace),
+      status: SwayWeb.StatusView.encode(status),
+      rooms: Enum.map(rooms, fn r-> SwayWeb.RoomView.encode(r) end),
+      privateRooms: Enum.map(privateRooms, fn r -> SwayWeb.RoomView.encode(r) end),
       body_class: "app",
       jwt: jwt,
       fake_state: false,

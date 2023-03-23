@@ -12,6 +12,10 @@ defmodule SwayWeb.InviteController do
   end
 
   def create(conn, %{"invite" => invite_params}) do
+    invite_params = invite_params
+    |> Map.put("created_by_id", SwayWeb.Hashing.decode_user(invite_params["created_by_id"]))
+    |> Map.put("workspace_id", SwayWeb.Hashing.decode_workspace(invite_params["workspace_id"]))
+
     cond do
       Sway.Accounts.get_user_by_email(invite_params["email"]) ->
         conn

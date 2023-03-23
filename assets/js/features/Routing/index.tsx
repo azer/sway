@@ -1,6 +1,5 @@
 import { useCommandPalette } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
-import { useRooms } from 'features/Room/use-rooms'
 import { logger } from 'lib/log'
 import React, { useEffect } from 'react'
 import {
@@ -37,6 +36,8 @@ function DefaultWorkspace(): JSX.Element {
     selectors.workspaces.getSelfWorkspace(state),
     selectors.rooms.getDefaultRoom(state),
   ])
+
+  log.info('Default workspace:', workspace, room)
 
   useEffect(() => {
     if (!workspace || !room) return

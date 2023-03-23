@@ -7,42 +7,35 @@
       jwt: "<%= @jwt %>",
     },
     focus: {
-      <%= if @status != nil do %>
       roomId: "<%= @status.room_id %>",
       workspaceId: "<%= @status.workspace_id %>",
-      <%= end %>
     },
     room: {
       userIdsByRoom: {},
       roomIdsByWorkspace: {
 	"<%= @workspace.id %>": [<%= raw(Enum.join(Enum.map(@rooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>],
-      },
-      privateRooms: [
-	  <%= raw(Enum.join(Enum.map(@privateRooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>
-      ]
+      }
     },
-    status: {
+    userStatusMap: {
       "<%= @status.user_id %>": "<%= @status.id %>"
     },
     entities: {
       workspaces: [
-	  <%= raw(Jason.encode!(render(SwayWeb.WorkspaceView, "workspace.json", workspace: @workspace))) %>
+	  <%= raw(Jason.encode!(@workspace)) %>
       ],
       memberships: [
-	  <%= raw(Jason.encode!(render(SwayWeb.MembershipView, "membership.json", membership: @membership))) %>
+	<%= raw(Jason.encode!(@membership)) %>
       ],
       users: [
-	<%= raw(Jason.encode!(render(SwayWeb.UserView, "user.json", user: @user))) %>
+	<%= raw(Jason.encode!(@user)) %>
+
       ],
       rooms: [
-	<%= for room <- @rooms do %>
-	  <%= raw(Jason.encode!(render(SwayWeb.RoomView, "room.json", room: room))) %>,
-	<%= end %>
+	  <%= for room <- @rooms do %><%= raw(Jason.encode!(room)) %>,
+<%= end %>
       ],
       statuses: [
-	  <%= if @status != nil do %>
-	  <%= raw(Jason.encode!(render(SwayWeb.StatusView, "status.json", status: @status))) %>,
-	  <%= end %>
+	  <%= if @status != nil do %><%= raw(Jason.encode!(@status)) %><%= end %>
       ]
     }
   }

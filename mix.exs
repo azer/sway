@@ -56,7 +56,8 @@ defmodule Sway.MixProject do
       {:guardian, "~> 2.0"},
       {:slugify, "~> 1.3"},
       {:mailgun, "~> 0.1.2"},
-      {:dotenv_parser, "~> 2.0"}
+      {:dotenv_parser, "~> 2.0"},
+      {:hashids, "~> 2.0"}
     ]
   end
 

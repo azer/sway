@@ -11,15 +11,19 @@ defmodule SwayWeb.RoomView do
   end
 
   def render("room.json", %{room: room}) do
+    encode room
+  end
+
+  def encode (room) do
     %{
-      id: room.id,
+      id: SwayWeb.Hashing.encode_room(room.id),
       name: room.name,
       slug: room.slug,
       is_default: room.is_default,
       is_active: room.is_active,
       is_private: room.is_private,
-      workspace_id: room.workspace_id,
-      user_id: room.user_id,
+      workspace_id: SwayWeb.Hashing.encode_workspace(room.workspace_id),
+      user_id: SwayWeb.Hashing.encode_user(room.user_id),
       inserted_at: room.inserted_at
     }
   end

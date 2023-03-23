@@ -11,13 +11,18 @@ defmodule SwayWeb.WorkspaceView do
   end
 
   def render("workspace.json", %{workspace: workspace}) do
+    encode(workspace)
+  end
+
+  def encode(workspace) do
     %{
-      id: workspace.id,
+      id: SwayWeb.Hashing.encode_workspace(workspace.id),
       name: workspace.name,
       slug: workspace.slug,
       domain: workspace.domain,
       is_active: workspace.is_active,
-      logo_url: workspace.logo_url
+      logo_url: workspace.logo_url,
+      inserted_at: workspace.inserted_at
     }
   end
 end

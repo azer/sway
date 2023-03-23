@@ -118,12 +118,13 @@ export function getRoomBySlug(
 export function getDefaultRoom(state: RootState): Room | undefined {
   const localWorkspaceId =
     selectors.memberships.getSelfMembership(state)?.workspace_id
+  const all = localWorkspaceId ? listAllRooms(state, localWorkspaceId) : []
 
-  return localWorkspaceId
-    ? listAllRooms(state, localWorkspaceId)
-        .map((id) => getRoomById(state, id))
-        .find((r) => r?.is_default)
-    : undefined
+  const defaultRoom = all
+    .map((id) => getRoomById(state, id))
+    .find((r) => r?.is_default)
+
+  return defaultRoom || all.length > 0 ? getRoomById(state, all[0]) : undefined
 }
 
 export function isFocusOnRoom(state: RootState): boolean {

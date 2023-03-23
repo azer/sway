@@ -11,11 +11,15 @@ defmodule SwayWeb.StatusView do
   end
 
   def render("status.json", %{status: status}) do
+    encode(status)
+  end
+
+  def encode(status) do
     %{
-      id: status.id,
-      user_id: status.user_id,
-      room_id: status.room_id,
-      workspace_id: status.workspace_id,
+      id: SwayWeb.Hashing.encode_status(status.id),
+      user_id: SwayWeb.Hashing.encode_user(status.user_id),
+      room_id: SwayWeb.Hashing.encode_room(status.room_id),
+      workspace_id: SwayWeb.Hashing.encode_workspace(status.workspace_id),
       status: status.status,
       message: status.message,
       camera_on: status.camera_on,

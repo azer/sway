@@ -16,7 +16,7 @@ interface State {
 
 export const initialState: State = {
   // @ts-ignore
-  userStatuses: window.initialState?.status || {},
+  userStatuses: window.initialState?.userStatusMap || {},
 }
 
 export const slice = createSlice({
@@ -29,10 +29,18 @@ export const slice = createSlice({
     ) => {
       state.userStatuses[action.payload.userId] = action.payload.statusId
     },
+    setStatusIdBatch: (
+      state,
+      action: PayloadAction<{ userId: string; statusId: string }[]>
+    ) => {
+      for (const row of action.payload) {
+        state.userStatuses[row.userId] = row.statusId
+      }
+    },
   },
 })
 
-export const { setStatusId } = slice.actions
+export const { setStatusId, setStatusIdBatch } = slice.actions
 export default slice.reducer
 
 export function tap(fromUserId: string) {

@@ -54,6 +54,7 @@ defmodule Sway.Rooms do
     from(r in Sway.Rooms.Room,
       where: r.workspace_id == ^"#{workspace_id}",
       where: r.is_private == false,
+      where: r.is_active == true,
       order_by: r.id
     )
     |> Sway.Repo.all()
@@ -184,7 +185,7 @@ defmodule Sway.Rooms do
     |> Enum.sort
     |> Sway.Accounts.get_users_by_ids
     |> Enum.map(&(&1.name))
-    |> Enum.join " "
+    |> Enum.join(" ")
     |> Slug.slugify
   end
 

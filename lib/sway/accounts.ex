@@ -60,6 +60,11 @@ defmodule Sway.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_users_by_ids(user_ids) do
+    from(u in User, where: u.id in ^user_ids)
+    |> Repo.all()
+  end
+
   ## User registration
 
   @doc """

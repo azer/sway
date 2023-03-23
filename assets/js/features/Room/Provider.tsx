@@ -14,8 +14,11 @@ import {
   addBatch,
   Membership,
   Memberships,
+  Status,
+  Statuses,
   toStateEntity,
 } from 'state/entities'
+import { setStatusIdBatch } from 'features/Presence/slice'
 
 const log = logger('room/provider')
 
@@ -44,10 +47,12 @@ export function RoomNavigationProvider(props: Props) {
 
     channel
       .push('workspace:list_online_users', { workspace_id: workspace?.id })
-      .receive('ok', (resp: { [roomId: string]: string[] }) => {
-        log.info('Set online users by rooms', resp)
-        dispatch(setAllRoomUserIds(resp))
+      .receive('ok', syncOnlineUserStatuses)
+      .receive('error', (error) => {
+        log.error('Can not list online users', error)
       })
+
+    log.info('list workspace memberships')
 
     channel
       .push('workspace:list_workspace_memberships', {
@@ -65,6 +70,9 @@ export function RoomNavigationProvider(props: Props) {
           )
         )
       })
+      .receive('error', (error) => {
+        log.error('Can not list workspace memberships', error)
+      })
   }, [channel, workspace, navigator.onLine])
 
   useEffect(() => {
@@ -74,10 +82,7 @@ export function RoomNavigationProvider(props: Props) {
 
   useEffect(() => {
     if (!channel) return
-    channel.on('workspace:sync_users', (resp) => {
-      log.info('Sync workspace users', resp)
-      dispatch(setAllRoomUserIds(resp))
-    })
+    channel.on('workspace:sync_online_user_statuses', syncOnlineUserStatuses)
   }, [channel])
 
   useEffect(() => {
@@ -119,5 +124,37 @@ export function RoomNavigationProvider(props: Props) {
         })
       )
     }
+  }
+
+  function syncOnlineUserStatuses(resp: { statuses: Status[] }) {
+    const list = resp.statuses
+
+    log.info('Sync online user statuses', list)
+
+    const userRoomMap: { [id: string]: string[] } = {}
+    const userStatusMap: { userId: string; statusId: string }[] = list.map(
+      (s) => ({ userId: s.user_id, statusId: s.id })
+    )
+
+    for (const status of list) {
+      if (userRoomMap[status.room_id]) {
+        userRoomMap[status.room_id].push(status.user_id)
+      } else {
+        userRoomMap[status.room_id] = [status.user_id]
+      }
+    }
+
+    dispatch(
+      addBatch(
+        list.map((s) => ({
+          id: s.id,
+          table: Statuses,
+          record: toStateEntity(Statuses, s),
+        }))
+      )
+    )
+
+    dispatch(setAllRoomUserIds(userRoomMap))
+    dispatch(setStatusIdBatch(userStatusMap))
   }
 }

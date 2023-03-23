@@ -119,4 +119,5 @@ defmodule Sway.Statuses do
   def change_status(%Status{} = status, attrs \\ %{}) do
     Status.changeset(status, attrs)
   end
+
 end

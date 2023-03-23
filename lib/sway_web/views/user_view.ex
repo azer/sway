@@ -11,11 +11,16 @@ defmodule SwayWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
+    encode(user)
+  end
+
+  def encode(user) do
     %{
-      id: user.id,
+      id: SwayWeb.Hashing.encode_user(user.id),
       email: user.email,
       name: user.name,
-      profile_photo_url: user.profile_photo_url
+      profile_photo_url: user.profile_photo_url,
+      inserted_at: user.inserted_at
     }
   end
 end
