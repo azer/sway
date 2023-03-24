@@ -13,6 +13,7 @@ import { UserContextMenu } from 'components/UserContextMenu'
 
 interface Props {
   id: string
+  selected?: boolean
   onClick: () => void
 }
 
@@ -32,7 +33,7 @@ export function UserButton(props: Props) {
 
   return (
     <UserContextMenu user={user} status={status} tap={tap}>
-      <Container onClick={() => props.onClick()}>
+      <Container onClick={props.onClick} selected={props.selected}>
         <StatusIcon status={status} isOnline={isOnline} noEmoji />
         <Name online={isOnline}>{user?.name}</Name>
       </Container>
@@ -43,9 +44,29 @@ export function UserButton(props: Props) {
 }
 
 const Container = styled('div', {
-  unitHeight: 8,
+  height: '32px',
   vcenter: true,
   gap: '6px',
+  position: 'relative',
+  variants: {
+    selected: {
+      true: {
+        [`&::before`]: {
+          background: '$navigationFocusBg',
+          content: ' ',
+          position: 'absolute',
+          top: '0',
+          left: '-10px',
+          width: 'calc(100% + 20px)',
+          round: 'small',
+          height: '100%',
+        },
+        fontWeight: '$medium',
+        color: '$navigationFocusFg',
+        letterSpacing: '-0.06px',
+      },
+    },
+  },
   [`& ${StyledStatusIcon}`]: {
     alignItems: 'start',
   },

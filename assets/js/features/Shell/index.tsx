@@ -8,6 +8,7 @@ import { Titlebar } from 'features/Titlebar'
 import { globalCss } from '@stitches/react'
 import { isElectron } from 'lib/electron'
 import { notifications } from 'lib/notifications'
+import Sidebar from 'features/Sidebar'
 
 interface Props {
   children?: React.ReactNode
@@ -24,11 +25,14 @@ export function Shell(props: Props) {
 
   return (
     <Viewport electron={isElectron}>
-      {isElectron ? <Titlebar /> : null}
-      <Container electron={isElectron} status={localStatus.status}>
-        <Navigation />
-        {props.children}
-      </Container>
+      <Navigation />
+      <Main>
+        <Titlebar />
+        <Container electron={isElectron} status={localStatus.status}>
+          <Middle>{props.children}</Middle>
+          <Sidebar />
+        </Container>
+      </Main>
     </Viewport>
   )
 }
@@ -50,39 +54,41 @@ const bottomBlurEffect = (color: string) =>
 const Viewport = styled('div', {
   width: '100vw',
   minHeight: '100vh',
+  display: 'flex',
   backgroundColor: '$shellBg',
+  backgroundImage: `${navigationBlur1}, radial-gradient(1000px at 500px -700px, $shellBlur1, transparent)`,
+})
+
+const Container = styled('main', {
+  flex: '1',
+  minHeight: 'calc(100vh - 48px)',
+  color: '$shellFg',
+  display: 'flex',
+  overflow: 'hidden',
   variants: {
     electron: {
-      true: {
-        backgroundImage: `${navigationBlur1}, radial-gradient(1000px at 500px -700px, $shellBlur1, transparent)`,
+      true: {},
+    },
+    status: {
+      [PresenceStatus.Online]: {
+        //backgroundImage: `${bottomBlurEffect('$presenceModelineSocialBlur')}`,
+      },
+      [PresenceStatus.Zen]: {
+        //backgroundImage: `${bottomBlurEffect('$presenceModelineZenBlur')}`,
+      },
+      [PresenceStatus.Focus]: {
+        //backgroundImage: `${bottomBlurEffect('$presenceModelineFocusBlur')}`,
       },
     },
   },
 })
 
-const Container = styled('main', {
-  width: '100vw',
-  minHeight: '100vh',
-  color: '$shellFg',
-  display: 'grid',
-  gridTemplateColumns: '220px auto',
-  overflow: 'hidden',
-  variants: {
-    electron: {
-      true: {
-        minHeight: 'calc(100vh - 48px)',
-      },
-    },
-    status: {
-      [PresenceStatus.Online]: {
-        backgroundImage: `${bottomBlurEffect('$presenceModelineSocialBlur')}`,
-      },
-      [PresenceStatus.Zen]: {
-        backgroundImage: `${bottomBlurEffect('$presenceModelineZenBlur')}`,
-      },
-      [PresenceStatus.Focus]: {
-        backgroundImage: `${bottomBlurEffect('$presenceModelineFocusBlur')}`,
-      },
-    },
-  },
+const Middle = styled('div', {
+  flex: '1',
+  height: '100%',
+  padding: '12px',
+})
+
+const Main = styled('main', {
+  flex: '1',
 })

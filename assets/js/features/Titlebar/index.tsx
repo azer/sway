@@ -1,46 +1,30 @@
 import { styled } from 'themes'
 import React from 'react'
 import selectors from 'selectors'
-import { Avatar } from 'components/Avatar'
 import { useSelector } from 'state'
-import { topBlurEffect } from 'features/Room'
 import { RoomButton, RoomName, RoomButtonBg } from 'features/Room/RoomButton'
 import { Tooltip } from 'components/Tooltip'
+import { SidebarHeader } from 'features/Sidebar/Header'
+import { isElectron } from 'lib/electron'
 
 interface Props {}
 
 export function Titlebar(props: Props) {
   // const dispatch = useDispatch()
-  const [workspace, room] = useSelector((state) => [
+  const [workspace, room, sidebarOpen] = useSelector((state) => [
     selectors.workspaces.getSelfWorkspace(state),
     selectors.rooms.getFocusedRoom(state),
+    selectors.sidebar.isOpen(state),
   ])
 
   return (
     <Container>
-      <TrafficLights>
-        <TrafficLight />
-        <TrafficLight />
-        <TrafficLight />
-        <Separator />
-      </TrafficLights>
-      <Left>
-        <Workspace>
-          <Avatar
-            src={workspace?.logoUrl || ''}
-            fallback={workspace?.name[0] || ''}
-          />
-          <Tooltip content="Your workspace">
-            <WorkspaceName>{workspace?.name}</WorkspaceName>
-          </Tooltip>
-        </Workspace>
-        <Separator />
-      </Left>
       <Right>
         <Room>
           <RoomButton roomId={room?.id || ''} />
         </Room>
       </Right>
+      <SidebarHeader />
     </Container>
   )
 }
@@ -48,7 +32,6 @@ export function Titlebar(props: Props) {
 const Container = styled('div', {
   width: '100%',
   height: '48px',
-  borderBottom: '1px solid $shellBorderColor',
   display: 'grid',
   gridTemplateColumns: '100px auto',
   vcenter: true,
@@ -58,33 +41,9 @@ const Container = styled('div', {
 const Separator = styled('div', {
   position: 'absolute',
   right: '0',
-  top: '20%',
-  height: '60%',
+  height: '100%',
   width: '1px',
   background: '$shellBorderColor',
-})
-
-const TrafficLights = styled('div', {
-  position: 'relative',
-  display: 'flex',
-  height: '100%',
-  gap: '8px',
-  padding: '14px 13px 0 13px',
-})
-
-const TrafficLight = styled('div', {
-  '-webkit-app-region': 'no-drag',
-  position: 'relative',
-  'border-radius': '50%',
-  width: '12px',
-  height: '12px',
-  border: '1px solid rgba(255,255,255,.15)',
-})
-
-const Left = styled('div', {
-  position: 'relative',
-  display: 'flex',
-  height: '100%',
 })
 
 const Workspace = styled('div', {
@@ -107,9 +66,10 @@ const WorkspaceName = styled('div', {
 
 const Right = styled('div', {
   display: 'flex',
-  width: 'auto',
+  flex: 1,
   height: '100%',
   padding: '0 12px',
+  borderBottom: '1px solid $shellBorderColor',
 })
 
 const Room = styled('div', {

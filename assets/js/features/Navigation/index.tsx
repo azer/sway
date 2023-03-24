@@ -1,7 +1,7 @@
 import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
-import { useSelector } from 'state'
+import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
 import { RoomButton } from './RoomButton'
 import { UserButton } from './UserButton'
@@ -10,12 +10,14 @@ import { RoomNavigationProvider } from 'features/Room/Provider'
 import { useInvitePeople } from 'features/Settings/InvitePeople'
 import { isElectron } from 'lib/electron'
 import { useUserSocket } from 'features/UserSocket'
+import { openUserSidebar } from 'features/Sidebar/slice'
 
 interface Props {}
 
 const log = logger('navigation')
 
 export function Navigation(props: Props) {
+  const dispatch = useDispatch()
   const inviteModal = useInvitePeople()
   const socket = useUserSocket()
 
@@ -26,6 +28,7 @@ export function Navigation(props: Props) {
     allUsers,
     prevRoom,
     localUserId,
+    userIdOnSidebar,
   ] = useSelector((state) => {
     const workspace = selectors.workspaces.getSelfWorkspace(state)
 
@@ -41,6 +44,7 @@ export function Navigation(props: Props) {
         : [],
       selectors.rooms.getPrevRoom(state),
       selectors.session.getUserId(state),
+      selectors.sidebar.getFocusedUserId(state),
     ]
   })
 
@@ -54,7 +58,14 @@ export function Navigation(props: Props) {
   }, [workspace, focusedRoom?.is_active, !!prevRoom])
 
   return (
-    <Container electron={isElectron}>
+    <Container>
+      {isElectron ? (
+        <TrafficLights>
+          <TrafficLight />
+          <TrafficLight />
+          <TrafficLight />
+        </TrafficLights>
+      ) : null}
       <Header electron={isElectron}>
         {workspace?.logoUrl ? (
           <ImageLogo src={workspace?.logoUrl || ''} />
@@ -83,13 +94,8 @@ export function Navigation(props: Props) {
           <UserButton
             key={uid}
             id={uid}
-            onClick={() =>
-              localUserId &&
-              createPrivateRoom(localUserId, workspace?.id || '', [
-                localUserId,
-                uid,
-              ])
-            }
+            onClick={() => dispatch(openUserSidebar(uid))}
+            selected={userIdOnSidebar === uid}
           />
         ))}
       </Rooms>
@@ -152,14 +158,7 @@ const Container = styled('nav', {
   borderRight: '1px solid $shellBorderColor',
   width: '220px',
   color: '$navigationFg',
-  background: `${navigationBlur1}, ${navigationBlur2}`,
-  variants: {
-    electron: {
-      true: {
-        background: `${navigationBlur2}`,
-      },
-    },
-  },
+  background: `${navigationBlur2}`,
 })
 
 const Header = styled('header', {
@@ -173,10 +172,28 @@ const Header = styled('header', {
   variants: {
     electron: {
       true: {
-        display: 'none',
+        height: 'auto',
+        marginBottom: '32px',
       },
     },
   },
+})
+
+const TrafficLights = styled('div', {
+  position: 'relative',
+  display: 'flex',
+  height: '48px',
+  gap: '8px',
+  padding: '18px 13px 0 13px',
+})
+
+const TrafficLight = styled('div', {
+  '-webkit-app-region': 'no-drag',
+  position: 'relative',
+  'border-radius': '50%',
+  width: '12px',
+  height: '12px',
+  border: '1px solid rgba(255,255,255,.15)',
 })
 
 const ImageLogo = styled('img', {

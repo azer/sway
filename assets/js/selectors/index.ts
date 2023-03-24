@@ -12,6 +12,7 @@ import * as presence from 'features/Presence/selectors'
 import * as electronTray from 'features/ElectronTray/selectors'
 import * as commandPalette from 'features/CommandPalette/selectors'
 import * as taps from 'features/Tap/selectors'
+import * as sidebar from 'features/Sidebar/selectors'
 
 export default {
   session,
@@ -28,4 +29,5 @@ export default {
   electronTray,
   commandPalette,
   taps,
+  sidebar,
 }

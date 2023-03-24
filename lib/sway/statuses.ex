@@ -55,6 +55,15 @@ defmodule Sway.Statuses do
     end
   end
 
+  def get_updates_by_user(user_id) do
+    query =
+      from s in Status,
+          where: s.user_id == ^user_id and (s.message != "" or s.emoji != ""),
+          order_by: [desc: s.inserted_at]
+
+    Repo.all(query)
+  end
+
   @doc """
   Creates a status.
 

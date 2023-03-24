@@ -88,11 +88,6 @@ export function RoomPage(props: Props) {
       activeOnElectron={isElectron && isLocalActive}
     >
       <ScreenshareProvider />
-      {!isElectron ? (
-        <Header>
-          <RoomButton roomId={props.id} />
-        </Header>
-      ) : null}
       <Top isLocalActive={isLocalActive}>
         {localUserId && isLocalActive ? (
           <Participant userId={localUserId} />
@@ -112,7 +107,7 @@ export function RoomPage(props: Props) {
             showScreen
           />
         ) : !focusedUserId && mainParticipants.length ? (
-          <CallTile ids={mainParticipants} tap={presence.tap} />
+          <CallTile ids={mainParticipants} />
         ) : null}
       </Middle>
       <Bottom>
@@ -127,13 +122,12 @@ export const topBlurEffect =
 
 const Container = styled('main', {
   width: '100%',
-  height: '100vh',
-  //display: 'flex',
-  //flexDirection: 'column',
+  //height: '100vh',
+  height: 'calc(100vh - 48px)',
   display: 'grid',
-  gridTemplateRows: '48px 86px auto 72px',
+  gridTemplateRows: '86px auto 72px',
   gap: '12px',
-  backgroundImage: topBlurEffect,
+  //backgroundImage: topBlurEffect,
   variants: {
     isLocalActive: {
       true: {

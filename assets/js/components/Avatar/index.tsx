@@ -9,11 +9,14 @@ interface Props {
   alt?: string
   src?: string
   fallback: string
+  fontSize?: string
 }
 
 export function Avatar(props: Props) {
+  const css = { fontSize: props.fontSize }
+
   return (
-    <AvatarRoot>
+    <AvatarRoot css={css}>
       <StyledImage src={props.src} alt={props.alt} />
       <Fallback>{initials(props.fallback)}</Fallback>
     </AvatarRoot>
@@ -27,7 +30,7 @@ export const AvatarRoot = styled(Root, {
   userSelect: 'none',
   height: '20px',
   aspectRatio: '1',
-  fontSize: '12px',
+  fontSize: '$small',
   color: '$white',
   fontWeight: '500',
   'border-radius': '30%',

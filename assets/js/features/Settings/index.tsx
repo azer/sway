@@ -33,7 +33,6 @@ export function useSettings() {
   const speakerSettings = useSpeakerSettings()
   const pushToTalkSettings = usePushToTalkSettings()
   const backgroundBlur = useBackgroundBlurSettings()
-  const presenceSettings = usePresenceSettings()
   const invitePeople = useInvitePeople()
 
   const callSyncDevices = debounce(() => {
@@ -57,7 +56,6 @@ export function useSettings() {
     currentSpeakerLabel,
     pushToTalkVideo,
     backgroundBlurLabel,
-    presenceSettingsLabel,
   ] = useSelector((state) => [
     selectors.settings.getVideoInputDeviceLabelById(
       state,
@@ -73,7 +71,6 @@ export function useSettings() {
     ),
     selectors.settings.isPushToTalkVideoOn(state),
     selectors.settings.getBackgroundBlurLabel(state),
-    selectors.presence.getLocalPresenceLabel(state),
   ])
 
   useEffect(() => {
@@ -144,13 +141,6 @@ export function useSettings() {
         name: 'Background Blur',
         hint: backgroundBlurLabel,
         palette: backgroundBlur,
-      },
-      {
-        id: 'presence-settings',
-        icon: 'livestream',
-        name: 'Presence',
-        hint: presenceSettingsLabel,
-        palette: presenceSettings,
       },
       {
         id: 'back',

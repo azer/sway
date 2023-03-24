@@ -255,9 +255,21 @@ defmodule SwayWeb.WorkspaceChannel do
   end
 
   def handle_in("user:status", %{"message" => message, "workspace_id" => encoded_workspace_id}, socket) do
-    status = Sway.Statuses.get_latest_status(socket.assigns.user, SwayWeb.Hashing.decode_workspace(encoded_workspace_id))
+    last = Sway.Statuses.get_latest_status(socket.assigns.user, SwayWeb.Hashing.decode_workspace(encoded_workspace_id))
+    next = %{
+      message: message,
+      status: last.status,
+      emoji: last.emoji,
+      room_id: last.room_id,
+      user_id: last.user_id,
+      workspace_id: last.workspace_id,
+      timezone: last.timezone,
+      camera_on: last.camera_on,
+      mic_on: last.mic_on,
+      speaker_on: last.speaker_on,
+    }
 
-    case Sway.Statuses.update_status(status, %{message: message}) do
+    case Sway.Statuses.create_status(next) do
       {:ok, status} ->
         broadcast(socket, "user:status", status_broadcastable(status))
         {:noreply, socket}
@@ -348,50 +360,19 @@ defmodule SwayWeb.WorkspaceChannel do
   end
 
   def room_broadcastable(room) do
-    %{
-      "id" => SwayWeb.Hashing.encode_room(room.id),
-      "name" => room.name,
-      "slug" => room.slug,
-      "is_default" => room.is_default,
-      "is_active" => room.is_active,
-      "user_id" => SwayWeb.Hashing.encode_user(room.user_id),
-      "inserted_at" => room.inserted_at
-    }
+    SwayWeb.RoomView.encode(room)
   end
 
   def user_broadcastable(user) do
-    %{
-      "id" => SwayWeb.Hashing.encode_user(user.id),
-      "name" => user.name,
-      "email" => user.email,
-      "profile_photo_url" => user.profile_photo_url
-    }
+    SwayWeb.UserView.encode(user)
   end
 
   def status_broadcastable(status) do
-    %{
-      "id" => SwayWeb.Hashing.encode_status(status.id),
-      "room_id" => SwayWeb.Hashing.encode_room(status.room_id),
-      "user_id" => SwayWeb.Hashing.encode_user(status.user_id),
-      "message" => status.message,
-      "camera_on" => status.camera_on,
-      "mic_on" => status.mic_on,
-      "speaker_on" => status.speaker_on,
-      "status" => status.status,
-      "emoji" => status.emoji,
-      "workspace_id" => SwayWeb.Hashing.encode_workspace(status.workspace_id),
-      "inserted_at" => status.inserted_at
-    }
+    SwayWeb.StatusView.encode(status)
   end
 
   def membership_broadcastable(membership) do
-    %{
-      "id" => SwayWeb.Hashing.encode_membership(membership.id),
-      "user_id" => SwayWeb.Hashing.encode_user(membership.user_id),
-      "workspace_id" => SwayWeb.Hashing.encode_workspace(membership.workspace_id),
-      "is_admin" => membership.is_admin,
-      "inserted_at" => membership.inserted_at
-    }
+    SwayWeb.MembershipView.encode(membership)
   end
 
   def error_broadcastable({field, value}) do

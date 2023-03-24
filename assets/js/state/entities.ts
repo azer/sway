@@ -166,6 +166,7 @@ export function toStateEntity(table: Table, record: any): Entity {
       room_id: String(record.room_id),
       user_id: String(record.user_id),
       workspace_id: String(record.workspace_id),
+      inserted_at: new Date(record.inserted_at),
     }
   }
 

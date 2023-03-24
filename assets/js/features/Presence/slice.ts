@@ -12,11 +12,13 @@ const log = logger('presence/slice')
 
 interface State {
   userStatuses: { [userId: string]: string }
+  statusUpdates: { [userId: string]: string[] }
 }
 
 export const initialState: State = {
   // @ts-ignore
   userStatuses: window.initialState?.userStatusMap || {},
+  statusUpdates: {},
 }
 
 export const slice = createSlice({
@@ -37,10 +39,16 @@ export const slice = createSlice({
         state.userStatuses[row.userId] = row.statusId
       }
     },
+    addStatusUpdates: (
+      state,
+      action: PayloadAction<{ userId: string; updates: string[] }>
+    ) => {
+      state.statusUpdates[action.payload.userId] = action.payload.updates
+    },
   },
 })
 
-export const { setStatusId, setStatusIdBatch } = slice.actions
+export const { setStatusId, setStatusIdBatch, addStatusUpdates } = slice.actions
 export default slice.reducer
 
 export function tap(fromUserId: string) {

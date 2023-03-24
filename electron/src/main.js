@@ -144,7 +144,7 @@ function createMainWindow() {
     width: 800,
     height: 650,
     title: "Sway",
-    trafficLightPosition: { x: 12, y: 12 },
+    trafficLightPosition: { x: 12, y: 16 },
     titleBarStyle: "customButtonsOnHover",
     transparent: true,
     icon: "file:///" + __dirname + "/../priv/static/images/logo.ico",

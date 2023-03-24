@@ -26,9 +26,13 @@ export function UserHeader(props: Props) {
           {firstName(props.user?.name || '')}
           {props.status?.emoji ? <Emoji id={props.status.emoji} /> : null}
         </Name>
-        <Status>{props.status ? props.status?.message || findModeByStatus(props.status.status)?.label : ''}</Status>
+        <Status>
+          {props.status
+            ? props.status?.message ||
+              findModeByStatus(props.status.status)?.label
+            : ''}
+        </Status>
       </Right>
-
     </Container>
   )
 }
@@ -41,14 +45,13 @@ const Container = styled('div', {
   gap: '8px',
   position: 'relative',
   [`& ${AvatarRoot}`]: {
-
-    height: '100%'
+    height: '100%',
   },
   [`& ${StyledStatusIcon}`]: {
     position: 'absolute',
     top: '36px',
-    left: '36px'
-  }
+    left: '36px',
+  },
 })
 
 const EmojiColumn = styled('div', {
@@ -62,10 +65,10 @@ const EmojiColumn = styled('div', {
   variants: {
     empty: {
       true: {
-        width: '8px'
-      }
-    }
-  }
+        width: '8px',
+      },
+    },
+  },
 })
 
 const Right = styled('div', {
@@ -73,7 +76,7 @@ const Right = styled('div', {
   flexDirection: 'column',
   gap: '4px',
   justifyContent: 'center',
-  label: true
+  label: true,
 })
 
 const Name = styled('div', {
@@ -87,14 +90,13 @@ const Name = styled('div', {
       position: 'absolute',
       bottom: '-3px',
       left: '2px',
-      fontSize: '16px'
-    }
-  }
+      fontSize: '16px',
+    },
+  },
 })
 
 const Status = styled('div', {
   color: 'rgba(225, 232, 240, 0.5)',
   fontSize: '$small',
-
 })
 //const  = styled('div', {})

@@ -152,6 +152,7 @@ export const utils = {
   ellipsis: () => {
     return {
       overflowX: 'hidden',
+      overflowY: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
     }

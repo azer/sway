@@ -19,8 +19,7 @@ interface Props {
 export function RoomButton(props: Props) {
   const navigate = useNavigate()
 
-  const [workspace, room, usersInRoom, roomStatus] = useSelector((state) => [
-    selectors.workspaces.getSelfWorkspace(state),
+  const [room, usersInRoom, roomStatus] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.id),
     selectors.rooms.getUsersInRoom(state, props.id),
     selectors.rooms.getRoomStatus(state, props.id),

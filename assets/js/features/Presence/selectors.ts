@@ -1,6 +1,7 @@
 import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 import selectors from 'selectors'
 import { RootState } from 'state'
+import { Status } from 'state/entities'
 import { findModeByStatus } from 'state/presence'
 
 export function isUserActive(state: RootState, userId: string): boolean {
@@ -12,11 +13,17 @@ export function isLocalUserActive(state: RootState): boolean {
   return isUserActive(state, selectors.users.getSelf(state)?.id || '')
 }
 
-export function getLocalPresenceIcon(state: RootState): string {
-  return getPresenceIconByUserId(
-    state,
-    selectors.users.getSelf(state)?.id || ''
-  )
+export function getPresenceLabelByUserId(
+  state: RootState,
+  userId: string
+): string {
+  const status = selectors.statuses.getByUserId(state, userId)
+  const isOnline = isUserOnline(state, userId)
+  if (!isOnline) {
+    return 'Offline'
+  }
+
+  return findModeByStatus(status.status)?.label || ''
 }
 
 export function getPresenceIconByUserId(
@@ -34,7 +41,16 @@ export function getPresenceIconByUserId(
   )
 }
 
-export function getLocalPresenceLabel(state: RootState): string {
+export function getUserUpdatesByUserId(
+  state: RootState,
+  userId: string
+): Status[] {
+  return (state.presence.statusUpdates[userId] || [])
+    .map((id) => selectors.statuses.getById(state, id))
+    .filter((u) => !!u) as Status[]
+}
+
+/*export function getLocalPresenceLabel(state: RootState): string {
   return getPresenceLabelByUserId(
     state,
     selectors.users.getSelf(state)?.id || ''
@@ -54,7 +70,7 @@ export function getPresenceLabelByUserId(
     findModeByStatus(selectors.statuses.getByUserId(state, userId).status)
       ?.label || ''
   )
-}
+}*/
 
 export function isSpaceButtonEnabled(state: RootState): boolean {
   return (
