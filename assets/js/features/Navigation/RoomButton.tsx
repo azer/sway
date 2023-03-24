@@ -56,6 +56,9 @@ const Container = styled('div', {
   space: { inner: [2, 3], outer: [0, -3] },
   color: '$navigationFg',
   round: 'small',
+  [`& ${RoomStatusIcon}`]: {
+    marginTop: '2px',
+  },
   variants: {
     selected: {
       true: {

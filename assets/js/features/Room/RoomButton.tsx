@@ -113,6 +113,7 @@ export function RoomButton(props: Props) {
             )
           }
         />
+        p
         <Dropdown.Item
           icon="trash"
           label={'Delete #' + room?.name}
@@ -381,7 +382,7 @@ const Container = styled('div', {
     background: 'rgba(220, 230, 255, 0.1)',
   },
   [`& ${RoomStatusIcon}`]: {
-    marginTop: '4px',
+    marginTop: '2.5px',
   },
 })
 
