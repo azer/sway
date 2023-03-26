@@ -5,7 +5,7 @@ import selectors from 'selectors'
 import { SidebarHeader } from './Header'
 import { useSelector, useDispatch } from 'state'
 import { SidebarContent } from './focus'
-import UserSidebar from './UserSidebar'
+import { UserSidebar } from './UserSidebar'
 
 interface Props {}
 

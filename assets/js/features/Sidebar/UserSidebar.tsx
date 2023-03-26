@@ -1,21 +1,31 @@
 import { styled } from 'themes'
-import React from 'react'
+import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import { UserHeader } from 'components/UserHeader'
 import { Avatar, AvatarRoot } from 'components/Avatar'
 import { Emoji } from 'components/Emoji'
 import { getLocalTime, relativeDate } from 'lib/datetime'
-import { findModeByStatus } from 'state/presence'
+import { findModeByStatus, PresenceStatus } from 'state/presence'
 import { StatusIcon } from 'features/Dock/StatusIcon'
 import Icon from 'components/Icon'
+import { logger } from 'lib/log'
+import { GET } from 'lib/api'
+import { setStatusUpdates } from 'features/Presence/slice'
+import { addBatch, Status, Statuses, toStateEntity } from 'state/entities'
+import { usePresence } from 'features/Presence/use-presence'
+import { setStatusHook } from 'features/Tap/slice'
 
 interface Props {}
 
-export default function (props: Props) {
-  // const dispatch = useDispatch()
-  const [user, updates, status, statusLabel, isOnline, room] = useSelector(
-    (state) => {
+const log = logger('sidebar/user-sidebar')
+
+export function UserSidebar(props: Props) {
+  const dispatch = useDispatch()
+  const presence = usePresence()
+
+  const [user, updates, status, statusLabel, isOnline, room, existingHook] =
+    useSelector((state) => {
       const userId = selectors.sidebar.getFocusedUserId(state)
       if (!userId) return [undefined, []]
 
@@ -23,14 +33,41 @@ export default function (props: Props) {
 
       return [
         selectors.users.getById(state, userId),
-        status ? [status] : [],
+        selectors.presence.getUserUpdatesByUserId(state, userId),
         status,
         selectors.presence.getPresenceLabelByUserId(state, userId),
         selectors.presence.isUserOnline(state, userId),
         selectors.rooms.getRoomById(state, status.room_id),
+        selectors.taps.getStatusHookByUserId(state, userId),
       ]
-    }
-  )
+    })
+
+  useEffect(() => {
+    if (!user) return
+
+    GET<{ data: Status[] }>(`/api/users/${user.id}/updates`)
+      .then((response) => {
+        dispatch(
+          addBatch(
+            response.data.map((d) => ({
+              table: Statuses,
+              id: d.id,
+              record: toStateEntity(Statuses, status),
+            }))
+          )
+        )
+
+        dispatch(
+          setStatusUpdates({
+            userId: user.id,
+            updates: response.data.map((d) => d.id),
+          })
+        )
+      })
+      .catch((err) => {
+        log.error('Can not fetch updates', err)
+      })
+  }, [user?.id])
 
   return (
     <Container>
@@ -69,34 +106,55 @@ export default function (props: Props) {
           <Icon name="users" />
           1:1 Room
         </Button>
-        <Button>
+        <Button onClick={() => user?.id && presence.tap(user.id)}>
           <Emoji id="wave" />
           Tap
         </Button>
-        <Button>
-          <Icon name="bell" />
+        <Button
+          onClick={() => user && createStatusHook(user.id, status?.status)}
+        >
+          <Icon name={existingHook ? 'checkmark' : 'bell'} />
           Notify when available
         </Button>
       </Buttons>
-
       {updates.length > 0 ? <Title>Updates</Title> : null}
-      {updates
-        .filter((u) => u?.message)
-        .map((u) => (
-          <Update>
-            {status?.emoji ? <Emoji id={u.emoji} /> : null}
-            <Message>
-              {u?.message}
-              <Time>{u ? relativeDate(u?.inserted_at) : ''}</Time>
-            </Message>
-          </Update>
-        ))}
+      {updates.length > 0 ? (
+        <Updates>
+          {updates
+            .filter((u) => u?.message)
+            .map((u) => (
+              <Update key={u.id}>
+                {status?.emoji ? <Emoji id={u.emoji} /> : null}
+                <Message>
+                  {u?.message}
+                  <Time>{u ? relativeDate(new Date(u?.inserted_at)) : ''}</Time>
+                </Message>
+              </Update>
+            ))}
+        </Updates>
+      ) : null}
     </Container>
   )
+
+  function createStatusHook(userId: string, status: PresenceStatus) {
+    dispatch(
+      setStatusHook({
+        userId,
+        whenPresentAs:
+          status !== PresenceStatus?.Online
+            ? PresenceStatus?.Online
+            : undefined,
+        whenActive: status === PresenceStatus?.Online,
+      })
+    )
+  }
 }
 
 const Container = styled('div', {
   padding: '32px',
+  display: 'flex',
+  flexDirection: 'column',
+  height: 'calc(100vh - 48px)',
 })
 
 const CardGrid = styled('div', {
@@ -142,7 +200,7 @@ const Table = styled('div', {
   gridRowGap: '12px',
   gridColumnGap: '16px',
   width: '100%',
-  margin: '32px 0',
+  margin: '24px 0',
   fontSize: '13px',
 })
 
@@ -173,33 +231,10 @@ const Title = styled('h1', {
   label: true,
 })
 
-const Update = styled('div', {
-  display: 'flex',
-  fontSize: '$small',
-  gap: '6px',
-  [`& em-emoji`]: {
-    fontSize: '18px',
-  },
-})
-
-const Time = styled('div', {
-  marginTop: '4px',
-  color: 'rgba(235,  240, 255, 0.5)',
-  label: true,
-  '&:first-letter': {
-    textTransform: 'uppercase',
-  },
-})
-
-const Message = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-})
-
 const Buttons = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  gap: '12px',
+  gap: '6px',
 })
 
 const Button = styled('div', {
@@ -237,4 +272,36 @@ const Button = styled('div', {
       opacity: '1',
     },
   },
+})
+
+const Updates = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
+  flexGrow: '1',
+  overflowX: 'hidden',
+  overflowY: 'scroll',
+})
+
+const Update = styled('div', {
+  display: 'flex',
+  fontSize: '$small',
+  gap: '6px',
+  [`& em-emoji`]: {
+    fontSize: '18px',
+  },
+})
+
+const Time = styled('div', {
+  marginTop: '4px',
+  color: 'rgba(235,  240, 255, 0.5)',
+  label: true,
+  '&:first-letter': {
+    textTransform: 'uppercase',
+  },
+})
+
+const Message = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
 })

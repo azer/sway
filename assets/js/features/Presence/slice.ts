@@ -39,16 +39,32 @@ export const slice = createSlice({
         state.userStatuses[row.userId] = row.statusId
       }
     },
-    addStatusUpdates: (
+    setStatusUpdates: (
       state,
       action: PayloadAction<{ userId: string; updates: string[] }>
     ) => {
       state.statusUpdates[action.payload.userId] = action.payload.updates
     },
+    addStatusUpdates: (
+      state,
+      action: PayloadAction<{ userId: string; updates: string[] }>
+    ) => {
+      const existing = state.statusUpdates[action.payload.userId]
+      const next = existing
+        ? action.payload.updates.concat(existing)
+        : action.payload.updates
+
+      state.statusUpdates[action.payload.userId] = Array.from(new Set(next))
+    },
   },
 })
 
-export const { setStatusId, setStatusIdBatch, addStatusUpdates } = slice.actions
+export const {
+  setStatusId,
+  setStatusIdBatch,
+  setStatusUpdates,
+  addStatusUpdates,
+} = slice.actions
 export default slice.reducer
 
 export function tap(fromUserId: string) {
@@ -79,10 +95,10 @@ export function receive(status: Status) {
     )
 
     dispatch(setStatusId({ userId: status.user_id, statusId: status.id }))
+    dispatch(addStatusUpdates({ userId: status.user_id, updates: [status.id] }))
 
     const state = getState()
     const triggered = selectors.taps.getTriggeredStatusHooks(state)
-    log.info('Triggered hooks', triggered)
 
     if (triggered.length > 0) {
       dispatch(removeStatusHook(triggered.map((h) => h.userId)))
