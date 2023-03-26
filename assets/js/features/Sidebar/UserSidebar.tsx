@@ -52,7 +52,7 @@ export function UserSidebar(props: Props) {
             response.data.map((d) => ({
               table: Statuses,
               id: d.id,
-              record: toStateEntity(Statuses, status),
+              record: toStateEntity(Statuses, d),
             }))
           )
         )
@@ -124,7 +124,7 @@ export function UserSidebar(props: Props) {
             .filter((u) => u?.message)
             .map((u) => (
               <Update key={u.id}>
-                {status?.emoji ? <Emoji id={u.emoji} /> : null}
+                {u?.emoji ? <Emoji id={u.emoji} /> : null}
                 <Message>
                   {u?.message}
                   <Time>{u ? relativeDate(new Date(u?.inserted_at)) : ''}</Time>
