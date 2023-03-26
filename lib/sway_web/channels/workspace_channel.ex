@@ -269,13 +269,17 @@ defmodule SwayWeb.WorkspaceChannel do
       speaker_on: last.speaker_on,
     }
 
-    case Sway.Statuses.create_status(next) do
-      {:ok, status} ->
-        broadcast(socket, "user:status", status_broadcastable(status))
-        {:noreply, socket}
+    if last.message != next.message do
+      case Sway.Statuses.create_status(next) do
+	{:ok, status} ->
+          broadcast(socket, "user:status", status_broadcastable(status))
+          {:noreply, socket}
 
-      {:error, reason} ->
-        {:error, %{reason: reason}}
+	{:error, reason} ->
+          {:error, %{reason: reason}}
+      end
+    else
+      {:noreply, socket}
     end
   end
 
