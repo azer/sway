@@ -44,6 +44,9 @@ export const slice = createSlice({
       action: PayloadAction<{ userId: string; updates: string[] }>
     ) => {
       state.statusUpdates[action.payload.userId] = action.payload.updates
+      if (action.payload.updates[0]) {
+        state.userStatuses[action.payload.userId] = action.payload.updates[0]
+      }
     },
     addStatusUpdates: (
       state,
