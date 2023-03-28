@@ -24,6 +24,7 @@ export function Navigation(props: Props) {
   const [
     workspace,
     activeRoomIds,
+    privateRoomIds,
     focusedRoom,
     allUsers,
     prevRoom,
@@ -35,6 +36,7 @@ export function Navigation(props: Props) {
     return [
       workspace,
       selectors.rooms.listActiveRooms(state),
+      selectors.rooms.listActivePrivateRooms(state),
       selectors.rooms.getFocusedRoom(state),
       workspace
         ? selectors.memberships
@@ -88,8 +90,20 @@ export function Navigation(props: Props) {
           />
         ))}
       </Rooms>
+      <Rooms>
+        <Title>Private</Title>
+        {privateRoomIds.map((id) => (
+          <RoomButton
+            key={id}
+            id={id}
+            selected={id === focusedRoom?.id}
+            onClick={rooms.enterById}
+          />
+        ))}
+      </Rooms>
       <Rooms electron={isElectron}>
         <Title>People</Title>
+
         {allUsers.map((uid) => (
           <UserButton
             key={uid}
@@ -119,25 +133,6 @@ export function Navigation(props: Props) {
 
   function mail() {
     window.location.href = 'mailto:azer@sway.so'
-  }
-
-  function createPrivateRoom(
-    localUserId: string,
-    workspaceId: string,
-    users: string[]
-  ) {
-    socket.channel
-      ?.push('rooms:create_private', {
-        workspace_id: workspaceId,
-        created_by: localUserId,
-        users: users,
-      })
-      .receive('ok', (response) => {
-        log.info('created private room', response)
-      })
-      .receive('error', (error) => {
-        log.error('can not create private room', error)
-      })
   }
 }
 
@@ -236,7 +231,7 @@ const Rooms = styled('section', {
 })
 
 const Title = styled('div', {
-  color: '$gray4',
+  color: '$gray8',
   baselineFontSize: 'small',
   unitHeight: 5,
   fontWeight: '$medium',

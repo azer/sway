@@ -34,7 +34,11 @@ export const slice = createSlice({
   initialState,
   reducers: {
     setStatusHook: (state, action: PayloadAction<StatusHook>) => {
-      state.statusHooks[action.payload.userId] = action.payload
+      if (!state.statusHooks[action.payload.userId]) {
+        state.statusHooks[action.payload.userId] = action.payload
+      } else {
+        delete state.statusHooks[action.payload.userId]
+      }
     },
     removeStatusHook: (state, action: PayloadAction<string[]>) => {
       for (const id of action.payload) {

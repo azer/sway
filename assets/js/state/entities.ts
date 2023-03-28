@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { APIResponse, APIResponseRow } from 'lib/api'
 import { PresenceStatus } from './presence'
+import { AppDispatch, RootState } from './store'
 
 export type Entity = User | Workspace | Room | Status | Participant | Membership
 
-export type Table =
+export type Schema =
   | typeof Users
   | typeof Workspaces
   | typeof Rooms
@@ -12,9 +14,9 @@ export type Table =
   | typeof Memberships
 
 export interface Update {
-  table: Table
+  schema: Schema
   id: string
-  record: Entity
+  data: Entity
 }
 
 export const Users = 'users'
@@ -22,7 +24,8 @@ export interface User {
   id: string
   email: string
   name: string
-  photoUrl?: string
+  profile_photo_url: string | null
+  inserted_at: string
 }
 
 export const Memberships = 'memberships'
@@ -52,6 +55,7 @@ export interface Room {
   slug: string
   is_default: boolean
   is_active: boolean
+  is_private: boolean
 }
 
 export const Statuses = 'statuses'
@@ -101,15 +105,15 @@ export const slice = createSlice({
   initialState,
   reducers: {
     add: (state, action: PayloadAction<Update>) => {
-      state[action.payload.table][action.payload.id] = action.payload.record
+      state[action.payload.schema][action.payload.id] = action.payload.data
     },
     addBatch: (state, action: PayloadAction<Update[]>) => {
       for (let update of action.payload) {
-        if (!state[update.table]) {
-          state[update.table] = {}
+        if (!state[update.schema]) {
+          state[update.schema] = {}
         }
 
-        state[update.table][update.id] = update.record
+        state[update.schema][update.id] = update.data
       }
     },
     addInitialState: (state, action: PayloadAction<undefined>) => {
@@ -126,7 +130,7 @@ export const slice = createSlice({
     },
     removeBatch: (
       state,
-      action: PayloadAction<{ table: Table; id: string }[]>
+      action: PayloadAction<{ table: Schema; id: string }[]>
     ) => {
       for (let row of action.payload) {
         delete state[row.table][row.id]
@@ -139,71 +143,26 @@ export const { add, addBatch, addInitialState, removeBatch } = slice.actions
 
 export default slice.reducer
 
-export function toStateEntity(table: Table, record: any): Entity {
-  if (table === Users) {
-    return {
-      id: String(record.id),
-      email: record.email,
-      name: record.name,
-      photoUrl: record.profile_photo_url,
+export function scanAPIResponse(resp: APIResponse) {
+  return (dispatch: AppDispatch) => {
+    const updates: Update[] = []
+    if (resp.result) {
+      updates.push(resp.result as Update)
     }
-  }
 
-  if (table === Participants) {
-    return {
-      id: String(record.user_id) as string,
-      sessionId: record.session_id as string,
-      audio: record.audio as boolean,
-      video: record.video as boolean,
-      screen: record.screen as boolean,
+    if (resp.list) {
+      updates.push.apply(updates, resp.list as Update[])
     }
-  }
 
-  if (table === Statuses) {
-    return {
-      ...record,
-      id: String(record.id),
-      room_id: String(record.room_id),
-      user_id: String(record.user_id),
-      workspace_id: String(record.workspace_id),
+    if (resp.links) {
+      updates.push.apply(updates, resp.links as Update[])
     }
-  }
 
-  if (table === Rooms) {
-    return {
-      ...record,
-      id: String(record.id),
-      user_id: String(record.user_id),
-      workspace_id: String(record.workspace_id),
-      is_active: record.is_active,
-      is_default: record.is_default,
-    }
+    dispatch(addBatch(updates))
   }
-
-  if (table === Memberships) {
-    return {
-      ...record,
-      id: String(record.id),
-      user_id: String(record.user_id),
-      workspace_id: String(record.workspace_id),
-      is_admin: record.is_admin,
-    }
-  }
-
-  if (table === Workspaces) {
-    return {
-      ...record,
-      id: String(record.id),
-      name: record.name,
-      slug: record.slug,
-      domain: record.slug,
-    }
-  }
-
-  return record
 }
 
-function initial<T>(table: Table): Record<string, T> {
+function initial<T>(table: Schema): Record<string, T> {
   const result: Record<string, T> = {}
 
   // @ts-ignore
@@ -211,7 +170,7 @@ function initial<T>(table: Table): Record<string, T> {
     // @ts-ignore
     for (const r of window.initialState.entities[table]) {
       // @ts-ignore
-      result[r.id] = toStateEntity(table, r)
+      result[r.id] = r
     }
   }
 

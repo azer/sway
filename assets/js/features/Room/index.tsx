@@ -131,7 +131,7 @@ const Container = styled('main', {
   variants: {
     isLocalActive: {
       true: {
-        gridTemplateRows: '48px 118px auto 72px',
+        gridTemplateRows: '118px auto 72px',
       },
     },
     electron: {

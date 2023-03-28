@@ -2,7 +2,6 @@ import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
-import { UserHeader } from 'components/UserHeader'
 import { Avatar, AvatarRoot } from 'components/Avatar'
 import { Emoji } from 'components/Emoji'
 import { getLocalTime, relativeDate } from 'lib/datetime'
@@ -10,11 +9,15 @@ import { findModeByStatus, PresenceStatus } from 'state/presence'
 import { StatusIcon } from 'features/Dock/StatusIcon'
 import Icon from 'components/Icon'
 import { logger } from 'lib/log'
-import { GET } from 'lib/api'
+import { GET, POST } from 'lib/api'
 import { setStatusUpdates } from 'features/Presence/slice'
-import { addBatch, Status, Statuses, toStateEntity } from 'state/entities'
+import { add, addBatch, Room, Rooms, Status, Statuses } from 'state/entities'
 import { usePresence } from 'features/Presence/use-presence'
 import { setStatusHook } from 'features/Tap/slice'
+import { useUserSocket } from 'features/UserSocket'
+import { useNavigate } from 'react-router-dom'
+import { useRooms } from 'features/Room/use-rooms'
+import { appendRoomIdToWorkspace } from 'features/Room/slice'
 
 interface Props {}
 
@@ -23,24 +26,38 @@ const log = logger('sidebar/user-sidebar')
 export function UserSidebar(props: Props) {
   const dispatch = useDispatch()
   const presence = usePresence()
+  const rooms = useRooms()
 
-  const [user, updates, status, statusLabel, isOnline, room, existingHook] =
-    useSelector((state) => {
-      const userId = selectors.sidebar.getFocusedUserId(state)
-      if (!userId) return [undefined, []]
+  const [
+    user,
+    updates,
+    status,
+    statusLabel,
+    isOnline,
+    room,
+    existingHook,
+    localUserId,
+    workspaceId,
+    workspaceSlug,
+  ] = useSelector((state) => {
+    const userId = selectors.sidebar.getFocusedUserId(state)
+    if (!userId) return [undefined, []]
 
-      const status = selectors.statuses.getByUserId(state, userId)
+    const status = selectors.statuses.getByUserId(state, userId)
 
-      return [
-        selectors.users.getById(state, userId),
-        selectors.presence.getUserUpdatesByUserId(state, userId),
-        status,
-        selectors.presence.getPresenceLabelByUserId(state, userId),
-        selectors.presence.isUserOnline(state, userId),
-        selectors.rooms.getRoomById(state, status.room_id),
-        selectors.taps.getStatusHookByUserId(state, userId),
-      ]
-    })
+    return [
+      selectors.users.getById(state, userId),
+      selectors.presence.getUserUpdatesByUserId(state, userId),
+      status,
+      selectors.presence.getPresenceLabelByUserId(state, userId),
+      selectors.presence.isUserOnline(state, userId),
+      selectors.rooms.getRoomById(state, status.room_id),
+      selectors.taps.getStatusHookByUserId(state, userId),
+      selectors.session.getUserId(state),
+      selectors.workspaces.getSelfWorkspace(state)?.id,
+      selectors.workspaces.getSelfWorkspace(state)?.slug,
+    ]
+  })
 
   useEffect(() => {
     if (!user) return
@@ -50,9 +67,9 @@ export function UserSidebar(props: Props) {
         dispatch(
           addBatch(
             response.data.map((d) => ({
-              table: Statuses,
+              schema: Statuses,
               id: d.id,
-              record: toStateEntity(Statuses, d),
+              data: d,
             }))
           )
         )
@@ -102,7 +119,7 @@ export function UserSidebar(props: Props) {
       </Table>
 
       <Buttons>
-        <Button>
+        <Button onClick={() => createPrivateRoom()}>
           <Icon name="users" />
           1:1 Room
         </Button>
@@ -147,6 +164,43 @@ export function UserSidebar(props: Props) {
         whenActive: status === PresenceStatus?.Online,
       })
     )
+  }
+
+  function createPrivateRoom() {
+    if (!workspaceId || !user || !localUserId) return
+
+    POST<{ data: Room }>('/api/rooms', {
+      body: {
+        private_room: {
+          workspace_id: workspaceId,
+          users: [user?.id, localUserId],
+        },
+      },
+    })
+      .then((resp) => {
+        log.info('Created / retrieved private room', resp)
+        dispatch(
+          add({
+            table: Rooms,
+            id: resp.data.id,
+            record: resp.data,
+          })
+        )
+
+        dispatch(
+          appendRoomIdToWorkspace({
+            workspaceId,
+            roomId: resp.data.id,
+            privateRoom: true,
+          })
+        )
+
+        rooms.enterById(resp.data.id)
+        //navigate(`/${workspaceSlug}/room/${resp.data.id}/${resp.data.slug}`)
+      })
+      .catch((err) => {
+        log.error('can not create private room', err)
+      })
   }
 }
 

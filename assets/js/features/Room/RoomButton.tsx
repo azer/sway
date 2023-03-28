@@ -5,13 +5,7 @@ import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
 import { useUserSocket } from 'features/UserSocket'
 import { Command, useCommandPalette } from 'features/CommandPalette'
-import entities, {
-  add,
-  addBatch,
-  Room,
-  Rooms,
-  toStateEntity,
-} from '../../state/entities'
+import entities, { add, addBatch, Room, Rooms } from '../../state/entities'
 import { setWorkspaceRoomIds } from './slice'
 import { Channel } from 'phoenix'
 import { useCommandRegistry } from 'features/CommandRegistry'
@@ -62,9 +56,9 @@ export function RoomButton(props: Props) {
     channel.on('rooms:update', (payload: Room) => {
       dispatch(
         add({
-          table: Rooms,
+          schema: Rooms,
           id: payload.id,
-          record: toStateEntity(Rooms, payload),
+          data: payload,
         })
       )
     })
@@ -83,8 +77,8 @@ export function RoomButton(props: Props) {
         addBatch(
           payload.all.map((r) => ({
             id: r.id,
-            table: Rooms,
-            record: toStateEntity(Rooms, r),
+            schema: Rooms,
+            data: r,
           }))
         )
       )
@@ -229,8 +223,8 @@ export function RoomButton(props: Props) {
           addBatch(
             response.workspace_rooms.map((r) => ({
               id: r.id,
-              table: Rooms,
-              record: toStateEntity(Rooms, r),
+              schema: Rooms,
+              data: r,
             }))
           )
         )
@@ -289,8 +283,8 @@ export function RoomButton(props: Props) {
           addBatch(
             response.workspace_rooms.map((r) => ({
               id: r.id,
-              table: Rooms,
-              record: toStateEntity(Rooms, r),
+              schema: Rooms,
+              data: r,
             }))
           )
         )
@@ -346,8 +340,8 @@ export function RoomButton(props: Props) {
         dispatch(
           add({
             id: response.room.id,
-            table: Rooms,
-            record: toStateEntity(Rooms, response.room),
+            schema: Rooms,
+            data: response.room,
           })
         )
       })

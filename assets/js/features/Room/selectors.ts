@@ -4,11 +4,23 @@ import { Room, Rooms } from 'state/entities'
 import { RoomFocus } from './focus'
 
 export function getRoomById(state: RootState, id: string): Room {
-  return state.entities[Rooms][id]
+  const room = state.entities[Rooms][id]
+  if (!room?.is_private) return room
+
+  //const localUser = selectors.users.getSelf(state)
+  //const otherUser =
+  return room
 }
 
 export function listAllRooms(state: RootState, workspaceId: string): string[] {
   return state.rooms.roomIdsByWorkspace[workspaceId]
+}
+
+export function listAllPrivateRooms(
+  state: RootState,
+  workspaceId: string
+): string[] {
+  return state.rooms.privateRoomIdsByWorkspace[workspaceId]
 }
 
 export function listActiveRooms(state: RootState): string[] {
@@ -20,6 +32,20 @@ export function listActiveRooms(state: RootState): string[] {
         .map((id) => getRoomById(state, id))
         .filter((r) => r && r.is_active)
         .map((r) => r.id)
+    : []
+}
+
+// condition to be an active private room:
+// the other user is inside
+// or the local user is inside
+// recently communicated with?
+// FIXME: make sure the private rooms local user isn't a part of hidden
+export function listActivePrivateRooms(state: RootState): string[] {
+  const localWorkspaceId =
+    selectors.memberships.getSelfMembership(state)?.workspace_id
+
+  return localWorkspaceId
+    ? state.rooms.privateRoomIdsByWorkspace[localWorkspaceId]
     : []
 }
 

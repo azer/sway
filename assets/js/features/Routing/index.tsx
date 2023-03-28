@@ -12,6 +12,7 @@ import {
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { MainRoute } from './Main'
+import { PrivateRoomRoute } from './PrivateRoom'
 
 const log = logger('routing')
 
@@ -25,6 +26,10 @@ export default function Routing(): JSX.Element {
         <Route path="/" element={<DefaultWorkspace />} />
         <Route path="/:workspace" element={<DefaultRoom />} />
         <Route path="/:workspace/room/:room" element={<MainRoute />} />
+        <Route
+          path="/:workspace/room/:room_id/:room_slug"
+          element={<PrivateRoomRoute />}
+        />
       </Routes>
     </BrowserRouter>
   )

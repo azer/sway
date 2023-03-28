@@ -16,7 +16,6 @@ import {
   Memberships,
   Status,
   Statuses,
-  toStateEntity,
 } from 'state/entities'
 import { setStatusIdBatch } from 'features/Presence/slice'
 
@@ -64,8 +63,8 @@ export function RoomNavigationProvider(props: Props) {
           addBatch(
             resp.map((m) => ({
               id: m.id,
-              table: Memberships,
-              record: toStateEntity(Memberships, m),
+              schema: Memberships,
+              data: m,
             }))
           )
         )
@@ -90,7 +89,11 @@ export function RoomNavigationProvider(props: Props) {
 
     log.info('Focused room changed', focusedRoom.name)
 
-    navigate(`/${workspace?.slug}/room/${focusedRoom.slug}`)
+    if (focusedRoom.is_private) {
+      navigate(`/${workspace?.slug}/room/${focusedRoom.id}/${focusedRoom.slug}`)
+    } else {
+      navigate(`/${workspace?.slug}/room/${focusedRoom.slug}`)
+    }
 
     channel.push('rooms:join', {
       id: focusedRoom?.id,
@@ -148,8 +151,8 @@ export function RoomNavigationProvider(props: Props) {
       addBatch(
         list.map((s) => ({
           id: s.id,
-          table: Statuses,
-          record: toStateEntity(Statuses, s),
+          schema: Statuses,
+          data: s,
         }))
       )
     )

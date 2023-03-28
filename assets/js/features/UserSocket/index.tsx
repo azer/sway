@@ -4,13 +4,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { Socket, Presence, Channel } from 'phoenix'
 import { useDispatch } from 'react-redux'
-import { add, Entity, toStateEntity } from 'state/entities'
+import { add, Entity, Update } from 'state/entities'
 import { logger } from 'lib/log'
 import {
   ConnectionState,
   setSwaySocketConnectionStatus,
 } from 'features/Dock/slice'
 import { timezone } from 'lib/datetime'
+import { APIResponseRow } from 'lib/api'
 // import useUserSocket, { context, initialState } from './use-user-socket'
 // import { useSelector, useDispatch } from 'app/state'
 
@@ -190,23 +191,16 @@ export function useUserSocket() {
     fetchEntity,
   }
 
-  function fetchEntity(entity: entities.Table, id: string) {
+  function fetchEntity(schema: entities.Schema, id: string) {
     if (!ctx.channel) return
 
-    log.info('Fetching entity', entity, id)
+    log.info('Fetching entity', schema, id)
 
     ctx.channel
-      .push('entities:fetch', { id, entity })
-      .receive('ok', (record: Entity) => {
-        log.info('Fetching entity done', id, entity, record)
-
-        dispatch(
-          add({
-            table: entity,
-            id,
-            record: toStateEntity(entity, record),
-          })
-        )
+      .push('entities:fetch', { id, schema })
+      .receive('ok', (row: APIResponseRow) => {
+        log.info('Fetching entity done', id, schema, row)
+        dispatch(add(row as Update))
       })
   }
 }

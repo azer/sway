@@ -2,13 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { receive, setStatusId, tap } from './slice'
 import { useUserSocket } from 'features/UserSocket'
 import { logger } from 'lib/log'
-import { add, Status, Statuses, toStateEntity, Users } from 'state/entities'
+import { Status } from 'state/entities'
 import selectors from 'selectors'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useCommandPalette } from 'features/CommandPalette'
 import { useSelector, useDispatch } from 'state'
 import { usePresence } from './use-presence'
-import { notifications } from 'lib/notifications'
 
 interface Props {
   children?: React.ReactNode

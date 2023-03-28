@@ -1,9 +1,18 @@
 defmodule SwayWeb.StatusView do
   use SwayWeb, :view
   alias SwayWeb.StatusView
+  alias SwayWeb.APIView
+
+  def links(status, acc) do
+    acc
+    |> APIView.append_room(status.room_id)
+    |> APIView.append_user(status.user_id)
+    |> APIView.append_workspace(status.workspace_id)
+  end
 
   def render("index.json", %{statuses: statuses}) do
-    %{data: render_many(statuses, StatusView, "status.json")}
+    l = Enum.reduce(statuses, %{}, fn status, acc -> links(status, acc) end)
+    %{data: render_many(statuses, StatusView, "status.json") }
   end
 
   def render("show.json", %{status: status}) do

@@ -7,6 +7,8 @@ export const name = 'room'
 interface State {
   userIdsByRoom: { [id: string]: string[] }
   roomIdsByWorkspace: { [id: string]: string[] }
+  privateRoomIdsByWorkspace: { [id: string]: string[] }
+  privateRoomMembers: { [id: string]: string[] }
 }
 
 export const initialState: State = {
@@ -14,6 +16,10 @@ export const initialState: State = {
   userIdsByRoom: window.initialState.room.userIdsByRoom,
   // @ts-ignore
   roomIdsByWorkspace: window.initialState.room.roomIdsByWorkspace || [],
+  // @ts-ignore
+  privateRoomIdsByWorkspace: window.initialState.room.privateRoomIdsByWorkspace,
+  // @ts-ignore
+  privateRoomMembers: window.initialState.privateRoomMembers,
 }
 
 export const slice = createSlice({
@@ -22,22 +28,35 @@ export const slice = createSlice({
   reducers: {
     setWorkspaceRoomIds: (
       state,
-      action: PayloadAction<{ roomIds: string[]; workspaceId: string }>
+      action: PayloadAction<{
+        roomIds: string[]
+        workspaceId: string
+        privateRoom?: boolean
+      }>
     ) => {
-      state.roomIdsByWorkspace[action.payload.workspaceId] =
-        action.payload.roomIds
+      const roomIds = action.payload.privateRoom
+        ? state.privateRoomIdsByWorkspace
+        : state.roomIdsByWorkspace
+
+      roomIds[action.payload.workspaceId] = action.payload.roomIds
     },
     appendRoomIdToWorkspace: (
       state,
-      action: PayloadAction<{ workspaceId: string; roomId: string }>
+      action: PayloadAction<{
+        workspaceId: string
+        roomId: string
+        privateRoom?: boolean
+      }>
     ) => {
+      const roomIds = action.payload.privateRoom
+        ? state.privateRoomIdsByWorkspace
+        : state.roomIdsByWorkspace
+
       if (
-        !state.roomIdsByWorkspace[action.payload.workspaceId].includes(
-          action.payload.roomId
-        )
+        !roomIds[action.payload.workspaceId].includes(action.payload.roomId)
       ) {
-        state.roomIdsByWorkspace[action.payload.workspaceId] = [
-          ...state.roomIdsByWorkspace[action.payload.workspaceId],
+        roomIds[action.payload.workspaceId] = [
+          ...roomIds[action.payload.workspaceId],
           action.payload.roomId,
         ]
       }
@@ -62,9 +81,7 @@ export const slice = createSlice({
       action: PayloadAction<{ [id: string]: string[] }>
     ) => {
       // @ts-ignore
-      state.userIdsByRoom = window.fakeState
-        ? window.fakeState.room.userIdsByRoom
-        : action.payload
+      state.userIdsByRoom = action.payload
     },
   },
 })

@@ -5,7 +5,7 @@ import { logger } from 'lib/log'
 import { notifications } from 'lib/notifications'
 import selectors from 'selectors'
 import { AppDispatch, entities, RootState } from 'state'
-import { add, Entity, Status, Statuses, toStateEntity } from 'state/entities'
+import { add, Entity, Status, Statuses } from 'state/entities'
 
 export const name = 'presence'
 const log = logger('presence/slice')
@@ -91,9 +91,9 @@ export function receive(status: Status) {
 
     dispatch(
       add({
-        table: Statuses,
+        schema: Statuses,
         id: status.id,
-        record: toStateEntity(Statuses, status),
+        data: status,
       })
     )
 

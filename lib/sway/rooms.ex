@@ -50,6 +50,18 @@ defmodule Sway.Rooms do
     Repo.get_by(Room, workspace_id: workspace_id, is_default: true)
   end
 
+  def get_private_room_by_user_ids(workspace_id, user_ids) do
+    slug = generate_private_room_slug(user_ids)
+
+    from(r in Sway.Rooms.Room,
+      where: r.slug == ^"#{slug}",
+      where: r.workspace_id == ^"#{workspace_id}",
+      where: r.is_private == true
+    )
+    |> preload(:private_members)
+    |> Repo.one()
+  end
+
   def list_by_workspace_id(workspace_id) do
     from(r in Sway.Rooms.Room,
       where: r.workspace_id == ^"#{workspace_id}",
@@ -69,6 +81,11 @@ defmodule Sway.Rooms do
       where: r.is_private == true,
       select: r
     )
+    |> Repo.all()
+  end
+
+  def list_private_members_by_room_id(room_id) do
+    from(pm in PrivateMember, where: pm.room_id == ^room_id)
     |> Repo.all()
   end
 
@@ -156,38 +173,52 @@ defmodule Sway.Rooms do
   end
 
   def create_private_room_with_members(attrs, user_ids) do
-    attrs = attrs
-    |> Map.put(:is_private, true)
-    |> Map.put(:slug, generate_private_room_slug(user_ids))
+    user_ids = Enum.uniq(user_ids)
 
-    room = %Room{}
-    |> Room.changeset(Map.put(attrs, :is_private, true))
+    if length(user_ids) < 2 do
+      {:error, "At least 2 unique user ids are required for a private room"}
+    else
+      name = generate_private_room_name(user_ids)
+      slug = Slug.slugify(name)
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.insert(:room, room)
-    |> Ecto.Multi.run(:members, fn repo, %{room: room} ->
-      results = user_ids
-      |> Enum.map(fn user_id ->
-        Sway.Rooms.PrivateMember.changeset(%PrivateMember{}, %{
-          room_id: room.id,
-          user_id: user_id
-        })
+      attrs =
+        attrs
+        |> Map.put(:is_private, true)
+        |> Map.put(:slug, slug)
+        |> Map.put(:name, name)
+
+      room =
+        %Room{}
+        |> Room.changeset(attrs)
+
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:room, room)
+      |> Ecto.Multi.run(:members, fn repo, %{room: room} ->
+        results =
+          user_ids
+          |> Enum.map(fn user_id ->
+            Sway.Rooms.PrivateMember.changeset(%PrivateMember{}, %{
+              room_id: room.id,
+              user_id: user_id
+            })
+          end)
+          |> Enum.map(&repo.insert/1)
+
+        {:ok, results}
       end)
-      |> Enum.map(&repo.insert/1)
+      |> Repo.transaction()
+    end
+  end
 
-      {:ok, results}
-    end)
-    |> Repo.transaction()
+  defp generate_private_room_name(user_ids) do
+    user_ids
+    |> Enum.sort()
+    |> Sway.Accounts.get_users_by_ids()
+    |> Enum.map(& &1.name)
+    |> Enum.join(", ")
   end
 
   defp generate_private_room_slug(user_ids) do
-    user_ids
-    |> Enum.sort
-    |> Sway.Accounts.get_users_by_ids
-    |> Enum.map(&(&1.name))
-    |> Enum.join(" ")
-    |> Slug.slugify
+    Slug.slugify(generate_private_room_name(user_ids))
   end
-
-
 end

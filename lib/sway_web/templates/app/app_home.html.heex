@@ -7,13 +7,16 @@
       jwt: "<%= @jwt %>",
     },
     focus: {
-      roomId: "<%= @status.room_id %>",
+      roomId: "<%= @focused_room_id %>",
       workspaceId: "<%= @status.workspace_id %>",
     },
     room: {
       userIdsByRoom: {},
       roomIdsByWorkspace: {
 	"<%= @workspace.id %>": [<%= raw(Enum.join(Enum.map(@rooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>],
+      },
+      privateRoomIdsByWorkspace: {
+	"<%= @workspace.id %>": [<%= raw(Enum.join(Enum.map(@private_rooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>],
       }
     },
     userStatusMap: {
@@ -32,6 +35,8 @@
       ],
       rooms: [
 	  <%= for room <- @rooms do %><%= raw(Jason.encode!(room)) %>,
+	      <%= end %>
+	  <%= for room <- @private_rooms do %><%= raw(Jason.encode!(room)) %>,
 <%= end %>
       ],
       statuses: [

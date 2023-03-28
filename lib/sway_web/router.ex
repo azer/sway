@@ -123,13 +123,16 @@ defmodule SwayWeb.Router do
     pipe_through [:api, :api_auth]
     get "/users", UserController, :list_by_workspace
     get "/users/:user_id/updates", StatusController, :list_updates_by_user
+    resources "/rooms", RoomController
+    get "/rooms/:room_id/members", PrivateMemberController, :index
   end
 
   scope "/", SwayWeb do
     pipe_through [:browser, :require_authenticated_user]
     get "/", AppController, :index
     get "/:workspace", AppController, :index
-    get "/:workspace/room/:room", AppController, :room
+    get "/:workspace/room/:room_slug", AppController, :room
+    get "/:workspace/room/:room_id/:room_slug", AppController, :private_room
   end
 
 end
