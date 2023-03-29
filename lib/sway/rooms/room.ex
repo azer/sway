@@ -11,7 +11,7 @@ defmodule Sway.Rooms.Room do
 
     belongs_to :workspace, Sway.Workspaces.Workspace
     belongs_to :user, Sway.Accounts.User
-    has_many :private_members, Sway.Rooms.PrivateMember
+    has_many :room_members, Sway.Rooms.RoomMember
 
     timestamps()
   end

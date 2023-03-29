@@ -10,6 +10,7 @@ import presence from 'features/Presence/slice'
 import userSocket from 'features/UserSocket/slice'
 import workspaces from 'features/Workspace/slice'
 import taps from 'features/Tap/slice'
+import roomMembers from 'features/RoomMembers/slice'
 
 export default {
   //undotree,
@@ -24,4 +25,5 @@ export default {
   userSocket,
   workspaces,
   taps,
+  roomMembers,
 }

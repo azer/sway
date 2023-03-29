@@ -5,7 +5,7 @@ defmodule Sway.Rooms do
 
   import Ecto.Query, warn: false
   alias Sway.Repo
-  alias Sway.Rooms.PrivateMember
+  alias Sway.Rooms.RoomMember
 
   alias Sway.Rooms.Room
 
@@ -58,7 +58,6 @@ defmodule Sway.Rooms do
       where: r.workspace_id == ^"#{workspace_id}",
       where: r.is_private == true
     )
-    |> preload(:private_members)
     |> Repo.one()
   end
 
@@ -74,7 +73,7 @@ defmodule Sway.Rooms do
 
   def list_private_rooms_by_user_id(workspace_id, user_id) do
     from(r in Room,
-      join: pm in PrivateMember,
+      join: pm in RoomMember,
       on: r.id == pm.room_id,
       where: r.workspace_id == ^workspace_id,
       where: pm.user_id == ^user_id,
@@ -84,8 +83,8 @@ defmodule Sway.Rooms do
     |> Repo.all()
   end
 
-  def list_private_members_by_room_id(room_id) do
-    from(pm in PrivateMember, where: pm.room_id == ^room_id)
+  def list_room_members_by_room_id(room_id) do
+    from(pm in RoomMember, where: pm.room_id == ^room_id)
     |> Repo.all()
   end
 
@@ -197,7 +196,7 @@ defmodule Sway.Rooms do
         results =
           user_ids
           |> Enum.map(fn user_id ->
-            Sway.Rooms.PrivateMember.changeset(%PrivateMember{}, %{
+            Sway.Rooms.RoomMember.changeset(%RoomMember{}, %{
               room_id: room.id,
               user_id: user_id
             })

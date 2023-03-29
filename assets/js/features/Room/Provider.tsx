@@ -81,6 +81,7 @@ export function RoomNavigationProvider(props: Props) {
 
   useEffect(() => {
     if (!channel) return
+    log.info('Listen for status changes')
     channel.on('workspace:sync_online_user_statuses', syncOnlineUserStatuses)
   }, [channel])
 
@@ -110,7 +111,7 @@ export function RoomNavigationProvider(props: Props) {
       presentRoom.name
     )
 
-    enterById(presentRoom.id)
+    //enterById(presentRoom.id)
     //dispatch(setFocusedRoomById(presentRoom.id))
   }, [focusedRoom?.id, presentRoom?.id])
 

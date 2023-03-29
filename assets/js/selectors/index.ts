@@ -13,6 +13,7 @@ import * as electronTray from 'features/ElectronTray/selectors'
 import * as commandPalette from 'features/CommandPalette/selectors'
 import * as taps from 'features/Tap/selectors'
 import * as sidebar from 'features/Sidebar/selectors'
+import * as roomMembers from 'features/RoomMembers/selectors'
 
 export default {
   session,
@@ -30,4 +31,5 @@ export default {
   commandPalette,
   taps,
   sidebar,
+  roomMembers,
 }

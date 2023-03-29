@@ -181,9 +181,9 @@ export function UserSidebar(props: Props) {
         log.info('Created / retrieved private room', resp)
         dispatch(
           add({
-            table: Rooms,
+            schema: Rooms,
             id: resp.data.id,
-            record: resp.data,
+            data: resp.data,
           })
         )
 

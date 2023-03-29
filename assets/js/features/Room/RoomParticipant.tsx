@@ -74,7 +74,7 @@ export const RoomParticipantRoot = styled('div', {
   background: '$participantBg',
   [`& ${AvatarRoot}`]: {
     marginTop: '-10px',
-    fontSize: '18px',
+    fontSize: 'var(--avatar-font-size)',
     height: '50%',
     round: true,
   },

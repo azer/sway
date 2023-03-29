@@ -19,6 +19,12 @@ export interface Update {
   data: Entity
 }
 
+export interface Row<T> {
+  schema: Schema
+  id: string
+  data: T
+}
+
 export const Users = 'users'
 export interface User {
   id: string
@@ -56,6 +62,14 @@ export interface Room {
   is_default: boolean
   is_active: boolean
   is_private: boolean
+}
+
+export const RoomMembers = 'room_members'
+export interface RoomMember {
+  id: string
+  user_id: string
+  room_id: string
+  inserted_at: string
 }
 
 export const Statuses = 'statuses'

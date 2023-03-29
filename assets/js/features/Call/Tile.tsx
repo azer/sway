@@ -53,13 +53,16 @@ export function CallTile(props: Props) {
       dimensions.height
     )
 
-    log.info('Recalculated tile', size)
+    log.info('Recalculated tile', size, Math.floor(size.height / 4))
 
     return {
       '--tile-width': size.width + 'px',
       '--tile-height': size.height + 'px',
+      '--avatar-font-size': Math.floor(size.height / 8) + 'px',
     }
   }, [props.ids.length, dimensions])
+
+  log.info('title size', tileSizeVars)
 
   return (
     <Container ref={gridRef} css={tileSizeVars}>

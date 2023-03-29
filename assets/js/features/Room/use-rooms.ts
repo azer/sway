@@ -29,12 +29,15 @@ export function useRooms() {
   }
 
   function enterById(id: string) {
+    log.info('Enter room by id', id)
     dispatch(moveUserToRoom({ roomId: id, userId: localUser?.id || '' }))
     dispatch(setFocusedRoomById(id))
   }
 
   function enterBySlug(slug: string) {
     if (!localUser) return
+
+    log.info('Enter room by slug', slug)
 
     dispatch(
       setSwayRoomConnectionStatus({

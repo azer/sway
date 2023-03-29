@@ -14,22 +14,22 @@ export interface APIResponse {
 
 const log = logger('api')
 
-export const GET = <T>(url: string, options?: Options) =>
-  request<T>('get', url, options)
-export const POST = <T>(url: string, options?: Options) =>
-  request<T>('post', url, options)
-export const PUT = <T>(url: string, options?: Options) =>
-  request<T>('put', url, options)
+export const GET = (url: string, options?: Options) =>
+  request('get', url, options)
+export const POST = (url: string, options?: Options) =>
+  request('post', url, options)
+export const PUT = (url: string, options?: Options) =>
+  request('put', url, options)
 
 interface Options {
   body?: any
 }
 
-function request<T>(
+function request(
   method: string,
   url: string,
   options?: Options
-): Promise<T> {
+): Promise<APIResponse> {
   log.info('Request', method, url, options)
   return fetch(url, {
     method: method,

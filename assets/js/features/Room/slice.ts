@@ -8,7 +8,7 @@ interface State {
   userIdsByRoom: { [id: string]: string[] }
   roomIdsByWorkspace: { [id: string]: string[] }
   privateRoomIdsByWorkspace: { [id: string]: string[] }
-  privateRoomMembers: { [id: string]: string[] }
+  roomMembers: { [id: string]: string[] }
 }
 
 export const initialState: State = {
@@ -18,8 +18,6 @@ export const initialState: State = {
   roomIdsByWorkspace: window.initialState.room.roomIdsByWorkspace || [],
   // @ts-ignore
   privateRoomIdsByWorkspace: window.initialState.room.privateRoomIdsByWorkspace,
-  // @ts-ignore
-  privateRoomMembers: window.initialState.privateRoomMembers,
 }
 
 export const slice = createSlice({

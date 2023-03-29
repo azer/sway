@@ -1,3 +1,4 @@
+import { firstName } from 'lib/string'
 import selectors from 'selectors'
 import { RootState } from 'state'
 import { Room, Rooms } from 'state/entities'
@@ -7,9 +8,31 @@ export function getRoomById(state: RootState, id: string): Room {
   const room = state.entities[Rooms][id]
   if (!room?.is_private) return room
 
-  //const localUser = selectors.users.getSelf(state)
-  //const otherUser =
-  return room
+  const localUser = selectors.users.getSelf(state)
+  const otherUsers = selectors.roomMembers
+    .getMembersByRoomId(state, id)
+    .filter((userId) => localUser?.id !== userId)
+    .map((id) => selectors.users.getById(state, id))
+
+  if (!localUser || otherUsers.length === 0 || !otherUsers.every((u) => !!u)) {
+    return room
+  }
+
+  if (otherUsers.length === 1) {
+    return {
+      ...room,
+      name: `${firstName(otherUsers[0]?.name || '')} & ${firstName(
+        localUser?.name || ''
+      )}`,
+    }
+  }
+
+  return {
+    ...room,
+    name: `${otherUsers
+      .map((u) => firstName(u?.name || ''))
+      .join(', ')}, ${firstName(localUser.name || '')}`,
+  }
 }
 
 export function listAllRooms(state: RootState, workspaceId: string): string[] {
@@ -44,9 +67,13 @@ export function listActivePrivateRooms(state: RootState): string[] {
   const localWorkspaceId =
     selectors.memberships.getSelfMembership(state)?.workspace_id
 
-  return localWorkspaceId
+  const allPrivateRooms = localWorkspaceId
     ? state.rooms.privateRoomIdsByWorkspace[localWorkspaceId]
     : []
+
+  return allPrivateRooms.filter(
+    (roomId) => getUsersInRoom(state, roomId).length > 0
+  )
 }
 
 export function getFocus(state: RootState): RoomFocus {

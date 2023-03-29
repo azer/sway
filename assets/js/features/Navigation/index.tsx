@@ -11,6 +11,9 @@ import { useInvitePeople } from 'features/Settings/InvitePeople'
 import { isElectron } from 'lib/electron'
 import { useUserSocket } from 'features/UserSocket'
 import { openUserSidebar } from 'features/Sidebar/slice'
+import { GET } from 'lib/api'
+import { RoomMember, Row, scanAPIResponse } from 'state/entities'
+import { setRoomMemberUserIdMap } from 'features/RoomMembers/slice'
 
 interface Props {}
 
@@ -30,13 +33,26 @@ export function Navigation(props: Props) {
     prevRoom,
     localUserId,
     userIdOnSidebar,
+    privateRoomToSync,
   ] = useSelector((state) => {
     const workspace = selectors.workspaces.getSelfWorkspace(state)
+    const privateRoomIds = selectors.rooms.listActivePrivateRooms(state)
+    const privateRoomToSync = privateRoomIds.find((id) => {
+      if (!selectors.rooms.getRoomById(state, id)) {
+        return true
+      }
+
+      if (selectors.roomMembers.getMembersByRoomId(state, id).length === 0) {
+        return true
+      }
+
+      return false
+    })
 
     return [
       workspace,
       selectors.rooms.listActiveRooms(state),
-      selectors.rooms.listActivePrivateRooms(state),
+      privateRoomIds,
       selectors.rooms.getFocusedRoom(state),
       workspace
         ? selectors.memberships
@@ -47,6 +63,7 @@ export function Navigation(props: Props) {
       selectors.rooms.getPrevRoom(state),
       selectors.session.getUserId(state),
       selectors.sidebar.getFocusedUserId(state),
+      privateRoomToSync,
     ]
   })
 
@@ -58,6 +75,22 @@ export function Navigation(props: Props) {
       rooms.enterById(prevRoom.id)
     }
   }, [workspace, focusedRoom?.is_active, !!prevRoom])
+
+  useEffect(() => {
+    const roomId = privateRoomToSync
+    if (!roomId) return
+
+    log.info('Sync up private room data;', roomId)
+
+    GET(`/api/rooms/${roomId}/members`).then((resp) => {
+      const userIds = (resp.list as Row<RoomMember>[]).map(
+        (m) => m.data.user_id
+      )
+
+      dispatch(setRoomMemberUserIdMap({ roomId, userIds }))
+      dispatch(scanAPIResponse(resp))
+    })
+  }, [privateRoomToSync])
 
   return (
     <Container>
