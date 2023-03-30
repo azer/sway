@@ -190,7 +190,7 @@ export const navigationBlur2 = `radial-gradient(
 
 const Container = styled('nav', {
   display: 'grid',
-  gridTemplateRows: '40px auto',
+  gridTemplateRows: '60px auto',
   position: 'relative',
   borderRight: '1px solid $shellBorderColor',
   width: '220px',
@@ -264,14 +264,7 @@ const OrgName = styled('div', {
 })
 
 const Rooms = styled('section', {
-  space: { outer: [9, 5, 0, 5] }, // { outer: [6, 5, 0, 5] },
-  variants: {
-    electron: {
-      true: {
-        marginTop: '28px',
-      },
-    },
-  },
+  space: { outer: [5, 5, 0, 5] }, // { outer: [6, 5, 0, 5] },
 })
 
 const Title = styled('div', {
