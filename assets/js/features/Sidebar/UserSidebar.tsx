@@ -18,6 +18,7 @@ import { useUserSocket } from 'features/UserSocket'
 import { useNavigate } from 'react-router-dom'
 import { useRooms } from 'features/Room/use-rooms'
 import { appendRoomIdToWorkspace } from 'features/Room/slice'
+import { setSidebarOpen } from './slice'
 
 interface Props {}
 
@@ -169,7 +170,7 @@ export function UserSidebar(props: Props) {
   function createPrivateRoom() {
     if (!workspaceId || !user || !localUserId) return
 
-    POST<{ data: Room }>('/api/rooms', {
+    POST('/api/rooms', {
       body: {
         private_room: {
           workspace_id: workspaceId,
@@ -196,6 +197,7 @@ export function UserSidebar(props: Props) {
         )
 
         rooms.enterById(resp.data.id)
+        dispatch(setSidebarOpen(false))
         //navigate(`/${workspaceSlug}/room/${resp.data.id}/${resp.data.slug}`)
       })
       .catch((err) => {

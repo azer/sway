@@ -14,6 +14,7 @@ import { openUserSidebar } from 'features/Sidebar/slice'
 import { GET } from 'lib/api'
 import { RoomMember, Row, scanAPIResponse } from 'state/entities'
 import { setRoomMemberUserIdMap } from 'features/RoomMembers/slice'
+import Icon from 'components/Icon'
 
 interface Props {}
 
@@ -34,6 +35,7 @@ export function Navigation(props: Props) {
     localUserId,
     userIdOnSidebar,
     privateRoomToSync,
+    isSidebarOpen,
   ] = useSelector((state) => {
     const workspace = selectors.workspaces.getSelfWorkspace(state)
     const privateRoomIds = selectors.rooms.listActivePrivateRooms(state)
@@ -64,6 +66,7 @@ export function Navigation(props: Props) {
       selectors.session.getUserId(state),
       selectors.sidebar.getFocusedUserId(state),
       privateRoomToSync,
+      selectors.sidebar.isOpen(state),
     ]
   })
 
@@ -111,58 +114,62 @@ export function Navigation(props: Props) {
         )}
         <OrgName>{workspace?.name}</OrgName>
       </Header>
-      <Rooms electron={isElectron}>
-        <RoomNavigationProvider />
-        <Title>Your Rooms</Title>
-        {activeRoomIds.map((id) => (
-          <RoomButton
-            key={id}
-            id={id}
-            selected={id === focusedRoom?.id}
-            onClick={rooms.enterById}
-          />
-        ))}
-      </Rooms>
-      <Rooms>
-        <Title>Private</Title>
-        {privateRoomIds.map((id) => (
-          <RoomButton
-            key={id}
-            id={id}
-            selected={id === focusedRoom?.id}
-            onClick={rooms.enterById}
-          />
-        ))}
-      </Rooms>
-      <Rooms electron={isElectron}>
-        <Title>People</Title>
+      <Content>
+        <Rooms electron={isElectron}>
+          <RoomNavigationProvider />
+          <Title>Your Rooms</Title>
+          {activeRoomIds.map((id) => (
+            <RoomButton
+              key={id}
+              id={id}
+              selected={id === focusedRoom?.id}
+              onClick={rooms.enterById}
+            />
+          ))}
+        </Rooms>
+        {privateRoomIds.length > 0 ? (
+          <Rooms>
+            <Title>Private</Title>
+            {privateRoomIds.map((id) => (
+              <RoomButton
+                key={id}
+                id={id}
+                selected={id === focusedRoom?.id}
+                onClick={rooms.enterById}
+              />
+            ))}
+          </Rooms>
+        ) : null}
+        <People>
+          <Title>People</Title>
 
-        {allUsers.map((uid) => (
-          <UserButton
-            key={uid}
-            id={uid}
-            onClick={() => dispatch(openUserSidebar(uid))}
-            selected={userIdOnSidebar === uid}
-          />
-        ))}
-      </Rooms>
+          {allUsers.map((uid) => (
+            <UserButton
+              key={uid}
+              id={uid}
+              onClick={() => dispatch(openUserSidebar(uid))}
+              selected={userIdOnSidebar === uid && isSidebarOpen}
+            />
+          ))}
+        </People>
+        <Fill />
+        <Bottom>
+          <Button onClick={inviteModal.open}>
+            <ButtonIcon>
+              <Icon name="avatar" />
+            </ButtonIcon>
+            <ButtonLabel>Invite People</ButtonLabel>
+          </Button>
+          <Button onClick={mail}>
+            <ButtonIcon>
+              <Icon name="lightbulb" />
+            </ButtonIcon>
+            <ButtonLabel>Share feedback</ButtonLabel>
+          </Button>
+        </Bottom>
+      </Content>
     </Container>
   )
-
-  /*<Bottom>
-        <Button onClick={inviteModal.open}>
-          <ButtonIcon>
-            <Icon name="avatar" />
-          </ButtonIcon>
-          <ButtonLabel>Invite People</ButtonLabel>
-        </Button>
-        <Button onClick={mail}>
-          <ButtonIcon>
-            <Icon name="lightbulb" />
-          </ButtonIcon>
-          <ButtonLabel>Share feedback</ButtonLabel>
-        </Button>
-      </Bottom>*/
 
   function mail() {
     window.location.href = 'mailto:azer@sway.so'
@@ -182,9 +189,12 @@ export const navigationBlur2 = `radial-gradient(
 )`
 
 const Container = styled('nav', {
+  display: 'grid',
+  gridTemplateRows: '40px auto',
   position: 'relative',
   borderRight: '1px solid $shellBorderColor',
   width: '220px',
+  height: '100vh',
   color: '$navigationFg',
   background: `${navigationBlur2}`,
 })
@@ -213,6 +223,7 @@ const TrafficLights = styled('div', {
   height: '48px',
   gap: '8px',
   padding: '18px 13px 0 13px',
+  '-webkit-app-region': 'drag',
 })
 
 const TrafficLight = styled('div', {
@@ -272,10 +283,9 @@ const Title = styled('div', {
 })
 
 const Bottom = styled('div', {
-  position: 'absolute',
   width: 'calc(100% - 20px)',
-  bottom: '20px',
-  left: '20px',
+  marginLeft: '20px',
+  marginBottom: '12px',
 })
 
 const Button = styled('div', {
@@ -300,4 +310,20 @@ const ButtonLabel = styled('div', {
   fontSize: '$small',
   fontWeight: '$medium',
   label: true,
+})
+
+const People = styled('div', {
+  space: { outer: [9, 5, 0, 5] },
+})
+
+const Content = styled('div', {
+  position: 'relative',
+  overflowY: 'scroll',
+  display: 'flex',
+  flexDirection: 'column',
+})
+
+const Fill = styled('div', {
+  flexGrow: '1',
+  minHeight: '20px',
 })
