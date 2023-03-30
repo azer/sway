@@ -17,7 +17,7 @@ export function UserHeader(props: Props) {
     <Container>
       {props.status ? <StatusIcon status={props.status} noEmoji /> : null}
       <Avatar
-        src={props.user?.photoUrl}
+        src={props.user?.profile_photo_url}
         alt={props.user?.name}
         fallback={props.user?.name || 'User'}
       />

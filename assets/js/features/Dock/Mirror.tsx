@@ -32,7 +32,7 @@ export function Mirror(props: Props) {
           <Video id={localParticipant.session_id} />
         </SelfVideo>
       ) : (
-        <Avatar src={user?.photoUrl} fallback={user?.name || 'You'} />
+        <Avatar src={user?.profile_photo_url} fallback={user?.name || 'You'} />
       )}
       <StatusIcon
         status={localStatus}

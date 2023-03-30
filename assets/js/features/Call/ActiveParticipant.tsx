@@ -120,7 +120,10 @@ function UActiveParticipant(props: Props) {
         {isVideoOn ? (
           <Video id={props.participantId} />
         ) : (
-          <Avatar src={user?.photoUrl} fallback={user?.name || 'User'} />
+          <Avatar
+            src={user?.profile_photo_url}
+            fallback={user?.name || 'User'}
+          />
         )}
         {audioTrack && !isSelf && (
           <audio

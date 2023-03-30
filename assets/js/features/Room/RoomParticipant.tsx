@@ -53,7 +53,7 @@ export function Participant(props: Props) {
           <StatusIcon status={status} noEmoji />
         </ParticipantLabel>
         <Avatar
-          src={user?.photoUrl}
+          src={user?.profile_photo_url}
           fallback={user?.name || 'User ' + props.userId}
         />
       </RoomParticipantRoot>

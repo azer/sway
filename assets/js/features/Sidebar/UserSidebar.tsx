@@ -90,7 +90,7 @@ export function UserSidebar(props: Props) {
     <Container>
       <CardGrid>
         <Avatar
-          src={user?.photoUrl}
+          src={user?.profile_photo_url}
           alt={user?.name}
           fallback={user?.name || 'User'}
           fontSize="$large"

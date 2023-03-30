@@ -3,11 +3,8 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { Avatar } from 'features/Avatar'
-
-import { AvatarStack } from 'features/Avatar/AvatarView'
-import { RoomStatus } from 'features/Room/selectors'
 import { RoomStatusIcon } from 'components/RoomStatusIcon'
+import { Avatar, AvatarRoot } from 'components/Avatar'
 // import { useSelector, useDispatch } from 'state'
 
 interface Props {
@@ -21,7 +18,9 @@ export function RoomButton(props: Props) {
 
   const [room, usersInRoom, roomStatus] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.id),
-    selectors.rooms.getUsersInRoom(state, props.id),
+    selectors.rooms
+      .getUsersInRoom(state, props.id)
+      .map((id) => selectors.users.getById(state, id)),
     selectors.rooms.getRoomStatus(state, props.id),
   ])
 
@@ -36,8 +35,11 @@ export function RoomButton(props: Props) {
       {!props.selected && usersInRoom.length > 0 ? (
         <Users>
           <AvatarStack>
-            {usersInRoom.slice(0, 4).map((id) => (
-              <Avatar key={id} id={id} small />
+            {usersInRoom.slice(0, 4).map((user) => (
+              <Avatar
+                src={user?.profile_photo_url}
+                fallback={user?.name || ''}
+              />
             ))}
           </AvatarStack>
         </Users>
@@ -80,6 +82,20 @@ const Name = styled('div', {
   label: true,
   ellipsis: true,
   letterSpacing: 'inherit',
+})
+
+export const AvatarStack = styled('div', {
+  display: 'flex',
+  flexDirection: 'row-reverse',
+  justifyContent: 'end',
+  '& *:not(:last-child)': {
+    marginLeft: '-8px',
+  },
+  [`& ${AvatarRoot}`]: {
+    border: '1.5px solid $shellBg',
+    round: true,
+    fontSize: '8px',
+  },
 })
 
 const Users = styled('div', {

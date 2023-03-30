@@ -116,8 +116,8 @@ export function receive(status: Status) {
       notifications.show({
         title: `${user?.name} is available`,
         body: `${user?.name} is ${label} in the ${room.name} room`,
-        icon: user?.photoUrl,
-        badge: user?.photoUrl,
+        icon: user?.profile_photo_url,
+        badge: user?.profile_photo_url,
         requireInteraction: true,
       })
     }

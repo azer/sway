@@ -7,7 +7,7 @@ import { initials } from 'lib/string'
 
 interface Props {
   alt?: string
-  src?: string
+  src?: string | null
   fallback: string
   fontSize?: string
 }

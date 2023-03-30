@@ -9,13 +9,6 @@ import { PresenceStatus } from 'state/presence'
 
 interface Props {}
 
-interface Tap {
-  from: string
-  to: string
-  workspace_id: string
-  room_id: string
-}
-
 const log = logger('tap/provider')
 
 export function TapProvider(props: Props) {
@@ -45,8 +38,8 @@ export function TapProvider(props: Props) {
     notifications.show({
       title: `${firstName(tappingUser.name)} tapped you`,
       body: 'Jump on Sway to start talking',
-      icon: tappingUser.photoUrl,
-      badge: tappingUser.photoUrl,
+      icon: tappingUser.profile_photo_url,
+      badge: tappingUser.profile_photo_url,
     })
 
     setLastTappingUserId(undefined)

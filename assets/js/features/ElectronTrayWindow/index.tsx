@@ -240,7 +240,7 @@ const fakeState = `{
     }
 }`
 
-interface Props { }
+interface Props {}
 
 export function ElectronTrayWindow(props: Props) {
   globalStyles()
@@ -372,7 +372,7 @@ export function ElectronTrayWindow(props: Props) {
         {userList.map((u) => (
           <User>
             <Avatar
-              src={u.user?.photoUrl || ''}
+              src={u.user?.profile_photo_url || ''}
               fallback={u.user?.name.slice(0)}
               alt={u.user?.name}
             />
@@ -446,7 +446,7 @@ export function ElectronTrayWindow(props: Props) {
           </StatusDropdown>
         </Dropdown.Menu>
       </Dock>
-    </Container >
+    </Container>
   )
 
   function showMainWindow() {
