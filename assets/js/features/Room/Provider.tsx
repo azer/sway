@@ -88,13 +88,13 @@ export function RoomNavigationProvider(props: Props) {
   useEffect(() => {
     if (!focusedRoom || !channel || !localUser) return
 
-    log.info('Focused room changed', focusedRoom.name)
+    log.info('Sync new focus room to backend', focusedRoom.id, focusedRoom.slug)
 
-    if (focusedRoom.is_private) {
+    /*if (focusedRoom.is_private) {
       navigate(`/${workspace?.slug}/room/${focusedRoom.id}/${focusedRoom.slug}`)
     } else {
       navigate(`/${workspace?.slug}/room/${focusedRoom.slug}`)
-    }
+    }*/
 
     channel.push('rooms:join', {
       id: focusedRoom?.id,
@@ -112,7 +112,6 @@ export function RoomNavigationProvider(props: Props) {
     )
 
     //enterById(presentRoom.id)
-    //dispatch(setFocusedRoomById(presentRoom.id))
   }, [focusedRoom?.id, presentRoom?.id])
 
   return <></>

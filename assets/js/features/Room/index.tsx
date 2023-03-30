@@ -1,14 +1,10 @@
 import React, { useEffect } from 'react'
 import { styled } from 'themes'
 import { logger } from 'lib/log'
-import { ParticipantGrid } from './ParticipantGrid'
-
 import { Dock } from 'features/Dock'
 import { ScreenshareProvider } from 'features/Screenshare/Provider'
-import { RoomButton } from './RoomButton'
 import { isElectron } from 'lib/electron'
 import { CallDock } from 'features/CallDock'
-
 import { useSelector, useDispatch } from 'state'
 import selectors from 'selectors'
 import { Participant, RoomParticipantRoot } from './RoomParticipant'
@@ -20,6 +16,7 @@ import {
 import { AvatarRoot } from 'components/Avatar'
 import { CallTile } from 'features/Call/Tile'
 import { usePresence } from 'features/Presence/use-presence'
+import { moveUserToRoom, setFocusedRoomById } from './slice'
 
 interface Props {
   id: string
@@ -28,6 +25,7 @@ interface Props {
 const log = logger('room')
 
 export function RoomPage(props: Props) {
+  const dispatch = useDispatch()
   const presence = usePresence()
 
   const [
@@ -37,6 +35,7 @@ export function RoomPage(props: Props) {
     focusedParticipantId,
     mainParticipants,
     minimizedParticipants,
+    focusedRoomId,
   ] = useSelector((state) => {
     const users = selectors.rooms.getOtherUsersInRoom(state, props.id)
 
@@ -78,8 +77,17 @@ export function RoomPage(props: Props) {
       focusedParticipantId,
       mainParticipants,
       minimizedParticipants,
+      selectors.rooms.getFocusedRoom(state)?.id,
     ]
   })
+
+  useEffect(() => {
+    if (props.id !== focusedRoomId) {
+      log.info('User navigated to another room', props.id, focusedRoomId)
+      dispatch(moveUserToRoom({ roomId: props.id, userId: localUserId || '' }))
+      dispatch(setFocusedRoomById(props.id))
+    }
+  }, [props.id, focusedRoomId])
 
   return (
     <Container

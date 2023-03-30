@@ -19,16 +19,23 @@ export function MainRoute(): JSX.Element {
   const dispatch = useDispatch()
   const params = useParams()
 
-  const [room] = useSelector((state) => [
-    params.slug
-      ? selectors.rooms.getRoomBySlug(state, params.slug)
-      : selectors.rooms.getFocusedRoom(state),
+  const [roomId] = useSelector((state) => [
+    (params.room
+      ? selectors.rooms.getRoomBySlug(state, params.room)
+      : selectors.rooms.getFocusedRoom(state)
+    )?.id,
   ])
 
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== 'cmdk') return
     commandPalette.setCommands(Object.values(commands))
   }, [commandPalette.isOpen, commandPalette.id, commands])
+
+  /*useEffect(() => {
+    if (room && params.room !== room.name) {
+
+    }
+  }, [params.room, room?.id])*/
 
   useHotkeys(
     'meta+k',
@@ -39,11 +46,9 @@ export function MainRoute(): JSX.Element {
     [commandPalette.isOpen]
   )
 
-  return (
-    <Shell>
-      <RoomPage id={room?.id || ''} />
-    </Shell>
-  )
+  log.info('Room page', roomId)
+
+  return <Shell>{roomId ? <RoomPage id={roomId} /> : null}</Shell>
 
   function onPressCommandK() {
     if (commandPalette.isOpen) commandPalette.close()

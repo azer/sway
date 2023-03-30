@@ -1,5 +1,7 @@
 import { useCommandPalette } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
+import { RoomPage } from 'features/Room'
+import { Shell } from 'features/Shell'
 import { logger } from 'lib/log'
 import React, { useEffect } from 'react'
 import {
@@ -11,8 +13,6 @@ import {
 } from 'react-router-dom'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { MainRoute } from './Main'
-import { PrivateRoomRoute } from './PrivateRoom'
 
 const log = logger('routing')
 
@@ -25,7 +25,7 @@ export default function Routing(): JSX.Element {
       <Routes>
         <Route path="/" element={<DefaultWorkspace />} />
         <Route path="/:workspace" element={<DefaultRoom />} />
-        <Route path="/:workspace/room/:room" element={<MainRoute />} />
+        <Route path="/:workspace/room/:room_slug" element={<RoomRoute />} />
         <Route
           path="/:workspace/room/:room_id/:room_slug"
           element={<PrivateRoomRoute />}
@@ -66,4 +66,32 @@ function DefaultRoom(): JSX.Element {
   }, [room?.slug])
 
   return <></>
+}
+
+function PrivateRoomRoute() {
+  // const dispatch = useDispatch()
+  // const [] = useSelector((state) => [])
+
+  const params = useParams()
+
+  return (
+    <Shell>
+      {params.room_id ? <RoomPage id={params.room_id} /> : 'Bad route'}
+    </Shell>
+  )
+}
+
+function RoomRoute() {
+  const params = useParams()
+
+  const [roomId] = useSelector((state) => {
+    const room = params.room_slug
+      ? selectors.rooms.getRoomBySlug(state, params.room_slug)
+      : undefined
+    log.info('room route;;', params.room_slug, room)
+
+    return [room?.id]
+  })
+
+  return <Shell>{roomId ? <RoomPage id={roomId} /> : null}</Shell>
 }

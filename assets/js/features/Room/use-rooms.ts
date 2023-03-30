@@ -10,17 +10,19 @@ import {
   setFocusedRoomById,
   setFocusedRoomBySlug,
 } from './slice'
+import { useNavigate } from 'react-router-dom'
+import { Rooms } from 'state/entities'
 
 const log = logger('rooms/use-rooms')
 
 export function useRooms() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const [localUser] = useSelector((state) => [
+  const [localUser, workspace, roomIdMap] = useSelector((state) => [
     selectors.users.getSelf(state),
     selectors.workspaces.getSelfWorkspace(state),
-    selectors.rooms.getFocusedRoom(state),
-    selectors.rooms.getPresentRoom(state),
+    state.entities[Rooms],
   ])
 
   return {
@@ -30,8 +32,14 @@ export function useRooms() {
 
   function enterById(id: string) {
     log.info('Enter room by id', id)
-    dispatch(moveUserToRoom({ roomId: id, userId: localUser?.id || '' }))
-    dispatch(setFocusedRoomById(id))
+    if (roomIdMap[id].is_private) {
+      navigate(`/${workspace?.slug}/room/${id}/${roomIdMap[id].slug}`)
+    } else {
+      navigate(`/${workspace?.slug}/room/${roomIdMap[id].slug}`)
+    }
+
+    //dispatch(moveUserToRoom({ roomId: id, userId: localUser?.id || '' }))
+    //dispatch(setFocusedRoomById(id))
   }
 
   function enterBySlug(slug: string) {
