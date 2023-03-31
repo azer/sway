@@ -36,7 +36,7 @@ export function TapProvider(props: Props) {
     }
 
     notifications.show({
-      title: `${firstName(tappingUser.name)} tapped you`,
+      title: `${firstName(tappingUser.name)} waved to you`,
       body: 'Jump on Sway to start talking',
       icon: tappingUser.profile_photo_url,
       badge: tappingUser.profile_photo_url,

@@ -126,7 +126,7 @@ export function UserSidebar(props: Props) {
         </Button>
         <Button onClick={() => user?.id && presence.tap(user.id)}>
           <Emoji id="wave" />
-          Tap
+          Wave
         </Button>
         <Button
           onClick={() => user && createStatusHook(user.id, status?.status)}

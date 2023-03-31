@@ -29,7 +29,7 @@ export function UserContextMenu(props: Props) {
         <ContextMenu.Separator />
         <ContextMenu.Item
           emoji="wave"
-          label="Tap"
+          label="Wave"
           onClick={() => props.user && props.tap(props.user.id)}
         />
         <ContextMenu.Item

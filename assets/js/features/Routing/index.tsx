@@ -88,7 +88,6 @@ function RoomRoute() {
     const room = params.room_slug
       ? selectors.rooms.getRoomBySlug(state, params.room_slug)
       : undefined
-    log.info('room route;;', params.room_slug, room)
 
     return [room?.id]
   })
