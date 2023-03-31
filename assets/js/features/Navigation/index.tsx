@@ -30,7 +30,7 @@ export function Navigation(props: Props) {
     activeRoomIds,
     privateRoomIds,
     focusedRoom,
-    allUsers,
+    people,
     prevRoom,
     localUserId,
     userIdOnSidebar,
@@ -56,12 +56,7 @@ export function Navigation(props: Props) {
       selectors.rooms.listActiveRooms(state),
       privateRoomIds,
       selectors.rooms.getFocusedRoom(state),
-      workspace
-        ? selectors.memberships
-            .listByWorkspaceId(state, workspace.id)
-            .map((m) => m.user_id)
-            .sort(selectors.presence.sortUsersByPresence(state))
-        : [],
+      selectors.navigation.listPeople(state),
       selectors.rooms.getPrevRoom(state),
       selectors.session.getUserId(state),
       selectors.sidebar.getFocusedUserId(state),
@@ -96,7 +91,7 @@ export function Navigation(props: Props) {
   }, [privateRoomToSync])
 
   return (
-    <Container>
+    <Container electron={isElectron}>
       {isElectron ? (
         <TrafficLights>
           <TrafficLight />
@@ -115,7 +110,7 @@ export function Navigation(props: Props) {
         <OrgName>{workspace?.name}</OrgName>
       </Header>
       <Content>
-        <Rooms electron={isElectron}>
+        <Rooms>
           <RoomNavigationProvider />
           <Title>Your Rooms</Title>
           {activeRoomIds.map((id) => (
@@ -143,7 +138,7 @@ export function Navigation(props: Props) {
         <People>
           <Title>People</Title>
 
-          {allUsers.map((uid) => (
+          {people.map((uid) => (
             <UserButton
               key={uid}
               id={uid}
@@ -197,6 +192,13 @@ const Container = styled('nav', {
   height: '100vh',
   color: '$navigationFg',
   background: `${navigationBlur2}`,
+  variants: {
+    electron: {
+      true: {
+        gridTemplateRows: '60px 40px auto',
+      },
+    },
+  },
 })
 
 const Header = styled('header', {
@@ -211,7 +213,7 @@ const Header = styled('header', {
     electron: {
       true: {
         height: 'auto',
-        marginBottom: '32px',
+        marginBottom: '20px',
       },
     },
   },

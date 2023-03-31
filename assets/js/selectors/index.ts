@@ -14,6 +14,7 @@ import * as commandPalette from 'features/CommandPalette/selectors'
 import * as taps from 'features/Tap/selectors'
 import * as sidebar from 'features/Sidebar/selectors'
 import * as roomMembers from 'features/RoomMembers/selectors'
+import * as navigation from 'features/Navigation/selectors'
 
 export default {
   session,
@@ -32,4 +33,5 @@ export default {
   taps,
   sidebar,
   roomMembers,
+  navigation,
 }

@@ -43,7 +43,12 @@ export function listAllPrivateRooms(
   state: RootState,
   workspaceId: string
 ): string[] {
-  return state.rooms.privateRoomIdsByWorkspace[workspaceId]
+  const localUserId = selectors.session.getUserId(state)
+  if (!localUserId) return []
+
+  return state.rooms.privateRoomIdsByWorkspace[workspaceId].filter((id) =>
+    state.roomMembers.userIdsByRoomId[id]?.includes(localUserId)
+  )
 }
 
 export function listActiveRooms(state: RootState): string[] {
