@@ -10,14 +10,19 @@ interface Props {}
 
 export function SidebarHeader(props: Props) {
   const dispatch = useDispatch()
-  const [isOpen] = useSelector((state) => [selectors.sidebar.isOpen(state)])
+  const [isOpen, hasContent] = useSelector((state) => [
+    selectors.sidebar.isOpen(state),
+    selectors.sidebar.hasContent(state),
+  ])
 
   return (
-    <Container electron={isElectron}>
+    <Container>
       <Buttons>
-        <Button onClick={toggle} isOpen={isOpen}>
-          <Icon name="sidebar" />
-        </Button>
+        {hasContent ? (
+          <Button onClick={toggle} isOpen={isOpen}>
+            <Icon name="sidebar" />
+          </Button>
+        ) : null}
       </Buttons>
     </Container>
   )
@@ -33,19 +38,6 @@ const Container = styled('header', {
   width: '300px',
   borderBottom: '1px solid $shellBorderColor',
   transition: 'width 0.1s ease-in-out',
-  variants: {
-    electron: {
-      true: {
-        //borderLeft: '1px solid $shellBorderColor',
-      },
-    },
-    isOpen: {
-      /*false: {
-        width: '0',
-        overflow: 'hidden',
-      },*/
-    },
-  },
 })
 
 const Title = styled('div', {

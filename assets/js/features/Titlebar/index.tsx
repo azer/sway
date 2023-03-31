@@ -3,19 +3,13 @@ import React from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { RoomButton, RoomName, RoomButtonBg } from 'features/Room/RoomButton'
-import { Tooltip } from 'components/Tooltip'
 import { SidebarHeader } from 'features/Sidebar/Header'
-import { isElectron } from 'lib/electron'
 
 interface Props {}
 
 export function Titlebar(props: Props) {
   // const dispatch = useDispatch()
-  const [workspace, room, sidebarOpen] = useSelector((state) => [
-    selectors.workspaces.getSelfWorkspace(state),
-    selectors.rooms.getFocusedRoom(state),
-    selectors.sidebar.isOpen(state),
-  ])
+  const [room] = useSelector((state) => [selectors.rooms.getFocusedRoom(state)])
 
   return (
     <Container>
