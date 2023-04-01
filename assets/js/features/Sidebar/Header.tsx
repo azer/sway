@@ -4,24 +4,32 @@ import React from 'react'
 import selectors from 'selectors'
 import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
-import { setSidebarOpen } from './slice'
+import { openChatSidebar, setSidebarOpen } from './slice'
+import { SidebarContent } from './focus'
 
 interface Props {}
 
 export function SidebarHeader(props: Props) {
   const dispatch = useDispatch()
-  const [isOpen, hasContent] = useSelector((state) => [
+  const [isOpen, hasContent, content] = useSelector((state) => [
     selectors.sidebar.isOpen(state),
     selectors.sidebar.hasContent(state),
+    selectors.sidebar.getContent(state),
   ])
 
   return (
     <Container>
       <Buttons>
+        <Button
+          onClick={toggleChat}
+          isOpen={isOpen && content === SidebarContent.Chat}
+        >
+          <Icon name="chat" />
+        </Button>
         {hasContent ? (
-          <Button onClick={toggle} isOpen={isOpen}>
+          <ToggleButton onClick={toggle} isOpen={isOpen}>
             <Icon name="sidebar" />
-          </Button>
+          </ToggleButton>
         ) : null}
       </Buttons>
     </Container>
@@ -29,6 +37,10 @@ export function SidebarHeader(props: Props) {
 
   function toggle() {
     dispatch(setSidebarOpen(!isOpen))
+  }
+
+  function toggleChat() {
+    dispatch(openChatSidebar())
   }
 }
 
@@ -58,6 +70,7 @@ const Buttons = styled('div', {
   width: '100%',
   height: '100%',
   marginRight: '8px',
+  gap: '6px',
 })
 
 const Button = styled('div', {
@@ -71,7 +84,6 @@ const Button = styled('div', {
   '& svg': {
     aspectRatio: '1',
     height: '12px',
-    transform: 'rotate(180deg)',
   },
   '&:hover': {
     background: 'rgba(255, 255, 255, 0.1)',
@@ -80,6 +92,19 @@ const Button = styled('div', {
     isOpen: {
       true: {
         background: 'rgba(255, 255, 255, 0.1)',
+      },
+    },
+  },
+})
+
+const ToggleButton = styled(Button, {
+  '& svg': {
+    transform: 'rotate(180deg)',
+  },
+  variants: {
+    isOpen: {
+      true: {
+        background: 'transparent',
         '&::after': {
           content: ' ',
           position: 'absolute',

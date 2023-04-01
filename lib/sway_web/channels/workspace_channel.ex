@@ -2,10 +2,16 @@ defmodule SwayWeb.WorkspaceChannel do
   use SwayWeb, :channel
 
   alias SwayWeb.UserPresence
+  alias Sway.Accounts
+  alias Sway.Chat
+  alias Sway.Rooms
+  alias Sway.Statuses
+  alias Sway.Workspaces
+  alias SwayWeb.Hashing
 
   @impl true
   def join("workspace:" <> workspace_id, _payload, socket) do
-    if authorized?(socket.assigns.user, SwayWeb.Hashing.decode_workspace(workspace_id)) do
+    if authorized?(socket.assigns.user, Hashing.decode_workspace(workspace_id)) do
       send(self(), :after_join)
       {:ok, socket}
     else
@@ -14,8 +20,8 @@ defmodule SwayWeb.WorkspaceChannel do
   end
 
   def handle_info(:after_join, socket) do
-    user = Sway.Accounts.get_user!(socket.assigns[:user])
-    id = SwayWeb.Hashing.encode_user(user.id)
+    user = Accounts.get_user!(socket.assigns[:user])
+    id = Hashing.encode_user(user.id)
 
     {:ok, _} =
       UserPresence.track(socket, "users:#{id}", %{
@@ -36,8 +42,87 @@ defmodule SwayWeb.WorkspaceChannel do
 
   def handle_in("entities:fetch", %{"id" => encoded_id, "schema" => schema_name}, socket) do
     {key, schema, view} = SwayWeb.SchemaMap.find_by_name(schema_name)
-    row = Sway.Repo.get!(schema, SwayWeb.Hashing.decode_any(encoded_id))
+    row = Sway.Repo.get!(schema, Hashing.decode_any(encoded_id))
     {:reply, {:ok, SwayWeb.APIView.render_row(view.encode(row), key)}, socket}
+  end
+
+  def handle_in("chat:list_messages", %{"room_id" => encoded_room_id}, socket) do
+    room_id = Hashing.decode_room(encoded_room_id)
+
+    case Chat.list_messages_by_room(room_id) do
+      {:ok, messages} ->
+        push(socket, "chat:list_messages", %{
+          messages: Enum.map(messages, fn m -> SwayWeb.ChatMessageView.encode(m) end),
+          room_id: encoded_room_id
+        })
+
+        {:noreply, socket}
+
+      {:error, _reason} ->
+        {:reply, {:error, "Error listing messages"}, socket}
+    end
+  end
+
+  def handle_in(
+        "chat:post_message",
+        %{"room_id" => encoded_room_id, "user_id" => encoded_user_id, "body" => body},
+        socket
+      ) do
+    room_id = Hashing.decode_room(encoded_room_id)
+    user_id = Hashing.decode_user(encoded_user_id)
+
+    IO.puts "###"
+
+    case Chat.create_message(%{room_id: room_id, user_id: user_id, body: body}) do
+      {:ok, message} ->
+	IO.inspect(message)
+
+        push(socket, "chat:new_message", %{message: SwayWeb.ChatMessageView.encode(message)})
+        {:noreply, socket}
+
+      {:error, reason} ->
+	IO.puts("error")
+	IO.inspect(reason)
+        {:reply, {:error, "Error posting message"}, socket}
+    end
+  end
+
+  def handle_in("chat:edit_message", %{"id" => encoded_id, "body" => body}, socket) do
+    id = Hashing.decode_message(encoded_id)
+
+    case Chat.get_message!(id) do
+      message ->
+        case Chat.update_message(message, %{body: body}) do
+          {:ok, updated_message} ->
+            push(socket, "chat:message_updated", %{
+              message: SwayWeb.ChatMessageView.encode(updated_message)
+            })
+
+            {:noreply, socket}
+
+          {:error, _reason} ->
+            {:reply, {:error, "Error editing message"}, socket}
+        end
+    end
+  end
+
+  def handle_in("chat:delete_message", %{"id" => encoded_id}, socket) do
+    id = Hashing.decode_message(encoded_id)
+
+    case Chat.get_message!(id) do
+      message ->
+        case Chat.soft_delete_message(message) do
+          {:ok, deleted_message} ->
+            push(socket, "chat:message_deleted", %{
+              message: SwayWeb.ChatMessageView.encode(deleted_message)
+            })
+
+            {:noreply, socket}
+
+          {:error, _reason} ->
+            {:reply, {:error, "Error deleting message"}, socket}
+        end
+    end
   end
 
   def handle_in(
@@ -60,20 +145,17 @@ defmodule SwayWeb.WorkspaceChannel do
 
   def handle_in("workspace:list_online_users", %{"workspace_id" => workspace_id}, socket) do
     statuses =
-      list_online_users_by_rooms(socket, SwayWeb.Hashing.decode_workspace(workspace_id))
-      |> Enum.map(fn status -> status_broadcastable(status) end)
+      list_online_users_by_rooms(socket, Hashing.decode_workspace(workspace_id))
+      |> Enum.map(fn status -> SwayWeb.StatusView.encode(status) end)
 
     {:reply, {:ok, %{statuses: statuses}}, socket}
   end
 
   def handle_in("workspace:list_workspace_memberships", %{"workspace_id" => workspace_id}, socket) do
-    memberships =
-      Sway.Workspaces.list_memberships_by_workspace(
-        SwayWeb.Hashing.decode_workspace(workspace_id)
-      )
+    memberships = Workspaces.list_memberships_by_workspace(Hashing.decode_workspace(workspace_id))
 
     {:reply,
-     {:ok, Enum.map(memberships, fn membership -> membership_broadcastable(membership) end)},
+     {:ok, Enum.map(memberships, fn membership -> SwayWeb.MembershipView.encode(membership) end)},
      socket}
   end
 
@@ -82,9 +164,9 @@ defmodule SwayWeb.WorkspaceChannel do
         %{"id" => encoded_room_id, "workspace_id" => encoded_workspace_id},
         socket
       ) do
-    room_id = SwayWeb.Hashing.decode_room(encoded_room_id)
-    workspace_id = SwayWeb.Hashing.decode_workspace(encoded_workspace_id)
-    encoded_user_id = SwayWeb.Hashing.encode_user(socket.assigns.user)
+    room_id = Hashing.decode_room(encoded_room_id)
+    workspace_id = Hashing.decode_workspace(encoded_workspace_id)
+    encoded_user_id = Hashing.encode_user(socket.assigns.user)
 
     broadcast(socket, "rooms:join", %{"id" => encoded_room_id, "user_id" => encoded_user_id})
 
@@ -96,18 +178,18 @@ defmodule SwayWeb.WorkspaceChannel do
         workspace_id: encoded_workspace_id
       })
 
-    status = Sway.Statuses.get_latest_status(socket.assigns.user, workspace_id)
+    status = Statuses.get_latest_status(socket.assigns.user, workspace_id)
 
-    case Sway.Statuses.update_status(status, %{room_id: room_id}) do
+    case Statuses.update_status(status, %{room_id: room_id}) do
       {:ok, status} ->
-        # broadcast(socket, "user:status", status_broadcastable(status))
+        # broadcast(socket, "user:status", SwayWeb.StatusView.encode(status))
         broadcast(
           socket,
           "workspace:sync_online_user_statuses",
           %{
             statuses:
               Enum.map(list_online_users_by_rooms(socket, workspace_id), fn status ->
-                status_broadcastable(status)
+                SwayWeb.StatusView.encode(status)
               end)
           }
         )
@@ -120,8 +202,8 @@ defmodule SwayWeb.WorkspaceChannel do
   end
 
   def handle_in("rooms:create", %{"name" => name, "workspace_id" => encoded_workspace_id}, socket) do
-    user = Sway.Accounts.get_user!(socket.assigns.user)
-    workspace_id = SwayWeb.Hashing.decode_workspace(encoded_workspace_id)
+    user = Accounts.get_user!(socket.assigns.user)
+    workspace_id = Hashing.decode_workspace(encoded_workspace_id)
 
     attrs = %{
       name: name,
@@ -133,13 +215,13 @@ defmodule SwayWeb.WorkspaceChannel do
 
     case authorized?(user.id, workspace_id) do
       true ->
-        case Sway.Rooms.create_or_activate_room(attrs) do
+        case Rooms.create_or_activate_room(attrs) do
           {:ok, room} ->
-            workspace_rooms = Sway.Rooms.list_by_workspace_id(workspace_id)
-            all = Enum.map(workspace_rooms, fn room -> room_broadcastable(room) end)
+            workspace_rooms = Rooms.list_by_workspace_id(workspace_id)
+            all = Enum.map(workspace_rooms, fn room -> SwayWeb.RoomView.encode(room) end)
 
-            broadcast(socket, "rooms:create", %{all: all, created: room_broadcastable(room)})
-            {:reply, {:ok, %{room: room_broadcastable(room), workspace_rooms: all}}, socket}
+            broadcast(socket, "rooms:create", %{all: all, created: SwayWeb.RoomView.encode(room)})
+            {:reply, {:ok, %{room: SwayWeb.RoomView.encode(room), workspace_rooms: all}}, socket}
 
           {:error, changeset} ->
             errors = Enum.map(changeset.errors, fn err -> error_broadcastable(err) end)
@@ -163,14 +245,14 @@ defmodule SwayWeb.WorkspaceChannel do
     roomName =
       Enum.join(
         Enum.map(users, fn userId ->
-          user = Sway.Accounts.get_user!(SwayWeb.Hashing.decode_user(userId))
+          user = Accounts.get_user!(Hashing.decode_user(userId))
           user.name
         end),
         ", "
       )
 
-    workspace_id = SwayWeb.Hashing.decode_workspace(encoded_workspace_id)
-    created_by = SwayWeb.Hashing.decode_user(encoded_created_by)
+    workspace_id = Hashing.decode_workspace(encoded_workspace_id)
+    created_by = Hashing.decode_user(encoded_created_by)
 
     attrs = %{
       name: roomName,
@@ -179,20 +261,20 @@ defmodule SwayWeb.WorkspaceChannel do
       is_private: true
     }
 
-    user_ids = Enum.map(users, &SwayWeb.Hashing.decode_user/1)
+    user_ids = Enum.map(users, &Hashing.decode_user/1)
 
     room =
-      case Sway.Rooms.get_private_room_by_user_ids(workspace_id, user_ids) do
+      case Rooms.get_private_room_by_user_ids(workspace_id, user_ids) do
         room ->
-          broadcast(socket, "rooms:update", room_broadcastable(room))
+          broadcast(socket, "rooms:update", SwayWeb.RoomView.encode(room))
 
         nil ->
-          case Sway.Rooms.create_private_room_with_members(
+          case Rooms.create_private_room_with_members(
                  attrs,
                  user_ids
                ) do
             {:ok, room} ->
-              broadcast(socket, "rooms:update", room_broadcastable(room))
+              broadcast(socket, "rooms:update", SwayWeb.RoomView.encode(room))
 
             {:error, _changes_so_far, failed_operation, _changes} ->
               {:reply, {:error, "Failed to create private room: #{inspect(failed_operation)}"},
@@ -202,15 +284,15 @@ defmodule SwayWeb.WorkspaceChannel do
   end
 
   def handle_in("rooms:rename", %{"id" => encoded_room_id, "name" => name}, socket) do
-    user = Sway.Accounts.get_user!(socket.assigns.user)
-    room = Sway.Rooms.get_room!(SwayWeb.Hashing.decode_room(encoded_room_id))
+    user = Accounts.get_user!(socket.assigns.user)
+    room = Rooms.get_room!(Hashing.decode_room(encoded_room_id))
 
     case authorized?(user.id, room.workspace_id) do
       true ->
-        case Sway.Rooms.update_room(room, %{name: name}) do
+        case Rooms.update_room(room, %{name: name}) do
           {:ok, room} ->
-            broadcast(socket, "rooms:update", room_broadcastable(room))
-            {:reply, {:ok, %{room: room_broadcastable(room)}}, socket}
+            broadcast(socket, "rooms:update", SwayWeb.RoomView.encode(room))
+            {:reply, {:ok, %{room: SwayWeb.RoomView.encode(room)}}, socket}
 
           {:error, changeset} ->
             errors = Enum.map(changeset.errors, fn err -> error_broadcastable(err) end)
@@ -223,22 +305,22 @@ defmodule SwayWeb.WorkspaceChannel do
   end
 
   def handle_in("rooms:delete", %{"id" => encoded_room_id}, socket) do
-    user = Sway.Accounts.get_user!(socket.assigns.user)
-    room = Sway.Rooms.get_room!(SwayWeb.Hashing.decode_room(encoded_room_id))
+    user = Accounts.get_user!(socket.assigns.user)
+    room = Rooms.get_room!(Hashing.decode_room(encoded_room_id))
 
     case authorized?(user.id, room.workspace_id) do
       true ->
-        case Sway.Rooms.update_room(room, %{is_active: false}) do
+        case Rooms.update_room(room, %{is_active: false}) do
           {:ok, room} ->
-            broadcast(socket, "rooms:update", room_broadcastable(room))
-            workspace_rooms = Sway.Rooms.list_by_workspace_id(room.workspace_id)
+            broadcast(socket, "rooms:update", SwayWeb.RoomView.encode(room))
+            workspace_rooms = Rooms.list_by_workspace_id(room.workspace_id)
 
             {:reply,
              {:ok,
               %{
-                room: room_broadcastable(room),
+                room: SwayWeb.RoomView.encode(room),
                 workspace_rooms:
-                  Enum.map(workspace_rooms, fn room -> room_broadcastable(room) end)
+                  Enum.map(workspace_rooms, fn room -> SwayWeb.RoomView.encode(room) end)
               }}, socket}
 
           {:error, changeset} ->
@@ -257,14 +339,14 @@ defmodule SwayWeb.WorkspaceChannel do
         socket
       ) do
     status =
-      Sway.Statuses.get_latest_status(
+      Statuses.get_latest_status(
         socket.assigns.user,
-        SwayWeb.Hashing.decode_workspace(encoded_workspace_id)
+        Hashing.decode_workspace(encoded_workspace_id)
       )
 
-    case Sway.Statuses.update_status(status, %{timezone: timezone}) do
+    case Statuses.update_status(status, %{timezone: timezone}) do
       {:ok, status} ->
-        broadcast(socket, "user:status", status_broadcastable(status))
+        broadcast(socket, "user:status", SwayWeb.StatusView.encode(status))
         {:noreply, socket}
 
       {:error, reason} ->
@@ -278,14 +360,14 @@ defmodule SwayWeb.WorkspaceChannel do
         socket
       ) do
     status =
-      Sway.Statuses.get_latest_status(
+      Statuses.get_latest_status(
         socket.assigns.user,
-        SwayWeb.Hashing.decode_workspace(encoded_workspace_id)
+        Hashing.decode_workspace(encoded_workspace_id)
       )
 
-    case Sway.Statuses.update_status(status, %{emoji: emoji}) do
+    case Statuses.update_status(status, %{emoji: emoji}) do
       {:ok, status} ->
-        broadcast(socket, "user:status", status_broadcastable(status))
+        broadcast(socket, "user:status", SwayWeb.StatusView.encode(status))
         {:noreply, socket}
 
       {:error, reason} ->
@@ -299,9 +381,9 @@ defmodule SwayWeb.WorkspaceChannel do
         socket
       ) do
     last =
-      Sway.Statuses.get_latest_status(
+      Statuses.get_latest_status(
         socket.assigns.user,
-        SwayWeb.Hashing.decode_workspace(encoded_workspace_id)
+        Hashing.decode_workspace(encoded_workspace_id)
       )
 
     next = %{
@@ -318,9 +400,9 @@ defmodule SwayWeb.WorkspaceChannel do
     }
 
     if last.message != next.message do
-      case Sway.Statuses.create_status(next) do
+      case Statuses.create_status(next) do
         {:ok, status} ->
-          broadcast(socket, "user:status", status_broadcastable(status))
+          broadcast(socket, "user:status", SwayWeb.StatusView.encode(status))
           {:noreply, socket}
 
         {:error, reason} ->
@@ -340,17 +422,17 @@ defmodule SwayWeb.WorkspaceChannel do
         },
         socket
       ) do
-    room_id = SwayWeb.Hashing.decode_room(encoded_room_id)
-    workspace_id = SwayWeb.Hashing.decode_workspace(encoded_workspace_id)
+    room_id = Hashing.decode_room(encoded_room_id)
+    workspace_id = Hashing.decode_workspace(encoded_workspace_id)
 
-    case Sway.Statuses.create_status(%{
+    case Statuses.create_status(%{
            status: presence_mode,
            user_id: socket.assigns.user,
            room_id: room_id,
            workspace_id: workspace_id
          }) do
       {:ok, status} ->
-        broadcast(socket, "user:status", status_broadcastable(status))
+        broadcast(socket, "user:status", SwayWeb.StatusView.encode(status))
         {:noreply, socket}
 
       {:error, reason} ->
@@ -371,20 +453,20 @@ defmodule SwayWeb.WorkspaceChannel do
         socket
       ) do
     status =
-      Sway.Statuses.get_latest_status(
+      Statuses.get_latest_status(
         socket.assigns.user,
-        SwayWeb.Hashing.decode_workspace(encoded_workspace_id)
+        Hashing.decode_workspace(encoded_workspace_id)
       )
 
-    case Sway.Statuses.update_status(status, %{
+    case Statuses.update_status(status, %{
            status: mode,
            camera_on: camera_on,
            mic_on: mic_on,
            speaker_on: speaker_on,
-           room_id: SwayWeb.Hashing.decode_room(encoded_room_id)
+           room_id: Hashing.decode_room(encoded_room_id)
          }) do
       {:ok, status} ->
-        broadcast(socket, "user:status", status_broadcastable(status))
+        broadcast(socket, "user:status", SwayWeb.StatusView.encode(status))
         {:noreply, socket}
 
       {:error, reason} ->
@@ -402,34 +484,18 @@ defmodule SwayWeb.WorkspaceChannel do
 
   # Add authorization logic here as required.
   defp authorized?(user_id, workspace_id) do
-    membership = Sway.Workspaces.get_membership_by_workspace(user_id, workspace_id)
+    membership = Workspaces.get_membership_by_workspace(user_id, workspace_id)
     membership != nil
   end
 
   defp list_online_users_by_rooms(socket, workspace_id) do
     UserPresence.list(socket)
-    |> Enum.map(fn {_, value} -> SwayWeb.Hashing.decode_user(hd(value[:metas])[:user_id]) end)
+    |> Enum.map(fn {_, value} -> Hashing.decode_user(hd(value[:metas])[:user_id]) end)
     |> Enum.map(fn user_id ->
-      Sway.Statuses.get_latest_status(user_id, workspace_id)
+      Statuses.get_latest_status(user_id, workspace_id)
     end)
 
     # |> Enum.group_by(&(&1["room_id"]), &(&1))
-  end
-
-  def room_broadcastable(room) do
-    SwayWeb.RoomView.encode(room)
-  end
-
-  def user_broadcastable(user) do
-    SwayWeb.UserView.encode(user)
-  end
-
-  def status_broadcastable(status) do
-    SwayWeb.StatusView.encode(status)
-  end
-
-  def membership_broadcastable(membership) do
-    SwayWeb.MembershipView.encode(membership)
   end
 
   def error_broadcastable({field, value}) do

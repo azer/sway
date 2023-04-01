@@ -3,7 +3,14 @@ import { APIResponse, APIResponseRow } from 'lib/api'
 import { PresenceStatus } from './presence'
 import { AppDispatch, RootState } from './store'
 
-export type Entity = User | Workspace | Room | Status | Participant | Membership
+export type Entity =
+  | User
+  | Workspace
+  | Room
+  | Status
+  | Participant
+  | Membership
+  | ChatMessage
 
 export type Schema =
   | typeof Users
@@ -12,6 +19,7 @@ export type Schema =
   | typeof Statuses
   | typeof Participants
   | typeof Memberships
+  | typeof ChatMessages
 
 export interface Update {
   schema: Schema
@@ -72,6 +80,19 @@ export interface RoomMember {
   inserted_at: string
 }
 
+export const ChatMessages = 'chat_messages'
+export interface ChatMessage {
+  id: string
+  room_id: string
+  user_id: string
+  body: string
+  is_active: boolean
+  inserted_at: string
+  updated_at: string
+  edited_at: string | null
+  thread_id: string | null
+}
+
 export const Statuses = 'statuses'
 export interface Status {
   id: string
@@ -112,6 +133,7 @@ export const initialState = {
   [Rooms]: initial<Room>(Rooms),
   [Statuses]: initial<Status>(Statuses),
   [Participants]: initial<Participant>(Participants),
+  [ChatMessages]: initial<ChatMessage>(ChatMessages),
 }
 
 export const slice = createSlice({

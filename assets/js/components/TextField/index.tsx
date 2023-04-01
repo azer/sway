@@ -10,7 +10,7 @@ interface Props {
   onBlur: () => void
 }
 
-export default function TextField(props: Props) {
+export function TextField(props: Props) {
   const containerEl = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -19,8 +19,8 @@ export default function TextField(props: Props) {
   }, [containerEl, props.value])
 
   return (
-    <InputWrapper ref={containerEl}>
-      <StyledTextField
+    <TextFieldRoot ref={containerEl}>
+      <TextfieldInput
         rows={1}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
@@ -29,7 +29,7 @@ export default function TextField(props: Props) {
         placeholder={props.placeholder}
         value={props.value}
       />
-    </InputWrapper>
+    </TextFieldRoot>
   )
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -37,7 +37,7 @@ export default function TextField(props: Props) {
   }
 }
 
-export const InputWrapper = styled('div', {
+export const TextFieldRoot = styled('div', {
   display: 'grid',
   backgroundColor: 'transparent',
   '&::after': {
@@ -47,18 +47,20 @@ export const InputWrapper = styled('div', {
     font: 'inherit',
     gridArea: '1 / 1 / 2 / 2',
     lineHeight: 'inherit',
+    color: '$blue',
   },
 })
 
-export const StyledTextField = styled('textarea', {
+export const TextfieldInput = styled('textarea', {
   display: 'block',
   width: '100%',
   color: 'rgba(255, 255, 255, 0.9)',
-  backgroundColor: 'inherit',
+  backgroundColor: 'transparent',
   border: 0,
-  fontFamily: '$sans',
+  fontFamily: 'inherit',
   outline: 'none',
   resize: 'none',
+  lineHeight: 'inherit',
   overflow: 'hidden',
   gridArea: '1 / 1 / 2 / 2',
   '&::placeholder': {

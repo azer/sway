@@ -8,6 +8,7 @@ import * as dock from 'features/Dock/selectors'
 import * as call from 'features/Call/selectors'
 import * as settings from 'features/Settings/selectors'
 import * as statuses from './status'
+import * as chatMessages from './chat-messages'
 import * as presence from 'features/Presence/selectors'
 import * as electronTray from 'features/ElectronTray/selectors'
 import * as commandPalette from 'features/CommandPalette/selectors'
@@ -15,6 +16,7 @@ import * as taps from 'features/Tap/selectors'
 import * as sidebar from 'features/Sidebar/selectors'
 import * as roomMembers from 'features/RoomMembers/selectors'
 import * as navigation from 'features/Navigation/selectors'
+import * as chat from 'features/Chat/selectors'
 
 export default {
   session,
@@ -34,4 +36,6 @@ export default {
   sidebar,
   roomMembers,
   navigation,
+  chat,
+  chatMessages,
 }

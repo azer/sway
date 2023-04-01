@@ -1,0 +1,23 @@
+defmodule Sway.Chat.Message do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  schema "messages" do
+    field :body, :string
+    field :edited_at, :utc_datetime
+    field :is_active, :boolean, default: false
+
+    belongs_to :room, Sway.Rooms.Room
+    belongs_to :user, Sway.Accounts.User
+    belongs_to :thread, Sway.Chat.Message, foreign_key: :thread_id
+
+    timestamps()
+  end
+
+  @doc false
+  def changeset(message, attrs) do
+    message
+    |> cast(attrs, [:body, :is_active, :edited_at])
+    |> validate_required([:body, :edited_at])
+  end
+end

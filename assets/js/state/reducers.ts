@@ -11,6 +11,7 @@ import userSocket from 'features/UserSocket/slice'
 import workspaces from 'features/Workspace/slice'
 import taps from 'features/Tap/slice'
 import roomMembers from 'features/RoomMembers/slice'
+import chat from 'features/Chat/slice'
 
 export default {
   //undotree,
@@ -26,4 +27,5 @@ export default {
   workspaces,
   taps,
   roomMembers,
+  chat,
 }

@@ -37,3 +37,10 @@ export function openUserSidebar(userId: string) {
     }
   })
 }
+
+export function openChatSidebar() {
+  return updateWorkspaceFocus((focus) => {
+    focus.sidebar.content = SidebarContent.Chat
+    focus.sidebar.isOpen = true
+  })
+}

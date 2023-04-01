@@ -1,3 +1,4 @@
+import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 import { RootState } from 'state'
 import { SidebarContent } from './focus'
 
@@ -19,5 +20,13 @@ export function hasContent(state: RootState): boolean {
     return !!state.focus.workspace.sidebar.user?.id
   }
 
+  if (content === SidebarContent.Chat) {
+    return true
+  }
+
   return false
+}
+
+export function isFocusOnSidebar(state: RootState): boolean {
+  return state.focus.workspace.region === WorkspaceFocusRegion.Sidebar
 }

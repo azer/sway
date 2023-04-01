@@ -1,43 +1,85 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { updateWorkspaceFocus } from 'features/Focus'
+import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 
 export const name = 'chat'
 
 interface State {
-  roomId: string
-  statusId: string | undefined
-  onlineUsers: string[]
-  onlineAt: { [id: string]: string }
+  messagesByRoom: { [roomId: string]: string[] }
+  draftsByRoom: { [roomId: string]: string }
 }
 
 export const initialState: State = {
-  roomId: (window as any).initialState.chat.roomId,
-  statusId: (window as any).initialState.chat.statusId,
-  onlineUsers: [],
-  onlineAt: {},
+  messagesByRoom: {},
+  draftsByRoom: {},
 }
 
 export const slice = createSlice({
   name,
   initialState,
   reducers: {
-    syncOnline: (
+    setDraft: (
       state,
-      action: PayloadAction<{ id: string; onlineAt: string }[]>
+      action: PayloadAction<{ roomId: string; draft: string }>
     ) => {
-      state.onlineUsers = action.payload.map((r) => r.id)
-
-      for (const row of action.payload) {
-        state.onlineAt[row.id] = row.onlineAt
+      state.draftsByRoom[action.payload.roomId] = action.payload.draft
+    },
+    setMessages: (
+      state,
+      action: PayloadAction<{ roomId: string; messages: string[] }>
+    ) => {
+      state.messagesByRoom[action.payload.roomId] = action.payload.messages
+    },
+    addNewMessages: (
+      state,
+      action: PayloadAction<{ roomId: string; messages: string[] }>
+    ) => {
+      if (state.messagesByRoom[action.payload.roomId]) {
+        state.messagesByRoom[action.payload.roomId] = state.messagesByRoom[
+          action.payload.roomId
+        ].concat(action.payload.messages)
+      } else {
+        state.messagesByRoom[action.payload.roomId] = action.payload.messages
       }
     },
-    setRoomId: (state, action: PayloadAction<string>) => {
-      state.roomId = action.payload
-    },
-    setStatusId: (state, action: PayloadAction<string>) => {
-      state.statusId = action.payload
+    addOlderMessages: (
+      state,
+      action: PayloadAction<{ roomId: string; messages: string[] }>
+    ) => {
+      if (state.messagesByRoom[action.payload.roomId]) {
+        state.messagesByRoom[action.payload.roomId] =
+          action.payload.messages.concat(
+            state.messagesByRoom[action.payload.roomId]
+          )
+      } else {
+        state.messagesByRoom[action.payload.roomId] = action.payload.messages
+      }
     },
   },
 })
 
-export const { setRoomId, setStatusId, syncOnline } = slice.actions
+export const { setMessages, addNewMessages, addOlderMessages, setDraft } =
+  slice.actions
 export default slice.reducer
+
+export function setFocusOnInput() {
+  return updateWorkspaceFocus((focus) => {
+    focus.region = WorkspaceFocusRegion.Sidebar
+    focus.sidebar.chat = {
+      input: true,
+    }
+  })
+}
+
+export function setFocusOnMessage(id: string) {
+  return updateWorkspaceFocus((focus) => {
+    focus.region = WorkspaceFocusRegion.Sidebar
+    focus.sidebar.chat = {
+      input: false,
+      message: {
+        id,
+        editing: false,
+      },
+    }
+  })
+}

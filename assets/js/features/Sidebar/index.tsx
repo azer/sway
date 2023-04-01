@@ -6,20 +6,25 @@ import { SidebarHeader } from './Header'
 import { useSelector, useDispatch } from 'state'
 import { SidebarContent } from './focus'
 import { UserSidebar } from './UserSidebar'
+import { Chat } from 'features/Chat'
 
 interface Props {}
 
 export default function Sidebar(props: Props) {
   // const dispatch = useDispatch()
   // const [] = useSelector((state) => [])
-  const [isOpen, content] = useSelector((state) => [
+  const [isOpen, content, roomId] = useSelector((state) => [
     selectors.sidebar.isOpen(state),
     selectors.sidebar.getContent(state),
+    selectors.rooms.getFocusedRoomId(state),
   ])
 
   return (
     <Container isOpen={isOpen}>
       {content === SidebarContent.User ? <UserSidebar /> : null}
+      {roomId && content === SidebarContent.Chat ? (
+        <Chat roomId={roomId} />
+      ) : null}
     </Container>
   )
 }

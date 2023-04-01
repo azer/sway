@@ -144,6 +144,11 @@ export const dark = {
   electronTrayTextFieldCaret: '$candy',
   electronTrayTextFieldSelectionBg: 'rgba(255, 225, 250, 0.25)',
   electronTrayTextFieldPlaceholder: 'rgba(255, 245, 255, 0.3)',
+  chatInputBg: 'rgb(30, 34, 41)',
+  chatInputFg: 'rgb(235, 238, 242, 0.8)',
+  chatInputFocusBg: 'rgba(36, 40, 47)',
+  chatInputFocusFg: '$white',
+  chatInputCaretColor: '$purple',
 }
 
 export const participantLabelBg = [

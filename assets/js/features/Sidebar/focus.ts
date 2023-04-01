@@ -1,3 +1,5 @@
+import { ChatFocus } from 'features/Chat/focus'
+
 export enum SidebarContent {
   User = 'user',
   Chat = 'chat',
@@ -9,12 +11,10 @@ export interface SidebarFocus {
   user?: {
     id: string
   }
-  chat?: {
-    roomId: string
-  }
+  chat?: ChatFocus
 }
 
 export const initialSidebarFocus: SidebarFocus = {
   isOpen: false,
-  content: SidebarContent.User,
+  content: SidebarContent.Chat,
 }

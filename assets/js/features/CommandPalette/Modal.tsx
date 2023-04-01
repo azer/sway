@@ -304,7 +304,7 @@ const Commands = styled('nav', {
   },
 })
 
-const Border = styled('mark', {
+export const Border = styled('mark', {
   width: '3.5px',
   height: '100%',
   position: 'absolute',
