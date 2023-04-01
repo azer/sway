@@ -8,6 +8,7 @@ defmodule SwayWeb.WorkspaceChannel do
   alias Sway.Statuses
   alias Sway.Workspaces
   alias SwayWeb.Hashing
+  alias SwayWeb.APIView
 
   @impl true
   def join("workspace:" <> workspace_id, _payload, socket) do
@@ -43,24 +44,19 @@ defmodule SwayWeb.WorkspaceChannel do
   def handle_in("entities:fetch", %{"id" => encoded_id, "schema" => schema_name}, socket) do
     {key, schema, view} = SwayWeb.SchemaMap.find_by_name(schema_name)
     row = Sway.Repo.get!(schema, Hashing.decode_any(encoded_id))
-    {:reply, {:ok, SwayWeb.APIView.render_row(view.encode(row), key)}, socket}
+    {:reply, {:ok, APIView.row(view.encode(row), key)}, socket}
   end
 
   def handle_in("chat:list_messages", %{"room_id" => encoded_room_id}, socket) do
     room_id = Hashing.decode_room(encoded_room_id)
+    messages = Chat.list_messages_by_room(room_id)
 
-    case Chat.list_messages_by_room(room_id) do
-      {:ok, messages} ->
-        push(socket, "chat:list_messages", %{
-          messages: Enum.map(messages, fn m -> SwayWeb.ChatMessageView.encode(m) end),
-          room_id: encoded_room_id
-        })
+    push(socket, "chat:list_messages", %{
+      messages: Enum.map(messages, fn m -> SwayWeb.ChatMessageView.row(m) end),
+      room_id: encoded_room_id
+    })
 
-        {:noreply, socket}
-
-      {:error, _reason} ->
-        {:reply, {:error, "Error listing messages"}, socket}
-    end
+    {:noreply, socket}
   end
 
   def handle_in(
@@ -71,18 +67,14 @@ defmodule SwayWeb.WorkspaceChannel do
     room_id = Hashing.decode_room(encoded_room_id)
     user_id = Hashing.decode_user(encoded_user_id)
 
-    IO.puts "###"
-
     case Chat.create_message(%{room_id: room_id, user_id: user_id, body: body}) do
       {:ok, message} ->
-	IO.inspect(message)
-
-        push(socket, "chat:new_message", %{message: SwayWeb.ChatMessageView.encode(message)})
+        broadcast(socket, "chat:new_message", %{message: SwayWeb.ChatMessageView.row(message)})
         {:noreply, socket}
 
       {:error, reason} ->
-	IO.puts("error")
-	IO.inspect(reason)
+        IO.puts("error")
+        IO.inspect(reason)
         {:reply, {:error, "Error posting message"}, socket}
     end
   end

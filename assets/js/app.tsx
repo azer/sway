@@ -43,6 +43,7 @@ import * as Tooltip from '@radix-ui/react-tooltip'
 import { ElectronTrayProvider } from 'features/ElectronTray'
 import { EmojiProvider } from 'features/Emoji/Provider'
 import { TapProvider } from 'features/Tap/Provider'
+import { ChatProvider } from 'features/Chat/Provider'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -78,6 +79,7 @@ ReactDOM.render(
               <ElectronTrayProvider />
               <EmojiProvider />
               <TapProvider />
+              <ChatProvider />
               <Tooltip.Provider>
                 <Routing />
               </Tooltip.Provider>

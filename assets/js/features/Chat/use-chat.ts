@@ -1,12 +1,4 @@
-import {
-  ConnectionState,
-  setSwayRoomConnectionStatus,
-} from 'features/Dock/slice'
-import selectors from 'selectors'
-import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
-import { useNavigate } from 'react-router-dom'
-import { Rooms } from 'state/entities'
 import { useUserSocket } from 'features/UserSocket'
 
 const log = logger('chat/use-chat')

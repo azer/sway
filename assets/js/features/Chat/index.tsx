@@ -7,6 +7,9 @@ import { setDraft, setFocusOnInput } from './slice'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useUserSocket } from 'features/UserSocket'
 import { Border } from 'features/CommandPalette/Modal'
+import { useChat } from './use-chat'
+import { Avatar } from 'components/Avatar'
+import { ChatMessage } from 'components/ChatMessage'
 
 interface Props {
   roomId: string
@@ -15,14 +18,26 @@ interface Props {
 export function Chat(props: Props) {
   const dispatch = useDispatch()
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const socket = useUserSocket()
+  const chat = useChat()
 
-  const [draft, room, focusOnInput, localUser] = useSelector((state) => [
-    selectors.chat.getDraftByRoomId(state, props.roomId),
-    selectors.rooms.getRoomById(state, props.roomId),
-    selectors.chat.isFocusOnInput(state),
-    selectors.users.getSelf(state),
-  ])
+  const [draft, room, focusOnInput, localUser, messageList] = useSelector(
+    (state) => [
+      selectors.chat.getDraftByRoomId(state, props.roomId),
+      selectors.rooms.getRoomById(state, props.roomId),
+      selectors.chat.isFocusOnInput(state),
+      selectors.users.getSelf(state),
+      selectors.chat.getMessagesByRoomId(state, props.roomId).map((id) => {
+        const message = selectors.chatMessages.getById(state, id)
+        return {
+          id,
+          message,
+          user:
+            (message && selectors.users.getById(state, message?.user_id)) ||
+            undefined,
+        }
+      }),
+    ]
+  )
 
   useHotkeys(
     'enter',
@@ -56,7 +71,18 @@ export function Chat(props: Props) {
 
   return (
     <Container>
-      <MessageList></MessageList>
+      <MessageList>
+        {messageList.map((row) => (
+          <ChatMessage
+            id={row.id}
+            username={row.user?.name}
+            profilePhotoUrl={row.user?.profile_photo_url}
+            postedAt={row.message?.inserted_at}
+          >
+            {row.message?.body}
+          </ChatMessage>
+        ))}
+      </MessageList>
       <Compose focused={focusOnInput}>
         <TextField
           inputRef={inputRef}
@@ -78,13 +104,8 @@ export function Chat(props: Props) {
 
   function onBlurInput() {}
   function onPressEnter() {
+    localUser?.id && chat.postMessage(localUser?.id, props.roomId, draft)
     dispatch(setDraft({ roomId: props.roomId, draft: '' }))
-
-    socket.channel?.push('chat:post_message', {
-      room_id: props.roomId,
-      user_id: localUser?.id,
-      body: draft,
-    })
   }
 }
 
@@ -97,6 +118,7 @@ const Container = styled('div', {
 
 const MessageList = styled('div', {
   flex: '1',
+  overflowY: 'scroll',
 })
 
 const Compose = styled('div', {
@@ -117,6 +139,7 @@ const Compose = styled('div', {
     color: '$chatInputFg',
     lineHeight: '$relaxed',
     fontSize: '$base',
+    caretColor: '$chatInputCaret',
   },
   [`& ${TextFieldRoot}::before`]: {
     position: 'absolute',
@@ -140,7 +163,7 @@ const Compose = styled('div', {
           background: '$chatInputFocusBg',
           color: '$chatInputFocusFg',
           borderColor: 'rgba(82, 82, 111, 0.44)',
-          boxShadow: '0px 3px 8px rgba(10, 14, 22, 0.2)',
+          boxShadow: 'rgb(1 4 12 / 50%) 0px 0px 15px',
         },
 
         [`& ${TextFieldRoot}::before`]: {

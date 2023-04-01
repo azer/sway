@@ -87,7 +87,7 @@ defmodule SwayWeb.APIView do
     end)
   end
 
-  def render_row(row, schema) do
+  def row(row, schema) do
     %{
       id: row.id,
       schema: schema,

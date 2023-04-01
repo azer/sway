@@ -5,7 +5,7 @@ defmodule Sway.Chat.Message do
   schema "messages" do
     field :body, :string
     field :edited_at, :utc_datetime
-    field :is_active, :boolean, default: false
+    field :is_active, :boolean, default: true
 
     belongs_to :room, Sway.Rooms.Room
     belongs_to :user, Sway.Accounts.User
@@ -17,7 +17,7 @@ defmodule Sway.Chat.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:body, :is_active, :edited_at])
-    |> validate_required([:body, :edited_at])
+    |> cast(attrs, [:body, :user_id, :room_id, :thread_id, :edited_at])
+    |> validate_required([:body, :user_id, :room_id])
   end
 end

@@ -11,7 +11,7 @@ export function getMessagesByRoomId(
   state: RootState,
   roomId: string
 ): string[] {
-  return state.chat.messagesByRoom[roomId]
+  return state.chat.messagesByRoom[roomId] || []
 }
 
 export function getFocus(state: RootState): ChatFocus | undefined {

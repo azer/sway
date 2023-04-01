@@ -15,11 +15,15 @@ defmodule SwayWeb.ChatMessageView do
   end
 
   def render("show.json", %{message: message}) do
-    %{data: render_one(message, ChatMessageView, "message.json")}
+    %{data: render_one(message, ChatMessageView, "chat_message.json")}
   end
 
   def render("chat_message.json", %{message: message}) do
     encode(message)
+  end
+
+  def row(message) do
+    APIView.row(encode(message), :chat_messages)
   end
 
   def encode(message) do

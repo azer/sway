@@ -21,7 +21,7 @@ defmodule SwayWeb.RoomMemberView do
   end
 
   def render("room_member.json", %{room_member: member}) do
-    APIView.render_row(encode(member), :room_members)
+    APIView.row(encode(member), :room_members)
   end
 
   def encode(member) do

@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { removeStatusHook } from 'features/Tap/slice'
-import { useUserSocket } from 'features/UserSocket'
 import { logger } from 'lib/log'
 import { notifications } from 'lib/notifications'
 import selectors from 'selectors'
-import { AppDispatch, entities, RootState } from 'state'
-import { add, Entity, Status, Statuses } from 'state/entities'
+import { AppDispatch, RootState } from 'state'
+import { add, Status, Statuses } from 'state/entities'
 
 export const name = 'presence'
 const log = logger('presence/slice')
@@ -69,21 +68,6 @@ export const {
   addStatusUpdates,
 } = slice.actions
 export default slice.reducer
-
-export function tap(fromUserId: string) {
-  return (dispatch: AppDispatch, getState: () => RootState) => {
-    const user = selectors.users.getById(getState(), fromUserId)
-    const ctx = useUserSocket()
-
-    log.info('tap user', user)
-
-    ctx.channel
-      ?.push('entities:fetch', { id: fromUserId, entity: entities.Users })
-      .receive('ok', (record: entities.User) => {
-        log.info('taped user rec', record)
-      })
-  }
-}
 
 export function receive(status: Status) {
   return (dispatch: AppDispatch, getState: () => RootState) => {
