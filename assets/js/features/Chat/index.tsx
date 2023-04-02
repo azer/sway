@@ -3,13 +3,14 @@ import React, { useRef } from 'react'
 import selectors from 'selectors'
 import { TextField, TextfieldInput, TextFieldRoot } from 'components/TextField'
 import { useSelector, useDispatch } from 'state'
-import { setDraft, setFocusOnInput } from './slice'
+import { setDraft, setFocusOnInput, setFocusOnMessage } from './slice'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useUserSocket } from 'features/UserSocket'
 import { Border } from 'features/CommandPalette/Modal'
 import { useChat } from './use-chat'
 import { Avatar } from 'components/Avatar'
 import { ChatMessage } from 'components/ChatMessage'
+import { openUserSidebar } from 'features/Sidebar/slice'
 
 interface Props {
   roomId: string
@@ -20,11 +21,12 @@ export function Chat(props: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const chat = useChat()
 
-  const [draft, room, focusOnInput, localUser, messageList] = useSelector(
-    (state) => [
+  const [draft, room, focusOnInput, focusedMessageId, localUser, messageList] =
+    useSelector((state) => [
       selectors.chat.getDraftByRoomId(state, props.roomId),
       selectors.rooms.getRoomById(state, props.roomId),
       selectors.chat.isFocusOnInput(state),
+      selectors.chat.getFocusedMessageId(state),
       selectors.users.getSelf(state),
       selectors.chat.getMessagesByRoomId(state, props.roomId).map((id) => {
         const message = selectors.chatMessages.getById(state, id)
@@ -36,8 +38,7 @@ export function Chat(props: Props) {
             undefined,
         }
       }),
-    ]
-  )
+    ])
 
   useHotkeys(
     'enter',
@@ -76,8 +77,13 @@ export function Chat(props: Props) {
           <ChatMessage
             id={row.id}
             username={row.user?.name}
-            profilePhotoUrl={row.user?.profile_photo_url}
+            profilePhotoUrl={row.user?.profile_photo_url || undefined}
+            focused={focusedMessageId === row.id}
             postedAt={row.message?.inserted_at}
+            onClick={() => dispatch(setFocusOnMessage(row.id))}
+            onClickUser={() =>
+              row.user?.id && dispatch(openUserSidebar(row.user?.id))
+            }
           >
             {row.message?.body}
           </ChatMessage>
@@ -107,6 +113,8 @@ export function Chat(props: Props) {
     localUser?.id && chat.postMessage(localUser?.id, props.roomId, draft)
     dispatch(setDraft({ roomId: props.roomId, draft: '' }))
   }
+
+  function selectMessage(id: string) {}
 }
 
 const Container = styled('div', {

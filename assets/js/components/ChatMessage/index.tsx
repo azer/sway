@@ -1,8 +1,10 @@
 import { styled } from 'themes'
-import React from 'react'
+import React, { useMemo } from 'react'
 import selectors from 'selectors'
 import { Avatar, AvatarRoot } from '../Avatar'
 import { Timestamp } from 'components/Timestamp'
+import { Tooltip } from 'components/Tooltip'
+import { format } from 'date-fns'
 // import { useSelector, useDispatch } from 'state'
 
 interface Props {
@@ -11,21 +13,39 @@ interface Props {
   profilePhotoUrl: string | undefined
   postedAt: string | undefined
   children: React.ReactNode
+  onClick: () => void
+  onClickUser: () => void
+  focused: boolean
 }
 
 export function ChatMessage(props: Props) {
   // const dispatch = useDispatch()
   // const [] = useSelector((state) => [])
 
+  const date = useMemo(() => {
+    if (props.postedAt) {
+      const postedAt = new Date(props.postedAt)
+      return format(postedAt, 'MMMM do, p')
+    }
+
+    return ''
+  }, [props.postedAt])
+
   return (
-    <Container>
-      <Avatar src={props.profilePhotoUrl} fallback={props.username || ''} />
+    <Container onClick={props.onClick} focused={props.focused}>
+      <Avatar
+        onClick={props.onClickUser}
+        src={props.profilePhotoUrl}
+        fallback={props.username || ''}
+      />
       <Right>
         <Header>
-          <Author>{props.username}</Author>
-          <Date>
-            {props.postedAt ? <Timestamp date={props.postedAt} /> : null}
-          </Date>
+          <Author onClick={props.onClickUser}>{props.username}</Author>
+          <Tooltip content={date}>
+            <MessageDate>
+              {props.postedAt ? <Timestamp date={props.postedAt} /> : null}
+            </MessageDate>
+          </Tooltip>
         </Header>
         <Body>{props.children}</Body>
       </Right>
@@ -35,19 +55,26 @@ export function ChatMessage(props: Props) {
 
 const Container = styled('div', {
   display: 'grid',
-  gridTemplateColumns: '24px auto',
-  gap: '8px',
+  gridTemplateColumns: '26px auto',
+  gap: '12px',
   padding: '12px',
   [`& ${AvatarRoot}`]: {
-    height: '24px',
+    height: '26px',
     round: 'small',
+  },
+  variants: {
+    focused: {
+      true: {
+        background: '$gray2',
+      },
+    },
   },
 })
 
 const Right = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  gap: '6px',
+  gap: '4px',
 })
 
 const Header = styled('header', {
@@ -64,7 +91,7 @@ const Author = styled('div', {
   fontSize: '$base',
 })
 
-const Date = styled('div', {
+const MessageDate = styled('div', {
   color: '$chatMessageDateFg',
   fontSize: '$small',
   fontWeight: '$medium',
@@ -75,4 +102,5 @@ const Body = styled('div', {
   color: '$chatMessageBodyFg',
   lineHeight: '$normal',
   whiteSpace: 'pre-wrap',
+  cursor: 'default',
 })

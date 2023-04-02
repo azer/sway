@@ -10,13 +10,14 @@ interface Props {
   src?: string | null
   fallback: string
   fontSize?: string
+  onClick?: () => void
 }
 
 export function Avatar(props: Props) {
   const css = { fontSize: props.fontSize }
 
   return (
-    <AvatarRoot css={css}>
+    <AvatarRoot css={css} onClick={props.onClick}>
       <StyledImage src={props.src} alt={props.alt} />
       <Fallback>{initials(props.fallback)}</Fallback>
     </AvatarRoot>

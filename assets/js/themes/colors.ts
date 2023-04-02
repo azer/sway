@@ -149,9 +149,9 @@ export const dark = {
   chatInputFocusBg: 'rgba(36, 40, 47)',
   chatInputFocusFg: '$white',
   chatInputCaret: '$purple',
-  chatMessageAuthorFg: 'rgb(245, 250, 255)',
+  chatMessageAuthorFg: 'rgb(222, 223, 227)',
   chatMessageDateFg: 'rgb(100, 106, 111)',
-  chatMessageBodyFg: 'rgb(225, 230, 235)',
+  chatMessageBodyFg: 'rgb(209, 210, 215)',
 }
 
 export const participantLabelBg = [
