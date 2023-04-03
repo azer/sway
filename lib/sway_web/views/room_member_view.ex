@@ -17,7 +17,7 @@ defmodule SwayWeb.RoomMemberView do
   end
 
   def render("show.json", %{room_member: member}) do
-    %{data: render_one(member, RoomMemberView, "room_member.json")}
+    %{result: render_one(member, RoomMemberView, "room_member.json")}
   end
 
   def render("room_member.json", %{room_member: member}) do

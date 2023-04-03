@@ -11,7 +11,15 @@ import Icon from 'components/Icon'
 import { logger } from 'lib/log'
 import { GET, POST } from 'lib/api'
 import { setStatusUpdates } from 'features/Presence/slice'
-import { add, addBatch, Room, Rooms, Status, Statuses } from 'state/entities'
+import {
+  add,
+  addBatch,
+  Room,
+  Rooms,
+  Row,
+  Status,
+  Statuses,
+} from 'state/entities'
 import { usePresence } from 'features/Presence/use-presence'
 import { setStatusHook } from 'features/Tap/slice'
 import { useUserSocket } from 'features/UserSocket'
@@ -28,6 +36,7 @@ export function UserSidebar(props: Props) {
   const dispatch = useDispatch()
   const presence = usePresence()
   const rooms = useRooms()
+  const navigate = useNavigate()
 
   const [
     user,
@@ -180,23 +189,19 @@ export function UserSidebar(props: Props) {
     })
       .then((resp) => {
         log.info('Created / retrieved private room', resp)
-        dispatch(
-          add({
-            schema: Rooms,
-            id: resp.data.id,
-            data: resp.data,
-          })
-        )
+        const created = resp.result as Row<Room>
+
+        dispatch(add(created))
 
         dispatch(
           appendRoomIdToWorkspace({
             workspaceId,
-            roomId: resp.data.id,
+            roomId: created.id,
             privateRoom: true,
           })
         )
 
-        rooms.enterById(resp.data.id)
+        navigate(`/${workspaceSlug}/room/${created.id}/${created.data.slug}`)
         dispatch(setSidebarOpen(false))
         //navigate(`/${workspaceSlug}/room/${resp.data.id}/${resp.data.slug}`)
       })
