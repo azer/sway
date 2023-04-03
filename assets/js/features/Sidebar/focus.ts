@@ -15,6 +15,6 @@ export interface SidebarFocus {
 }
 
 export const initialSidebarFocus: SidebarFocus = {
-  isOpen: false,
+  isOpen: true,
   content: SidebarContent.Chat,
 }

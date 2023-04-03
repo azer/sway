@@ -25,7 +25,11 @@ export function setSidebarOpen(open: boolean) {
 
 export function openUserSidebar(userId: string) {
   return updateWorkspaceFocus((focus) => {
-    if (focus.sidebar.isOpen && focus.sidebar.user?.id === userId) {
+    if (
+      focus.sidebar.isOpen &&
+      focus.sidebar.content === SidebarContent.User &&
+      focus.sidebar.user?.id === userId
+    ) {
       focus.sidebar.isOpen = false
       return
     }

@@ -153,8 +153,6 @@ export function Chat(props: Props) {
     'down, meta+down',
     onPressDown,
     {
-      //enableOnFormTags: true,
-      //keydown: true,
       enabled: hasFocus && !!focusedMessageId,
       preventDefault: true,
     },
@@ -163,7 +161,12 @@ export function Chat(props: Props) {
 
   return (
     <Container>
-      <MessageList ref={listRef}>
+      <MessageList
+        ref={listRef}
+        onClick={(e) =>
+          e.target === listRef.current && inputRef.current.focus()
+        }
+      >
         {messageList.map((row) => (
           <ChatMessage
             key={row.id}
