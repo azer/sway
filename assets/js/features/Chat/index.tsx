@@ -1,18 +1,16 @@
 import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
-import { TextField, TextfieldInput, TextFieldRoot } from 'components/TextField'
 import { useSelector, useDispatch } from 'state'
 import { setDraft, setFocusOnInput, setFocusOnMessage } from './slice'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useUserSocket } from 'features/UserSocket'
-import { Border, getScrollPosition } from 'features/CommandPalette/Modal'
+import { getScrollPosition } from 'features/CommandPalette/Modal'
 import { useChat } from './use-chat'
-import { Avatar } from 'components/Avatar'
 import { ChatMessage } from 'components/ChatMessage'
 import { openUserSidebar } from 'features/Sidebar/slice'
 import { setWorkspaceFocusRegion } from 'features/Workspace/slice'
 import { WorkspaceFocusRegion } from 'features/Workspace/focus'
+import { ChatInput, StyledChatInput } from './Input'
 
 interface Props {
   roomId: string
@@ -35,6 +33,7 @@ export function Chat(props: Props) {
     prevMessageId,
     nextMessageId,
     lastMessageId,
+    focusedMessageDeleted,
   ] = useSelector((state) => [
     selectors.chat.getDraftByRoomId(state, props.roomId),
     selectors.rooms.getRoomById(state, props.roomId),
@@ -42,19 +41,26 @@ export function Chat(props: Props) {
     selectors.chat.isFocusOnInput(state),
     selectors.chat.getFocusedMessageId(state),
     selectors.users.getSelf(state),
-    selectors.chat.getMessagesByRoomId(state, props.roomId).map((id) => {
-      const message = selectors.chatMessages.getById(state, id)
-      return {
-        id,
-        message,
-        user:
-          (message && selectors.users.getById(state, message?.user_id)) ||
-          undefined,
-      }
-    }),
+    selectors.chat
+      .getMessagesByRoomId(state, props.roomId)
+      .map((id) => {
+        const message = selectors.chatMessages.getById(state, id)
+        return {
+          id,
+          message,
+          user:
+            (message && selectors.users.getById(state, message?.user_id)) ||
+            undefined,
+        }
+      })
+      .filter((row) => row.message?.is_active),
     selectors.chat.getPrevMessageId(state, props.roomId),
     selectors.chat.getNextMessageId(state, props.roomId),
     selectors.chat.getLastMessageId(state, props.roomId),
+    selectors.chatMessages.getById(
+      state,
+      selectors.chat.getFocusedMessageId(state) || ''
+    )?.is_active === false,
   ])
 
   useEffect(() => {
@@ -66,6 +72,18 @@ export function Chat(props: Props) {
       inputRef.current.blur()
     }
   }, [hasFocus, focusOnInput])
+
+  useEffect(() => {
+    if (!focusedMessageDeleted) return
+
+    if (nextMessageId) {
+      dispatch(setFocusOnMessage(nextMessageId))
+    } else if (prevMessageId) {
+      dispatch(setFocusOnMessage(prevMessageId))
+    } else {
+      dispatch(setFocusOnInput())
+    }
+  }, [focusedMessageDeleted])
 
   useEffect(() => {
     if (!focusedMessageId || !listRef.current) {
@@ -154,6 +172,9 @@ export function Chat(props: Props) {
             profilePhotoUrl={row.user?.profile_photo_url || undefined}
             focused={focusedMessageId === row.id}
             postedAt={row.message?.inserted_at}
+            editedAt={row.message?.edited_at}
+            ownMessage={row.user?.id === localUser?.id}
+            saveMessage={(edited: string) => chat.editMessage(row.id, edited)}
             onClick={() => dispatch(setFocusOnMessage(row.id))}
             onClickUser={() =>
               row.user?.id && dispatch(openUserSidebar(row.user?.id))
@@ -163,18 +184,15 @@ export function Chat(props: Props) {
           </ChatMessage>
         ))}
       </MessageList>
-      <Compose focused={focusOnInput}>
-        <TextField
-          inputRef={inputRef}
-          value={draft}
-          onFocus={onFocusInput}
-          onBlur={onBlurInput}
-          placeholder={`Message #${room?.name}`}
-          onInput={(draft) =>
-            dispatch(setDraft({ roomId: props.roomId, draft }))
-          }
-        />
-      </Compose>
+      <ChatInput
+        focused={focusOnInput}
+        inputRef={inputRef}
+        value={draft}
+        onFocus={onFocusInput}
+        onBlur={onBlurInput}
+        placeholder={`Message #${room?.name}`}
+        onInput={(draft) => dispatch(setDraft({ roomId: props.roomId, draft }))}
+      />
     </Container>
   )
 
@@ -222,65 +240,28 @@ const Container = styled('div', {
   flexDirection: 'column',
   height: 'calc(100vh - 48px)',
   gap: '12px',
+  [`& > ${StyledChatInput}`]: {
+    margin: '0 12px 12px 12px',
+  },
 })
 
 const MessageList = styled('div', {
   flex: '1',
   overflowY: 'scroll',
-})
-
-const Compose = styled('div', {
-  margin: '0 12px',
-  marginBottom: '12px',
-  lineHeight: '$relaxed',
-  fontSize: '$base',
-  fontFamily: '$sans',
-  color: '$red',
-  [`& ${TextFieldRoot}`]: {
-    padding: '8px 16px',
-    background: '$chatInputBg',
-    round: 'medium',
-    border: '0.5px solid transparent',
-    position: 'relative',
-  },
-  [`& ${TextfieldInput}`]: {
-    color: '$chatInputFg',
-    lineHeight: '$relaxed',
-    fontSize: '$base',
-    caretColor: '$chatInputCaret',
-  },
-  [`& ${TextFieldRoot}::before`]: {
-    position: 'absolute',
-    height: '100%',
-    content: ' ',
-    width: '3.5px',
+  '&::-webkit-scrollbar': {
+    width: '7.5px',
+    opacity: '0',
     background: 'transparent',
-
-    borderBottomLeftRadius: '$medium',
-    borderTopLeftRadius: '$medium',
   },
-  [`& ${TextFieldRoot}::after`]: {
-    fontSize: '$base',
-    lineHeight: '$relaxed',
-    margin: '2px 0 0 2px',
+  '&::-webkit-scrollbar-track': {
+    background: '$scrollTrackBg',
   },
-  variants: {
-    focused: {
-      true: {
-        [`& ${TextFieldRoot}`]: {
-          background: '$chatInputFocusBg',
-          color: '$chatInputFocusFg',
-          borderColor: 'rgba(82, 82, 111, 0.44)',
-          boxShadow: 'rgb(1 4 12 / 50%) 0px 0px 15px',
-        },
-
-        [`& ${TextFieldRoot}::before`]: {
-          background: `radial-gradient(circle farthest-corner at 0px 0px, $lightPurple, transparent), radial-gradient(circle farthest-corner at 0px 90%, $candy, transparent)`,
-        },
-        [`& ${TextfieldInput}`]: {
-          color: '$chatInputFocusFg',
-        },
-      },
-    },
+  '&::-webkit-scrollbar-thumb': {
+    background: '$scrollThumbBg',
+    borderRadius: '10px',
+    width: '6px',
+  },
+  '&::-webkit-scrollbar:hover': {
+    opacity: '1',
   },
 })

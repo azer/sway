@@ -30,6 +30,14 @@ export const slice = createSlice({
     ) => {
       state.messagesByRoom[action.payload.roomId] = action.payload.messages
     },
+    deleteMessageById: (
+      state,
+      action: PayloadAction<{ roomId: string; messageId: string }>
+    ) => {
+      state.messagesByRoom[action.payload.roomId] = state.messagesByRoom[
+        action.payload.roomId
+      ].filter((id) => id !== action.payload.messageId)
+    },
     addNewMessages: (
       state,
       action: PayloadAction<{ roomId: string; messages: string[] }>
@@ -58,8 +66,13 @@ export const slice = createSlice({
   },
 })
 
-export const { setMessages, addNewMessages, addOlderMessages, setDraft } =
-  slice.actions
+export const {
+  setMessages,
+  addNewMessages,
+  addOlderMessages,
+  setDraft,
+  deleteMessageById,
+} = slice.actions
 export default slice.reducer
 
 export function setFocusOnInput() {

@@ -17,7 +17,7 @@ defmodule Sway.Chat.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:body, :user_id, :room_id, :thread_id, :edited_at])
+    |> cast(attrs, [:body, :user_id, :room_id, :thread_id, :edited_at, :is_active])
     |> validate_required([:body, :user_id, :room_id])
   end
 end

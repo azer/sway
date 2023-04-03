@@ -27,7 +27,7 @@ export const dark = {
   shellBorderColor: 'rgba(255, 255, 255, 0.075)',
   shellBlur1: 'rgba(15, 100, 222, 0.25)',
   scrollTrackBg: '',
-  scrollThumbBg: 'rgba(255, 255, 255, 0.5)',
+  scrollThumbBg: 'rgb(0, 5, 11)',
   headerFg: 'rgba(255, 255, 255, 0.9)',
   navigationFocusFg: '$white',
   navigationFocusBg: 'rgba(125, 145, 200, 0.08)',
@@ -152,6 +152,9 @@ export const dark = {
   chatMessageAuthorFg: 'rgb(222, 223, 227)',
   chatMessageDateFg: 'rgb(100, 106, 111)',
   chatMessageBodyFg: 'rgb(209, 210, 215)',
+  chatMessageEditedFg: 'rgba(209, 210, 215, 0.5)',
+  focusItemBg:
+    'radial-gradient(circle farthest-corner at 0px 0px, $lightPurple, transparent), radial-gradient(circle farthest-corner at 0px 90%, $candy, transparent)',
 }
 
 export const participantLabelBg = [

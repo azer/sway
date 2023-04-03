@@ -83,11 +83,18 @@ defmodule Sway.Chat do
   end
 
   def edit_message(%Message{} = message, attrs) do
-    attrs = Map.put(attrs, :edited_at, DateTime.utc_now())
+    body = attrs[:body] |> String.trim()
 
-    message
-    |> Message.changeset(attrs)
-    |> Repo.update()
+    if body == "" do
+      soft_delete_message(message)
+    else
+      attrs = Map.put(attrs, :edited_at, DateTime.utc_now())
+
+      message
+      |> Message.changeset(attrs)
+      |> Repo.update()
+    end
+
   end
 
   @doc """

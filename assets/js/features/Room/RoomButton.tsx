@@ -107,7 +107,6 @@ export function RoomButton(props: Props) {
             )
           }
         />
-        p
         <Dropdown.Item
           icon="trash"
           label={'Delete #' + room?.name}

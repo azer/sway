@@ -1,26 +1,64 @@
 import { styled } from 'themes'
-import React, { useMemo } from 'react'
-import selectors from 'selectors'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Avatar, AvatarRoot } from '../Avatar'
 import { Timestamp } from 'components/Timestamp'
 import { Tooltip } from 'components/Tooltip'
 import { format } from 'date-fns'
-// import { useSelector, useDispatch } from 'state'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { ChatInput } from 'features/Chat/Input'
 
 interface Props {
   id: string
   username: string | undefined
   profilePhotoUrl: string | undefined
   postedAt: string | undefined
+  editedAt: string | undefined
   children: React.ReactNode
   onClick: () => void
   onClickUser: () => void
   focused: boolean
+  ownMessage: boolean
+  saveMessage: (draft: string) => void
 }
 
 export function ChatMessage(props: Props) {
   // const dispatch = useDispatch()
   // const [] = useSelector((state) => [])
+
+  const [draft, setDraft] = useState(props.children)
+  const [isEditing, setIsEditing] = useState(false)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  useHotkeys('esc', () => setIsEditing(false), {
+    enabled: isEditing,
+    enableOnFormTags: true,
+    preventDefault: true,
+  })
+
+  useHotkeys(
+    'enter',
+    save,
+    {
+      enabled: isEditing,
+      enableOnFormTags: true,
+    },
+    [draft]
+  )
+
+  useHotkeys('.', () => setIsEditing(true), {
+    enabled: !isEditing && props.focused && props.ownMessage,
+    enableOnFormTags: true,
+  })
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!inputRef.current) return
+      inputRef.current.focus()
+
+      const length = inputRef.current.value.length
+      inputRef.current.setSelectionRange(length, length)
+    }, 50)
+  }, [isEditing])
 
   const date = useMemo(() => {
     if (props.postedAt) {
@@ -31,11 +69,21 @@ export function ChatMessage(props: Props) {
     return ''
   }, [props.postedAt])
 
+  const emojiOnly = useMemo(() => {
+    const body = props.children as string
+
+    return (
+      /\p{Extended_Pictographic}+/gu.test(body) &&
+      body.replace(/\p{Extended_Pictographic}+/gu, '').trim().length <= 1 // `replace` in this line leaves 1 character left.
+    )
+  }, [props.id])
+
   return (
     <Container
       data-id={props.id}
       onClick={props.onClick}
-      focused={props.focused}
+      focused={props.focused && !isEditing}
+      highlight={props.focused}
     >
       <Avatar
         onClick={props.onClickUser}
@@ -51,34 +99,78 @@ export function ChatMessage(props: Props) {
             </MessageDate>
           </Tooltip>
         </Header>
-        <Body>{props.children}</Body>
+        <Body emoji={emojiOnly}>
+          {isEditing ? (
+            <ChatInput
+              focused={isEditing}
+              inputRef={inputRef}
+              value={draft as string}
+              onFocus={onFocusInput}
+              onBlur={onBlurInput}
+              onInput={(d) => setDraft(d)}
+              inline
+            />
+          ) : (
+            <>
+              {props.children}
+              {props.editedAt ? <Edited>(edited)</Edited> : null}
+            </>
+          )}
+        </Body>
       </Right>
     </Container>
   )
+
+  function onFocusInput() {}
+  function onBlurInput() {
+    setIsEditing(false)
+  }
+
+  function save() {
+    setIsEditing(false)
+    props.saveMessage(draft as string)
+  }
 }
+
+const Right = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4px',
+})
 
 const Container = styled('div', {
   display: 'grid',
   gridTemplateColumns: '26px auto',
   gap: '12px',
   padding: '12px',
+  position: 'relative',
   [`& ${AvatarRoot}`]: {
     height: '26px',
     round: 'small',
   },
+  '&::before': {
+    content: ' ',
+    position: 'absolute',
+    width: '2.5px',
+    height: '100%',
+    background: 'transparent',
+    top: '0',
+    left: '0',
+  },
   variants: {
-    focused: {
+    highlight: {
       true: {
         background: '$gray2',
       },
     },
+    focused: {
+      true: {
+        '&::before': {
+          background: '$focusItemBg',
+        },
+      },
+    },
   },
-})
-
-const Right = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '4px',
 })
 
 const Header = styled('header', {
@@ -107,4 +199,17 @@ const Body = styled('div', {
   lineHeight: '$normal',
   whiteSpace: 'pre-wrap',
   cursor: 'default',
+  variants: {
+    emoji: {
+      true: {
+        fontSize: '24px',
+      },
+    },
+  },
+})
+
+const Edited = styled('label', {
+  marginLeft: '$space2',
+  color: '$chatMessageEditedFg',
+  fontSize: '$small',
 })

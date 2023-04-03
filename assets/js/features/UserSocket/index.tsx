@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { Socket, Presence, Channel } from 'phoenix'
 import { useDispatch } from 'react-redux'
-import { add, Entity, Update } from 'state/entities'
+import { add, addBatch, Entity, Update } from 'state/entities'
 import { logger } from 'lib/log'
 import {
   ConnectionState,
@@ -67,6 +67,11 @@ export function UserSocketProvider(props: Props) {
       channel.push('user:status', {
         workspace_id: workspaceId,
         timezone: timezone(),
+      })
+
+      channel.on('entities:update', (update) => {
+        log.info('Received entity update', update)
+        dispatch(add(update))
       })
     }
   }, [status?.swaySocket, channel?.state])

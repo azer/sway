@@ -55,8 +55,6 @@ export function ChatProvider(props: Props) {
   useEffect(() => {
     if (!channel || !roomId) return
 
-    log.info('list chat messages', roomId)
-
     channel?.push('chat:list_messages', { room_id: roomId })
   }, [!!channel, roomId])
 

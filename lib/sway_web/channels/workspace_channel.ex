@@ -84,16 +84,16 @@ defmodule SwayWeb.WorkspaceChannel do
 
     case Chat.get_message!(id) do
       message ->
-        case Chat.update_message(message, %{body: body}) do
-          {:ok, updated_message} ->
-            push(socket, "chat:message_updated", %{
-              message: SwayWeb.ChatMessageView.encode(updated_message)
-            })
-
-            {:noreply, socket}
-
-          {:error, _reason} ->
-            {:reply, {:error, "Error editing message"}, socket}
+        if message.user_id == socket.assigns.user do
+          case Chat.edit_message(message, %{body: body}) do
+            {:ok, updated_message} ->
+              broadcast(socket, "entities:update", SwayWeb.ChatMessageView.row(updated_message))
+              {:noreply, socket}
+            {:error, reason} ->
+              {:reply, {:error, "Error editing message: #{reason}"}, socket}
+          end
+        else
+          {:reply, {:error, "You are not the owner of the message"}, socket}
         end
     end
   end
@@ -105,9 +105,7 @@ defmodule SwayWeb.WorkspaceChannel do
       message ->
         case Chat.soft_delete_message(message) do
           {:ok, deleted_message} ->
-            push(socket, "chat:message_deleted", %{
-              message: SwayWeb.ChatMessageView.encode(deleted_message)
-            })
+	    broadcast(socket, "entities:update", SwayWeb.ChatMessageView.row(deleted_message))
 
             {:noreply, socket}
 

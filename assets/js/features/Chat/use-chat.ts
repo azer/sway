@@ -8,6 +8,7 @@ export function useChat() {
 
   return {
     postMessage,
+    editMessage,
   }
 
   function postMessage(userId: string, roomId: string, body: string) {
@@ -21,6 +22,22 @@ export function useChat() {
       })
       .receive('ok', (msg) => {
         log.info('Message posted', msg)
+      })
+      .receive('error', (error) => {
+        log.error('Failed', error)
+      })
+  }
+
+  function editMessage(id: string, body: string) {
+    log.info('Editing message', id)
+
+    socket.channel
+      ?.push('chat:edit_message', {
+        id,
+        body,
+      })
+      .receive('ok', (msg) => {
+        log.info('Message edited', msg)
       })
       .receive('error', (error) => {
         log.error('Failed', error)
