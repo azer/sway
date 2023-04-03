@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { updateWorkspaceFocus } from 'features/Focus'
+import { WorkspaceFocusRegion } from './focus'
 
 export const name = 'workspace'
 
@@ -36,3 +38,9 @@ export const slice = createSlice({
 
 export const { setMembers, addMember } = slice.actions
 export default slice.reducer
+
+export function setWorkspaceFocusRegion(region: WorkspaceFocusRegion) {
+  return updateWorkspaceFocus((draft) => {
+    draft.region = WorkspaceFocusRegion.Room
+  })
+}

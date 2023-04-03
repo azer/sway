@@ -17,6 +17,8 @@ import { AvatarRoot } from 'components/Avatar'
 import { CallTile } from 'features/Call/Tile'
 import { usePresence } from 'features/Presence/use-presence'
 import { moveUserToRoom, setFocusedRoomById } from './slice'
+import { setWorkspaceFocusRegion } from 'features/Workspace/slice'
+import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 
 interface Props {
   id: string
@@ -106,7 +108,11 @@ export function RoomPage(props: Props) {
           <Participant userId={uid} />
         ))}
       </Top>
-      <Middle>
+      <Middle
+        onClick={() =>
+          dispatch(setWorkspaceFocusRegion(WorkspaceFocusRegion.Room))
+        }
+      >
         {focusedUserId && focusedParticipantId ? (
           <ActiveParticipant
             userId={focusedUserId}

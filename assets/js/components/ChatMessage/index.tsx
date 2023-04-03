@@ -32,7 +32,11 @@ export function ChatMessage(props: Props) {
   }, [props.postedAt])
 
   return (
-    <Container onClick={props.onClick} focused={props.focused}>
+    <Container
+      data-id={props.id}
+      onClick={props.onClick}
+      focused={props.focused}
+    >
       <Avatar
         onClick={props.onClickUser}
         src={props.profilePhotoUrl}
@@ -40,7 +44,7 @@ export function ChatMessage(props: Props) {
       />
       <Right>
         <Header>
-          <Author onClick={props.onClickUser}>{props.username}</Author>
+          <Author>{props.username}</Author>
           <Tooltip content={date}>
             <MessageDate>
               {props.postedAt ? <Timestamp date={props.postedAt} /> : null}
