@@ -21,8 +21,8 @@ export default function Sidebar(props: Props) {
 
   return (
     <Container isOpen={isOpen}>
-      {content === SidebarContent.User ? <UserSidebar /> : null}
-      {roomId && content === SidebarContent.Chat ? (
+      {isOpen && content === SidebarContent.User ? <UserSidebar /> : null}
+      {isOpen && roomId && content === SidebarContent.Chat ? (
         <Chat roomId={roomId} />
       ) : null}
     </Container>

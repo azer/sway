@@ -7,11 +7,13 @@ export const name = 'chat'
 interface State {
   messagesByRoom: { [roomId: string]: string[] }
   draftsByRoom: { [roomId: string]: string }
+  lastSeenMessageIdByRoom: { [roomId: string]: string }
 }
 
 export const initialState: State = {
   messagesByRoom: {},
   draftsByRoom: {},
+  lastSeenMessageIdByRoom: {},
 }
 
 export const slice = createSlice({
@@ -23,6 +25,13 @@ export const slice = createSlice({
       action: PayloadAction<{ roomId: string; draft: string }>
     ) => {
       state.draftsByRoom[action.payload.roomId] = action.payload.draft
+    },
+    setLastSeenMessage: (
+      state,
+      action: PayloadAction<{ roomId: string; messageId: string }>
+    ) => {
+      state.lastSeenMessageIdByRoom[action.payload.roomId] =
+        action.payload.messageId
     },
     setMessages: (
       state,
@@ -72,6 +81,7 @@ export const {
   addOlderMessages,
   setDraft,
   deleteMessageById,
+  setLastSeenMessage,
 } = slice.actions
 export default slice.reducer
 

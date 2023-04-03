@@ -32,6 +32,7 @@ export const dark = {
   navigationFocusFg: '$white',
   navigationFocusBg: 'rgba(125, 145, 200, 0.08)',
   navigationFg: 'rgba(255, 255, 255, 0.6)',
+  navigationUnreadFg: '$white',
   navigationBlur2: 'rgba(126, 33, 50, 0.125)',
   navigationBlur1: 'rgba(15, 100, 222, 0.125)',
   dockBg: 'rgba(34, 37, 42, 0.4)',

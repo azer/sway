@@ -16,19 +16,23 @@ interface Props {
 export function RoomButton(props: Props) {
   const navigate = useNavigate()
 
-  const [room, usersInRoom, roomStatus] = useSelector((state) => [
-    selectors.rooms.getRoomById(state, props.id),
-    selectors.rooms
-      .getUsersInRoom(state, props.id)
-      .map((id) => selectors.users.getById(state, id)),
-    selectors.rooms.getRoomStatus(state, props.id),
-  ])
+  const [room, usersInRoom, roomStatus, hasUnreadMessages] = useSelector(
+    (state) => [
+      selectors.rooms.getRoomById(state, props.id),
+      selectors.rooms
+        .getUsersInRoom(state, props.id)
+        .map((id) => selectors.users.getById(state, id)),
+      selectors.rooms.getRoomStatus(state, props.id),
+      selectors.chat.hasUnreadMessage(state, props.id),
+    ]
+  )
 
   return (
     <Container
       selected={props.selected}
       hasUsers={!props.selected && usersInRoom.length > 0}
       onClick={() => props.onClick(props.id)}
+      unread={hasUnreadMessages}
     >
       <RoomStatusIcon mode={roomStatus} />
       <Name>{room?.name || ''}</Name>
@@ -73,6 +77,12 @@ const Container = styled('div', {
       true: {
         display: 'grid',
         gridTemplateColumns: '8px 65% auto',
+      },
+    },
+    unread: {
+      true: {
+        fontWeight: '$semibold',
+        color: '$navigationUnreadFg',
       },
     },
   },

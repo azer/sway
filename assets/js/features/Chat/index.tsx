@@ -2,7 +2,12 @@ import { styled } from 'themes'
 import React, { useEffect, useRef } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
-import { setDraft, setFocusOnInput, setFocusOnMessage } from './slice'
+import {
+  setDraft,
+  setFocusOnInput,
+  setFocusOnMessage,
+  setLastSeenMessage,
+} from './slice'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { getScrollPosition } from 'features/CommandPalette/Modal'
 import { useChat } from './use-chat'
@@ -103,6 +108,10 @@ export function Chat(props: Props) {
     if (scrollTop !== undefined) {
       listRef.current.scrollTop = scrollTop
     }
+
+    dispatch(
+      setLastSeenMessage({ roomId: props.roomId, messageId: lastMessageId })
+    )
   }, [lastMessageId])
 
   useHotkeys(

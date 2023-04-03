@@ -11,21 +11,25 @@ interface Props {}
 
 export function SidebarHeader(props: Props) {
   const dispatch = useDispatch()
-  const [isOpen, hasContent, content] = useSelector((state) => [
-    selectors.sidebar.isOpen(state),
-    selectors.sidebar.hasContent(state),
-    selectors.sidebar.getContent(state),
-  ])
+  const [isOpen, hasContent, content, hasUnreadMessage] = useSelector(
+    (state) => [
+      selectors.sidebar.isOpen(state),
+      selectors.sidebar.hasContent(state),
+      selectors.sidebar.getContent(state),
+      selectors.chat.hasUnreadMessageInFocusedRoom(state),
+    ]
+  )
 
   return (
     <Container>
       <Buttons>
-        <Button
+        <ChatButton
+          unread={hasUnreadMessage}
           onClick={toggleChat}
           isOpen={isOpen && content === SidebarContent.Chat}
         >
           <Icon name="chat" />
-        </Button>
+        </ChatButton>
         {hasContent ? (
           <ToggleButton onClick={toggle} isOpen={isOpen}>
             <Icon name="sidebar" />
@@ -112,6 +116,25 @@ const ToggleButton = styled(Button, {
           height: '10px',
           background: '$white',
           right: '7px',
+        },
+      },
+    },
+  },
+})
+
+const ChatButton = styled(Button, {
+  variants: {
+    unread: {
+      true: {
+        '&::after': {
+          content: ' ',
+          position: 'absolute',
+          width: '6px',
+          height: '6px',
+          right: '4px',
+          top: '4px',
+          round: true,
+          background: 'rgb(240, 50, 50)',
         },
       },
     },

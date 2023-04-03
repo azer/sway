@@ -73,3 +73,19 @@ export function getNextMessageId(
 
   return list[nextIndex]
 }
+
+export function hasUnreadMessage(state: RootState, roomId: string): boolean {
+  const lastSeenMessageId = state.chat.lastSeenMessageIdByRoom[roomId]
+  const messages = state.chat.messagesByRoom[roomId]
+
+  return (
+    messages &&
+    messages.length > 0 &&
+    messages[messages.length - 1] !== lastSeenMessageId
+  )
+}
+
+export function hasUnreadMessageInFocusedRoom(state: RootState): boolean {
+  const focusedRoomId = selectors.rooms.getFocusedRoom(state)?.id
+  return focusedRoomId ? hasUnreadMessage(state, focusedRoomId) : false
+}
