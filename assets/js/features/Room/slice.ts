@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { updateWorkspaceFocus } from 'features/Focus'
+import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 import selectors from 'selectors'
 
 export const name = 'room'
@@ -95,6 +96,7 @@ export default slice.reducer
 export function setFocusedRoomById(id: string) {
   return updateWorkspaceFocus((focus) => {
     focus.room.roomId = id
+    focus.region = WorkspaceFocusRegion.Room
   })
 }
 
@@ -104,6 +106,7 @@ export function setFocusedRoomBySlug(slug: string) {
     const room = selectors.rooms.getRoomBySlug(state, slug)
     if (room) {
       focus.room.roomId = room.id
+      focus.region = WorkspaceFocusRegion.Room
     }
   })
 }

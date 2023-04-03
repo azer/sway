@@ -26,8 +26,6 @@ interface Props {}
 export function RoomNavigationProvider(props: Props) {
   const dispatch = useDispatch()
   const { channel } = useUserSocket()
-  const navigate = useNavigate()
-  const { enterById } = useRooms()
 
   const [localUser, workspace, focusedRoom, presentRoom] = useSelector(
     (state) => [
