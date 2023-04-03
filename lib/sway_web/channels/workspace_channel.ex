@@ -52,7 +52,7 @@ defmodule SwayWeb.WorkspaceChannel do
     messages = Chat.list_messages_by_room(room_id)
 
     push(socket, "chat:list_messages", %{
-      messages: Enum.map(messages, fn m -> SwayWeb.ChatMessageView.row(m) end),
+      messages: Enum.map(Enum.reverse(messages), fn m -> SwayWeb.ChatMessageView.row(m) end),
       room_id: encoded_room_id
     })
 

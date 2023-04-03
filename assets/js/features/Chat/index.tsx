@@ -34,6 +34,7 @@ export function Chat(props: Props) {
     messageList,
     prevMessageId,
     nextMessageId,
+    lastMessageId,
   ] = useSelector((state) => [
     selectors.chat.getDraftByRoomId(state, props.roomId),
     selectors.rooms.getRoomById(state, props.roomId),
@@ -53,6 +54,7 @@ export function Chat(props: Props) {
     }),
     selectors.chat.getPrevMessageId(state, props.roomId),
     selectors.chat.getNextMessageId(state, props.roomId),
+    selectors.chat.getLastMessageId(state, props.roomId),
   ])
 
   useEffect(() => {
@@ -75,6 +77,15 @@ export function Chat(props: Props) {
       listRef.current.scrollTop = scrollTop
     }
   }, [focusedMessageId])
+
+  useEffect(() => {
+    if (!lastMessageId || !listRef.current) return
+
+    const scrollTop = getScrollPosition(listRef, lastMessageId)
+    if (scrollTop !== undefined) {
+      listRef.current.scrollTop = scrollTop
+    }
+  }, [lastMessageId])
 
   useHotkeys(
     'enter',
