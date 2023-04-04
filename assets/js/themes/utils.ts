@@ -174,6 +174,33 @@ export const utils = {
       transition: `${options.props.join(' ')} ${options.time}s ${effect}`,
     }
   },
+  scrollbar: (opts: { x?: boolean; y?: boolean; dark?: boolean }) => {
+    return {
+      overflow: 'hidden',
+      '&:hover': {
+        overflowX: opts.x ? 'overlay' : 'hidden',
+        overflowY: opts.y ? 'overlay' : 'hidden',
+      },
+      '&::-webkit-scrollbar': {
+        width: '7.5px',
+        opacity: '0',
+        background: 'transparent',
+        position: 'absolute',
+        zIndex: '9999999',
+      },
+      '&::-webkit-scrollbar-track': {
+        background: '$scrollTrackBg',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        background: opts.dark ? '$scrollDarkThumbBg' : '$scrollThumbBg',
+        borderRadius: '10px',
+        width: '6px',
+      },
+      '&::-webkit-scrollbar:hover': {
+        opacity: '1',
+      },
+    }
+  },
 }
 
 function mapCSSOptions(

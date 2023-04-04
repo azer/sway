@@ -76,7 +76,7 @@ export function ChatMessage(props: Props) {
       /\p{Extended_Pictographic}+/gu.test(body) &&
       body.replace(/\p{Extended_Pictographic}+/gu, '').trim().length <= 1 // `replace` in this line leaves 1 character left.
     )
-  }, [props.id])
+  }, [props.id, props.children])
 
   return (
     <Container
@@ -144,6 +144,9 @@ const Container = styled('div', {
   gap: '12px',
   padding: '12px',
   position: 'relative',
+  '&:hover': {
+    background: 'rgba(245, 250, 255, 0.025)',
+  },
   [`& ${AvatarRoot}`]: {
     height: '26px',
     round: 'small',
@@ -160,7 +163,7 @@ const Container = styled('div', {
   variants: {
     highlight: {
       true: {
-        background: '$gray2',
+        background: '$gray2 !important',
       },
     },
     focused: {
@@ -199,6 +202,7 @@ const Body = styled('div', {
   lineHeight: '$normal',
   whiteSpace: 'pre-wrap',
   cursor: 'default',
+  fontSize: '13px',
   variants: {
     emoji: {
       true: {

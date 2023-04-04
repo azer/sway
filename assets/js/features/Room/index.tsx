@@ -150,10 +150,7 @@ const Container = styled('main', {
     },
     electron: {
       true: {
-        height: 'calc(100vh - 48px)',
-        gridTemplateRows: '86px auto 72px',
         background: 'none',
-        paddingTop: '12px',
       },
     },
     activeOnElectron: {

@@ -169,7 +169,7 @@ export function Chat(props: Props) {
   )
 
   return (
-    <Container>
+    <Container data-tag="chat-container" onClick={onClickContainer}>
       <MessageList
         ref={listRef}
         onClick={(e) =>
@@ -207,6 +207,13 @@ export function Chat(props: Props) {
       />
     </Container>
   )
+
+  function onClickContainer(e: Event) {
+    const target = e.target as Element
+    if (target && target.getAttribute('data-tag') == 'chat-container') {
+      inputRef.current?.focus()
+    }
+  }
 
   function onFocusInput() {
     dispatch(setFocusOnInput())
@@ -259,21 +266,5 @@ const Container = styled('div', {
 
 const MessageList = styled('div', {
   flex: '1',
-  overflowY: 'scroll',
-  '&::-webkit-scrollbar': {
-    width: '7.5px',
-    opacity: '0',
-    background: 'transparent',
-  },
-  '&::-webkit-scrollbar-track': {
-    background: '$scrollTrackBg',
-  },
-  '&::-webkit-scrollbar-thumb': {
-    background: '$scrollThumbBg',
-    borderRadius: '10px',
-    width: '6px',
-  },
-  '&::-webkit-scrollbar:hover': {
-    opacity: '1',
-  },
+  scrollbar: { y: true },
 })

@@ -23,7 +23,6 @@ const log = logger('navigation')
 export function Navigation(props: Props) {
   const dispatch = useDispatch()
   const inviteModal = useInvitePeople()
-  const socket = useUserSocket()
 
   const [
     workspace,
@@ -32,7 +31,6 @@ export function Navigation(props: Props) {
     focusedRoom,
     people,
     prevRoom,
-    localUserId,
     userIdOnSidebar,
     privateRoomToSync,
     isSidebarOpen,
@@ -58,7 +56,6 @@ export function Navigation(props: Props) {
       selectors.rooms.getFocusedRoom(state),
       selectors.navigation.listPeople(state),
       selectors.rooms.getPrevRoom(state),
-      selectors.session.getUserId(state),
       selectors.sidebar.getFocusedUserId(state),
       privateRoomToSync,
       selectors.sidebar.isOpen(state),
@@ -184,8 +181,9 @@ export const navigationBlur2 = `radial-gradient(
 )`
 
 const Container = styled('nav', {
-  display: 'grid',
-  gridTemplateRows: '60px auto',
+  display: 'flex',
+  flexDirection: 'column',
+  //gridTemplateRows: '48px auto',
   position: 'relative',
   borderRight: '1px solid $shellBorderColor',
   width: '220px',
@@ -195,15 +193,16 @@ const Container = styled('nav', {
   variants: {
     electron: {
       true: {
-        gridTemplateRows: '60px 40px auto',
+        //gridTemplateRows: '48px 26px auto',
       },
     },
   },
 })
 
 const Header = styled('header', {
-  baselineBlock: 10, // 16,
-  width: '100%',
+  vcenter: true,
+  height: '48px',
+  minHeight: '48px',
   display: 'grid',
   gridTemplateColumns: '24px auto',
   gridColumnGap: '8px',
@@ -212,8 +211,9 @@ const Header = styled('header', {
   variants: {
     electron: {
       true: {
-        height: 'auto',
-        marginBottom: '20px',
+        height: '26px',
+        minHeight: '26px',
+        marginBottom: '8px',
       },
     },
   },
@@ -241,26 +241,24 @@ const ImageLogo = styled('img', {
   width: '24px',
   height: '24px',
   round: 'medium',
-  marginBottom: '-6px',
 })
 
 const TextLogo = styled('div', {
   background: '$red',
   color: '$white',
-  unitWidth: 6,
-  unitHeight: 6,
+  width: '24px',
+  height: '24px',
   center: true,
   round: 'medium',
   cursor: 'default',
   fontWeight: '$medium',
   textTransform: 'uppercase',
-  baselineFontSize: 'small',
+  fontSize: '$small',
   label: true,
-  marginBottom: '-6px',
 })
 
 const OrgName = styled('div', {
-  baselineFontSize: 'base',
+  fontSize: '$base',
   fontWeight: '$medium',
   label: true,
 })
@@ -313,9 +311,9 @@ const People = styled('div', {
 
 const Content = styled('div', {
   position: 'relative',
-  overflowY: 'scroll',
   display: 'flex',
   flexDirection: 'column',
+  scrollbar: { y: true, dark: true },
 })
 
 const Fill = styled('div', {

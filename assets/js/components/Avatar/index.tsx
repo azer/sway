@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function Avatar(props: Props) {
-  const css = { fontSize: props.fontSize }
+  const css = { fontSize: props.fontSize || '$small' }
 
   return (
     <AvatarRoot css={css} onClick={props.onClick}>
