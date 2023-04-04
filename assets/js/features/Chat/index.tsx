@@ -17,6 +17,7 @@ import { setWorkspaceFocusRegion } from 'features/Workspace/slice'
 import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 import { ChatInput, StyledChatInput } from './Input'
 import { Users } from 'state/entities'
+import { useUserSocket } from 'features/UserSocket'
 
 interface Props {
   roomId: string
