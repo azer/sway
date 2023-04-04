@@ -3,7 +3,7 @@ import * as React from 'react'
 export function ChatIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      viewBox="4 4 16 16"
+      viewBox="5 5 15 15"
       width="100%"
       height="100%"
       fill="none"

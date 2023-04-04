@@ -205,7 +205,7 @@ const Header = styled('header', {
   minHeight: '48px',
   display: 'grid',
   gridTemplateColumns: '24px auto',
-  gridColumnGap: '8px',
+  gridColumnGap: '4px',
   space: { outer: [0, 5] },
   color: '$headerFg',
   variants: {
@@ -238,18 +238,18 @@ const TrafficLight = styled('div', {
 })
 
 const ImageLogo = styled('img', {
-  width: '24px',
-  height: '24px',
+  width: '20px',
+  height: '20px',
   round: 'medium',
 })
 
 const TextLogo = styled('div', {
   background: '$red',
   color: '$white',
-  width: '24px',
-  height: '24px',
+  width: '20px',
+  height: '20px',
   center: true,
-  round: 'medium',
+  round: 'small',
   cursor: 'default',
   fontWeight: '$medium',
   textTransform: 'uppercase',
@@ -258,7 +258,7 @@ const TextLogo = styled('div', {
 })
 
 const OrgName = styled('div', {
-  fontSize: '$base',
+  fontSize: '$small',
   fontWeight: '$medium',
   label: true,
 })
