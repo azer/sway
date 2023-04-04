@@ -246,14 +246,14 @@ const ImageLogo = styled('img', {
 const TextLogo = styled('div', {
   background: '$red',
   color: '$white',
-  width: '20px',
-  height: '20px',
+  width: '18px',
+  height: '18px',
   center: true,
   round: 'small',
   cursor: 'default',
   fontWeight: '$medium',
   textTransform: 'uppercase',
-  fontSize: '$small',
+  fontSize: '10px',
   label: true,
 })
 

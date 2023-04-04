@@ -16,6 +16,7 @@ import { openUserSidebar } from 'features/Sidebar/slice'
 import { setWorkspaceFocusRegion } from 'features/Workspace/slice'
 import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 import { ChatInput, StyledChatInput } from './Input'
+import { Users } from 'state/entities'
 
 interface Props {
   roomId: string
@@ -26,6 +27,7 @@ export function Chat(props: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const chat = useChat()
   const listRef = useRef<HTMLDivElement>(null)
+  const socket = useUserSocket()
 
   const [
     draft,
@@ -113,6 +115,16 @@ export function Chat(props: Props) {
       setLastSeenMessage({ roomId: props.roomId, messageId: lastMessageId })
     )
   }, [lastMessageId])
+
+  const missingUsers = messageList
+    .filter((row) => !row.user && !!row.message)
+    .map((r) => r.message?.user_id)
+
+  useEffect(() => {
+    if (!missingUsers[0]) return
+
+    socket.fetchEntity(Users, missingUsers[0])
+  }, [missingUsers[0]])
 
   useHotkeys(
     'enter',

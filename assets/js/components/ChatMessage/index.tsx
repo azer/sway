@@ -187,7 +187,7 @@ const Header = styled('header', {
 const Author = styled('div', {
   fontWeight: '$semibold',
   color: '$chatMessageAuthorFg',
-  fontSize: '$base',
+  fontSize: '13px',
 })
 
 const MessageDate = styled('div', {
