@@ -194,7 +194,7 @@ const MessageDate = styled('div', {
   color: '$chatMessageDateFg',
   fontSize: '$small',
   fontWeight: '$medium',
-  lineHeight: '16px',
+  lineHeight: '17px',
 })
 
 const Body = styled('div', {
