@@ -205,7 +205,7 @@ const Header = styled('header', {
   minHeight: '48px',
   display: 'grid',
   gridTemplateColumns: '24px auto',
-  gridColumnGap: '4px',
+  gridColumnGap: '0px',
   space: { outer: [0, 5] },
   color: '$headerFg',
   variants: {
