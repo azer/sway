@@ -20,17 +20,6 @@ function UVideo(props: Props) {
   useEffect(() => {
     const video = el.current
 
-    // @ts-ignore
-    if (window.fakeState) {
-      // @ts-ignore
-      video.style.background = `center center url(${
-        window.fakeState.participantStatus[props.id].cover
-      })`
-      // @ts-ignore
-      video.style['background-size'] = 'cover'
-      return
-    }
-
     if (!video || !track?.persistentTrack) return
 
     log.info('Set track', track.persistentTrack)

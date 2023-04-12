@@ -17,6 +17,7 @@ import * as sidebar from 'features/Sidebar/selectors'
 import * as roomMembers from 'features/RoomMembers/selectors'
 import * as navigation from 'features/Navigation/selectors'
 import * as chat from 'features/Chat/selectors'
+import * as pip from 'features/PictureInPicture/selectors'
 
 export default {
   session,
@@ -38,4 +39,5 @@ export default {
   navigation,
   chat,
   chatMessages,
+  pip,
 }

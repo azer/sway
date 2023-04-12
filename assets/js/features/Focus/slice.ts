@@ -9,11 +9,13 @@ const log = logger('focus/slice')
 
 interface State {
   windowHasFocus: boolean
+  windowIsVisible: boolean
   workspace: WorkspaceFocus
 }
 
 export const initialState: State = {
   windowHasFocus: document.hasFocus(),
+  windowIsVisible: !document.hidden,
   workspace: initialWorkspaceFocus,
 }
 
@@ -21,6 +23,9 @@ export const slice = createSlice({
   name,
   initialState,
   reducers: {
+    setWindowVisible: (state, action: PayloadAction<boolean>) => {
+      state.windowIsVisible = action.payload
+    },
     setWindowFocus: (state, action: PayloadAction<boolean>) => {
       state.windowHasFocus = action.payload
     },
@@ -30,7 +35,8 @@ export const slice = createSlice({
   },
 })
 
-export const { setWindowFocus, setWorkspaceFocus } = slice.actions
+export const { setWindowFocus, setWorkspaceFocus, setWindowVisible } =
+  slice.actions
 export default slice.reducer
 
 export function updateWorkspaceFocus(

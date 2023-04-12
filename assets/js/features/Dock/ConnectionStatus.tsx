@@ -34,6 +34,7 @@ export function ConnectionStatus(props: Props) {
   }, [connectionStatus.status])
 
   useEffect(() => {
+    log.info('Network quality:', network.threshold)
     setNetworkQuality(network.threshold)
   }, [network.threshold])
 

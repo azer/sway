@@ -44,6 +44,8 @@ import { ElectronTrayProvider } from 'features/ElectronTray'
 import { EmojiProvider } from 'features/Emoji/Provider'
 import { TapProvider } from 'features/Tap/Provider'
 import { ChatProvider } from 'features/Chat/Provider'
+import { PictureInPictureProvider } from 'features/PictureInPicture/Provider'
+import { FocusProvider } from 'features/Focus/Provider'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -74,12 +76,14 @@ ReactDOM.render(
         <CommandRegistryProvider>
           <CallProvider>
             <CommandPaletteProvider>
+              <FocusProvider />
               <SettingsProvider />
               <PresenceProvider />
               <ElectronTrayProvider />
               <EmojiProvider />
               <TapProvider />
               <ChatProvider />
+              <PictureInPictureProvider />
               <Tooltip.Provider>
                 <Routing />
               </Tooltip.Provider>

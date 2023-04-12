@@ -51,7 +51,7 @@ export function Shell(props: Props) {
       <Navigation />
       <Main>
         <Titlebar />
-        <Container electron={isElectron} status={localStatus.status}>
+        <Container status={localStatus.status}>
           <Middle>{props.children}</Middle>
           <Sidebar />
         </Container>
@@ -101,22 +101,6 @@ const Container = styled('main', {
   color: '$shellFg',
   display: 'flex',
   overflow: 'hidden',
-  variants: {
-    electron: {
-      true: {},
-    },
-    status: {
-      [PresenceStatus.Online]: {
-        //backgroundImage: `${bottomBlurEffect('$presenceModelineSocialBlur')}`,
-      },
-      [PresenceStatus.Zen]: {
-        //backgroundImage: `${bottomBlurEffect('$presenceModelineZenBlur')}`,
-      },
-      [PresenceStatus.Focus]: {
-        //backgroundImage: `${bottomBlurEffect('$presenceModelineFocusBlur')}`,
-      },
-    },
-  },
 })
 
 const Middle = styled('div', {

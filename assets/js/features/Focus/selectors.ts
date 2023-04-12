@@ -5,6 +5,10 @@ export function hasWindowFocus(state: RootState): boolean {
   return state.focus.windowHasFocus
 }
 
+export function isWindowVisible(state: RootState): boolean {
+  return state.focus.windowIsVisible
+}
+
 export function getWorkspaceFocus(state: RootState): WorkspaceFocus {
   return state.focus.workspace
 }
