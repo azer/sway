@@ -1,5 +1,5 @@
 defmodule SwayWeb.Hashing do
-  @alphabet "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"
+  @alphabet "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
   @salt "sw:ay"
   @min_length 4
 

@@ -3,22 +3,29 @@ defmodule SwayWeb.RoomView do
   alias SwayWeb.RoomView
   alias SwayWeb.APIView
 
-  def links(room, acc) do
-    acc
-    |> APIView.append_user(room.user_id)
-    |> APIView.append_workspace(room.workspace_id)
-    #|> APIView.append_links(
-      #:private_members,
-      #Enum.map(Sway.Rooms.list_private_members_by_room_id(room.id), fn pm -> APIView.link(pm) end)
-    #)
+  def links(resp, room) do
+    resp
+    |> APIView.add_user(room.user_id)
+    |> APIView.add_workspace(room.workspace_id)
+    |> APIView.add_links(
+      :room_members,
+      Enum.map(Sway.Rooms.list_room_members_by_room_id(room.id), fn pm -> APIView.link(pm, SwayWeb.RoomMemberView) end)
+    )
   end
 
   def render("index.json", %{rooms: rooms}) do
-    %{list: render_many(rooms, RoomView, "room.json")}
+    %{
+      list: render_many(rooms, RoomView, "room.json"),
+      links: APIView.links(:rooms, RoomView, rooms)
+    }
   end
 
-   def render("show.json", %{room: room}) do
-    %{result: render_one(room, RoomView, "room.json")}
+  def render("show.json", %{room: room}) do
+    IO.inspect(room)
+    %{
+      result: render_one(room, RoomView, "room.json"),
+      links: APIView.links(:rooms, RoomView, room)
+    }
   end
 
   def render("room.json", %{room: room}) do

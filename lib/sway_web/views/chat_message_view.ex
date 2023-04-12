@@ -3,14 +3,13 @@ defmodule SwayWeb.ChatMessageView do
   alias SwayWeb.ChatMessageView
   alias SwayWeb.APIView
 
-  def links(message, acc) do
-    acc
-    |> APIView.append_room(message.room_id)
-    |> APIView.append_user(message.user_id)
+  def links(view, message) do
+    view
+    |> APIView.add_room(message.room_id)
+    |> APIView.add_user(message.user_id)
   end
 
   def render("index.json", %{messages: messages}) do
-    l = Enum.reduce(messages, %{}, fn message, acc -> links(message, acc) end)
     %{data: render_many(messages, ChatMessageView, "chat_message.json") }
   end
 

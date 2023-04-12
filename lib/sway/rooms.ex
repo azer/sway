@@ -38,6 +38,8 @@ defmodule Sway.Rooms do
   """
   def get_room!(id), do: Repo.get!(Room, id)
 
+  def get_room_member!(id), do: Repo.get!(RoomMember, id)
+
   def get_room_by_name(workspace_id, name) when is_binary(name) do
     Repo.get_by(Room, workspace_id: workspace_id, name: name)
   end

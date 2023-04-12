@@ -3,16 +3,16 @@ defmodule SwayWeb.RoomMemberView do
   alias SwayWeb.APIView
   alias SwayWeb.RoomMemberView
 
-  def links(member, acc) do
-    acc
-    |> APIView.append_user(member.user_id)
-    |> APIView.append_room(member.room_id)
+  def links(view, member) do
+    view
+    |> APIView.add_user(member.user_id)
+    |> APIView.add_room(member.room_id)
   end
 
   def render("index.json", %{room_members: members}) do
     %{
       list: render_many(members, RoomMemberView, "room_member.json"),
-      links: APIView.render_links(APIView.many_links(members, fn member, acc -> links(member, acc) end))
+      links: APIView.render_links(APIView.many_links(members, %{}, fn member, acc -> links(member, acc) end))
     }
   end
 
