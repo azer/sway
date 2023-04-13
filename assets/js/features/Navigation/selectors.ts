@@ -1,5 +1,6 @@
 import { RootState } from 'state'
 import selectors from 'selectors'
+import { uniqueItems } from 'lib/utils'
 
 // users I have private rooms with
 // online users
@@ -40,5 +41,7 @@ export function listPeople(state: RootState): string[] {
 
   const all = [...onlineMembers, ...usersWithPrivateRooms, ...offlineMembers]
 
-  return all.sort(selectors.presence.sortUsersByPresence(state)).slice(0, 10)
+  return uniqueItems(all)
+    .sort(selectors.presence.sortUsersByPresence(state))
+    .slice(0, 10)
 }

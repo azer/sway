@@ -21,7 +21,6 @@ defmodule SwayWeb.RoomView do
   end
 
   def render("show.json", %{room: room}) do
-    IO.inspect(room)
     %{
       result: render_one(room, RoomView, "room.json"),
       links: APIView.links(:rooms, RoomView, room)

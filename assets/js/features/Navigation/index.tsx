@@ -9,12 +9,23 @@ import { useRooms } from 'features/Room/use-rooms'
 import { RoomNavigationProvider } from 'features/Room/Provider'
 import { useInvitePeople } from 'features/Settings/InvitePeople'
 import { isElectron } from 'lib/electron'
-import { useUserSocket } from 'features/UserSocket'
 import { openUserSidebar } from 'features/Sidebar/slice'
 import { GET } from 'lib/api'
-import { RoomMember, Row, scanAPIResponse } from 'state/entities'
-import { setRoomMemberUserIdMap } from 'features/RoomMembers/slice'
+import {
+  addBatch,
+  Room,
+  RoomMember,
+  RoomMembers,
+  Row,
+  scanAPIResponse,
+  Update,
+} from 'state/entities'
+import {
+  addRoomMembers,
+  setRoomMemberUserIdMap,
+} from 'features/RoomMembers/slice'
 import Icon from 'components/Icon'
+import { setWorkspaceRoomIds } from 'features/Room/slice'
 
 interface Props {}
 
@@ -32,22 +43,10 @@ export function Navigation(props: Props) {
     people,
     prevRoom,
     userIdOnSidebar,
-    privateRoomToSync,
     isSidebarOpen,
   ] = useSelector((state) => {
     const workspace = selectors.workspaces.getSelfWorkspace(state)
     const privateRoomIds = selectors.rooms.listActivePrivateRooms(state)
-    const privateRoomToSync = privateRoomIds.find((id) => {
-      if (!selectors.rooms.getRoomById(state, id)) {
-        return true
-      }
-
-      if (selectors.roomMembers.getMembersByRoomId(state, id).length === 0) {
-        return true
-      }
-
-      return false
-    })
 
     return [
       workspace,
@@ -57,10 +56,41 @@ export function Navigation(props: Props) {
       selectors.navigation.listPeople(state),
       selectors.rooms.getPrevRoom(state),
       selectors.sidebar.getFocusedUserId(state),
-      privateRoomToSync,
       selectors.sidebar.isOpen(state),
     ]
   })
+
+  useEffect(() => {
+    if (!workspace?.id) return
+
+    log.info('Fetching private rooms', workspace?.id)
+
+    GET(`/api/rooms/?workspace_id[eq]=${workspace.id}&is_private[true]`)
+      .then((response) => {
+        dispatch(
+          addBatch(
+            (response.links as Update[]).concat(response.list as Row<Room>[])
+          )
+        )
+
+        dispatch(
+          setWorkspaceRoomIds({
+            roomIds: (response.list as Row<Room>[]).map((r) => r.id),
+            workspaceId: workspace.id,
+            privateRoom: true,
+          })
+        )
+
+        const roomMembers = response.links.filter(
+          (l) => l.schema === RoomMembers
+        )
+
+        dispatch(addRoomMembers(roomMembers as Row<RoomMember>[]))
+      })
+      .catch((err) => {
+        log.error('Failed to fetch private rooms', err)
+      })
+  }, [!workspace?.id])
 
   const rooms = useRooms()
 
@@ -70,22 +100,6 @@ export function Navigation(props: Props) {
       rooms.enterById(prevRoom.id)
     }
   }, [workspace, focusedRoom?.is_active, !!prevRoom])
-
-  useEffect(() => {
-    const roomId = privateRoomToSync
-    if (!roomId) return
-
-    log.info('Sync up private room data;', roomId)
-
-    GET(`/api/rooms/${roomId}/members`).then((resp) => {
-      const userIds = (resp.list as Row<RoomMember>[]).map(
-        (m) => m.data.user_id
-      )
-
-      dispatch(setRoomMemberUserIdMap({ roomId, userIds }))
-      dispatch(scanAPIResponse(resp))
-    })
-  }, [privateRoomToSync])
 
   return (
     <Container electron={isElectron}>

@@ -11,7 +11,7 @@ defmodule SwayWeb.StatusView do
   end
 
   def render("index.json", %{statuses: statuses}) do
-    %{data: render_many(statuses, StatusView, "status.json") }
+    %{list: render_many(statuses, StatusView, "status.json") }
   end
 
   def render("show.json", %{status: status}) do

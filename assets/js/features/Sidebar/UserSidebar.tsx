@@ -72,22 +72,16 @@ export function UserSidebar(props: Props) {
   useEffect(() => {
     if (!user) return
 
-    GET<{ data: Status[] }>(`/api/users/${user.id}/updates`)
+    GET(`/api/users/${user.id}/updates`)
       .then((response) => {
-        dispatch(
-          addBatch(
-            response.data.map((d) => ({
-              schema: Statuses,
-              id: d.id,
-              data: d,
-            }))
-          )
-        )
+        if (!response.list) return log.error('Unexpected response', response)
+
+        dispatch(addBatch(response.list as Row<Status>[]))
 
         dispatch(
           setStatusUpdates({
             userId: user.id,
-            updates: response.data.map((d) => d.id),
+            updates: response.list.map((d) => d.id),
           })
         )
       })

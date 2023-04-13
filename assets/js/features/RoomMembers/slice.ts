@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RoomMember, Row } from 'state/entities'
 
 export const name = 'room_members'
 
@@ -20,8 +21,17 @@ export const slice = createSlice({
     ) => {
       state.userIdsByRoomId[action.payload.roomId] = action.payload.userIds
     },
+    addRoomMembers: (state, action: PayloadAction<Row<RoomMember>[]>) => {
+      for (const row of action.payload) {
+        if (state.userIdsByRoomId[row.data.room_id]) {
+          state.userIdsByRoomId[row.data.room_id].push(row.data.user_id)
+        } else {
+          state.userIdsByRoomId[row.data.room_id] = [row.data.user_id]
+        }
+      }
+    },
   },
 })
 
-export const { setRoomMemberUserIdMap } = slice.actions
+export const { setRoomMemberUserIdMap, addRoomMembers } = slice.actions
 export default slice.reducer
