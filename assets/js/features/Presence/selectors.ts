@@ -50,28 +50,6 @@ export function getUserUpdatesByUserId(
     .filter((u) => !!u) as Status[]
 }
 
-/*export function getLocalPresenceLabel(state: RootState): string {
-  return getPresenceLabelByUserId(
-    state,
-    selectors.users.getSelf(state)?.id || ''
-  )
-}
-
-export function getPresenceLabelByUserId(
-  state: RootState,
-  userId: string
-): string {
-  const isActive = selectors.presence.isUserActive(state, userId)
-  if (isActive) {
-    return 'phone'
-  }
-
-  return (
-    findModeByStatus(selectors.statuses.getByUserId(state, userId).status)
-      ?.label || ''
-  )
-}*/
-
 export function isSpaceButtonEnabled(state: RootState): boolean {
   return (
     state.focus.workspace.region === WorkspaceFocusRegion.Room &&
@@ -81,6 +59,12 @@ export function isSpaceButtonEnabled(state: RootState): boolean {
 
 export function isUserOnline(state: RootState, userId: string): boolean {
   return state.userSocket.onlineUsers.indexOf(userId) > -1
+}
+
+export function getUsersInRoom(state: RootState, roomId: string): string[] {
+  const users: string[] = []
+
+  return users
 }
 
 export function sortUsersByPresence(

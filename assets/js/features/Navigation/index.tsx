@@ -17,13 +17,9 @@ import {
   RoomMember,
   RoomMembers,
   Row,
-  scanAPIResponse,
   Update,
 } from 'state/entities'
-import {
-  addRoomMembers,
-  setRoomMemberUserIdMap,
-} from 'features/RoomMembers/slice'
+import { addRoomMembers } from 'features/RoomMembers/slice'
 import Icon from 'components/Icon'
 import { setWorkspaceRoomIds } from 'features/Room/slice'
 
@@ -38,7 +34,6 @@ export function Navigation(props: Props) {
   const [
     workspace,
     activeRoomIds,
-    privateRoomIds,
     focusedRoom,
     people,
     prevRoom,
@@ -46,12 +41,10 @@ export function Navigation(props: Props) {
     isSidebarOpen,
   ] = useSelector((state) => {
     const workspace = selectors.workspaces.getSelfWorkspace(state)
-    const privateRoomIds = selectors.rooms.listActivePrivateRooms(state)
 
     return [
       workspace,
       selectors.rooms.listActiveRooms(state),
-      privateRoomIds,
       selectors.rooms.getFocusedRoom(state),
       selectors.navigation.listPeople(state),
       selectors.rooms.getPrevRoom(state),
@@ -133,29 +126,10 @@ export function Navigation(props: Props) {
             />
           ))}
         </Rooms>
-        {privateRoomIds.length > 0 ? (
-          <Rooms>
-            <Title>Private</Title>
-            {privateRoomIds.map((id) => (
-              <RoomButton
-                key={id}
-                id={id}
-                selected={id === focusedRoom?.id}
-                onClick={rooms.enterById}
-              />
-            ))}
-          </Rooms>
-        ) : null}
         <People>
           <Title>People</Title>
-
           {people.map((uid) => (
-            <UserButton
-              key={uid}
-              id={uid}
-              onClick={() => dispatch(openUserSidebar(uid))}
-              selected={userIdOnSidebar === uid && isSidebarOpen}
-            />
+            <UserButton key={uid} id={uid} />
           ))}
         </People>
         <Fill />

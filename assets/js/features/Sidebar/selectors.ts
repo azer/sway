@@ -11,7 +11,9 @@ export function getContent(state: RootState): SidebarContent {
 }
 
 export function getFocusedUserId(state: RootState): string | undefined {
-  return state.focus.workspace.sidebar.user?.id
+  return getContent(state) === SidebarContent.User
+    ? state.focus.workspace.sidebar.user?.id
+    : undefined
 }
 
 export function hasContent(state: RootState): boolean {

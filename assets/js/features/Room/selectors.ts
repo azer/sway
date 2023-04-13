@@ -185,6 +185,21 @@ export function getDefaultRoom(state: RootState): Room | undefined {
   return defaultRoom || all.length > 0 ? getRoomById(state, all[0]) : undefined
 }
 
+export function get1v1RoomIdByUserId(
+  state: RootState,
+  userId: string
+): string | undefined {
+  const workspace = selectors.workspaces.getSelfWorkspace(state)
+  if (!workspace) return
+
+  return selectors.rooms
+    .listAllPrivateRooms(state, workspace.id)
+    .filter((roomId) => {
+      const members = selectors.roomMembers.getMembersByRoomId(state, roomId)
+      return members.includes(userId) && members.length == 2
+    })[0]
+}
+
 export function isFocusOnRoom(state: RootState): boolean {
   return selectors.focus.isFocusOnWorkspace(state)
 }

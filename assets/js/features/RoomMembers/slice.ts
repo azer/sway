@@ -24,7 +24,11 @@ export const slice = createSlice({
     addRoomMembers: (state, action: PayloadAction<Row<RoomMember>[]>) => {
       for (const row of action.payload) {
         if (state.userIdsByRoomId[row.data.room_id]) {
-          state.userIdsByRoomId[row.data.room_id].push(row.data.user_id)
+          if (
+            !state.userIdsByRoomId[row.data.room_id].includes(row.data.user_id)
+          ) {
+            state.userIdsByRoomId[row.data.room_id].push(row.data.user_id)
+          }
         } else {
           state.userIdsByRoomId[row.data.room_id] = [row.data.user_id]
         }

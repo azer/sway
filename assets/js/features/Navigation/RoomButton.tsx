@@ -20,7 +20,7 @@ export function RoomButton(props: Props) {
     (state) => [
       selectors.rooms.getRoomById(state, props.id),
       selectors.rooms
-        .getUsersInRoom(state, props.id)
+        .getOtherUsersInRoom(state, props.id)
         .map((id) => selectors.users.getById(state, id)),
       selectors.rooms.getRoomStatus(state, props.id),
       selectors.chat.hasUnreadMessage(state, props.id),
@@ -56,7 +56,7 @@ const Container = styled('div', {
   display: 'flex',
   alignItems: 'center',
   fontSize: '$small',
-  gap: '8px',
+  gap: '6px',
   unitHeight: 8,
   space: { inner: [2, 3], outer: [0, -3] },
   color: '$navigationFg',
@@ -108,7 +108,7 @@ export const AvatarStack = styled('div', {
   },
 })
 
-const Users = styled('div', {
+export const Users = styled('div', {
   height: '12px',
   position: 'relative',
   [`& ${AvatarStack}`]: {

@@ -49,6 +49,7 @@ export function UserSidebar(props: Props) {
     localUserId,
     workspaceId,
     workspaceSlug,
+    privateRoomId,
   ] = useSelector((state) => {
     const userId = selectors.sidebar.getFocusedUserId(state)
     if (!userId) return [undefined, []]
@@ -66,6 +67,7 @@ export function UserSidebar(props: Props) {
       selectors.session.getUserId(state),
       selectors.workspaces.getSelfWorkspace(state)?.id,
       selectors.workspaces.getSelfWorkspace(state)?.slug,
+      selectors.rooms.get1v1RoomIdByUserId(state, userId),
     ]
   })
 
@@ -173,34 +175,17 @@ export function UserSidebar(props: Props) {
   function createPrivateRoom() {
     if (!workspaceId || !user || !localUserId) return
 
-    POST('/api/rooms', {
-      body: {
-        private_room: {
-          workspace_id: workspaceId,
-          users: [user?.id, localUserId],
-        },
-      },
-    })
+    if (privateRoomId) {
+      rooms.enterById(privateRoomId)
+      dispatch(setSidebarOpen(false))
+      return
+    }
+
+    rooms
+      .createPrivateRoom(workspaceId, [user.id, localUserId])
       .then((resp) => {
-        log.info('Created / retrieved private room', resp)
         const created = resp.result as Row<Room>
-
-        dispatch(add(created))
-
-        dispatch(
-          appendRoomIdToWorkspace({
-            workspaceId,
-            roomId: created.id,
-            privateRoom: true,
-          })
-        )
-
         navigate(`/${workspaceSlug}/room/${created.id}/${created.data.slug}`)
-        dispatch(setSidebarOpen(false))
-        //navigate(`/${workspaceSlug}/room/${resp.data.id}/${resp.data.slug}`)
-      })
-      .catch((err) => {
-        log.error('can not create private room', err)
       })
   }
 }
@@ -360,3 +345,7 @@ const Message = styled('div', {
   display: 'flex',
   flexDirection: 'column',
 })
+
+function createPrivateRoom() {
+  return new Promise((resolve, reject) => {})
+}

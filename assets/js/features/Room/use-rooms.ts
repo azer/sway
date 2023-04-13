@@ -6,12 +6,14 @@ import selectors from 'selectors'
 import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
 import {
+  appendRoomIdToWorkspace,
   moveUserToRoom,
   setFocusedRoomById,
   setFocusedRoomBySlug,
 } from './slice'
 import { useNavigate } from 'react-router-dom'
-import { Rooms } from 'state/entities'
+import { add, Room, Rooms, Row } from 'state/entities'
+import { APIResponse, POST } from 'lib/api'
 
 const log = logger('rooms/use-rooms')
 
@@ -28,6 +30,7 @@ export function useRooms() {
   return {
     enterById,
     enterBySlug,
+    createPrivateRoom,
   }
 
   function enterById(id: string) {
@@ -55,5 +58,40 @@ export function useRooms() {
     )
 
     dispatch(setFocusedRoomBySlug(slug))
+  }
+
+  function createPrivateRoom(
+    workspaceId: string,
+    users: string[]
+  ): Promise<APIResponse> {
+    return new Promise((resolve, reject) => {
+      return POST('/api/rooms', {
+        body: {
+          private_room: {
+            workspace_id: workspaceId,
+            users,
+          },
+        },
+      })
+        .then((resp) => {
+          const created = resp.result as Row<Room>
+
+          dispatch(add(created))
+
+          dispatch(
+            appendRoomIdToWorkspace({
+              workspaceId,
+              roomId: created.id,
+              privateRoom: true,
+            })
+          )
+
+          resolve(resp)
+        })
+        .catch((err) => {
+          log.error('Can not create private room', err)
+          reject(err)
+        })
+    })
   }
 }

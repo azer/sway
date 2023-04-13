@@ -12,6 +12,7 @@ const log = logger('presence/slice')
 interface State {
   userStatuses: { [userId: string]: string }
   statusUpdates: { [userId: string]: string[] }
+  //  usersByRooms: { [userId: string]: string[] }
 }
 
 export const initialState: State = {
