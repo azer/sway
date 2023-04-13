@@ -73,8 +73,8 @@ export function sortUsersByPresence(
   const onlineMap = createOnlineUsersMap(state)
 
   return function (a: string, b: string): number {
-    if (onlineMap[a] || !onlineMap[b]) return -1
-    if (!onlineMap[a] || onlineMap[b]) return 1
+    if (onlineMap[a] && !onlineMap[b]) return -1
+    if (!onlineMap[a] && onlineMap[b]) return 1
     return 0
   }
 }

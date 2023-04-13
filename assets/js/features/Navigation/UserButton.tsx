@@ -36,18 +36,22 @@ export function UserButton(props: Props) {
     workspace,
     localUserId,
     selected,
-  ] = useSelector((state) => [
-    selectors.users.getById(state, props.id),
-    selectors.statuses.getByUserId(state, props.id),
-    selectors.presence.isUserOnline(state, props.id),
-    selectors.navigation.isUserIn1v1Room(state, props.id),
-    selectors.sidebar.getFocusedUserId(state),
-    selectors.rooms.get1v1RoomIdByUserId(state, props.id),
-    selectors.workspaces.getSelfWorkspace(state),
-    selectors.session.getUserId(state),
-    selectors.rooms.getFocusedRoomId(state) ===
+  ] = useSelector((state) => {
+    const focused = selectors.rooms.getFocusedRoomId(state)
+    const privateRoomId = selectors.rooms.get1v1RoomIdByUserId(state, props.id)
+
+    return [
+      selectors.users.getById(state, props.id),
+      selectors.statuses.getByUserId(state, props.id),
+      selectors.presence.isUserOnline(state, props.id),
+      selectors.navigation.isUserIn1v1Room(state, props.id),
+      selectors.sidebar.getFocusedUserId(state),
       selectors.rooms.get1v1RoomIdByUserId(state, props.id),
-  ])
+      selectors.workspaces.getSelfWorkspace(state),
+      selectors.session.getUserId(state),
+      focused === privateRoomId,
+    ]
+  })
 
   useEffect(() => {
     if (!user) {

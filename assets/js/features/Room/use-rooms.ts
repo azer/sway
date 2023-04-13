@@ -12,8 +12,18 @@ import {
   setFocusedRoomBySlug,
 } from './slice'
 import { useNavigate } from 'react-router-dom'
-import { add, Room, Rooms, Row } from 'state/entities'
+import {
+  add,
+  addBatch,
+  Room,
+  RoomMember,
+  RoomMembers,
+  Rooms,
+  Row,
+  Update,
+} from 'state/entities'
 import { APIResponse, POST } from 'lib/api'
+import { addRoomMembers } from 'features/RoomMembers/slice'
 
 const log = logger('rooms/use-rooms')
 
@@ -76,7 +86,11 @@ export function useRooms() {
         .then((resp) => {
           const created = resp.result as Row<Room>
 
+          dispatch(addBatch(resp.links as Update[]))
           dispatch(add(created))
+
+          const roomMembers = resp.links.filter((l) => l.schema === RoomMembers)
+          dispatch(addRoomMembers(roomMembers as Row<RoomMember>[]))
 
           dispatch(
             appendRoomIdToWorkspace({
