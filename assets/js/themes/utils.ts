@@ -182,7 +182,7 @@ export const utils = {
         overflowY: opts.y ? 'overlay' : 'hidden',
       },
       '&::-webkit-scrollbar': {
-        width: '7.5px',
+        width: '5px',
         opacity: '0',
         background: 'transparent',
         position: 'absolute',
@@ -194,7 +194,7 @@ export const utils = {
       '&::-webkit-scrollbar-thumb': {
         background: opts.dark ? '$scrollDarkThumbBg' : '$scrollThumbBg',
         borderRadius: '10px',
-        width: '6px',
+        width: '4.5px',
       },
       '&::-webkit-scrollbar:hover': {
         opacity: '1',

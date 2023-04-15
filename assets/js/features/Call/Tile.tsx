@@ -1,7 +1,6 @@
 import { styled } from 'themes'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import selectors from 'selectors'
-import { Participant } from 'features/Room/RoomParticipant'
+import { RoomParticipant } from 'features/Room/RoomParticipant'
 import { logger } from 'lib/log'
 // import { useSelector, useDispatch } from 'state'
 
@@ -62,14 +61,20 @@ export function CallTile(props: Props) {
     }
   }, [props.ids.length, dimensions])
 
-  log.info('title size', tileSizeVars)
+  const small = parseInt(tileSizeVars['--tile-width'].replace('px', '')) <= 125
 
   return (
-    <Container ref={gridRef} css={tileSizeVars}>
+    <CallTileRoot ref={gridRef} css={tileSizeVars}>
       {props.ids.map((id, ind) => (
-        <Participant data-id={id} key={id} userId={id} tap={props.tap} />
+        <RoomParticipant
+          data-id={id}
+          key={id}
+          userId={id}
+          tap={props.tap}
+          small={small}
+        />
       ))}
-    </Container>
+    </CallTileRoot>
   )
 
   function onResize() {
@@ -80,7 +85,7 @@ export function CallTile(props: Props) {
   }
 }
 
-const Container = styled('main', {
+export const CallTileRoot = styled('main', {
   width: '100%',
   overflow: 'hidden',
   display: 'flex',

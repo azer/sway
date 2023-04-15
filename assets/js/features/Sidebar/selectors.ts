@@ -26,9 +26,21 @@ export function hasContent(state: RootState): boolean {
     return true
   }
 
+  if (content === SidebarContent.Room) {
+    return !!state.focus.workspace.sidebar.room?.id
+  }
+
   return false
 }
 
 export function isFocusOnSidebar(state: RootState): boolean {
   return state.focus.workspace.region === WorkspaceFocusRegion.Sidebar
+}
+
+export function getRoomIdOnSidebar(state: RootState): string | undefined {
+  return (
+    (getContent(state) === SidebarContent.Room &&
+      state.focus.workspace.sidebar.room?.id) ||
+    undefined
+  )
 }

@@ -48,3 +48,22 @@ export function openChatSidebar() {
     focus.sidebar.isOpen = true
   })
 }
+
+export function openRoomSidebar(roomId: string) {
+  return updateWorkspaceFocus((focus) => {
+    if (
+      focus.sidebar.isOpen &&
+      focus.sidebar.content === SidebarContent.Room &&
+      focus.sidebar.room?.id === roomId
+    ) {
+      focus.sidebar.isOpen = false
+      return
+    }
+
+    focus.sidebar.content = SidebarContent.Room
+    focus.sidebar.isOpen = true
+    focus.sidebar.room = {
+      id: roomId,
+    }
+  })
+}

@@ -118,12 +118,7 @@ export function Navigation(props: Props) {
           <RoomNavigationProvider />
           <Title>Your Rooms</Title>
           {activeRoomIds.map((id) => (
-            <RoomButton
-              key={id}
-              id={id}
-              selected={id === focusedRoom?.id}
-              onClick={rooms.enterById}
-            />
+            <RoomButton key={id} id={id} />
           ))}
         </Rooms>
         <People>
@@ -246,7 +241,7 @@ const TextLogo = styled('div', {
 })
 
 const OrgName = styled('div', {
-  fontSize: '$small',
+  fontSize: '13px',
   fontWeight: '$medium',
   label: true,
 })

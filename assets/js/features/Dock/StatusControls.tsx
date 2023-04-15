@@ -421,6 +421,7 @@ const Emoji = styled('span', {
   center: true,
   fontSize: '21px',
   label: true,
+  round: 'small',
   '&:hover': {
     background: 'rgba(255, 255, 255, 0.1)',
   },

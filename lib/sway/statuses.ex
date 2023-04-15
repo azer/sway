@@ -64,6 +64,15 @@ defmodule Sway.Statuses do
     Repo.all(query)
   end
 
+  def get_updates_by_room(room_id) do
+    query =
+      from s in Status,
+          where: s.room_id == ^room_id and (s.message != "" or s.emoji != ""),
+          order_by: [desc: s.inserted_at]
+
+    Repo.all(query)
+  end
+
   @doc """
   Creates a status.
 

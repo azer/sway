@@ -3,6 +3,7 @@ import { ChatFocus } from 'features/Chat/focus'
 export enum SidebarContent {
   User = 'user',
   Chat = 'chat',
+  Room = 'room',
 }
 
 export interface SidebarFocus {
@@ -12,6 +13,9 @@ export interface SidebarFocus {
     id: string
   }
   chat?: ChatFocus
+  room?: {
+    id: string
+  }
 }
 
 export const initialSidebarFocus: SidebarFocus = {

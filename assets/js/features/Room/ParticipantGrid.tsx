@@ -1,10 +1,9 @@
 import { styled } from 'themes'
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import selectors from 'selectors'
 import { useSelector } from 'state'
-import { Border, RoomParticipantRoot, Participant } from './RoomParticipant'
 import { logger } from 'lib/log'
-import { useMediaTrack, useScreenShare } from '@daily-co/daily-react-hooks'
+import { useScreenShare } from '@daily-co/daily-react-hooks'
 import { CallTile } from 'features/Call/Tile'
 
 interface Props {

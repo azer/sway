@@ -7,7 +7,7 @@ import { isElectron } from 'lib/electron'
 import { CallDock } from 'features/CallDock'
 import { useSelector, useDispatch } from 'state'
 import selectors from 'selectors'
-import { Participant, RoomParticipantRoot } from './RoomParticipant'
+import { RoomParticipant, RoomParticipantRoot } from './RoomParticipant'
 import { ParticipantLabelRoot } from 'components/ParticipantLabel'
 import {
   ActiveParticipant,
@@ -100,12 +100,12 @@ export function RoomPage(props: Props) {
       <ScreenshareProvider />
       <Top isLocalActive={isLocalActive}>
         {localUserId && isLocalActive ? (
-          <Participant userId={localUserId} />
+          <RoomParticipant userId={localUserId} tap={tap} />
         ) : (
-          <Dock roomId={props.id} />
+          <Dock roomId={props.id} tap={tap} />
         )}
         {minimizedParticipants?.map((uid) => (
-          <Participant userId={uid} />
+          <RoomParticipant userId={uid} tap={tap} />
         ))}
       </Top>
       <Middle
@@ -121,7 +121,7 @@ export function RoomPage(props: Props) {
             showScreen
           />
         ) : !focusedUserId && mainParticipants.length ? (
-          <CallTile ids={mainParticipants} />
+          <CallTile ids={mainParticipants} tap={tap} />
         ) : null}
       </Middle>
       <Bottom>
@@ -129,6 +129,8 @@ export function RoomPage(props: Props) {
       </Bottom>
     </Container>
   )
+
+  function tap() {}
 }
 
 export const topBlurEffect =

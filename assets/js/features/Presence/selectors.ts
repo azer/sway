@@ -44,10 +44,15 @@ export function getPresenceIconByUserId(
 export function getUserUpdatesByUserId(
   state: RootState,
   userId: string
-): Status[] {
-  return (state.presence.statusUpdates[userId] || [])
-    .map((id) => selectors.statuses.getById(state, id))
-    .filter((u) => !!u) as Status[]
+): string[] {
+  return state.presence.statusUpdates[userId] || []
+}
+
+export function getStatusUpdatesByRoomId(
+  state: RootState,
+  roomId: string
+): string[] {
+  return state.presence.roomStatuses[roomId] || []
 }
 
 export function isSpaceButtonEnabled(state: RootState): boolean {

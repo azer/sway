@@ -12,6 +12,7 @@ const log = logger('presence/slice')
 interface State {
   userStatuses: { [userId: string]: string }
   statusUpdates: { [userId: string]: string[] }
+  roomStatuses: { [roomId: string]: string[] }
   //  usersByRooms: { [userId: string]: string[] }
 }
 
@@ -19,6 +20,7 @@ export const initialState: State = {
   // @ts-ignore
   userStatuses: window.initialState?.userStatusMap || {},
   statusUpdates: {},
+  roomStatuses: {},
 }
 
 export const slice = createSlice({
@@ -59,6 +61,12 @@ export const slice = createSlice({
 
       state.statusUpdates[action.payload.userId] = Array.from(new Set(next))
     },
+    setRoomStatusUpdates: (
+      state,
+      action: PayloadAction<{ roomId: string; updates: string[] }>
+    ) => {
+      state.roomStatuses[action.payload.roomId] = action.payload.updates
+    },
   },
 })
 
@@ -67,6 +75,7 @@ export const {
   setStatusIdBatch,
   setStatusUpdates,
   addStatusUpdates,
+  setRoomStatusUpdates,
 } = slice.actions
 export default slice.reducer
 

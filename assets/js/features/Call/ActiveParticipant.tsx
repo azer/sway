@@ -22,6 +22,7 @@ interface Props {
   muted?: boolean
   showScreen?: boolean
   tap: (userId: string) => void
+  small?: boolean
 }
 
 const log = logger('call/active-participant')
@@ -89,8 +90,8 @@ function UActiveParticipant(props: Props) {
     <UserContextMenu user={user} status={status} tap={props.tap}>
       <ActiveParticipantRoot
         data-participant-id={props.participantId}
-        videoOn={isVideoOn}
         screenOn={showScreen}
+        small={props.small}
         css={{ '--participant-bg': labelColor }}
       >
         {!isMicOn && isVideoOn ? (
@@ -161,6 +162,16 @@ export const ActiveParticipantRoot = styled('div', {
     background: 'var(--participant-bg)',
   },
   variants: {
+    small: {
+      true: {
+        round: 'large',
+        [`& ${ParticipantLabelRoot}`]: {
+          background: 'rgba(0, 10, 15, 0.35)',
+          height: '24px',
+          bottom: '2px',
+        },
+      },
+    },
     screenOn: {
       true: {
         width: '100%',

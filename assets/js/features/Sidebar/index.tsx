@@ -1,29 +1,34 @@
 import { styled } from 'themes'
-import { isElectron } from 'lib/electron'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import selectors from 'selectors'
-import { SidebarHeader } from './Header'
-import { useSelector, useDispatch } from 'state'
+import { useSelector } from 'state'
 import { SidebarContent } from './focus'
 import { UserSidebar } from './UserSidebar'
 import { Chat } from 'features/Chat'
+import { RoomSidebar } from './RoomSidebar'
 
 interface Props {}
 
-export default function Sidebar(props: Props) {
+export function Sidebar(props: Props) {
   // const dispatch = useDispatch()
   // const [] = useSelector((state) => [])
-  const [isOpen, content, roomId] = useSelector((state) => [
-    selectors.sidebar.isOpen(state),
-    selectors.sidebar.getContent(state),
-    selectors.rooms.getFocusedRoomId(state),
-  ])
+  const [isOpen, content, focusedRoomId, roomIdOnSidebar] = useSelector(
+    (state) => [
+      selectors.sidebar.isOpen(state),
+      selectors.sidebar.getContent(state),
+      selectors.rooms.getFocusedRoomId(state),
+      selectors.sidebar.getRoomIdOnSidebar(state),
+    ]
+  )
 
   return (
     <Container isOpen={isOpen}>
       {isOpen && content === SidebarContent.User ? <UserSidebar /> : null}
-      {isOpen && roomId && content === SidebarContent.Chat ? (
-        <Chat roomId={roomId} />
+      {isOpen && focusedRoomId && content === SidebarContent.Chat ? (
+        <Chat roomId={focusedRoomId} />
+      ) : null}
+      {isOpen && roomIdOnSidebar && content === SidebarContent.Room ? (
+        <RoomSidebar roomId={roomIdOnSidebar} />
       ) : null}
     </Container>
   )

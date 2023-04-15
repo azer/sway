@@ -125,6 +125,7 @@ defmodule SwayWeb.Router do
     get "/users/:user_id/updates", StatusController, :list_updates_by_user
     resources "/rooms", RoomController
     get "/rooms/:room_id/members", RoomMemberController, :index
+    get "/rooms/:room_id/updates", StatusController, :list_updates_by_room
   end
 
   scope "/", SwayWeb do

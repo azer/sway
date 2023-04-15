@@ -2,36 +2,45 @@ import { styled } from 'themes'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import selectors from 'selectors'
-import { useSelector } from 'state'
 import { RoomStatusIcon } from 'components/RoomStatusIcon'
 import { Avatar, AvatarRoot } from 'components/Avatar'
-// import { useSelector, useDispatch } from 'state'
+import { useRooms } from 'features/Room/use-rooms'
+import { openRoomSidebar } from 'features/Sidebar/slice'
+import { useSelector, useDispatch } from 'state'
 
 interface Props {
   id: string
   selected?: boolean
-  onClick: (id: string) => void
 }
 
 export function RoomButton(props: Props) {
   const navigate = useNavigate()
+  const rooms = useRooms()
+  const dispatch = useDispatch()
 
-  const [room, usersInRoom, roomStatus, hasUnreadMessages] = useSelector(
-    (state) => [
-      selectors.rooms.getRoomById(state, props.id),
-      selectors.rooms
-        .getOtherUsersInRoom(state, props.id)
-        .map((id) => selectors.users.getById(state, id)),
-      selectors.rooms.getRoomStatus(state, props.id),
-      selectors.chat.hasUnreadMessage(state, props.id),
-    ]
-  )
+  const [
+    room,
+    usersInRoom,
+    roomStatus,
+    hasUnreadMessages,
+    selected,
+    roomIdOnSidebar,
+  ] = useSelector((state) => [
+    selectors.rooms.getRoomById(state, props.id),
+    selectors.rooms
+      .getOtherUsersInRoom(state, props.id)
+      .map((id) => selectors.users.getById(state, id)),
+    selectors.rooms.getRoomStatus(state, props.id),
+    selectors.chat.hasUnreadMessage(state, props.id),
+    selectors.rooms.getFocusedRoomId(state) === props.id,
+    selectors.sidebar.getRoomIdOnSidebar(state),
+  ])
 
   return (
     <Container
-      selected={props.selected}
+      selected={selected}
       hasUsers={!props.selected && usersInRoom.length > 0}
-      onClick={() => props.onClick(props.id)}
+      onClick={handleClick}
       unread={hasUnreadMessages}
     >
       <RoomStatusIcon mode={roomStatus} />
@@ -50,6 +59,15 @@ export function RoomButton(props: Props) {
       ) : null}
     </Container>
   )
+
+  function handleClick() {
+    if (roomIdOnSidebar !== props.id) {
+      dispatch(openRoomSidebar(props.id))
+      return
+    }
+
+    rooms.enterById(props.id)
+  }
 }
 
 const Container = styled('div', {

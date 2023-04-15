@@ -5,28 +5,24 @@ import { useSelector, useDispatch } from 'state'
 import { Avatar, AvatarRoot } from 'components/Avatar'
 import { Emoji } from 'components/Emoji'
 import { getLocalTime, relativeDate } from 'lib/datetime'
-import { findModeByStatus, PresenceStatus } from 'state/presence'
+import { PresenceStatus } from 'state/presence'
 import { StatusIcon } from 'features/Dock/StatusIcon'
 import Icon from 'components/Icon'
 import { logger } from 'lib/log'
-import { GET, POST } from 'lib/api'
+import { GET } from 'lib/api'
 import { setStatusUpdates } from 'features/Presence/slice'
-import {
-  add,
-  addBatch,
-  Room,
-  Rooms,
-  Row,
-  Status,
-  Statuses,
-} from 'state/entities'
+import { addBatch, Room, Row, Status } from 'state/entities'
 import { usePresence } from 'features/Presence/use-presence'
 import { setStatusHook } from 'features/Tap/slice'
-import { useUserSocket } from 'features/UserSocket'
 import { useNavigate } from 'react-router-dom'
 import { useRooms } from 'features/Room/use-rooms'
-import { appendRoomIdToWorkspace } from 'features/Room/slice'
 import { setSidebarOpen } from './slice'
+import {
+  SidebarButton,
+  SidebarButtonset,
+  Title,
+} from 'components/SidebarButton'
+import { StatusUpdate, Updates } from './Update'
 
 interface Props {}
 
@@ -124,36 +120,28 @@ export function UserSidebar(props: Props) {
         <Value>{room?.name}</Value>
       </Table>
 
-      <Buttons>
-        <Button onClick={() => createPrivateRoom()}>
+      <SidebarButtonset>
+        <SidebarButton onClick={() => createPrivateRoom()}>
           <Icon name="users" />
           1:1 Room
-        </Button>
-        <Button onClick={() => user?.id && presence.tap(user.id)}>
+        </SidebarButton>
+        <SidebarButton onClick={() => user?.id && presence.tap(user.id)}>
           <Emoji id="wave" />
           Wave
-        </Button>
-        <Button
+        </SidebarButton>
+        <SidebarButton
           onClick={() => user && createStatusHook(user.id, status?.status)}
         >
           <Icon name={existingHook ? 'checkmark' : 'bell'} />
           Notify when available
-        </Button>
-      </Buttons>
+        </SidebarButton>
+      </SidebarButtonset>
       {updates.length > 0 ? <Title>Updates</Title> : null}
       {updates.length > 0 ? (
         <Updates>
-          {updates
-            .filter((u) => u?.message)
-            .map((u) => (
-              <Update key={u.id}>
-                {u?.emoji ? <Emoji id={u.emoji} /> : null}
-                <Message>
-                  {u?.message}
-                  <Time>{u ? relativeDate(new Date(u?.inserted_at)) : ''}</Time>
-                </Message>
-              </Update>
-            ))}
+          {updates.map((id) => (
+            <StatusUpdate id={id} />
+          ))}
         </Updates>
       ) : null}
     </Container>
@@ -261,91 +249,3 @@ export const Value = styled('div', {
   display: 'flex',
   gap: '8px',
 })
-
-const Title = styled('h1', {
-  fontSize: '13px',
-  fontWeight: '$medium',
-  color: '$gray8',
-  margin: '24px 0 12px',
-  vcenter: true,
-  label: true,
-})
-
-const Buttons = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '6px',
-})
-
-const Button = styled('div', {
-  round: 'medium',
-  color: 'rgba(225, 245, 255, 0.7)',
-  height: '38px',
-  position: 'relative',
-  vcenter: true,
-  label: true,
-  [`& svg`]: {
-    width: '12px',
-    height: '12px',
-    marginRight: '8px',
-    opacity: '0.55',
-  },
-  '& em-emoji': {
-    marginRight: '8px',
-  },
-  '&::before': {
-    content: ' ',
-    width: 'calc(100% + 24px)',
-    height: '100%',
-    position: 'absolute',
-    left: '-12px',
-    round: 'medium',
-    background: 'rgba(225, 235, 255, 0.04)',
-  },
-  '&:hover': {
-    color: '$white',
-    '&::before': {
-      background: 'rgba(225, 235, 255, 0.08)',
-    },
-    '& svg': {
-      color: '$candy',
-      opacity: '1',
-    },
-  },
-})
-
-const Updates = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '12px',
-  flexGrow: '1',
-  overflowX: 'hidden',
-  overflowY: 'scroll',
-})
-
-const Update = styled('div', {
-  display: 'flex',
-  fontSize: '$small',
-  gap: '6px',
-  [`& em-emoji`]: {
-    fontSize: '18px',
-  },
-})
-
-const Time = styled('div', {
-  marginTop: '4px',
-  color: 'rgba(235,  240, 255, 0.5)',
-  label: true,
-  '&:first-letter': {
-    textTransform: 'uppercase',
-  },
-})
-
-const Message = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-})
-
-function createPrivateRoom() {
-  return new Promise((resolve, reject) => {})
-}
