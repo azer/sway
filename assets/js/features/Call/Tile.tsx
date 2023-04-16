@@ -2,7 +2,8 @@ import { styled } from 'themes'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { RoomParticipant } from 'features/Room/RoomParticipant'
 import { logger } from 'lib/log'
-// import { useSelector, useDispatch } from 'state'
+import { useSelector, useDispatch } from 'state'
+import selectors from 'selectors'
 
 interface Props {
   ids: string[]
@@ -14,7 +15,9 @@ const RESIZE_DEBOUNCE_MS = 200
 
 export function CallTile(props: Props) {
   // const dispatch = useDispatch()
-  // const [] = useSelector((state) => [])
+  const [sidebarOpen] = useSelector((state) => [
+    selectors.sidebar.isOpen(state),
+  ])
 
   const [dimensions, setDimensions] = useState({
     width: 1,
@@ -44,6 +47,10 @@ export function CallTile(props: Props) {
       window.removeEventListener('orientationchange', handleResize)
     }
   }, [])
+
+  useEffect(() => {
+    setTimeout(onResize, 250)
+  }, [sidebarOpen])
 
   const tileSizeVars = useMemo(() => {
     const size = calcTileSize(
