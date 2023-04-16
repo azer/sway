@@ -74,11 +74,10 @@ export function RoomButton(props: Props) {
     if (isLocalUserActive && roomIdOnSidebar !== props.id) {
       dispatch(openRoomSidebar(props.id))
       return
-    } else if (roomIdOnSidebar === props.id) {
-      dispatch(setSidebarOpen(false))
     }
 
     rooms.enterById(props.id)
+    dispatch(setSidebarOpen(false))
   }
 }
 

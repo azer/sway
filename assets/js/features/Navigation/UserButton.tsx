@@ -96,6 +96,8 @@ export function UserButton(props: Props) {
       dispatch(setSidebarOpen(false))
     }
 
+    dispatch(setSidebarOpen(false))
+
     if (privateRoomId) {
       rooms.enterById(privateRoomId)
       return
