@@ -43,6 +43,7 @@ const StyledContent = styled(Content, {
   backdropFilter: 'blur(20px) saturate(190%) contrast(70%) brightness(80%)',
   padding: '4px',
   round: 'medium',
+  zIndex: '$aboveContent',
 })
 
 interface ItemProps {

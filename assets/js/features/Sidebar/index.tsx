@@ -6,6 +6,7 @@ import { SidebarContent } from './focus'
 import { UserSidebar } from './UserSidebar'
 import { Chat } from 'features/Chat'
 import { RoomSidebar } from './RoomSidebar'
+import { StatusSidebar } from './StatusSidebar'
 
 interface Props {}
 
@@ -29,6 +30,9 @@ export function Sidebar(props: Props) {
       ) : null}
       {isOpen && roomIdOnSidebar && content === SidebarContent.Room ? (
         <RoomSidebar roomId={roomIdOnSidebar} />
+      ) : null}
+      {isOpen && content === SidebarContent.StatusUpdates ? (
+        <StatusSidebar roomId={focusedRoomId} standalone />
       ) : null}
     </Container>
   )

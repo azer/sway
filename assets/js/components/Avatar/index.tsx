@@ -19,7 +19,7 @@ export function Avatar(props: Props) {
   return (
     <AvatarRoot css={css} onClick={props.onClick}>
       <StyledImage src={props.src} alt={props.alt} />
-      <Fallback>{initials(props.fallback)}</Fallback>
+      <StyledFallback>{initials(props.fallback)}</StyledFallback>
     </AvatarRoot>
   )
 }
@@ -35,7 +35,16 @@ export const AvatarRoot = styled(Root, {
   color: '$white',
   fontWeight: '500',
   'border-radius': '30%',
-  'background-color': '$red',
+})
+
+const StyledFallback = styled(Fallback, {
+  'background-color': '$purple',
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 })
 
 const StyledImage = styled(Image, {

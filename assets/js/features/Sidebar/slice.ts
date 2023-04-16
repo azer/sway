@@ -49,6 +49,13 @@ export function openChatSidebar() {
   })
 }
 
+export function openStatusSidebar() {
+  return updateWorkspaceFocus((focus) => {
+    focus.sidebar.content = SidebarContent.StatusUpdates
+    focus.sidebar.isOpen = true
+  })
+}
+
 export function openRoomSidebar(roomId: string) {
   return updateWorkspaceFocus((focus) => {
     if (

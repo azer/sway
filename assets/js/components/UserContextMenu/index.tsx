@@ -17,15 +17,16 @@ interface Props {
 export function UserContextMenu(props: Props) {
   const dispatch = useDispatch()
 
-  const [existingHook] = useSelector((state) => [
+  const [existingHook, isOnline] = useSelector((state) => [
     selectors.taps.getStatusHookByUserId(state, props.user?.id || ''),
+    selectors.presence.isUserOnline(state, props.user?.id || ''),
   ])
 
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger asChild>{props.children}</ContextMenu.Trigger>
       <ContextMenu.Content>
-        <UserHeader user={props.user} status={props.status} />
+        <UserHeader user={props.user} status={props.status} online={isOnline} />
         <ContextMenu.Separator />
         <ContextMenu.Item
           emoji="wave"

@@ -4,7 +4,7 @@ import React from 'react'
 import selectors from 'selectors'
 import Icon from 'components/Icon'
 import { useSelector, useDispatch } from 'state'
-import { openChatSidebar, setSidebarOpen } from './slice'
+import { openChatSidebar, openStatusSidebar, setSidebarOpen } from './slice'
 import { SidebarContent } from './focus'
 
 interface Props {}
@@ -30,6 +30,13 @@ export function SidebarHeader(props: Props) {
         >
           <Icon name="chat" />
         </ChatButton>
+        <StatusButton
+          unread={false}
+          onClick={toggleStatusUpdates}
+          isOpen={isOpen && content === SidebarContent.StatusUpdates}
+        >
+          <Icon name="activity" />
+        </StatusButton>
         {hasContent ? (
           <ToggleButton onClick={toggle} isOpen={isOpen}>
             <Icon name="sidebar" />
@@ -45,6 +52,10 @@ export function SidebarHeader(props: Props) {
 
   function toggleChat() {
     dispatch(openChatSidebar())
+  }
+
+  function toggleStatusUpdates() {
+    dispatch(openStatusSidebar())
   }
 }
 
@@ -140,3 +151,5 @@ const ChatButton = styled(Button, {
     },
   },
 })
+
+const StatusButton = styled(ChatButton, {})

@@ -91,12 +91,14 @@ export const RoomParticipantRoot = styled('div', {
         [`& ${ParticipantLabelRoot}`]: {
           background: 'transparent',
           bottom: '2px',
+          zIndex: '$content',
+          display: 'none',
         },
         [`& ${StyledStatusIcon}`]: {
           position: 'absolute',
           bottom: '0',
           right: '0',
-          zIndex: '9999',
+          zIndex: '$content',
           border: '1.5px solid $shellBg',
           round: true,
         },

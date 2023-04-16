@@ -15,7 +15,7 @@ import { logger } from 'lib/log'
 import { addBatch, Update } from 'state/entities'
 import { setRoomStatusUpdates } from 'features/Presence/slice'
 import { StatusUpdate, Updates } from './Update'
-import { StatusCircle } from 'features/Dock/StatusIcon'
+import { Empty, StatusSidebar } from './StatusSidebar'
 
 interface Props {
   roomId: string
@@ -28,36 +28,31 @@ export function RoomSidebar(props: Props) {
   const [room, roomStatus, usersInRoom, updates] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.roomId),
     selectors.rooms.getRoomStatus(state, props.roomId),
-    selectors.rooms
-      .getUsersInRoom(state, props.roomId)
-      .concat(selectors.rooms.getUsersInRoom(state, props.roomId))
-      .concat(selectors.rooms.getUsersInRoom(state, props.roomId)),
-    selectors.presence.getStatusUpdatesByRoomId(state, props.roomId),
+    selectors.rooms.getUsersInRoom(state, props.roomId),
+    selectors.presence
+      .getStatusUpdatesByRoomId(state, props.roomId)
+      .map((id: string) => {
+        return {
+          id,
+          status: selectors.statuses.getById(state, id),
+          user: selectors.users.getById(
+            state,
+            selectors.statuses.getById(state, id)?.user_id || ''
+          ),
+        }
+      }),
   ])
 
-  useEffect(() => {
-    GET(`/api/rooms/${room.id}/updates`)
-      .then((response) => {
-        if (!response.list) return log.error('Unexpected response', response)
-
-        dispatch(addBatch(response.list.concat(response.links) as Update[]))
-
-        dispatch(
-          setRoomStatusUpdates({
-            roomId: props.roomId,
-            updates: response.list.map((d) => d.id),
-          })
-        )
-      })
-      .catch((err) => {
-        log.error('Can not fetch updates', err)
-      })
-  }, [props.roomId])
-
   const tileCSS = useMemo(() => {
+    if (usersInRoom.length === 0) {
+      return {
+        gridTemplateColumns: '1fr',
+      }
+    }
+
     const size = 73
     const cols = 3
-    const rows = Math.floor(usersInRoom.length / cols)
+    const rows = Math.max(Math.floor(usersInRoom.length / cols), 1)
     const maxRows = 2
     const maxHeight = Math.min(rows * size, size * maxRows)
     const gap = Math.min(rows, maxRows) * 8
@@ -66,7 +61,7 @@ export function RoomSidebar(props: Props) {
       gridTemplateColumns: Array.from({ length: cols }, () => size + 'px').join(
         ' '
       ),
-      height: maxHeight + gap,
+      height: Math.max(size, maxHeight + gap),
       minHeight: maxHeight + gap,
     }
   }, [usersInRoom.length])
@@ -90,15 +85,16 @@ export function RoomSidebar(props: Props) {
         </Title>
         <Tile css={tileCSS}>
           {usersInRoom.map((userId) => (
-            <RoomParticipant userId={userId} tap={() => {}} small />
+            <RoomParticipant
+              key={userId}
+              userId={userId}
+              tap={() => {}}
+              small
+            />
           ))}
+          {usersInRoom.length === 0 ? <Empty>Room is empty</Empty> : null}
         </Tile>
-        <Title>Updates</Title>
-        <Updates>
-          {updates.map((id) => (
-            <StatusUpdate id={id} />
-          ))}
-        </Updates>
+        <StatusSidebar roomId={props.roomId} />
       </Content>
     </Container>
   )

@@ -83,7 +83,6 @@ ReactDOM.render(
               <EmojiProvider />
               <TapProvider />
               <ChatProvider />
-              <PictureInPictureProvider />
               <Tooltip.Provider>
                 <Routing />
               </Tooltip.Provider>

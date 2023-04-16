@@ -44,6 +44,7 @@ import { UsersIcon } from './Users'
 import { SidebarIcon } from './Sidebar'
 import { ChatIcon } from './Chat'
 import { DoorEnterIcon } from './DoorEnter'
+import { ActivityIcon } from './Activity'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -93,6 +94,7 @@ const icons: {
   sidebar: SidebarIcon,
   chat: ChatIcon,
   doorEnter: DoorEnterIcon,
+  activity: ActivityIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {

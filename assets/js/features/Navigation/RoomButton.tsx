@@ -5,8 +5,9 @@ import selectors from 'selectors'
 import { RoomStatusIcon } from 'components/RoomStatusIcon'
 import { Avatar, AvatarRoot } from 'components/Avatar'
 import { useRooms } from 'features/Room/use-rooms'
-import { openRoomSidebar } from 'features/Sidebar/slice'
+import { openRoomSidebar, setSidebarOpen } from 'features/Sidebar/slice'
 import { useSelector, useDispatch } from 'state'
+import { StyledUserButton, Name } from './UserButton'
 
 interface Props {
   id: string
@@ -23,8 +24,9 @@ export function RoomButton(props: Props) {
     usersInRoom,
     roomStatus,
     hasUnreadMessages,
-    selected,
+    focusedRoomId,
     roomIdOnSidebar,
+    isLocalUserActive,
   ] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.id),
     selectors.rooms
@@ -32,20 +34,24 @@ export function RoomButton(props: Props) {
       .map((id) => selectors.users.getById(state, id)),
     selectors.rooms.getRoomStatus(state, props.id),
     selectors.chat.hasUnreadMessage(state, props.id),
-    selectors.rooms.getFocusedRoomId(state) === props.id,
+    selectors.rooms.getFocusedRoomId(state),
     selectors.sidebar.getRoomIdOnSidebar(state),
+    selectors.presence.isLocalUserActive(state),
   ])
+
+  const selected = focusedRoomId === props.id
 
   return (
     <Container
-      selected={selected}
-      hasUsers={!props.selected && usersInRoom.length > 0}
+      selected={selected || roomIdOnSidebar === props.id}
+      onSidebar={!selected && roomIdOnSidebar === props.id}
+      hasUsers={!selected && usersInRoom.length > 0}
       onClick={handleClick}
       unread={hasUnreadMessages}
     >
       <RoomStatusIcon mode={roomStatus} />
       <Name>{room?.name || ''}</Name>
-      {!props.selected && usersInRoom.length > 0 ? (
+      {!selected && usersInRoom.length > 0 ? (
         <Users>
           <AvatarStack>
             {usersInRoom.slice(0, 4).map((user) => (
@@ -61,55 +67,34 @@ export function RoomButton(props: Props) {
   )
 
   function handleClick() {
-    if (roomIdOnSidebar !== props.id) {
+    if (focusedRoomId === props.id) {
+      return
+    }
+
+    if (isLocalUserActive && roomIdOnSidebar !== props.id) {
       dispatch(openRoomSidebar(props.id))
       return
+    } else if (roomIdOnSidebar === props.id) {
+      dispatch(setSidebarOpen(false))
     }
 
     rooms.enterById(props.id)
   }
 }
 
-const Container = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  fontSize: '$small',
-  gap: '6px',
-  unitHeight: 8,
-  space: { inner: [2, 3], outer: [0, -3] },
-  color: '$navigationFg',
+const Container = styled(StyledUserButton, {
   round: 'small',
   [`& ${RoomStatusIcon}`]: {
     marginTop: '2px',
   },
   variants: {
-    selected: {
-      true: {
-        background: '$navigationFocusBg',
-        fontWeight: '$medium',
-        color: '$navigationFocusFg',
-        letterSpacing: '-0.06px',
-      },
-    },
     hasUsers: {
       true: {
         display: 'grid',
         gridTemplateColumns: '8px 65% auto',
       },
     },
-    unread: {
-      true: {
-        fontWeight: '$semibold',
-        color: '$navigationUnreadFg',
-      },
-    },
   },
-})
-
-const Name = styled('div', {
-  label: true,
-  ellipsis: true,
-  letterSpacing: 'inherit',
 })
 
 export const AvatarStack = styled('div', {
@@ -120,6 +105,7 @@ export const AvatarStack = styled('div', {
     marginLeft: '-8px',
   },
   [`& ${AvatarRoot}`]: {
+    aspectRatio: '1',
     border: '1.5px solid $shellBg',
     round: true,
     fontSize: '8px',

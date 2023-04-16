@@ -4,6 +4,7 @@ export enum SidebarContent {
   User = 'user',
   Chat = 'chat',
   Room = 'room',
+  StatusUpdates = 'status-updates',
 }
 
 export interface SidebarFocus {

@@ -11,7 +11,7 @@ export function getContent(state: RootState): SidebarContent {
 }
 
 export function getFocusedUserId(state: RootState): string | undefined {
-  return getContent(state) === SidebarContent.User
+  return getContent(state) === SidebarContent.User && isOpen(state)
     ? state.focus.workspace.sidebar.user?.id
     : undefined
 }
@@ -22,7 +22,10 @@ export function hasContent(state: RootState): boolean {
     return !!state.focus.workspace.sidebar.user?.id
   }
 
-  if (content === SidebarContent.Chat) {
+  if (
+    content === SidebarContent.Chat ||
+    content === SidebarContent.StatusUpdates
+  ) {
     return true
   }
 
@@ -30,7 +33,7 @@ export function hasContent(state: RootState): boolean {
     return !!state.focus.workspace.sidebar.room?.id
   }
 
-  return false
+  return state.focus.workspace.sidebar.isOpen
 }
 
 export function isFocusOnSidebar(state: RootState): boolean {
@@ -39,7 +42,8 @@ export function isFocusOnSidebar(state: RootState): boolean {
 
 export function getRoomIdOnSidebar(state: RootState): string | undefined {
   return (
-    (getContent(state) === SidebarContent.Room &&
+    (isOpen(state) &&
+      getContent(state) === SidebarContent.Room &&
       state.focus.workspace.sidebar.room?.id) ||
     undefined
   )

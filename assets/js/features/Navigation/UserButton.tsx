@@ -35,9 +35,9 @@ export function UserButton(props: Props) {
     privateRoomId,
     workspace,
     localUserId,
-    selected,
+    focused,
+    isLocalUserActive,
   ] = useSelector((state) => {
-    const focused = selectors.rooms.getFocusedRoomId(state)
     const privateRoomId = selectors.rooms.get1v1RoomIdByUserId(state, props.id)
 
     return [
@@ -49,7 +49,8 @@ export function UserButton(props: Props) {
       selectors.rooms.get1v1RoomIdByUserId(state, props.id),
       selectors.workspaces.getSelfWorkspace(state),
       selectors.session.getUserId(state),
-      focused === privateRoomId,
+      selectors.rooms.getFocusedRoomId(state),
+      selectors.presence.isLocalUserActive(state),
     ]
   })
 
@@ -59,9 +60,15 @@ export function UserButton(props: Props) {
     }
   }, [!user])
 
+  const selected = focused === privateRoomId
+
   return (
     <UserContextMenu user={user} status={status} tap={tap}>
-      <Container onClick={handleClick} selected={selected}>
+      <StyledUserButton
+        onClick={handleClick}
+        selected={selected || userIdOnSidebar === props.id}
+        onSidebar={!selected && userIdOnSidebar === props.id}
+      >
         <StatusIcon status={status} isOnline={isOnline} noEmoji />
         <Name online={isOnline}>{user?.name}</Name>
         {!selected && isPresentInPrivateRoom ? (
@@ -69,7 +76,7 @@ export function UserButton(props: Props) {
             <Avatar src={user?.profile_photo_url} fallback={user?.name || ''} />
           </AvatarStack>
         ) : null}
-      </Container>
+      </StyledUserButton>
     </UserContextMenu>
   )
 
@@ -78,32 +85,48 @@ export function UserButton(props: Props) {
   function handleClick(event: MouseEvent) {
     event.preventDefault()
 
-    if (userIdOnSidebar !== props.id) {
-      dispatch(openUserSidebar(props.id))
-    } else {
-      if (privateRoomId) {
-        rooms.enterById(privateRoomId)
-        return
-      }
-
-      if (!workspace || !localUserId) return
-
-      rooms
-        .createPrivateRoom(workspace.id, [props.id, localUserId])
-        .then((resp) => {
-          const created = resp.result as Row<Room>
-          navigate(`/${workspace.slug}/room/${created.id}/${created.data.slug}`)
-        })
+    if (focused === privateRoomId) {
+      return
     }
+
+    if (isLocalUserActive && userIdOnSidebar !== props.id) {
+      dispatch(openUserSidebar(props.id))
+      return
+    } else if (userIdOnSidebar === props.id) {
+      dispatch(setSidebarOpen(false))
+    }
+
+    if (privateRoomId) {
+      rooms.enterById(privateRoomId)
+      return
+    }
+
+    if (!workspace || !localUserId) return
+
+    rooms
+      .createPrivateRoom(workspace.id, [props.id, localUserId])
+      .then((resp) => {
+        const created = resp.result as Row<Room>
+        navigate(`/${workspace.slug}/room/${created.id}/${created.data.slug}`)
+      })
   }
 }
 
-const Container = styled('div', {
+export const StyledUserButton = styled('div', {
   height: '32px',
   vcenter: true,
   gap: '6px',
   position: 'relative',
+  color: '$navigationFg',
   variants: {
+    onSidebar: {
+      true: {
+        [`&::before`]: {
+          background: 'transparent !important',
+          borderLeft: '3px solid rgba(255, 255, 255, 0.03)',
+        },
+      },
+    },
     selected: {
       true: {
         [`&::before`]: {
@@ -121,6 +144,12 @@ const Container = styled('div', {
         letterSpacing: '-0.06px',
       },
     },
+    unread: {
+      true: {
+        fontWeight: '$semibold',
+        color: '$navigationUnreadFg',
+      },
+    },
   },
   [`& ${StyledStatusIcon}`]: {
     alignItems: 'start',
@@ -134,10 +163,12 @@ const Container = styled('div', {
   },
 })
 
-const Name = styled('div', {
+export const Name = styled('div', {
   fontSize: '$small',
   fontWeight: '$medium',
   label: true,
+  ellipsis: true,
+  letterSpacing: 'inherit',
   variants: {
     online: {
       true: {

@@ -166,9 +166,12 @@ export const ActiveParticipantRoot = styled('div', {
       true: {
         round: 'large',
         [`& ${ParticipantLabelRoot}`]: {
-          background: 'rgba(0, 10, 15, 0.35)',
-          height: '24px',
-          bottom: '2px',
+          display: 'none',
+        },
+        [`& ${AvatarRoot}`]: {
+          margin: '0',
+          round: 'large',
+          height: '100%',
         },
       },
     },
