@@ -119,7 +119,6 @@ const StyledStatusSidebar = styled(Updates, {
       color: '$gray5',
       '& label': {
         margin: '0',
-        fontSize: '13px',
       },
       '& span': {
         fontSize: '$small',
