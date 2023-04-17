@@ -6,6 +6,7 @@ import { Tooltip } from 'components/Tooltip'
 import { format } from 'date-fns'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { ChatInput } from 'features/Chat/Input'
+import { AutoLinkText } from 'components/AutoLinkText'
 
 interface Props {
   id: string
@@ -22,9 +23,6 @@ interface Props {
 }
 
 export function ChatMessage(props: Props) {
-  // const dispatch = useDispatch()
-  // const [] = useSelector((state) => [])
-
   const [draft, setDraft] = useState(props.children)
   const [isEditing, setIsEditing] = useState(false)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -112,7 +110,7 @@ export function ChatMessage(props: Props) {
             />
           ) : (
             <>
-              {props.children}
+              <AutoLinkText>{props.children}</AutoLinkText>
               {props.editedAt ? <Edited>(edited)</Edited> : null}
             </>
           )}
@@ -202,13 +200,20 @@ const Body = styled('div', {
   lineHeight: '$normal',
   whiteSpace: 'pre-wrap',
   cursor: 'default',
-  fontSize: '13px',
+  fontSize: '14px',
   variants: {
     emoji: {
       true: {
         fontSize: '24px',
       },
     },
+  },
+  a: {
+    color: '$chatMessageLinkFg',
+    textDecoration: 'none',
+  },
+  'a:hover': {
+    textDecoration: 'underline',
   },
 })
 

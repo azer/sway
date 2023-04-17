@@ -152,9 +152,10 @@ export const dark = {
   chatInputFocusBg: 'rgba(36, 40, 47)',
   chatInputFocusFg: '$white',
   chatInputCaret: '$purple',
-  chatMessageAuthorFg: 'rgb(222, 223, 227)',
+  chatMessageAuthorFg: 'rgb(232, 233, 237)',
   chatMessageDateFg: 'rgb(100, 106, 111)',
   chatMessageBodyFg: 'rgb(209, 210, 215)',
+  chatMessageLinkFg: '$lightBlue',
   chatMessageEditedFg: 'rgba(209, 210, 215, 0.5)',
   focusItemBg:
     'radial-gradient(circle farthest-corner at 0px 0px, $lightPurple, transparent), radial-gradient(circle farthest-corner at 0px 90%, $candy, transparent)',
