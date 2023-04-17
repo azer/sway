@@ -131,9 +131,9 @@ export function Navigation(props: Props) {
         <Bottom>
           <Button onClick={inviteModal.open}>
             <ButtonIcon>
-              <Icon name="avatar" />
+              <Icon name="user-plus" />
             </ButtonIcon>
-            <ButtonLabel>Invite People</ButtonLabel>
+            <ButtonLabel>Invite members</ButtonLabel>
           </Button>
           <Button onClick={mail}>
             <ButtonIcon>
@@ -279,7 +279,8 @@ const Button = styled('div', {
 })
 
 const ButtonIcon = styled('div', {
-  width: '10px',
+  width: '12px',
+  marginTop: '2px',
 })
 
 const ButtonLabel = styled('div', {
@@ -297,6 +298,7 @@ const Content = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   scrollbar: { y: true, dark: true },
+  height: '100%',
 })
 
 const Fill = styled('div', {
