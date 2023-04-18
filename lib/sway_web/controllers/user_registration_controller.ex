@@ -48,7 +48,7 @@ defmodule SwayWeb.UserRegistrationController do
 
       {:error, %Ecto.Changeset{} = changeset} ->
 	oauth_google_url = ElixirAuthGoogle.generate_oauth_url(conn)
-        render(conn, "new.html", changeset: changeset, invite: nil, oauth_google_url: oauth_google_url)
+        render(conn, "new.html", changeset: changeset, invite: invite, oauth_google_url: oauth_google_url, invite_token: conn.params["invite_token"])
     end
   end
 end
