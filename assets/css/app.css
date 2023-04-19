@@ -406,7 +406,7 @@ html, body {
 }
 
 .features .feature h3 {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 18px;
     color: #222;
     margin-bottom: 10px;
@@ -416,7 +416,7 @@ html, body {
     margin-top: 5px;
     font-weight: 400;
     font-size: 14px;
-    color: #888;
+    color: #777;
 }
 
 .features .feature span {
