@@ -49,8 +49,13 @@ defmodule Sway.Workspaces do
   def get_membership_and_workspace(user_id, slug \\ nil) do
     if slug do
       workspace = get_workspace_by_slug(slug)
-      membership = get_membership_by_workspace(user_id, workspace.id)
-      [workspace, membership]
+
+      if workspace do
+	membership = get_membership_by_workspace(user_id, workspace.id)
+	[workspace, membership]
+      else
+	[nil, nil]
+      end
     else
       membership = Repo.get_by(Membership, user_id: user_id)
       workspace = get_workspace!(membership.workspace_id)

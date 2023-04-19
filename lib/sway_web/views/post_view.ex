@@ -11,4 +11,8 @@ defmodule SwayWeb.PostView do
   def format_date(date) do
     Timex.format!(date, "%b %d, %Y", :strftime)
   end
+
+  def url(id, title) do
+    "/blog/#{SwayWeb.Hashing.encode_blog(id)}-#{Slug.slugify(title)}"
+  end
 end

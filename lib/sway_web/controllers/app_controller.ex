@@ -6,11 +6,12 @@ defmodule SwayWeb.AppController do
     user_id = conn.assigns.current_user.id
 
     [workspace, membership] = Sway.Workspaces.get_membership_and_workspace(user_id, params["workspace"])
-    [rooms, status, privateRooms] = fetchRoomData(workspace.id, user_id)
 
-    {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
+    if workspace do
+      [rooms, status, privateRooms] = fetchRoomData(workspace.id, user_id)
+       {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
 
-    render(conn, "app_home.html",
+       render(conn, "app_home.html",
       jwt: jwt,
       user: SwayWeb.UserView.encode(conn.assigns.current_user),
       membership: SwayWeb.MembershipView.encode(membership),
@@ -20,7 +21,13 @@ defmodule SwayWeb.AppController do
       private_rooms: Enum.map(privateRooms, fn r -> SwayWeb.RoomView.encode(r) end),
       focused_room_id: SwayWeb.Hashing.encode_room(status.room_id),
       body_class: "app",
-    )
+       )
+    else
+      conn
+       |> put_status(:not_found)
+       |> json(%{error: "Not found"})
+    end
+
   end
 
   def room(conn, %{ "workspace" => workspace, "room_slug" => room_slug }) do

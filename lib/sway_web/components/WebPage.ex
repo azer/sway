@@ -7,13 +7,34 @@ defmodule SwayWeb.WebPageComponent do
     <div class="webpage">
     <%= render_slot(@inner_block) %>
     </div>
+    <footer class="page-footer">
+    <div class="border"></div>
+
+    <div class="left">
+    Made with love in Berlin.
+
+    <div class="haiku">
+    Meetings? Oh, please,
+    Sway laughs as it sets us free,
+    Talk more, with such ease.
+    </div>
+    </div>
+
+    <div class="right">
+    <a href="https://twitter.com/swaydotso">Twitter</a>
+    <a href="mailto:azer@sway.so">Say hello</a>
+
+    <img src="https://cldup.com/JiZENEu6lf.png" />
+    </div>
+    </footer>
     """
   end
 
   def header(assigns) do
     ~H"""
-       <header class="topbar">
-      <svg height="32px" viewBox="110 0 1017 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <header class="topbar">
+    <label>Beta</label>
+      <a href="/"><svg height="32px" viewBox="110 0 1017 500" fill="none" xmlns="http://www.w3.org/2000/svg">
   <circle cx="250.5" cy="250.5" r="90" stroke="#000" stroke-opacity=".08" stroke-width="35"/>
   <mask id="b" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="113" y="113" width="275" height="275">
     <circle cx="250.5" cy="250.5" r="117.5" stroke="#fff" stroke-width="40"/>
@@ -39,13 +60,27 @@ defmodule SwayWeb.WebPageComponent do
       <feBlend in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
     </filter>
   </defs>
-</svg>
+</svg></a>
 <div class="nav">
 <a href="/blog">Blog</a>
+<%= if assigns.conn.assigns.current_user do %>
+<a href="/login" class="primary launch">Open app</a>
+<% else %>
 <a href="/login" class="primary">Login</a>
+<% end %>
     </div>
     </header>
     """
+  end
+
+  defp workspace_or_login_url(assigns) do
+    IO.inspect(assigns)
+
+    if assigns.current_user != nil do
+      SwayWeb.Hashing.encode_workspace(assigns.current_user.workspace_id)
+    else
+      "/login"
+    end
   end
 
 

@@ -27,7 +27,23 @@ defmodule SwayWeb.PostController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => slug_id}) do
+    id = if String.contains?(slug_id, "-") do
+      encoded_id = hd String.split(slug_id, "-", parts: 2)
+      try do
+	SwayWeb.Hashing.decode_blog(encoded_id)
+      rescue
+	ArgumentError ->
+	  conn
+       |> put_status(:not_found)
+       |> json(%{error: "Not found"})
+      end
+
+      SwayWeb.Hashing.decode_blog(encoded_id)
+    else
+      slug_id
+    end
+
     post =
       Blog.get_post!(id)
 

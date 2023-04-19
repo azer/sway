@@ -17,6 +17,8 @@ defmodule SwayWeb.Hashing do
   def decode_membership(id), do: decode(6, id)
   def encode_message(id), do: encode(7, id)
   def decode_message(id), do: decode(7, id)
+  def encode_blog(id), do: encode(8, id)
+  def decode_blog(id), do: decode(8, id)
 
   def decode_any(hash) do
     hd(Hashids.decode!(provider(), hash))
@@ -29,7 +31,7 @@ defmodule SwayWeb.Hashing do
   defp decode(entity_salt, hash) do
     [result, decoded_entity_salt] = Hashids.decode!(provider(), hash)
     if entity_salt != decoded_entity_salt do
-      raise "Entity salt does not match the decoded salt"
+      raise ArgumentError, message: "Entity salt does not match the decoded salt"
     end
 
     result
