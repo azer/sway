@@ -77,6 +77,7 @@ defmodule SwayWeb.Router do
   scope "/", SwayWeb do
     pipe_through [:browser]
 
+    get "/", WebsiteController, :index
     resources "/blog", PostController, only: [:show, :index]
   end
 
