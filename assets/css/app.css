@@ -111,7 +111,7 @@ html, body {
     color: rgba(255, 255, 255, 0.4);
 }
 
-.page {
+.form-page {
     width: 100vw;
     min-height: 100vh;;
     display: flex;
@@ -121,7 +121,7 @@ html, body {
     padding: 30px 0;
 }
 
-.page header .logo {
+.form-page header .logo {
     display: block;
     text-decoration: none;
     width: 350px;
@@ -133,7 +133,7 @@ html, body {
     cursor: default;
 }
 
-.page .logo img {
+.form-page .logo img {
     width: auto;
     height: 100%;
 }
@@ -146,7 +146,7 @@ html, body {
     max-width: calc(100vw - 60px);
 }
 
-.form header {
+.form-page header {
     margin-bottom: 30px;
     cursor: default;
 }
@@ -321,6 +321,112 @@ html, body {
 
 .waitlist:hover {
     transform: translateY(-2px);
+}
+
+.webpage {
+    width: 80vw;
+    max-width: 800px;
+    margin: 24px auto;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+}
+
+.topbar svg {
+    height: 56px;
+}
+
+.topbar .nav {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    flex-grow: 1;
+    gap: 10px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.topbar .nav a {
+    text-decoration: none;
+    color: rgb(20, 24, 28);
+    transition: background color .2s;
+    padding: 10px 20px;
+    border-radius: 32px;
+}
+
+.topbar .nav a:hover {
+    background: rgba(225, 230, 235, 0.5);
+}
+
+.topbar .nav .primary {
+    background: rgb(225, 230, 235);
+}
+
+.topbar .nav .primary:hover {
+    background: rgb(218, 223, 228);
+}
+
+.blog {
+    max-width: 600px;
+    margin: 10vh auto;
+}
+
+.blog .post {
+    color: #222;
+    line-height: 1.6;
+}
+
+.blog .post .date {
+    font-size: 14px;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.blog .post > h1 {
+    font-weight: 700;
+    color: #111;
+    letter-spacing: -0.025em;
+    font-size: 32px;
+    line-height: 1.2;
+    margin: 10px 0 25px 0;
+}
+
+.blog .post > h1 a {
+    text-decoration: none;
+    cursor: default;
+    color: inherit;
+}
+
+.blog .post img {
+    width: calc(100% + 30px);
+    margin-left: -15px;
+    border-radius: 10px;;
+}
+
+.blog .post-content {
+    font-size: 18px;
+}
+
+.blog .post-content h1 {
+    margin: 20px 0 5px 0;
+    font-size: 32px;
+}
+
+.blog .post-content a {
+    color: rgb(2, 87, 224);
+    text-decoration: none;
+}
+
+.blog .post-content a:hover {
+    text-decoration: underline;
+}
+
+.webpage *::selection {
+    background: rgba(119,119,119,0.15);
+    color: rgba(0, 0, 0, 0.5);
 }
 
 @keyframes scaleIn {

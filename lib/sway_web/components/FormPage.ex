@@ -4,7 +4,7 @@ defmodule SwayWeb.FormPageComponent do
 
   def form(assigns) do
     ~H"""
-    <div class="page">
+    <div class="form-page">
     <div class="form">
     <%= render_slot(@inner_block) %>
     </div>

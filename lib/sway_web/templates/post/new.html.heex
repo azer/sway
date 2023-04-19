@@ -1,0 +1,23 @@
+<h1>New Post</h1>
+<style type="text/css">
+  form {
+      margin: 10px auto;
+      display: grid;
+      grid-template-columns: 100px auto;
+      grid-row-gap: 10px;;
+      width: 800px;
+  }
+
+  form input {
+      padding: 4px;
+  }
+
+  form textarea {
+      height: 500px;
+      padding: 6px;
+  }
+</style>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.post_path(@conn, :create)) %>
+
+<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>

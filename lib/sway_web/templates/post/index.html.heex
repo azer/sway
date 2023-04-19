@@ -1,0 +1,23 @@
+<SwayWeb.WebPageComponent.page>
+  <SwayWeb.WebPageComponent.header title="Blog" conn={@conn} />
+
+ <div class="blog">
+   <%= for post <- @blog_posts do %>
+       <div class="post">
+	 <div class="date"><%= format_date(post.inserted_at) %></div>
+	 <h1><a href=""><%= post.title %></a></h1>
+	 <div class="author">
+	   <img src="" />
+	 </div>
+       <div class="post-content"><%= markdown_to_html(post.body) %></div>
+       </div>
+ <%= end %>
+
+ <%= if @conn.assigns.current_user && @conn.assigns.current_user.is_superuser do %>
+ <hr />
+<span><%= link "New Post", to: Routes.post_path(@conn, :new) %></span>
+<% end %>
+
+</div>
+
+</SwayWeb.WebPageComponent.page>
