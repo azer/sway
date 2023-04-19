@@ -452,6 +452,9 @@ html, body {
 .blog {
     max-width: 600px;
     margin: 10vh auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .blog .back-button {

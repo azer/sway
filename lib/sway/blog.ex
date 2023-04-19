@@ -21,6 +21,25 @@ defmodule Sway.Blog do
     Repo.all(Post) |> Repo.preload(:author)
   end
 
+  def list_active_blog_posts do
+  from(p in Post,
+    where: p.draft == false,
+    order_by: [desc: p.inserted_at],
+    limit: 5
+  )
+  |> Repo.all()
+  |> Repo.preload(:author)
+  end
+
+  def list_recent_blog_posts do
+  from(p in Post,
+    order_by: [desc: p.inserted_at],
+    limit: 10
+  )
+  |> Repo.all()
+  |> Repo.preload(:author)
+end
+
   @doc """
   Gets a single post.
 
@@ -50,6 +69,9 @@ defmodule Sway.Blog do
 
   """
   def create_post(attrs \\ %{}) do
+    IO.puts "###"
+    IO.inspect(attrs)
+
     %Post{}
     |> Post.changeset(attrs)
     |> Repo.insert()

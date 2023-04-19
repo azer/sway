@@ -5,8 +5,14 @@ defmodule SwayWeb.PostController do
   alias Sway.Blog.Post
 
   def index(conn, _params) do
-    blog_posts =
-      Blog.list_blog_posts()
+    IO.inspect(conn.assigns)
+
+    blog_posts = if conn.assigns.current_user && conn.assigns.current_user.is_superuser do
+      Blog.list_recent_blog_posts()
+    else
+      Blog.list_active_blog_posts()
+    end
+
     render(conn, "index.html", blog_posts: blog_posts, page_title: "Blog")
   end
 
@@ -16,6 +22,8 @@ defmodule SwayWeb.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
+    post_params = Map.put(post_params, "author_id", conn.assigns.current_user.id)
+
     case Blog.create_post(post_params) do
       {:ok, post} ->
         conn

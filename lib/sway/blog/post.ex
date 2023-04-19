@@ -5,7 +5,7 @@ defmodule Sway.Blog.Post do
   schema "blog_posts" do
     field :body, :string
     field :changelog, :boolean, default: false
-    field :draft, :boolean, default: false
+    field :draft, :boolean, default: true
     field :title, :string
 
     belongs_to :author, Sway.Accounts.User
@@ -17,7 +17,7 @@ defmodule Sway.Blog.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:title, :body, :draft, :changelog])
-    |> validate_required([:title, :body, :draft, :changelog])
+    |> cast(attrs, [:title, :body, :draft, :author_id, :workspace_id, :changelog])
+    |> validate_required([:title, :body, :draft, :author_id])
   end
 end
