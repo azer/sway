@@ -354,7 +354,7 @@ html, body {
     margin-top: 10px;
 }
 
-.hero a {
+.cta {
     width: 180px;
     height: 46px;
     display: flex;
@@ -371,7 +371,7 @@ html, body {
     transition: transform .2s;
 }
 
-.hero a:hover {
+.cta:hover {
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     transform: translateY(-2px);
 }
@@ -395,7 +395,8 @@ html, body {
 .features {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px
+    gap: 10px;
+    margin-bottom: 75px;
 }
 
 .features .feature {
@@ -431,8 +432,8 @@ html, body {
 .page-footer {
     width: 80vw;
     max-width: 800px;
-    margin: 24px auto;
-    padding-top: 36px;
+    margin: 44px auto;
+    padding-top: 44px;
     color: rgb(120, 120, 120);
     font-weight: 400;
     font-size: 16px;
@@ -475,7 +476,7 @@ html, body {
     height: 1px;
     position: absolute;
     left: 0;
-    margin-top: -36px;
+    margin-top: -44px;
     background: rgb(238, 238, 238);
 }
 
