@@ -6,8 +6,13 @@ export function isGranted() {
   return Notification.permission === 'granted'
 }
 
+export function isSupported() {
+  return window.Notification !== undefined
+}
+
 export function requestPermission() {
   if (isGranted()) return
+  if (!isSupported()) return
 
   Notification.requestPermission()
     .then((permission) => {
@@ -32,7 +37,9 @@ interface Options {
 }
 
 export function show(options: Options) {
-  if (!isGranted()) return log.info('Can not show notification', options)
+  if (!isGranted()) return log.error('Can not show notification', options)
+  if (!isSupported())
+    return log.error('Browser does not support notifications', options)
 
   log.info('Show notification', options)
 
