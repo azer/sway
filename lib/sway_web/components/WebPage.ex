@@ -66,8 +66,6 @@ defmodule SwayWeb.WebPageComponent do
   end
 
   defp workspace_or_login_url(assigns) do
-    IO.inspect(assigns)
-
     if assigns.current_user != nil do
       SwayWeb.Hashing.encode_workspace(assigns.current_user.workspace_id)
     else
