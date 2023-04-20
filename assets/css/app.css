@@ -336,7 +336,7 @@ html, body {
 .hero {
     text-align: center;
     max-width: 900px;
-    margin: 15vh auto 0 auto;
+    margin: 120px auto 0 auto;
 }
 
 .hero h1 {
@@ -701,5 +701,11 @@ html, body {
 
     .features {
 	grid-template-columns: 1fr;
+    }
+}
+
+@media only screen and (max-height: 1000px) {
+    .hero {
+	margin-top: 15vh;
     }
 }
