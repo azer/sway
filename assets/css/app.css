@@ -327,7 +327,7 @@ html, body {
 
 .webpage {
     width: 80vw;
-    max-width: 800px;
+    max-width: 900px;
     margin: 24px auto;
     position: relative;
     min-height: 100vh;
@@ -335,7 +335,7 @@ html, body {
 
 .hero {
     text-align: center;
-    max-width: 580px;
+    max-width: 900px;
     margin: 15vh auto 0 auto;
 }
 
@@ -448,9 +448,10 @@ html, body {
     position: relative;
 }
 
-.page-footer .right img {
+.page-footer img {
     position: absolute;
     bottom: 0;
+    left: 50%;
     width: 40px;
     height: 40px;
 }
@@ -613,7 +614,7 @@ html, body {
 }
 
 .blog .author img {
-    margin-right: 12px;
+    margin-right: 6px;
     width: 32px;
     height: 32px;
     aspect-ratio: 1;
@@ -635,8 +636,9 @@ html, body {
 
 .blog .post-content a:hover {
     color: #111;
-
 }
+
+
 
 *::selection {
     background: rgba(119,119,119,0.15);
@@ -681,5 +683,23 @@ html, body {
     .back-button {
 	margin-top: -32px;
 	left: inherit !important;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .webpage {
+	width: 90vw;
+    }
+
+    .topbar .nav {
+	gap: 5px;
+    }
+
+    .hero h2 {
+	font-size: 24px;
+    }
+
+    .features {
+	grid-template-columns: 1fr;
     }
 }

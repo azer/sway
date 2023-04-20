@@ -12,19 +12,11 @@ defmodule SwayWeb.WebPageComponent do
 
     <div class="left">
     Made with love in Berlin.
-
-    <div class="haiku">
-    Meetings? Oh, please,
-    Sway laughs as it sets us free,
-    Talk more, with such ease.
-    </div>
     </div>
 
     <div class="right">
     <a href="https://twitter.com/swaydotso">Twitter</a>
     <a href="mailto:azer@sway.so">Say hello</a>
-
-    <img src="https://cldup.com/JiZENEu6lf.png" />
     </div>
     </footer>
     """
