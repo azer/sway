@@ -26,6 +26,10 @@ defmodule SwayWeb.Router do
     plug SwayWeb.ApiSuperuserPipeline
   end
 
+  pipeline :attach_workspace do
+    plug SwayWeb.BrowserAuthPlugWorkspace
+  end
+
   scope "/", SwayWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
@@ -55,7 +59,7 @@ defmodule SwayWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
+      pipe_through [:browser, :attach_workspace]
 
       live_dashboard "/dashboard", metrics: SwayWeb.Telemetry
     end
@@ -75,7 +79,7 @@ defmodule SwayWeb.Router do
 
   ## Website routes
   scope "/", SwayWeb do
-    pipe_through [:browser]
+    pipe_through [:browser, :attach_workspace]
 
     get "/", WebsiteController, :index
     resources "/blog", PostController, only: [:show, :index]

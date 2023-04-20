@@ -5,8 +5,6 @@ defmodule SwayWeb.PostController do
   alias Sway.Blog.Post
 
   def index(conn, _params) do
-    IO.inspect(conn.assigns)
-
     blog_posts = if conn.assigns.current_user && conn.assigns.current_user.is_superuser do
       Blog.list_recent_blog_posts()
     else

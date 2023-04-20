@@ -69,9 +69,6 @@ end
 
   """
   def create_post(attrs \\ %{}) do
-    IO.puts "###"
-    IO.inspect(attrs)
-
     %Post{}
     |> Post.changeset(attrs)
     |> Repo.insert()

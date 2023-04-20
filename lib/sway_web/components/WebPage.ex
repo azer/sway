@@ -56,7 +56,7 @@ defmodule SwayWeb.WebPageComponent do
 <div class="nav">
 <a href="/blog">Blog</a>
 <%= if assigns.conn.assigns.current_user do %>
-<a href="/login" class="primary launch">Open app</a>
+<a href={"/" <> assigns.conn.assigns.current_workspace.slug} class="primary launch">Open app</a>
 <% else %>
 <a href="/login" class="primary">Login</a>
 <% end %>

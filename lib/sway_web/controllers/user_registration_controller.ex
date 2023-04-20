@@ -28,6 +28,8 @@ defmodule SwayWeb.UserRegistrationController do
   def create(conn, %{"user" => user_params}) do
     [invite, invite_invalid] = Sway.Invites.get_invite_by_token(conn.params["invite_token"])
 
+    workspace = Sway.Workspaces.get_workspace!(invite.workspace_id)
+
     case Accounts.register_user(user_params) do
       {:ok, user} ->
         {:ok, _} =
@@ -43,6 +45,7 @@ defmodule SwayWeb.UserRegistrationController do
           })
 
         conn
+	|> put_session(:user_return_to, "/#{workspace.slug}")
         |> put_flash(:info, "User created successfully.")
         |> UserAuth.log_in_user(user)
 

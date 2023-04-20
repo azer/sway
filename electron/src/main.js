@@ -157,10 +157,10 @@ function createMainWindow() {
   win.setMinimumSize(800, 600);
 
   if (isDev) {
-    win.loadURL("http://localhost:4000/");
+    win.loadURL("http://localhost:4000/login");
   } else {
     // 'build/index.html'
-    win.loadURL(`https://sway.so`);
+    win.loadURL(`https://sway.so/login`);
   }
 
   win.on("closed", () => (mainWindow = null));
