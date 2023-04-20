@@ -13,7 +13,11 @@ defmodule SwayWeb.UserOauthController do
     cond do
       # user already has account
       user = Sway.Accounts.get_user_by_email(email) ->
-        UserAuth.log_in_user(conn, user)
+	[workspace, _] = Sway.Workspaces.get_membership_and_workspace(user.id)
+
+	conn
+	|> put_session(:user_return_to, "/#{workspace.slug}")
+        |> UserAuth.log_in_user(user)
 
       # user has an invitation
       invite = Sway.Invites.get_invite_by_email!(email, [:workspace]) ->
@@ -29,9 +33,13 @@ defmodule SwayWeb.UserOauthController do
           Sway.Workspaces.create_membership(%{
             workspace_id: invite.workspace.id,
             user_id: user.id
-          })
+					    })
 
-        UserAuth.log_in_user(conn, user)
+	workspace = Sway.Workspaces.get_workspace!(invite.workspace_id)
+
+	conn
+	|> put_session(:user_return_to, "/#{workspace.slug}")
+	|> UserAuth.log_in_user(user)
 
       # user has no invitation but there is a workspace for his email domain
       workspace = Sway.Workspaces.get_workspace_by_domain(domain) ->
@@ -49,7 +57,9 @@ defmodule SwayWeb.UserOauthController do
             user_id: user.id
           })
 
-        UserAuth.log_in_user(conn, user)
+	conn
+	|> put_session(:user_return_to, "/#{workspace.slug}")
+        |> UserAuth.log_in_user(user)
 
       true ->
         conn
