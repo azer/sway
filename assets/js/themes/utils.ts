@@ -174,6 +174,13 @@ export const utils = {
       transition: `${options.props.join(' ')} ${options.time}s ${effect}`,
     }
   },
+  capitalizeFirstLetter: (_: true) => {
+    return {
+      '&::first-letter': {
+        textTransform: 'uppercase',
+      },
+    }
+  },
   scrollbar: (opts: { x?: boolean; y?: boolean; dark?: boolean }) => {
     return {
       overflow: 'hidden',

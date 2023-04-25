@@ -82,6 +82,10 @@ const globalStyles = globalCss({
     background: '$shellBg',
     overflow: 'hidden',
   },
+  '::selection': {
+    background: '$textSelectionBg',
+    color: '$textSelectionFg',
+  },
 })
 
 const bottomBlurEffect = (color: string) =>

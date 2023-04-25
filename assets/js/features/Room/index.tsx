@@ -19,6 +19,7 @@ import { usePresence } from 'features/Presence/use-presence'
 import { moveUserToRoom, setFocusedRoomById } from './slice'
 import { setWorkspaceFocusRegion } from 'features/Workspace/slice'
 import { WorkspaceFocusRegion } from 'features/Workspace/focus'
+import { EmptyRoom } from './EmptyRoom'
 
 interface Props {
   id: string
@@ -122,7 +123,9 @@ export function RoomPage(props: Props) {
           />
         ) : !focusedUserId && mainParticipants.length ? (
           <CallTile ids={mainParticipants} tap={tap} />
-        ) : null}
+        ) : (
+          <EmptyRoom id={props.id} />
+        )}
       </Middle>
       <Bottom>
         <CallDock />

@@ -18,7 +18,7 @@ export interface WorkspaceFocus {
 
 export const initialWorkspaceFocus: WorkspaceFocus = {
   // @ts-ignore
-  workspaceId: window.initialState.focus.workspaceId,
+  workspaceId: window.initialState?.focus.workspaceId,
   room: initialRoomFocus,
   region: WorkspaceFocusRegion.Room,
   sidebar: initialSidebarFocus,

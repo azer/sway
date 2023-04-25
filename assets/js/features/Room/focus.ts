@@ -6,6 +6,6 @@ export interface RoomFocus {
 }
 
 export const initialRoomFocus: RoomFocus = {
-  roomId: (window as any).initialState.focus.roomId,
+  roomId: (window as any).initialState?.focus.roomId,
   dock: undefined,
 }

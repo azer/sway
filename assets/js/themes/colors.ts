@@ -23,6 +23,8 @@ export const dark = {
   darkGreen: 'rgb(15, 120, 60)',
   green: 'rgb(76, 183, 130)',
   yellow: 'rgb(242, 201, 76)',
+  textSelectionFg: '$lightPurple',
+  textSelectionBg: 'rgba(40, 44, 51)',
   shellBg: 'rgb(20, 22, 28)',
   shellFg: 'rgb(255, 255, 255)',
   shellBorderColor: 'rgba(255, 255, 255, 0.075)',
