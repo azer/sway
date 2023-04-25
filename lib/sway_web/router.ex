@@ -59,7 +59,7 @@ defmodule SwayWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through [:browser, :attach_workspace]
+      pipe_through [:browser]
 
       live_dashboard "/dashboard", metrics: SwayWeb.Telemetry
     end
@@ -88,7 +88,7 @@ defmodule SwayWeb.Router do
   ## Authentication routes
 
   scope "/", SwayWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated]
+    pipe_through [:browser, :attach_workspace, :redirect_if_user_is_authenticated]
 
     get "/join", UserRegistrationController, :new
     post "/join", UserRegistrationController, :create

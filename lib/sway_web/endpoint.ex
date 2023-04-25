@@ -7,7 +7,8 @@ defmodule SwayWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_sway_key",
-    signing_salt: "DQBeBd/a"
+    signing_salt: "DQBeBd/a",
+    max_age: 24*60*60*37,
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
