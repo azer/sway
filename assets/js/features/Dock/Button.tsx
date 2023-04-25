@@ -58,6 +58,9 @@ export const StyledButton = styled('button', {
     off: {
       true: {
         color: '$dockButtonOffFg',
+        '&:hover': {
+          color: 'rgba(255, 255, 255, 0.7)',
+        },
       },
     },
     on: {

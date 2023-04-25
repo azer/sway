@@ -32,7 +32,7 @@ export const StyledSwitch = styled('div', {
   width: '100%',
 })
 
-const StyledRoot = styled(Root, {
+export const StyledRoot = styled(Root, {
   background: '$switchBg',
   width: '24px',
   height: '14px',
@@ -52,7 +52,7 @@ const StyledRoot = styled(Root, {
   },
 })
 
-const StyledThumb = styled(Thumb, {
+export const StyledThumb = styled(Thumb, {
   display: 'block',
   width: '10px',
   height: '10px',

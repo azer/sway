@@ -1,6 +1,5 @@
 import { styled } from 'themes'
 import React from 'react'
-import selectors from 'selectors'
 import { Dropdown } from 'components/DropdownMenu'
 import { DeviceInfo } from 'features/Settings/slice'
 import { Button, StyledButton } from '../Dock/Button'
@@ -10,10 +9,11 @@ import { useMicSettings } from 'features/Settings/MicSettings'
 import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
 import { ScreenshareButton } from 'features/Screenshare/Provider'
 import { useBackgroundBlurSettings } from 'features/Settings/BackgroundBlur'
-import { FocusRegion } from 'components/FocusRegion'
 import { DockFocus, DockFocusRegion } from '../Dock/focus'
+import { CallSwitch } from './CallSwitch'
 
 interface Props {
+  isActive: boolean
   cameraOn: boolean
   micOn: boolean
   speakerOn: boolean
@@ -37,6 +37,7 @@ interface Props {
   setFocusRegion: (r: DockFocusRegion) => void
   startPresentingScreen: () => void
   stopPresentingScreen: () => void
+  joinCall: () => void
   leaveCall: () => void
 }
 
@@ -52,6 +53,11 @@ export function CallControls(props: Props) {
 
   return (
     <Container>
+      <CallSwitch
+        isActive={props.isActive}
+        joinCall={props.joinCall}
+        leaveCall={props.leaveCall}
+      />
       <Dropdown.Menu>
         <Dropdown.Trigger>
           <Button
@@ -206,7 +212,7 @@ export function CallControls(props: Props) {
         tooltipShortcut={['opt', 's']}
         onClick={settings.open}
       ></Button>
-      {props.cameraOn || props.micOn ? (
+      {props.isActive ? (
         <PhoneCallButton>
           <Button
             icon="phone-call"
@@ -240,6 +246,9 @@ const Container = styled('div', {
   flexDirection: 'row',
   padding: '4px 4px',
   gap: '8px',
+  [`& ${StyledButton}`]: {
+    width: '48px',
+  },
   //background: 'rgb(28, 31, 36)',
 })
 

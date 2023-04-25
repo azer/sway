@@ -70,6 +70,7 @@ export function CallDock(props: Props) {
     selectedAudioOutputDeviceId,
     blurValue,
     focus,
+    isActive,
   ] = useSelector((state) => [
     selectors.users.getSelf(state),
     selectors.statuses.getLocalStatus(state),
@@ -82,6 +83,7 @@ export function CallDock(props: Props) {
     selectors.settings.getAudioOutputDeviceId(state),
     selectors.settings.getBackgroundBlurValue(state),
     selectors.dock.getFocus(state),
+    selectors.presence.isLocalUserActive(state),
   ])
 
   return (
@@ -106,6 +108,8 @@ export function CallDock(props: Props) {
         toggleBlur={toggleBlurValue}
         startPresentingScreen={startScreenShare}
         stopPresentingScreen={stopScreenShare}
+        isActive={isActive}
+        joinCall={() => presence.setMedia({ camera: true, mic: true })}
         leaveCall={() => presence.setMedia({ camera: false, mic: false })}
         setCameraOn={(camera: boolean) => presence.setMedia({ camera })}
         setMicOn={(mic: boolean) => presence.setMedia({ mic })}
