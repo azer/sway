@@ -56,7 +56,7 @@ const Container = styled('div', {
   position: 'absolute',
   width: '250px',
   left: 'calc(50% - 125px)',
-  bottom: '-24px',
+  top: '-20px',
   color: 'rgba(255, 255, 255, 0.35)',
   fontSize: '$small',
   opacity: '1',

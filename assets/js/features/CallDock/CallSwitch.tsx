@@ -4,6 +4,7 @@ import { StyledSwitch, StyledRoot, StyledThumb } from 'components/Switch'
 import Icon from 'components/Icon'
 import { StyledButton } from 'features/Dock/Button'
 import { Tooltip } from 'components/Tooltip'
+import { ConnectionStatus } from 'features/Dock/ConnectionStatus'
 
 interface Props {
   isActive: boolean
@@ -13,26 +14,28 @@ interface Props {
 
 export function CallSwitch(props: Props) {
   return (
-    <Tooltip
-      content={props.isActive ? 'Leave call' : 'Join call'}
-      shortcut={['Space']}
-    >
-      <Button
-        onClick={() => handleClick()}
-        on={props.isActive}
-        off={!props.isActive}
+    <>
+      <Tooltip
+        content={props.isActive ? 'Leave call' : 'Join call'}
+        shortcut={['Space']}
       >
-        <StyledSwitch>
-          <Icon name="headphones" />
-          <CustomStyledRoot
-            checked={props.isActive}
-            onCheckedChange={handleClick}
-          >
-            <CustomStyledThumb />
-          </CustomStyledRoot>
-        </StyledSwitch>
-      </Button>
-    </Tooltip>
+        <Button
+          onClick={() => handleClick()}
+          on={props.isActive}
+          off={!props.isActive}
+        >
+          <StyledSwitch>
+            <Icon name="headphones" />
+            <CustomStyledRoot
+              checked={props.isActive}
+              onCheckedChange={handleClick}
+            >
+              <CustomStyledThumb />
+            </CustomStyledRoot>
+          </StyledSwitch>
+        </Button>
+      </Tooltip>
+    </>
   )
 
   function handleClick(on: boolean | undefined) {

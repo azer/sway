@@ -65,7 +65,7 @@ export function getStatusMessage(state: RootState): {
 
   if (status.dailyCall === ConnectionState.Connecting) {
     return {
-      msg: 'Opening media connection',
+      msg: 'Setting up the media connection',
       status: ConnectionState.Connecting,
     }
   }

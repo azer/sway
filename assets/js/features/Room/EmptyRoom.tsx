@@ -33,7 +33,7 @@ export function EmptyRoom(props: Props) {
 function EmptyRoomTips() {
   return (
     <>
-      This room is empty at the moment. You can;
+      It{"'"}s just you in the room at the moment. You can;
       <ul>
         <li>Join another room</li>
         <li>Wave someone to start talking</li>

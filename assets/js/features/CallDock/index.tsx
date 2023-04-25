@@ -18,6 +18,7 @@ import {
 } from '@daily-co/daily-react-hooks'
 import { setParticipantStatus } from 'features/Call/slice'
 import { logger } from 'lib/log'
+import { ConnectionStatus } from 'features/Dock/ConnectionStatus'
 
 interface Props {}
 
@@ -88,6 +89,7 @@ export function CallDock(props: Props) {
 
   return (
     <Container>
+      <ConnectionStatus />
       <CallControls
         focus={focus}
         cameraOn={localStatus.camera_on}
@@ -138,4 +140,6 @@ export function CallDock(props: Props) {
   }
 }
 
-const Container = styled('div', {})
+const Container = styled('div', {
+  position: 'relative',
+})

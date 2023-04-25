@@ -21,7 +21,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { Mirror, MirrorRoot } from './Mirror'
 import { DockSection } from './CallControls'
 import { findModeByStatus } from 'state/presence'
-import { ConnectionStatus } from './ConnectionStatus'
 
 interface Props {
   roomId: string
@@ -155,7 +154,6 @@ export function Dock(props: Props) {
           )}
         </MainDockRow>
       </Container>
-      <ConnectionStatus />
     </>
   )
 
