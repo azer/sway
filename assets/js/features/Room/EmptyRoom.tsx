@@ -82,7 +82,7 @@ const Container = styled('div', {
 })
 
 const Emoji = styled('span', {
-  fontSize: '48px',
+  fontSize: '32px',
   color: '$white',
 })
 
