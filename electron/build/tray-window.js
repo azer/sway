@@ -1162,7 +1162,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
-          function useMemo4(create, deps) {
+          function useMemo3(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1933,7 +1933,7 @@
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
           exports.useLayoutEffect = useLayoutEffect3;
-          exports.useMemo = useMemo4;
+          exports.useMemo = useMemo3;
           exports.useReducer = useReducer;
           exports.useRef = useRef6;
           exports.useState = useState8;
@@ -24394,11 +24394,11 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx48 = jsxWithValidationDynamic;
-          var jsxs21 = jsxWithValidationStatic;
+          var jsx55 = jsxWithValidationDynamic;
+          var jsxs25 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx48;
-          exports.jsxs = jsxs21;
+          exports.jsx = jsx55;
+          exports.jsxs = jsxs25;
         })();
       }
     }
@@ -24606,8 +24606,8 @@
           t5.constructor !== Object || t5.$$typeof ? null == n5.type && (n5.type = t5) : n5.composers.add(C(t5, e3));
     return null == n5.type && (n5.type = "span"), n5.composers.size || n5.composers.add(["PJLV", {}, [], [], {}, []]), P(e3, n5, t4);
   });
-  var C = (_a3, i5) => {
-    var _b2 = _a3, { variants: e3, compoundVariants: t4, defaultVariants: r5 } = _b2, n5 = __objRest(_b2, ["variants", "compoundVariants", "defaultVariants"]);
+  var C = (_a5, i5) => {
+    var _b2 = _a5, { variants: e3, compoundVariants: t4, defaultVariants: r5 } = _b2, n5 = __objRest(_b2, ["variants", "compoundVariants", "defaultVariants"]);
     const o5 = `${S(i5.prefix)}c-${z(n5)}`, l5 = [], s5 = [], d5 = /* @__PURE__ */ Object.create(null), g5 = [];
     for (const e4 in r5)
       d5[e4] = String(r5[e4]);
@@ -24625,7 +24625,7 @@
     var p5, u5;
     if ("object" == typeof t4 && t4)
       for (const e4 of t4) {
-        let _a4 = e4, { css: t5 } = _a4, r6 = __objRest(_a4, ["css"]);
+        let _a6 = e4, { css: t5 } = _a6, r6 = __objRest(_a6, ["css"]);
         t5 = "object" == typeof t5 && t5 || {};
         for (const e5 in r6)
           r6[e5] = String(r6[e5]);
@@ -24646,7 +24646,7 @@
       return t5[T] = [], t5.rules = {}, W.forEach((e5) => t5.rules[e5] = { apply: (r6) => t5[T].push([e5, r6]) }), t5;
     })(r5) : null, d5 = (c6 || r5).rules, g5 = `.${n5}${i5.length > 1 ? `:where(.${i5.slice(1).join(".")})` : ""}`, p5 = (l5) => {
       l5 = "object" == typeof l5 && l5 || A;
-      const _a3 = l5, { css: s5 } = _a3, p6 = __objRest(_a3, ["css"]), u5 = {};
+      const _a5 = l5, { css: s5 } = _a5, p6 = __objRest(_a5, ["css"]), u5 = {};
       for (const e4 in o5)
         if (delete p6[e4], e4 in l5) {
           let t5 = l5[e4];
@@ -24850,6 +24850,7 @@
     //'rgb(36, 36, 44)',
     gray3: "rgb(65, 65, 65)",
     gray4: "rgb(72, 83, 94)",
+    gray5: "rgb(87, 98, 109)",
     gray8: "rgb(110, 121, 132)",
     gray9: "rgb(145, 145, 149)",
     silver: "rgb(198, 203, 209)",
@@ -24868,37 +24869,48 @@
     darkGreen: "rgb(15, 120, 60)",
     green: "rgb(76, 183, 130)",
     yellow: "rgb(242, 201, 76)",
+    textSelectionFg: "$lightPurple",
+    textSelectionBg: "rgba(40, 44, 51)",
     shellBg: "rgb(20, 22, 28)",
     shellFg: "rgb(255, 255, 255)",
     shellBorderColor: "rgba(255, 255, 255, 0.075)",
     shellBlur1: "rgba(15, 100, 222, 0.25)",
     scrollTrackBg: "",
-    scrollThumbBg: "rgba(255, 255, 255, 0.5)",
+    scrollThumbBg: "rgba(59, 63, 67)",
+    scrollDarkThumbBg: "rgba(225, 235, 245, 0.08)",
     headerFg: "rgba(255, 255, 255, 0.9)",
     navigationFocusFg: "$white",
     navigationFocusBg: "rgba(125, 145, 200, 0.08)",
     navigationFg: "rgba(255, 255, 255, 0.6)",
+    navigationUnreadFg: "$white",
     navigationBlur2: "rgba(126, 33, 50, 0.125)",
     navigationBlur1: "rgba(15, 100, 222, 0.125)",
-    dockBg: "rgb(34, 37, 42)",
-    dockFocusBg: "rgb(37, 40, 45)",
-    dockBorderColor: "rgba(255, 255, 255, 0.07)",
-    dockFocusBorderColor: "rgba(255, 255, 255, 0.1)",
+    dockBg: "rgba(34, 37, 42, 0.4)",
+    dockFocusBg: "rgba(37, 40, 45, 0.7)",
+    dockFocusSectionBg: "rgba(37, 40, 45, 0.5)",
+    dockBorderColor: "rgba(255, 255, 255, 0.05)",
+    dockFocusBorderColor: "rgba(255, 255, 255, 0.07)",
     dockSeparator: "rgba(255, 255, 255, 0.05)",
     dockFg: "$white",
+    dockPresenceFg: "rgba(255, 255, 255, 0.4)",
     dockIconBorderColor: "$gray2",
     dockIconReadyBg: "$gray3",
     dockIconConnectingBg: "$yellow",
     dockIconFailedBg: "$red",
     dockIconConnectedBg: "rgb(20, 130, 80)",
-    dockButtonFg: "rgba(255, 255, 255, 0.5)",
     dockButtonIconFg: "rgba(255, 255, 255, 0.7)",
     dockButtonBg: "rgba(255, 255, 255, 0.0185)",
     dockButtonHoverBg: "rgba(255, 255, 255, 0.05)",
     dockButtonHoverFg: "rgba(255, 255, 255, 0.6)",
     dockButtonHighlightedBg: "rgba(255, 255, 255, 0.03)",
-    dockButtonOffFg: "$red",
+    dockButtonOffFg: "rgba(255, 255, 255, 0.3)",
     dockButtonOnFg: "$green",
+    dockButtonFg: "rgba(255, 255, 255, 0.7)",
+    statusIconOnlineBg: "$green",
+    statusIconActiveBg: "$green",
+    statusIconFocusBg: "$yellow",
+    statusIconZenBg: "$purple",
+    statusIconOfflineBg: "rgb(50, 54, 61, 1)",
     presenceModelineFocusFg: "rgba(242, 201, 76, 0.9)",
     presenceModelineFocusBlur: "rgba(242, 201, 76, 0.2)",
     presenceModelineSoloFg: "rgba(255, 93, 224, 0.9)",
@@ -24909,8 +24921,13 @@
     presenceModelineActiveBlur: "rgba(24, 255, 167, 0.18)",
     presenceModelineSocialFg: "rgb(24, 255, 167)",
     presenceModelineSocialBlur: "rgba(24, 255, 167, 0.18)",
+    contextMenuBg: "rgba(30, 34, 41, 0.6)",
+    contextMenuFg: "rgba(255, 255, 255, 0.6)",
+    contextMenuLeftSlotFg: "rgba(100, 106, 110, 0.8)",
+    contextMenuRightSlotFg: "rgba(100, 106, 110, 0.8)",
+    contextMenuHighlightBg: "rgba(255, 245, 240, 0.07)",
+    contextMenuHighlightFg: "rgba(255, 255, 255, 0.9)",
     commandPaletteBg: "rgba(30, 34, 41, 0.6)",
-    //rgba(29, 30, 43, 0.498)',
     commandPaletteFg: "$white",
     commandPaletteTitleFg: "rgba(255, 255, 255, 0.6)",
     commandPaletteTitleBg: "rgba(255, 255, 255, 0.08)",
@@ -24932,8 +24949,10 @@
     commandPaletteSelectedShortcutBg: "rgba(149, 149, 189, 0.25)",
     commandPaletteSelectedShortcutFg: "rgba(255, 255, 255, 0.85)",
     commandPaletteSeparatorBg: "rgba(255, 255, 255, 0.06)",
-    participantUsernameFg: "$white",
-    participantUsernameBg: "$shellBg",
+    participantBg: "rgba(255, 255, 255, 0.05)",
+    participantBorder: "rgba(150, 190, 255, 0.1)",
+    participantLabelFg: "rgba(255, 255, 255, 0.9)",
+    participantLabelBg: "rgba(255, 255, 255, 0.08)",
     participantFocusBg: "$yellow",
     participantFocusFg: "rgba(25, 20, 0, 0.85)",
     participantSoloBg: "rgba(255, 93, 224, 0.7)",
@@ -24971,10 +24990,22 @@
     electronTrayHighlightedUsernameFg: "$white",
     electronTrayHighlightedUserStatusFg: "rgba(255, 255, 255, 0.65)",
     electronTrayHighlightedUserBg: "rgba(255, 255, 255, 0.04)",
-    electronTrayTextFieldFg: "$white",
+    electronTrayTextFieldFg: "rgba(255, 255, 255, 0.8)",
+    electronTrayTextFieldFocusFg: "rgba(255, 255, 255, 0.9)",
     electronTrayTextFieldCaret: "$candy",
     electronTrayTextFieldSelectionBg: "rgba(255, 225, 250, 0.25)",
-    electronTrayTextFieldPlaceholder: "rgba(255, 245, 255, 0.3)"
+    electronTrayTextFieldPlaceholder: "rgba(255, 245, 255, 0.3)",
+    chatInputBg: "rgb(30, 34, 41)",
+    chatInputFg: "rgb(235, 238, 242, 0.8)",
+    chatInputFocusBg: "rgba(36, 40, 47)",
+    chatInputFocusFg: "$white",
+    chatInputCaret: "$purple",
+    chatMessageAuthorFg: "rgb(232, 233, 237)",
+    chatMessageDateFg: "rgb(100, 106, 111)",
+    chatMessageBodyFg: "rgb(209, 210, 215)",
+    chatMessageLinkFg: "$lightBlue",
+    chatMessageEditedFg: "rgba(209, 210, 215, 0.5)",
+    focusItemBg: "radial-gradient(circle farthest-corner at 0px 0px, $lightPurple, transparent), radial-gradient(circle farthest-corner at 0px 90%, $candy, transparent)"
   };
 
   // ../assets/js/themes/tokens.ts
@@ -25169,6 +25200,7 @@
     ellipsis: () => {
       return {
         overflowX: "hidden",
+        overflowY: "hidden",
         whiteSpace: "nowrap",
         textOverflow: "ellipsis"
       };
@@ -25182,6 +25214,40 @@
       const effect = options.effect || "ease-in-out";
       return {
         transition: `${options.props.join(" ")} ${options.time}s ${effect}`
+      };
+    },
+    capitalizeFirstLetter: (_3) => {
+      return {
+        "&::first-letter": {
+          textTransform: "uppercase"
+        }
+      };
+    },
+    scrollbar: (opts) => {
+      return {
+        overflow: "hidden",
+        "&:hover": {
+          overflowX: opts.x ? "overlay" : "hidden",
+          overflowY: opts.y ? "overlay" : "hidden"
+        },
+        "&::-webkit-scrollbar": {
+          width: "5px",
+          opacity: "0",
+          background: "transparent",
+          position: "absolute",
+          zIndex: "9999999"
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "$scrollTrackBg"
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: opts.dark ? "$scrollDarkThumbBg" : "$scrollThumbBg",
+          borderRadius: "10px",
+          width: "4.5px"
+        },
+        "&::-webkit-scrollbar:hover": {
+          opacity: "1"
+        }
       };
     }
   };
@@ -26311,12 +26377,12 @@
           }
           var promise2 = function() {
             return __async2(this, null, function() {
-              var _a3, _b2, finalAction, conditionResult, err_1, skipDispatch;
+              var _a5, _b2, finalAction, conditionResult, err_1, skipDispatch;
               return __generator(this, function(_c) {
                 switch (_c.label) {
                   case 0:
                     _c.trys.push([0, 4, , 5]);
-                    conditionResult = (_a3 = options == null ? void 0 : options.condition) == null ? void 0 : _a3.call(options, arg, { getState, extra });
+                    conditionResult = (_a5 = options == null ? void 0 : options.condition) == null ? void 0 : _a5.call(options, arg, { getState, extra });
                     if (!isThenable(conditionResult))
                       return [3, 2];
                     return [4, conditionResult];
@@ -26444,6 +26510,7 @@
   var Memberships = "memberships";
   var Workspaces = "workspaces";
   var Rooms = "rooms";
+  var ChatMessages = "chat_messages";
   var Statuses = "statuses";
   var Participants = "daily_participants";
   var initialState = {
@@ -26452,26 +26519,27 @@
     [Workspaces]: initial(Workspaces),
     [Rooms]: initial(Rooms),
     [Statuses]: initial(Statuses),
-    [Participants]: initial(Participants)
+    [Participants]: initial(Participants),
+    [ChatMessages]: initial(ChatMessages)
   };
   var slice = createSlice({
     name: "entities",
     initialState,
     reducers: {
       add: (state, action) => {
-        state[action.payload.table][action.payload.id] = action.payload.record;
+        state[action.payload.schema][action.payload.id] = action.payload.data;
       },
       addBatch: (state, action) => {
         for (let update of action.payload) {
-          if (!state[update.table]) {
-            state[update.table] = {};
+          if (!state[update.schema]) {
+            state[update.schema] = {};
           }
-          state[update.table][update.id] = update.record;
+          state[update.schema][update.id] = update.data;
         }
       },
       addInitialState: (state, action) => {
-        var _a3;
-        const entities = (_a3 = window.initialState) == null ? void 0 : _a3.entities;
+        var _a5;
+        const entities = (_a5 = window.initialState) == null ? void 0 : _a5.entities;
         if (!entities)
           return;
         for (const table in entities) {
@@ -26489,64 +26557,11 @@
   });
   var { add, addBatch, addInitialState, removeBatch } = slice.actions;
   var entities_default = slice.reducer;
-  function toStateEntity(table, record) {
-    if (table === Users) {
-      return {
-        id: String(record.id),
-        email: record.email,
-        name: record.name,
-        photoUrl: record.profile_photo_url
-      };
-    }
-    if (table === Participants) {
-      return {
-        id: String(record.user_id),
-        sessionId: record.session_id,
-        audio: record.audio,
-        video: record.video,
-        screen: record.screen
-      };
-    }
-    if (table === Statuses) {
-      return __spreadProps(__spreadValues({}, record), {
-        id: String(record.id),
-        room_id: String(record.room_id),
-        user_id: String(record.user_id),
-        workspace_id: String(record.workspace_id)
-      });
-    }
-    if (table === Rooms) {
-      return __spreadProps(__spreadValues({}, record), {
-        id: String(record.id),
-        user_id: String(record.user_id),
-        workspace_id: String(record.workspace_id),
-        is_active: record.is_active,
-        is_default: record.is_default
-      });
-    }
-    if (table === Memberships) {
-      return __spreadProps(__spreadValues({}, record), {
-        id: String(record.id),
-        user_id: String(record.user_id),
-        workspace_id: String(record.workspace_id),
-        is_admin: record.is_admin
-      });
-    }
-    if (table === Workspaces) {
-      return __spreadProps(__spreadValues({}, record), {
-        id: String(record.id),
-        name: record.name,
-        slug: record.slug,
-        domain: record.slug
-      });
-    }
-    return record;
-  }
   function initial(table) {
     const result = {};
     if (window.initialState && window.initialState.entities[table]) {
       for (const r5 of window.initialState.entities[table]) {
-        result[r5.id] = toStateEntity(table, r5);
+        result[r5.id] = r5;
       }
     }
     return result;
@@ -26597,18 +26612,38 @@
     ipcRenderer.send(chan, JSON.stringify(payload));
   }
 
+  // ../assets/js/lib/string.ts
+  function titleCase(text) {
+    return text.slice(0, 1).toUpperCase() + text.replace(/-/g, " ").slice(1);
+  }
+  function firstName(fullName) {
+    return fullName.split(" ")[0];
+  }
+  function initials(fullName) {
+    return fullName.split(" ").map((f5) => f5.slice(0, 1).toUpperCase()).join("");
+  }
+
   // ../assets/js/features/Room/focus.ts
+  var _a2;
   var initialRoomFocus = {
-    roomId: window.initialState.focus.roomId,
+    roomId: (_a2 = window.initialState) == null ? void 0 : _a2.focus.roomId,
     dock: void 0
   };
 
+  // ../assets/js/features/Sidebar/focus.ts
+  var initialSidebarFocus = {
+    isOpen: false,
+    content: "chat" /* Chat */
+  };
+
   // ../assets/js/features/Workspace/focus.ts
+  var _a3;
   var initialWorkspaceFocus = {
     // @ts-ignore
-    workspaceId: window.initialState.focus.workspaceId,
+    workspaceId: (_a3 = window.initialState) == null ? void 0 : _a3.focus.workspaceId,
     room: initialRoomFocus,
-    region: "room" /* Room */
+    region: "room" /* Room */,
+    sidebar: initialSidebarFocus
   };
 
   // ../assets/js/features/Focus/slice.ts
@@ -26616,12 +26651,16 @@
   var log2 = logger("focus/slice");
   var initialState2 = {
     windowHasFocus: document.hasFocus(),
+    windowIsVisible: !document.hidden,
     workspace: initialWorkspaceFocus
   };
   var slice2 = createSlice({
     name,
     initialState: initialState2,
     reducers: {
+      setWindowVisible: (state, action) => {
+        state.windowIsVisible = action.payload;
+      },
       setWindowFocus: (state, action) => {
         state.windowHasFocus = action.payload;
       },
@@ -26630,18 +26669,18 @@
       }
     }
   });
-  var { setWindowFocus, setWorkspaceFocus } = slice2.actions;
+  var { setWindowFocus, setWorkspaceFocus, setWindowVisible } = slice2.actions;
   var slice_default = slice2.reducer;
 
   // ../assets/js/features/Dock/slice.ts
   var log3 = logger("dock/slice");
   var name2 = "status";
-  var _a2, _b;
+  var _a4, _b;
   var initialState3 = {
     presence: {},
     connection: {
       // @ts-ignore
-      [(_a2 = window.initialState) == null ? void 0 : _a2.session.userId]: {
+      [(_a4 = window.initialState) == null ? void 0 : _a4.session.userId]: {
         // @ts-ignore
         userId: (_b = window.initialState) == null ? void 0 : _b.session.userId,
         internet: navigator.onLine ? "connected" /* Connected */ : "disconnected" /* Disconnected */
@@ -26760,77 +26799,50 @@
     };
     return _extends.apply(this, arguments);
   }
-  function _unsupportedIterableToArray(o5, minLen) {
-    if (!o5)
-      return;
-    if (typeof o5 === "string")
-      return _arrayLikeToArray(o5, minLen);
-    var n5 = Object.prototype.toString.call(o5).slice(8, -1);
-    if (n5 === "Object" && o5.constructor)
-      n5 = o5.constructor.name;
-    if (n5 === "Map" || n5 === "Set")
-      return Array.from(o5);
-    if (n5 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n5))
-      return _arrayLikeToArray(o5, minLen);
-  }
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length)
-      len = arr.length;
-    for (var i5 = 0, arr2 = new Array(len); i5 < len; i5++)
-      arr2[i5] = arr[i5];
-    return arr2;
-  }
-  function _createForOfIteratorHelperLoose(o5, allowArrayLike) {
-    var it = typeof Symbol !== "undefined" && o5[Symbol.iterator] || o5["@@iterator"];
-    if (it)
-      return (it = it.call(o5)).next.bind(it);
-    if (Array.isArray(o5) || (it = _unsupportedIterableToArray(o5)) || allowArrayLike && o5 && typeof o5.length === "number") {
-      if (it)
-        o5 = it;
-      var i5 = 0;
-      return function() {
-        if (i5 >= o5.length)
-          return {
-            done: true
-          };
-        return {
-          done: false,
-          value: o5[i5++]
-        };
-      };
-    }
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  var reservedModifierKeywords = ["ctrl", "shift", "alt", "meta", "mod"];
+  var reservedModifierKeywords = ["shift", "alt", "meta", "mod", "ctrl"];
   var mappedKeys = {
     esc: "escape",
     "return": "enter",
-    left: "arrowleft",
-    up: "arrowup",
-    right: "arrowright",
-    down: "arrowdown"
+    ".": "period",
+    ",": "comma",
+    "-": "slash",
+    " ": "space",
+    "`": "backquote",
+    "#": "backslash",
+    "+": "bracketright",
+    ShiftLeft: "shift",
+    ShiftRight: "shift",
+    AltLeft: "alt",
+    AltRight: "alt",
+    MetaLeft: "meta",
+    MetaRight: "meta",
+    OSLeft: "meta",
+    OSRight: "meta",
+    ControlLeft: "ctrl",
+    ControlRight: "ctrl"
   };
+  function mapKey(key) {
+    return (mappedKeys[key] || key).trim().toLowerCase().replace(/key|digit|numpad|arrow/, "");
+  }
+  function isHotkeyModifier(key) {
+    return reservedModifierKeywords.includes(key);
+  }
   function parseKeysHookInput(keys, splitKey) {
     if (splitKey === void 0) {
       splitKey = ",";
     }
-    if (typeof keys === "string") {
-      return keys.split(splitKey);
-    }
-    return keys;
+    return keys.split(splitKey);
   }
   function parseHotkey(hotkey, combinationKey) {
     if (combinationKey === void 0) {
       combinationKey = "+";
     }
     var keys = hotkey.toLocaleLowerCase().split(combinationKey).map(function(k4) {
-      return k4.trim();
-    }).map(function(k4) {
-      return mappedKeys[k4] || k4;
+      return mapKey(k4);
     });
     var modifiers = {
       alt: keys.includes("alt"),
-      ctrl: keys.includes("ctrl"),
+      ctrl: keys.includes("ctrl") || keys.includes("control"),
       shift: keys.includes("shift"),
       meta: keys.includes("meta"),
       mod: keys.includes("mod")
@@ -26841,6 +26853,58 @@
     return _extends({}, modifiers, {
       keys: singleCharKeys
     });
+  }
+  (function() {
+    if (typeof document !== "undefined") {
+      document.addEventListener("keydown", function(e3) {
+        if (e3.key === void 0) {
+          return;
+        }
+        pushToCurrentlyPressedKeys([mapKey(e3.key), mapKey(e3.code)]);
+      });
+      document.addEventListener("keyup", function(e3) {
+        if (e3.key === void 0) {
+          return;
+        }
+        removeFromCurrentlyPressedKeys([mapKey(e3.key), mapKey(e3.code)]);
+      });
+    }
+    if (typeof window !== "undefined") {
+      window.addEventListener("blur", function() {
+        currentlyPressedKeys.clear();
+      });
+    }
+  })();
+  var currentlyPressedKeys = /* @__PURE__ */ new Set();
+  function isHotkeyPressed(key, splitKey) {
+    if (splitKey === void 0) {
+      splitKey = ",";
+    }
+    var hotkeyArray = Array.isArray(key) ? key : key.split(splitKey);
+    return hotkeyArray.every(function(hotkey) {
+      return currentlyPressedKeys.has(hotkey.trim().toLowerCase());
+    });
+  }
+  function pushToCurrentlyPressedKeys(key) {
+    var hotkeyArray = Array.isArray(key) ? key : [key];
+    if (currentlyPressedKeys.has("meta")) {
+      currentlyPressedKeys.forEach(function(key2) {
+        return !isHotkeyModifier(key2) && currentlyPressedKeys["delete"](key2.toLowerCase());
+      });
+    }
+    hotkeyArray.forEach(function(hotkey) {
+      return currentlyPressedKeys.add(hotkey.toLowerCase());
+    });
+  }
+  function removeFromCurrentlyPressedKeys(key) {
+    var hotkeyArray = Array.isArray(key) ? key : [key];
+    if (key === "meta") {
+      currentlyPressedKeys.clear();
+    } else {
+      hotkeyArray.forEach(function(hotkey) {
+        return currentlyPressedKeys["delete"](hotkey.toLowerCase());
+      });
+    }
   }
   function maybePreventDefault(e3, hotkey, preventDefault) {
     if (typeof preventDefault === "function" && preventDefault(e3, hotkey) || preventDefault === true) {
@@ -26881,35 +26945,38 @@
       return scopes.includes(scope);
     }) || activeScopes.includes("*");
   }
-  var isHotkeyMatchingKeyboardEvent = function isHotkeyMatchingKeyboardEvent2(e3, hotkey, pressedDownKeys) {
-    var alt = hotkey.alt, ctrl = hotkey.ctrl, meta = hotkey.meta, mod = hotkey.mod, shift = hotkey.shift, keys = hotkey.keys;
-    var altKey = e3.altKey, ctrlKey = e3.ctrlKey, metaKey = e3.metaKey, shiftKey = e3.shiftKey, pressedKeyUppercase = e3.key, code = e3.code;
-    var keyCode = code.toLowerCase().replace("key", "");
+  var isHotkeyMatchingKeyboardEvent = function isHotkeyMatchingKeyboardEvent2(e3, hotkey, ignoreModifiers) {
+    if (ignoreModifiers === void 0) {
+      ignoreModifiers = false;
+    }
+    var alt = hotkey.alt, meta = hotkey.meta, mod = hotkey.mod, shift = hotkey.shift, ctrl = hotkey.ctrl, keys = hotkey.keys;
+    var pressedKeyUppercase = e3.key, code = e3.code, ctrlKey = e3.ctrlKey, metaKey = e3.metaKey, shiftKey = e3.shiftKey, altKey = e3.altKey;
+    var keyCode = mapKey(code);
     var pressedKey = pressedKeyUppercase.toLowerCase();
-    if (altKey !== alt && pressedKey !== "alt") {
-      return false;
-    }
-    if (shiftKey !== shift && pressedKey !== "shift") {
-      return false;
-    }
-    if (mod) {
-      if (!metaKey && !ctrlKey) {
+    if (!ignoreModifiers) {
+      if (alt === !altKey && pressedKey !== "alt") {
         return false;
       }
-    } else {
-      if (metaKey !== meta && keyCode !== "meta") {
+      if (shift === !shiftKey && pressedKey !== "shift") {
         return false;
       }
-      if (ctrlKey !== ctrl && keyCode !== "ctrl") {
-        return false;
+      if (mod) {
+        if (!metaKey && !ctrlKey) {
+          return false;
+        }
+      } else {
+        if (meta === !metaKey && pressedKey !== "meta" && pressedKey !== "os") {
+          return false;
+        }
+        if (ctrl === !ctrlKey && pressedKey !== "ctrl" && pressedKey !== "control") {
+          return false;
+        }
       }
     }
     if (keys && keys.length === 1 && (keys.includes(pressedKey) || keys.includes(keyCode))) {
       return true;
     } else if (keys) {
-      return keys.every(function(key) {
-        return pressedDownKeys.has(key);
-      });
+      return isHotkeyPressed(keys);
     } else if (!keys) {
       return true;
     }
@@ -26919,6 +26986,12 @@
   var useBoundHotkeysProxy = function useBoundHotkeysProxy2() {
     return (0, import_react3.useContext)(BoundHotkeysProxyProvider);
   };
+  function deepEqual(x5, y5) {
+    return x5 && y5 && typeof x5 === "object" && typeof y5 === "object" ? Object.keys(x5).length === Object.keys(y5).length && //@ts-ignore
+    Object.keys(x5).reduce(function(isEqual, key) {
+      return isEqual && deepEqual(x5[key], y5[key]);
+    }, true) : x5 === y5;
+  }
   var HotkeysContext = /* @__PURE__ */ (0, import_react3.createContext)({
     hotkeys: [],
     enabledScopes: [],
@@ -26932,11 +27005,6 @@
   var useHotkeysContext = function useHotkeysContext2() {
     return (0, import_react3.useContext)(HotkeysContext);
   };
-  function deepEqual(x5, y5) {
-    return x5 && y5 && typeof x5 === "object" && typeof y5 === "object" ? Object.keys(x5).length === Object.keys(y5).length && Object.keys(x5).reduce(function(isEqual, key) {
-      return isEqual && deepEqual(x5[key], y5[key]);
-    }, true) : x5 === y5;
-  }
   function useDeepEqualMemo(value) {
     var ref = (0, import_react3.useRef)(void 0);
     if (!deepEqual(ref.current, value)) {
@@ -26952,10 +27020,17 @@
   var useSafeLayoutEffect = typeof window !== "undefined" ? import_react3.useLayoutEffect : import_react3.useEffect;
   function useHotkeys(keys, callback, options, dependencies) {
     var ref = (0, import_react3.useRef)(null);
-    var _useRef = (0, import_react3.useRef)(/* @__PURE__ */ new Set()), pressedDownKeys = _useRef.current;
+    var hasTriggeredRef = (0, import_react3.useRef)(false);
     var _options = !(options instanceof Array) ? options : !(dependencies instanceof Array) ? dependencies : void 0;
-    var _deps = options instanceof Array ? options : dependencies instanceof Array ? dependencies : [];
-    var cb = (0, import_react3.useCallback)(callback, [].concat(_deps));
+    var _keys = keys instanceof Array ? keys.join(_options == null ? void 0 : _options.splitKey) : keys;
+    var _deps = options instanceof Array ? options : dependencies instanceof Array ? dependencies : void 0;
+    var memoisedCB = (0, import_react3.useCallback)(callback, _deps != null ? _deps : []);
+    var cbRef = (0, import_react3.useRef)(memoisedCB);
+    if (_deps) {
+      cbRef.current = memoisedCB;
+    } else {
+      cbRef.current = callback;
+    }
     var memoisedOptions = useDeepEqualMemo(_options);
     var _useHotkeysContext = useHotkeysContext(), enabledScopes = _useHotkeysContext.enabledScopes;
     var proxy = useBoundHotkeysProxy();
@@ -26963,8 +27038,11 @@
       if ((memoisedOptions == null ? void 0 : memoisedOptions.enabled) === false || !isScopeActive(enabledScopes, memoisedOptions == null ? void 0 : memoisedOptions.scopes)) {
         return;
       }
-      var listener2 = function listener3(e3) {
+      var listener2 = function listener3(e3, isKeyUp) {
         var _e$target;
+        if (isKeyUp === void 0) {
+          isKeyUp = false;
+        }
         if (isKeyboardEventTriggeredByInput(e3) && !isHotkeyEnabledOnTag(e3, memoisedOptions == null ? void 0 : memoisedOptions.enableOnFormTags)) {
           return;
         }
@@ -26975,89 +27053,64 @@
         if ((_e$target = e3.target) != null && _e$target.isContentEditable && !(memoisedOptions != null && memoisedOptions.enableOnContentEditable)) {
           return;
         }
-        parseKeysHookInput(keys, memoisedOptions == null ? void 0 : memoisedOptions.splitKey).forEach(function(key) {
+        parseKeysHookInput(_keys, memoisedOptions == null ? void 0 : memoisedOptions.splitKey).forEach(function(key) {
           var _hotkey$keys;
           var hotkey = parseHotkey(key, memoisedOptions == null ? void 0 : memoisedOptions.combinationKey);
-          if (isHotkeyMatchingKeyboardEvent(e3, hotkey, pressedDownKeys) || (_hotkey$keys = hotkey.keys) != null && _hotkey$keys.includes("*")) {
+          if (isHotkeyMatchingKeyboardEvent(e3, hotkey, memoisedOptions == null ? void 0 : memoisedOptions.ignoreModifiers) || (_hotkey$keys = hotkey.keys) != null && _hotkey$keys.includes("*")) {
+            if (isKeyUp && hasTriggeredRef.current) {
+              return;
+            }
             maybePreventDefault(e3, hotkey, memoisedOptions == null ? void 0 : memoisedOptions.preventDefault);
             if (!isHotkeyEnabled(e3, hotkey, memoisedOptions == null ? void 0 : memoisedOptions.enabled)) {
               stopPropagation(e3);
               return;
             }
-            cb(e3, hotkey);
+            cbRef.current(e3, hotkey);
+            if (!isKeyUp) {
+              hasTriggeredRef.current = true;
+            }
           }
         });
       };
       var handleKeyDown = function handleKeyDown2(event) {
-        pressedDownKeys.add(event.key.toLowerCase());
+        if (event.key === void 0) {
+          return;
+        }
+        pushToCurrentlyPressedKeys(mapKey(event.code));
         if ((memoisedOptions == null ? void 0 : memoisedOptions.keydown) === void 0 && (memoisedOptions == null ? void 0 : memoisedOptions.keyup) !== true || memoisedOptions != null && memoisedOptions.keydown) {
           listener2(event);
         }
       };
       var handleKeyUp = function handleKeyUp2(event) {
-        if (event.key.toLowerCase() !== "meta") {
-          pressedDownKeys["delete"](event.key.toLowerCase());
-        } else {
-          pressedDownKeys.clear();
+        if (event.key === void 0) {
+          return;
         }
+        removeFromCurrentlyPressedKeys(mapKey(event.code));
+        hasTriggeredRef.current = false;
         if (memoisedOptions != null && memoisedOptions.keyup) {
-          listener2(event);
+          listener2(event, true);
         }
       };
-      (ref.current || document).addEventListener("keyup", handleKeyUp);
-      (ref.current || document).addEventListener("keydown", handleKeyDown);
+      var domNode = ref.current || (_options == null ? void 0 : _options.document) || document;
+      domNode.addEventListener("keyup", handleKeyUp);
+      domNode.addEventListener("keydown", handleKeyDown);
       if (proxy) {
-        parseKeysHookInput(keys, memoisedOptions == null ? void 0 : memoisedOptions.splitKey).forEach(function(key) {
+        parseKeysHookInput(_keys, memoisedOptions == null ? void 0 : memoisedOptions.splitKey).forEach(function(key) {
           return proxy.addHotkey(parseHotkey(key, memoisedOptions == null ? void 0 : memoisedOptions.combinationKey));
         });
       }
       return function() {
-        (ref.current || document).removeEventListener("keyup", handleKeyUp);
-        (ref.current || document).removeEventListener("keydown", handleKeyDown);
+        domNode.removeEventListener("keyup", handleKeyUp);
+        domNode.removeEventListener("keydown", handleKeyDown);
         if (proxy) {
-          parseKeysHookInput(keys, memoisedOptions == null ? void 0 : memoisedOptions.splitKey).forEach(function(key) {
+          parseKeysHookInput(_keys, memoisedOptions == null ? void 0 : memoisedOptions.splitKey).forEach(function(key) {
             return proxy.removeHotkey(parseHotkey(key, memoisedOptions == null ? void 0 : memoisedOptions.combinationKey));
           });
         }
       };
-    }, [keys, cb, memoisedOptions, enabledScopes]);
+    }, [_keys, memoisedOptions, enabledScopes]);
     return ref;
   }
-  var currentlyPressedKeys = /* @__PURE__ */ new Set();
-  function pushToCurrentlyPressedKeys(key) {
-    var hotkeyArray = Array.isArray(key) ? key : [key];
-    hotkeyArray.forEach(function(hotkey) {
-      return currentlyPressedKeys.add(parseHotkey(hotkey));
-    });
-  }
-  function removeFromCurrentlyPressedKeys(key) {
-    var hotkeyArray = Array.isArray(key) ? key : [key];
-    hotkeyArray.forEach(function(hotkey) {
-      var parsedHotkey = parseHotkey(hotkey);
-      for (var _iterator2 = _createForOfIteratorHelperLoose(currentlyPressedKeys), _step2; !(_step2 = _iterator2()).done; ) {
-        var _pressedHotkey$keys;
-        var pressedHotkey = _step2.value;
-        if ((_pressedHotkey$keys = pressedHotkey.keys) != null && _pressedHotkey$keys.every(function(key2) {
-          var _parsedHotkey$keys;
-          return (_parsedHotkey$keys = parsedHotkey.keys) == null ? void 0 : _parsedHotkey$keys.includes(key2);
-        })) {
-          currentlyPressedKeys["delete"](pressedHotkey);
-        }
-      }
-    });
-  }
-  (function() {
-    if (typeof window !== "undefined") {
-      window.addEventListener("DOMContentLoaded", function() {
-        document.addEventListener("keydown", function(e3) {
-          pushToCurrentlyPressedKeys(e3.key);
-        });
-        document.addEventListener("keyup", function(e3) {
-          removeFromCurrentlyPressedKeys(e3.key);
-        });
-      });
-    }
-  })();
 
   // ../assets/node_modules/@babel/runtime/helpers/esm/extends.js
   function _extends2() {
@@ -27090,7 +27143,7 @@
         defaultContext
       ];
       function Provider(props) {
-        const _a3 = props, { scope, children } = _a3, context = __objRest(_a3, ["scope", "children"]);
+        const _a5 = props, { scope, children } = _a5, context = __objRest(_a5, ["scope", "children"]);
         const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
         const value = (0, import_react4.useMemo)(
           () => context,
@@ -27218,7 +27271,7 @@
 
   // ../assets/node_modules/@radix-ui/react-slot/dist/index.module.js
   var $5e63c961fc1ce211$export$8c6ed5c666ac1360 = /* @__PURE__ */ (0, import_react8.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { children } = _a3, slotProps = __objRest(_a3, ["children"]);
+    const _a5 = props, { children } = _a5, slotProps = __objRest(_a5, ["children"]);
     const childrenArray = import_react8.Children.toArray(children);
     const slottable = childrenArray.find($5e63c961fc1ce211$var$isSlottable);
     if (slottable) {
@@ -27241,7 +27294,7 @@
   });
   $5e63c961fc1ce211$export$8c6ed5c666ac1360.displayName = "Slot";
   var $5e63c961fc1ce211$var$SlotClone = /* @__PURE__ */ (0, import_react8.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { children } = _a3, slotProps = __objRest(_a3, ["children"]);
+    const _a5 = props, { children } = _a5, slotProps = __objRest(_a5, ["children"]);
     if (/* @__PURE__ */ (0, import_react8.isValidElement)(children))
       return /* @__PURE__ */ (0, import_react8.cloneElement)(children, __spreadProps(__spreadValues({}, $5e63c961fc1ce211$var$mergeProps(slotProps, children.props)), {
         ref: $6ed0406888f73fc4$export$43e446d32b3d21af(forwardedRef, children.ref)
@@ -27299,7 +27352,7 @@
   ];
   var $8927f6f2acc4f386$export$250ffa63cdc0d034 = $8927f6f2acc4f386$var$NODES.reduce((primitive, node) => {
     const Node = /* @__PURE__ */ (0, import_react9.forwardRef)((props, forwardedRef) => {
-      const _a3 = props, { asChild } = _a3, primitiveProps = __objRest(_a3, ["asChild"]);
+      const _a5 = props, { asChild } = _a5, primitiveProps = __objRest(_a5, ["asChild"]);
       const Comp = asChild ? $5e63c961fc1ce211$export$8c6ed5c666ac1360 : node;
       (0, import_react9.useEffect)(() => {
         window[Symbol.for("radix-ui")] = true;
@@ -27325,7 +27378,7 @@
   var [$cddcb0b647441e34$var$createAvatarContext, $cddcb0b647441e34$export$90370d16b488820f] = $c512c27ab02ef895$export$50c7b4e9d9f19c1($cddcb0b647441e34$var$AVATAR_NAME);
   var [$cddcb0b647441e34$var$AvatarProvider, $cddcb0b647441e34$var$useAvatarContext] = $cddcb0b647441e34$var$createAvatarContext($cddcb0b647441e34$var$AVATAR_NAME);
   var $cddcb0b647441e34$export$e2255cf6045e8d47 = /* @__PURE__ */ (0, import_react10.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeAvatar } = _a3, avatarProps = __objRest(_a3, ["__scopeAvatar"]);
+    const _a5 = props, { __scopeAvatar } = _a5, avatarProps = __objRest(_a5, ["__scopeAvatar"]);
     const [imageLoadingStatus, setImageLoadingStatus] = (0, import_react10.useState)("idle");
     return /* @__PURE__ */ (0, import_react10.createElement)($cddcb0b647441e34$var$AvatarProvider, {
       scope: __scopeAvatar,
@@ -27337,8 +27390,8 @@
   });
   var $cddcb0b647441e34$var$IMAGE_NAME = "AvatarImage";
   var $cddcb0b647441e34$export$2cd8ae1985206fe8 = /* @__PURE__ */ (0, import_react10.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeAvatar, src, onLoadingStatusChange = () => {
-    } } = _a3, imageProps = __objRest(_a3, ["__scopeAvatar", "src", "onLoadingStatusChange"]);
+    const _a5 = props, { __scopeAvatar, src, onLoadingStatusChange = () => {
+    } } = _a5, imageProps = __objRest(_a5, ["__scopeAvatar", "src", "onLoadingStatusChange"]);
     const context = $cddcb0b647441e34$var$useAvatarContext($cddcb0b647441e34$var$IMAGE_NAME, __scopeAvatar);
     const imageLoadingStatus = $cddcb0b647441e34$var$useImageLoadingStatus(src);
     const handleLoadingStatusChange = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a((status) => {
@@ -27359,7 +27412,7 @@
   });
   var $cddcb0b647441e34$var$FALLBACK_NAME = "AvatarFallback";
   var $cddcb0b647441e34$export$69fffb6a9571fbfe = /* @__PURE__ */ (0, import_react10.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeAvatar, delayMs } = _a3, fallbackProps = __objRest(_a3, ["__scopeAvatar", "delayMs"]);
+    const _a5 = props, { __scopeAvatar, delayMs } = _a5, fallbackProps = __objRest(_a5, ["__scopeAvatar", "delayMs"]);
     const context = $cddcb0b647441e34$var$useAvatarContext($cddcb0b647441e34$var$FALLBACK_NAME, __scopeAvatar);
     const [canRender, setCanRender] = (0, import_react10.useState)(delayMs === void 0);
     (0, import_react10.useEffect)(() => {
@@ -27410,9 +27463,10 @@
   // ../assets/js/components/Avatar/index.tsx
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   function Avatar(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(AvatarRoot, { children: [
+    const css2 = { fontSize: props.fontSize || "$small" };
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(StyledImage, { src: props.src, alt: props.alt }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)($cddcb0b647441e34$export$fb8d7f40caaeea67, { children: props.fallback })
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(StyledFallback, { children: initials(props.fallback) })
     ] });
   }
   var AvatarRoot = styled($cddcb0b647441e34$export$be92b6f5f03c0fe9, {
@@ -27422,14 +27476,24 @@
     userSelect: "none",
     height: "20px",
     aspectRatio: "1",
-    fontSize: "12px",
+    fontSize: "$small",
     color: "$white",
     fontWeight: "500",
-    "border-radius": "30%",
-    "background-color": "$red"
+    "border-radius": "30%"
+  });
+  var StyledFallback = styled($cddcb0b647441e34$export$fb8d7f40caaeea67, {
+    "background-color": "$purple",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   });
   var StyledImage = styled($cddcb0b647441e34$export$3e431a229df88919, {
-    width: "100%"
+    width: "100%",
+    height: "100%",
+    objectFit: "cover"
   });
 
   // ../assets/node_modules/emoji-mart/dist/module.js
@@ -31413,8 +31477,260 @@
     );
   }
 
-  // ../assets/js/components/Icon/index.tsx
+  // ../assets/js/components/Icon/Bell.tsx
   var import_jsx_runtime42 = __toESM(require_jsx_runtime());
+  function BellIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M17.25 12v-2a5.25 5.25 0 1 0-10.5 0v2l-2 4.25h14.5l-2-4.25ZM9 16.75s0 2.5 3 2.5 3-2.5 3-2.5"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/Users.tsx
+  var import_jsx_runtime43 = __toESM(require_jsx_runtime());
+  function UsersIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M5.782 19.25h7.436c.565 0 1.009-.468.896-1.021C13.804 16.7 12.79 14 9.5 14s-4.304 2.701-4.615 4.229c-.112.553.332 1.021.897 1.021ZM15.75 14c2.079 0 2.93 2.148 3.274 3.696.185.836-.49 1.554-1.347 1.554h-.927"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+            "circle",
+            {
+              cx: 9.5,
+              cy: 7.5,
+              r: 2.75,
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M14.75 10.25c1.519 0 2.5-1.231 2.5-2.75s-.981-2.75-2.5-2.75"
+            }
+          )
+        ]
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/Sidebar.tsx
+  var import_jsx_runtime44 = __toESM(require_jsx_runtime());
+  function SidebarIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M12.75 4.75h4.5a2 2 0 0 1 2 2v10.5a2 2 0 0 1-2 2h-4.5m-8-2V6.75a2 2 0 0 1 2-2h2.5v14.5h-2.5a2 2 0 0 1-2-2Z"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/Chat.tsx
+  var import_jsx_runtime45 = __toESM(require_jsx_runtime());
+  function ChatIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "5 5 15 15",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M12 18.25c3.5 0 7.25-1.75 7.25-6.25S15.5 5.75 12 5.75 4.75 7.5 4.75 12c0 1.03.196 1.916.541 2.67.215.47.336.987.24 1.495l-.262 1.399a1 1 0 0 0 1.168 1.167l3.207-.602a2.24 2.24 0 0 1 .764-.003c.527.084 1.062.124 1.592.124Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              d: "M9.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM12.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM15.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z"
+            }
+          )
+        ]
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/DoorEnter.tsx
+  var import_jsx_runtime46 = __toESM(require_jsx_runtime());
+  function DoorEnterIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M10.25 4.75h-3.5a2 2 0 0 0-2 2v12.5h10.5v-6.5"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              d: "M12.5 12a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M4.75 19.25h14.5M16.25 9.25 13.75 7m0 0 2.5-2.25M13.75 7h5.5"
+            }
+          )
+        ]
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/Activity.tsx
+  var import_jsx_runtime47 = __toESM(require_jsx_runtime());
+  function ActivityIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M4.75 11.75h3.5l2-7 3.5 14.5 2-7.5h3.5"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/UserPlus.tsx
+  var import_jsx_runtime48 = __toESM(require_jsx_runtime());
+  function UserPlusIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime48.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(
+            "circle",
+            {
+              cx: 12,
+              cy: 8,
+              r: 3.25,
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M12.25 19.25h-5.3c-1.18 0-2.06-1.04-1.46-2.055C6.363 15.723 8.24 14 12.25 14M17 14.75v4.5M19.25 17h-4.5"
+            }
+          )
+        ]
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/index.tsx
+  var import_jsx_runtime49 = __toESM(require_jsx_runtime());
   var icons = {
     headphones: HeadphonesIcon,
     coffee: CoffeeIcon,
@@ -31455,22 +31771,30 @@
     send: SendIcon,
     emoji: EmojiIcon,
     lightbulb: LightBulbIcon,
-    search: SearchIcon
+    search: SearchIcon,
+    bell: BellIcon,
+    users: UsersIcon,
+    sidebar: SidebarIcon,
+    chat: ChatIcon,
+    doorEnter: DoorEnterIcon,
+    activity: ActivityIcon,
+    userPlus: UserPlusIcon
   };
   var log5 = logger("icons");
   function Icon(props) {
     if (!props.name)
-      return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_jsx_runtime42.Fragment, {});
+      return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(import_jsx_runtime49.Fragment, {});
     const IconComponent = icons[props.name] || icons[props.name.replace(/-([a-z])/g, function(g5) {
       return g5[1].toUpperCase();
     })];
     if (IconComponent) {
-      return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(IconComponent, __spreadValues({}, props));
+      return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(IconComponent, __spreadValues({}, props));
     } else {
       log5.error("Can not find icon", props.name, Object.keys(icons));
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_jsx_runtime42.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(import_jsx_runtime49.Fragment, {});
   }
+  var Icon_default = Icon;
 
   // ../assets/node_modules/@radix-ui/react-dropdown-menu/dist/index.module.js
   var import_react26 = __toESM(require_react());
@@ -31574,7 +31898,7 @@
     const ITEM_SLOT_NAME = name3 + "CollectionItemSlot";
     const ITEM_DATA_ATTR = "data-radix-collection-item";
     const CollectionItemSlot = /* @__PURE__ */ import_react12.default.forwardRef((props, forwardedRef) => {
-      const _a3 = props, { scope, children } = _a3, itemData = __objRest(_a3, ["scope", "children"]);
+      const _a5 = props, { scope, children } = _a5, itemData = __objRest(_a5, ["scope", "children"]);
       const ref = import_react12.default.useRef(null);
       const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, ref);
       const context = useCollectionContext(ITEM_SLOT_NAME, scope);
@@ -31661,7 +31985,7 @@
   });
   var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react15.forwardRef)((props, forwardedRef) => {
     var _node$ownerDocument;
-    const _a3 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a3, layerProps = __objRest(_a3, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
+    const _a5 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a5, layerProps = __objRest(_a5, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
     const context = (0, import_react15.useContext)($5cb92bef7577960e$var$DismissableLayerContext);
     const [node1, setNode] = (0, import_react15.useState)(null);
     const ownerDocument = (_node$ownerDocument = node1 === null || node1 === void 0 ? void 0 : node1.ownerDocument) !== null && _node$ownerDocument !== void 0 ? _node$ownerDocument : globalThis === null || globalThis === void 0 ? void 0 : globalThis.document;
@@ -31891,7 +32215,7 @@
     cancelable: true
   };
   var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react17.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a3, scopeProps = __objRest(_a3, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
+    const _a5 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a5, scopeProps = __objRest(_a5, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
     const [container1, setContainer] = (0, import_react17.useState)(null);
     const onMountAutoFocus = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onMountAutoFocusProp);
     const onUnmountAutoFocus = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onUnmountAutoFocusProp);
@@ -32244,7 +32568,7 @@
     return void 0 === e3 && (e3 = {}), { name: "flip", options: e3, fn(n5) {
       return __async(this, null, function* () {
         var r5;
-        const { placement: i5, middlewareData: o5, rects: a5, initialPlacement: l5, platform: c6, elements: f5 } = n5, _a4 = e3, { mainAxis: u5 = true, crossAxis: m5 = true, fallbackPlacements: g5, fallbackStrategy: h5 = "bestFit", flipAlignment: x5 = true } = _a4, w5 = __objRest(_a4, ["mainAxis", "crossAxis", "fallbackPlacements", "fallbackStrategy", "flipAlignment"]), v5 = t3(i5), b5 = g5 || (v5 === l5 || !x5 ? [d3(l5)] : function(t4) {
+        const { placement: i5, middlewareData: o5, rects: a5, initialPlacement: l5, platform: c6, elements: f5 } = n5, _a6 = e3, { mainAxis: u5 = true, crossAxis: m5 = true, fallbackPlacements: g5, fallbackStrategy: h5 = "bestFit", flipAlignment: x5 = true } = _a6, w5 = __objRest(_a6, ["mainAxis", "crossAxis", "fallbackPlacements", "fallbackStrategy", "flipAlignment"]), v5 = t3(i5), b5 = g5 || (v5 === l5 || !x5 ? [d3(l5)] : function(t4) {
           const e4 = d3(t4);
           return [y3(t4), e4, y3(e4)];
         }(l5)), R5 = [l5, ...b5], A4 = yield s3(n5, w5), P4 = [];
@@ -32283,7 +32607,7 @@
     return x3.some((e3) => t4[e3] >= 0);
   }
   var P3 = function(t4) {
-    let _a3 = void 0 === t4 ? {} : t4, { strategy: e3 = "referenceHidden" } = _a3, n5 = __objRest(_a3, ["strategy"]);
+    let _a5 = void 0 === t4 ? {} : t4, { strategy: e3 = "referenceHidden" } = _a5, n5 = __objRest(_a5, ["strategy"]);
     return { name: "hide", fn(t5) {
       return __async(this, null, function* () {
         const { rects: r5 } = t5;
@@ -32322,10 +32646,10 @@
   var D3 = function(e3) {
     return void 0 === e3 && (e3 = {}), { name: "shift", options: e3, fn(r5) {
       return __async(this, null, function* () {
-        const { x: i5, y: o5, placement: a5 } = r5, _a4 = e3, { mainAxis: l5 = true, crossAxis: c6 = false, limiter: f5 = { fn: (t4) => {
+        const { x: i5, y: o5, placement: a5 } = r5, _a6 = e3, { mainAxis: l5 = true, crossAxis: c6 = false, limiter: f5 = { fn: (t4) => {
           let { x: e4, y: n5 } = t4;
           return { x: e4, y: n5 };
-        } } } = _a4, m5 = __objRest(_a4, ["mainAxis", "crossAxis", "limiter"]), g5 = { x: i5, y: o5 }, d5 = yield s3(r5, m5), p5 = n3(t3(a5)), h5 = O3(p5);
+        } } } = _a6, m5 = __objRest(_a6, ["mainAxis", "crossAxis", "limiter"]), g5 = { x: i5, y: o5 }, d5 = yield s3(r5, m5), p5 = n3(t3(a5)), h5 = O3(p5);
         let y5 = g5[p5], x5 = g5[h5];
         if (l5) {
           const t4 = "y" === p5 ? "bottom" : "right";
@@ -32360,7 +32684,7 @@
   var k3 = function(n5) {
     return void 0 === n5 && (n5 = {}), { name: "size", options: n5, fn(r5) {
       return __async(this, null, function* () {
-        const { placement: i5, rects: o5, platform: a5, elements: l5 } = r5, _a4 = n5, { apply: c6 } = _a4, u5 = __objRest(_a4, ["apply"]), m5 = yield s3(r5, u5), g5 = t3(i5), d5 = e2(i5);
+        const { placement: i5, rects: o5, platform: a5, elements: l5 } = r5, _a6 = n5, { apply: c6 } = _a6, u5 = __objRest(_a6, ["apply"]), m5 = yield s3(r5, u5), g5 = t3(i5), d5 = e2(i5);
         let p5, h5;
         "top" === g5 || "bottom" === g5 ? (p5 = g5, h5 = d5 === ((yield null == a5.isRTL ? void 0 : a5.isRTL(l5.floating)) ? "start" : "end") ? "left" : "right") : (h5 = g5, p5 = "end" === d5 ? "top" : "bottom");
         const y5 = f3(m5.left, 0), x5 = f3(m5.right, 0), w5 = f3(m5.top, 0), v5 = f3(m5.bottom, 0), b5 = { availableHeight: o5.floating.height - (["left", "right"].includes(i5) ? 2 * (0 !== w5 || 0 !== v5 ? w5 + v5 : f3(m5.top, m5.bottom)) : m5[p5]), availableWidth: o5.floating.width - (["top", "bottom"].includes(i5) ? 2 * (0 !== y5 || 0 !== x5 ? y5 + x5 : f3(m5.left, m5.right)) : m5[h5]) }, R5 = yield a5.getDimensions(l5.floating);
@@ -32824,7 +33148,7 @@
   };
   var $cf1ac5d9fe0e8206$var$ANCHOR_NAME = "PopperAnchor";
   var $cf1ac5d9fe0e8206$export$ecd4e1ccab6ed6d = /* @__PURE__ */ (0, import_react20.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopePopper, virtualRef } = _a3, anchorProps = __objRest(_a3, ["__scopePopper", "virtualRef"]);
+    const _a5 = props, { __scopePopper, virtualRef } = _a5, anchorProps = __objRest(_a5, ["__scopePopper", "virtualRef"]);
     const context = $cf1ac5d9fe0e8206$var$usePopperContext($cf1ac5d9fe0e8206$var$ANCHOR_NAME, __scopePopper);
     const ref = (0, import_react20.useRef)(null);
     const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, ref);
@@ -32843,7 +33167,7 @@
   });
   var $cf1ac5d9fe0e8206$export$bc4ae5855d3c4fc = /* @__PURE__ */ (0, import_react20.forwardRef)((props, forwardedRef) => {
     var _arrowSize$width, _arrowSize$height, _middlewareData$arrow, _middlewareData$arrow2, _middlewareData$arrow3, _middlewareData$hide, _middlewareData$trans, _middlewareData$trans2;
-    const _a3 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a3, contentProps = __objRest(_a3, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
+    const _a5 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a5, contentProps = __objRest(_a5, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
     const context = $cf1ac5d9fe0e8206$var$usePopperContext($cf1ac5d9fe0e8206$var$CONTENT_NAME, __scopePopper);
     const [content, setContent] = (0, import_react20.useState)(null);
     const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(
@@ -33073,7 +33397,7 @@
   var import_react_dom3 = __toESM(require_react_dom());
   var $f1701beae083dbae$export$602eac185826482c = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
     var _globalThis$document;
-    const _a3 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a3, portalProps = __objRest(_a3, ["container"]);
+    const _a5 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a5, portalProps = __objRest(_a5, ["container"]);
     return container ? /* @__PURE__ */ import_react_dom3.default.createPortal(/* @__PURE__ */ (0, import_react21.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends2({}, portalProps, {
       ref: forwardedRef
     })), container) : null;
@@ -33217,7 +33541,7 @@
     }))));
   });
   var $d7bdfb9eb0fdf311$var$RovingFocusGroupImpl = /* @__PURE__ */ (0, import_react23.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a3, groupProps = __objRest(_a3, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
+    const _a5 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a5, groupProps = __objRest(_a5, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
     const ref = (0, import_react23.useRef)(null);
     const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, ref);
     const direction = $f631663db3294ace$export$b39126d51d94e6f3(dir);
@@ -33315,7 +33639,7 @@
   });
   var $d7bdfb9eb0fdf311$var$ITEM_NAME = "RovingFocusGroupItem";
   var $d7bdfb9eb0fdf311$export$ab9df7c53fe8454 = /* @__PURE__ */ (0, import_react23.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a3, itemProps = __objRest(_a3, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
+    const _a5 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a5, itemProps = __objRest(_a5, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
     const autoId = $1746a345f3d73bb7$export$f680877a34711e37();
     const id = tabStopId || autoId;
     const context = $d7bdfb9eb0fdf311$var$useRovingFocusContext($d7bdfb9eb0fdf311$var$ITEM_NAME, __scopeRovingFocusGroup);
@@ -33731,8 +34055,8 @@
 
   // ../assets/node_modules/use-sidecar/dist/es2015/exports.js
   var React2 = __toESM(require_react());
-  var SideCar = function(_a3) {
-    var sideCar = _a3.sideCar, rest = __rest(_a3, ["sideCar"]);
+  var SideCar = function(_a5) {
+    var sideCar = _a5.sideCar, rest = __rest(_a5, ["sideCar"]);
     if (!sideCar) {
       throw new Error("Sidecar: please provide `sideCar` property to import the right car");
     }
@@ -33757,11 +34081,11 @@
   };
   var RemoveScroll = React3.forwardRef(function(props, parentRef) {
     var ref = React3.useRef(null);
-    var _a3 = React3.useState({
+    var _a5 = React3.useState({
       onScrollCapture: nothing,
       onWheelCapture: nothing,
       onTouchMoveCapture: nothing
-    }), callbacks = _a3[0], setCallbacks = _a3[1];
+    }), callbacks = _a5[0], setCallbacks = _a5[1];
     var forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b2 = props.as, Container2 = _b2 === void 0 ? "div" : _b2, rest = __rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noIsolation", "inert", "allowPinchZoom", "as"]);
     var SideCar2 = sideCar;
     var containerRef = useMergeRefs([ref, parentRef]);
@@ -33866,8 +34190,8 @@
   // ../assets/node_modules/react-style-singleton/dist/es2015/component.js
   var styleSingleton = function() {
     var useStyle = styleHookSingleton();
-    var Sheet = function(_a3) {
-      var styles = _a3.styles, dynamic = _a3.dynamic;
+    var Sheet = function(_a5) {
+      var styles = _a5.styles, dynamic = _a5.dynamic;
       useStyle(styles, dynamic);
       return null;
     };
@@ -33911,8 +34235,8 @@
 
   // ../assets/node_modules/react-remove-scroll-bar/dist/es2015/component.js
   var Style = styleSingleton();
-  var getStyles = function(_a3, allowRelative, gapMode, important) {
-    var left = _a3.left, top = _a3.top, right = _a3.right, gap = _a3.gap;
+  var getStyles = function(_a5, allowRelative, gapMode, important) {
+    var left = _a5.left, top = _a5.top, right = _a5.right, gap = _a5.gap;
     if (gapMode === void 0) {
       gapMode = "margin";
     }
@@ -33923,7 +34247,7 @@
     ].filter(Boolean).join(""), "\n  }\n  \n  .").concat(zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(zeroRightClassName, " .").concat(zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " .").concat(fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body {\n    ").concat(removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
   };
   var RemoveScrollBar = function(props) {
-    var noRelative = props.noRelative, noImportant = props.noImportant, _a3 = props.gapMode, gapMode = _a3 === void 0 ? "margin" : _a3;
+    var noRelative = props.noRelative, noImportant = props.noImportant, _a5 = props.gapMode, gapMode = _a5 === void 0 ? "margin" : _a5;
     var gap = React5.useMemo(function() {
       return getGapWidth(gapMode);
     }, [gapMode]);
@@ -33975,7 +34299,7 @@
       }
       var isScrollable = elementCouldBeScrolled(axis, current);
       if (isScrollable) {
-        var _a3 = getScrollVariables(axis, current), s5 = _a3[1], d5 = _a3[2];
+        var _a5 = getScrollVariables(axis, current), s5 = _a5[1], d5 = _a5[2];
         if (s5 > d5) {
           return true;
         }
@@ -33984,16 +34308,16 @@
     } while (current && current !== document.body);
     return false;
   };
-  var getVScrollVariables = function(_a3) {
-    var scrollTop = _a3.scrollTop, scrollHeight = _a3.scrollHeight, clientHeight = _a3.clientHeight;
+  var getVScrollVariables = function(_a5) {
+    var scrollTop = _a5.scrollTop, scrollHeight = _a5.scrollHeight, clientHeight = _a5.clientHeight;
     return [
       scrollTop,
       scrollHeight,
       clientHeight
     ];
   };
-  var getHScrollVariables = function(_a3) {
-    var scrollLeft = _a3.scrollLeft, scrollWidth = _a3.scrollWidth, clientWidth = _a3.clientWidth;
+  var getHScrollVariables = function(_a5) {
+    var scrollLeft = _a5.scrollLeft, scrollWidth = _a5.scrollWidth, clientWidth = _a5.clientWidth;
     return [
       scrollLeft,
       scrollWidth,
@@ -34019,7 +34343,7 @@
     var availableScroll = 0;
     var availableScrollTop = 0;
     do {
-      var _a3 = getScrollVariables(axis, target), position = _a3[0], scroll_1 = _a3[1], capacity = _a3[2];
+      var _a5 = getScrollVariables(axis, target), position = _a5[0], scroll_1 = _a5[1], capacity = _a5[2];
       var elementScroll = scroll_1 - capacity - directionFactor * position;
       if (position || elementScroll) {
         if (elementCouldBeScrolled(axis, target)) {
@@ -34302,7 +34626,7 @@
     }, children)));
   };
   var $6cc32821e9371a1c$export$9fa5ebd18bee4d43 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeMenu } = _a3, anchorProps = __objRest(_a3, ["__scopeMenu"]);
+    const _a5 = props, { __scopeMenu } = _a5, anchorProps = __objRest(_a5, ["__scopeMenu"]);
     const popperScope = $6cc32821e9371a1c$var$usePopperScope(__scopeMenu);
     return /* @__PURE__ */ (0, import_react25.createElement)($cf1ac5d9fe0e8206$export$b688253958b8dfe7, _extends2({}, popperScope, anchorProps, {
       ref: forwardedRef
@@ -34329,7 +34653,7 @@
   var [$6cc32821e9371a1c$var$MenuContentProvider, $6cc32821e9371a1c$var$useMenuContentContext] = $6cc32821e9371a1c$var$createMenuContext($6cc32821e9371a1c$var$CONTENT_NAME);
   var $6cc32821e9371a1c$export$479f0f2f71193efe = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
     const portalContext = $6cc32821e9371a1c$var$usePortalContext($6cc32821e9371a1c$var$CONTENT_NAME, props.__scopeMenu);
-    const _a3 = props, { forceMount = portalContext.forceMount } = _a3, contentProps = __objRest(_a3, ["forceMount"]);
+    const _a5 = props, { forceMount = portalContext.forceMount } = _a5, contentProps = __objRest(_a5, ["forceMount"]);
     const context = $6cc32821e9371a1c$var$useMenuContext($6cc32821e9371a1c$var$CONTENT_NAME, props.__scopeMenu);
     const rootContext = $6cc32821e9371a1c$var$useMenuRootContext($6cc32821e9371a1c$var$CONTENT_NAME, props.__scopeMenu);
     return /* @__PURE__ */ (0, import_react25.createElement)($6cc32821e9371a1c$var$Collection.Provider, {
@@ -34379,7 +34703,7 @@
     }));
   });
   var $6cc32821e9371a1c$var$MenuContentImpl = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll } = _a3, contentProps = __objRest(_a3, ["__scopeMenu", "loop", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEntryFocus", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss", "disableOutsideScroll"]);
+    const _a5 = props, { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll } = _a5, contentProps = __objRest(_a5, ["__scopeMenu", "loop", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEntryFocus", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss", "disableOutsideScroll"]);
     const context = $6cc32821e9371a1c$var$useMenuContext($6cc32821e9371a1c$var$CONTENT_NAME, __scopeMenu);
     const rootContext = $6cc32821e9371a1c$var$useMenuRootContext($6cc32821e9371a1c$var$CONTENT_NAME, __scopeMenu);
     const popperScope = $6cc32821e9371a1c$var$usePopperScope(__scopeMenu);
@@ -34552,7 +34876,7 @@
     })))))));
   });
   var $6cc32821e9371a1c$export$dd37bec0e8a99143 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeMenu } = _a3, labelProps = __objRest(_a3, ["__scopeMenu"]);
+    const _a5 = props, { __scopeMenu } = _a5, labelProps = __objRest(_a5, ["__scopeMenu"]);
     return /* @__PURE__ */ (0, import_react25.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends2({}, labelProps, {
       ref: forwardedRef
     }));
@@ -34560,7 +34884,7 @@
   var $6cc32821e9371a1c$var$ITEM_NAME = "MenuItem";
   var $6cc32821e9371a1c$var$ITEM_SELECT = "menu.itemSelect";
   var $6cc32821e9371a1c$export$2ce376c2cc3355c8 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { disabled = false, onSelect } = _a3, itemProps = __objRest(_a3, ["disabled", "onSelect"]);
+    const _a5 = props, { disabled = false, onSelect } = _a5, itemProps = __objRest(_a5, ["disabled", "onSelect"]);
     const ref = (0, import_react25.useRef)(null);
     const rootContext = $6cc32821e9371a1c$var$useMenuRootContext($6cc32821e9371a1c$var$ITEM_NAME, props.__scopeMenu);
     const contentContext = $6cc32821e9371a1c$var$useMenuContentContext($6cc32821e9371a1c$var$ITEM_NAME, props.__scopeMenu);
@@ -34613,7 +34937,7 @@
     }));
   });
   var $6cc32821e9371a1c$var$MenuItemImpl = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeMenu, disabled = false, textValue } = _a3, itemProps = __objRest(_a3, ["__scopeMenu", "disabled", "textValue"]);
+    const _a5 = props, { __scopeMenu, disabled = false, textValue } = _a5, itemProps = __objRest(_a5, ["__scopeMenu", "disabled", "textValue"]);
     const contentContext = $6cc32821e9371a1c$var$useMenuContentContext($6cc32821e9371a1c$var$ITEM_NAME, __scopeMenu);
     const rovingFocusGroupScope = $6cc32821e9371a1c$var$useRovingFocusGroupScope(__scopeMenu);
     const ref = (0, import_react25.useRef)(null);
@@ -34679,7 +35003,7 @@
     checked: false
   });
   var $6cc32821e9371a1c$export$1cec7dcdd713e220 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeMenu } = _a3, separatorProps = __objRest(_a3, ["__scopeMenu"]);
+    const _a5 = props, { __scopeMenu } = _a5, separatorProps = __objRest(_a5, ["__scopeMenu"]);
     return /* @__PURE__ */ (0, import_react25.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends2({
       role: "separator",
       "aria-orientation": "horizontal"
@@ -34799,7 +35123,7 @@
   };
   var $d08ef79370b62062$var$TRIGGER_NAME = "DropdownMenuTrigger";
   var $d08ef79370b62062$export$d2469213b3befba9 = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeDropdownMenu, disabled = false } = _a3, triggerProps = __objRest(_a3, ["__scopeDropdownMenu", "disabled"]);
+    const _a5 = props, { __scopeDropdownMenu, disabled = false } = _a5, triggerProps = __objRest(_a5, ["__scopeDropdownMenu", "disabled"]);
     const context = $d08ef79370b62062$var$useDropdownMenuContext($d08ef79370b62062$var$TRIGGER_NAME, __scopeDropdownMenu);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$b688253958b8dfe7, _extends2({
@@ -34842,13 +35166,13 @@
     })));
   });
   var $d08ef79370b62062$export$cd369b4d4d54efc9 = (props) => {
-    const _a3 = props, { __scopeDropdownMenu } = _a3, portalProps = __objRest(_a3, ["__scopeDropdownMenu"]);
+    const _a5 = props, { __scopeDropdownMenu } = _a5, portalProps = __objRest(_a5, ["__scopeDropdownMenu"]);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$602eac185826482c, _extends2({}, menuScope, portalProps));
   };
   var $d08ef79370b62062$var$CONTENT_NAME = "DropdownMenuContent";
   var $d08ef79370b62062$export$6e76d93a37c01248 = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeDropdownMenu } = _a3, contentProps = __objRest(_a3, ["__scopeDropdownMenu"]);
+    const _a5 = props, { __scopeDropdownMenu } = _a5, contentProps = __objRest(_a5, ["__scopeDropdownMenu"]);
     const context = $d08ef79370b62062$var$useDropdownMenuContext($d08ef79370b62062$var$CONTENT_NAME, __scopeDropdownMenu);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     const hasInteractedOutsideRef = (0, import_react26.useRef)(false);
@@ -34878,21 +35202,21 @@
     }));
   });
   var $d08ef79370b62062$export$76e48c5b57f24495 = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeDropdownMenu } = _a3, labelProps = __objRest(_a3, ["__scopeDropdownMenu"]);
+    const _a5 = props, { __scopeDropdownMenu } = _a5, labelProps = __objRest(_a5, ["__scopeDropdownMenu"]);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$b04be29aa201d4f5, _extends2({}, menuScope, labelProps, {
       ref: forwardedRef
     }));
   });
   var $d08ef79370b62062$export$ed97964d1871885d = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeDropdownMenu } = _a3, itemProps = __objRest(_a3, ["__scopeDropdownMenu"]);
+    const _a5 = props, { __scopeDropdownMenu } = _a5, itemProps = __objRest(_a5, ["__scopeDropdownMenu"]);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$6d08773d2e66f8f2, _extends2({}, menuScope, itemProps, {
       ref: forwardedRef
     }));
   });
   var $d08ef79370b62062$export$da160178fd3bc7e9 = /* @__PURE__ */ (0, import_react26.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeDropdownMenu } = _a3, separatorProps = __objRest(_a3, ["__scopeDropdownMenu"]);
+    const _a5 = props, { __scopeDropdownMenu } = _a5, separatorProps = __objRest(_a5, ["__scopeDropdownMenu"]);
     const menuScope = $d08ef79370b62062$var$useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ (0, import_react26.createElement)($6cc32821e9371a1c$export$1ff3c3f08ae963c0, _extends2({}, menuScope, separatorProps, {
       ref: forwardedRef
@@ -34922,11 +35246,11 @@
   }
 
   // ../assets/js/components/Kbd/index.tsx
-  var import_jsx_runtime43 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime50 = __toESM(require_jsx_runtime());
   function Kbd(props) {
-    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Keys, { children: props.keys.map((s5, ind) => /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(import_jsx_runtime43.Fragment, { children: [
-      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Sep, { children: "+" }, "step" + ind) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Key, { children: keySymbol(s5) }, ind)
+    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Keys, { children: props.keys.map((s5, ind) => /* @__PURE__ */ (0, import_jsx_runtime50.jsxs)(import_jsx_runtime50.Fragment, { children: [
+      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Sep, { children: "+" }, "step" + ind) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Key, { children: keySymbol(s5) }, ind)
     ] })) }) : null;
   }
   var Keys = styled("div", {
@@ -34976,7 +35300,7 @@
   var [$6be4966fd9bbc698$var$createSwitchContext, $6be4966fd9bbc698$export$cf7f5f17f69cbd43] = $c512c27ab02ef895$export$50c7b4e9d9f19c1($6be4966fd9bbc698$var$SWITCH_NAME);
   var [$6be4966fd9bbc698$var$SwitchProvider, $6be4966fd9bbc698$var$useSwitchContext] = $6be4966fd9bbc698$var$createSwitchContext($6be4966fd9bbc698$var$SWITCH_NAME);
   var $6be4966fd9bbc698$export$b5d5cf8927ab7262 = /* @__PURE__ */ (0, import_react28.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeSwitch, name: name3, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange } = _a3, switchProps = __objRest(_a3, ["__scopeSwitch", "name", "checked", "defaultChecked", "required", "disabled", "value", "onCheckedChange"]);
+    const _a5 = props, { __scopeSwitch, name: name3, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange } = _a5, switchProps = __objRest(_a5, ["__scopeSwitch", "name", "checked", "defaultChecked", "required", "disabled", "value", "onCheckedChange"]);
     const [button, setButton] = (0, import_react28.useState)(null);
     const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(
       forwardedRef,
@@ -35029,7 +35353,7 @@
   });
   var $6be4966fd9bbc698$var$THUMB_NAME = "SwitchThumb";
   var $6be4966fd9bbc698$export$4d07bf653ea69106 = /* @__PURE__ */ (0, import_react28.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { __scopeSwitch } = _a3, thumbProps = __objRest(_a3, ["__scopeSwitch"]);
+    const _a5 = props, { __scopeSwitch } = _a5, thumbProps = __objRest(_a5, ["__scopeSwitch"]);
     const context = $6be4966fd9bbc698$var$useSwitchContext($6be4966fd9bbc698$var$THUMB_NAME, __scopeSwitch);
     return /* @__PURE__ */ (0, import_react28.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.span, _extends2({
       "data-state": $6be4966fd9bbc698$var$getState(context.checked),
@@ -35039,7 +35363,7 @@
     }));
   });
   var $6be4966fd9bbc698$var$BubbleInput = (props) => {
-    const _a3 = props, { control, checked, bubbles = true } = _a3, inputProps = __objRest(_a3, ["control", "checked", "bubbles"]);
+    const _a5 = props, { control, checked, bubbles = true } = _a5, inputProps = __objRest(_a5, ["control", "checked", "bubbles"]);
     const ref = (0, import_react28.useRef)(null);
     const prevChecked = $010c2913dbd2fe3d$export$5cae361ad82dce8b(checked);
     const controlSize = $db6c3485150b8e66$export$1ab7ae714698c4b8(control);
@@ -35082,11 +35406,11 @@
   var $6be4966fd9bbc698$export$6521433ed15a34db = $6be4966fd9bbc698$export$4d07bf653ea69106;
 
   // ../assets/js/components/Switch/index.tsx
-  var import_jsx_runtime44 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime51 = __toESM(require_jsx_runtime());
   function Switch(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(StyledSwitch, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(Label, { htmlFor: props.id, children: props.label }),
-      /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(StyledSwitch, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(Label, { htmlFor: props.id, children: props.label }),
+      /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
         StyledRoot,
         {
           defaultChecked: props.checked,
@@ -35094,7 +35418,7 @@
           onCheckedChange: (checked) => {
             props.onCheckedChange(checked);
           },
-          children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(StyledThumb, {})
+          children: /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(StyledThumb, {})
         }
       )
     ] });
@@ -35141,27 +35465,27 @@
   var Label = styled("label", {});
 
   // ../assets/js/components/DropdownMenu/index.tsx
-  var import_jsx_runtime45 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime52 = __toESM(require_jsx_runtime());
   function DropdownMenu(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)($d08ef79370b62062$export$be92b6f5f03c0fe9, { onOpenChange: props.onOpenChange, open: props.open, children: props.children });
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)($d08ef79370b62062$export$be92b6f5f03c0fe9, { onOpenChange: props.onOpenChange, open: props.open, children: props.children });
   }
   function DropdownContent(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)($d08ef79370b62062$export$602eac185826482c, { children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(StyledDropdownContent, { side: props.side || "top", sideOffset: 5, children: props.children }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)($d08ef79370b62062$export$602eac185826482c, { children: /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(StyledDropdownContent, { side: props.side || "top", sideOffset: 5, children: props.children }) });
   }
   function DropdownItem(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(StyledItem, { onClick: props.onClick, children: [
-      props.icon ? /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(StyledIndicator, { children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(Icon, { name: props.icon }) }) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(ItemLabel, { children: props.label }),
-      props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(Kbd, { keys: props.kbd, sep: true }) : null
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsxs)(StyledItem, { onClick: props.onClick, children: [
+      props.icon ? /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(StyledIndicator, { children: /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(Icon_default, { name: props.icon }) }) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(ItemLabel, { children: props.label }),
+      props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(Kbd, { keys: props.kbd, sep: true }) : null
     ] });
   }
   function DropdownTrigger(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)($d08ef79370b62062$export$41fb9f06171c75f4, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("div", { children: props.children }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)($d08ef79370b62062$export$41fb9f06171c75f4, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_runtime52.jsx)("div", { children: props.children }) });
   }
   function SwitchItem(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(StyledSwitchItem, { children: [
-      props.icon ? /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(StyledIndicator, { children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(Icon, { name: props.icon }) }) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsxs)(StyledSwitchItem, { children: [
+      props.icon ? /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(StyledIndicator, { children: /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(Icon_default, { name: props.icon }) }) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(
         Switch,
         {
           id: props.id,
@@ -35265,21 +35589,13 @@
     Switch: SwitchItem
   };
 
-  // ../assets/js/lib/string.ts
-  function titleCase(text) {
-    return text.slice(0, 1).toUpperCase() + text.replace(/-/g, " ").slice(1);
-  }
-  function firstName(fullName) {
-    return fullName.split(" ")[0];
-  }
-
   // ../assets/node_modules/@radix-ui/react-toggle-group/dist/index.module.js
   var import_react30 = __toESM(require_react());
 
   // ../assets/node_modules/@radix-ui/react-toggle/dist/index.module.js
   var import_react29 = __toESM(require_react());
   var $b3bbe2732c13b576$export$bea8ebba691c5813 = /* @__PURE__ */ (0, import_react29.forwardRef)((props, forwardedRef) => {
-    const _a3 = props, { pressed: pressedProp, defaultPressed = false, onPressedChange } = _a3, buttonProps = __objRest(_a3, ["pressed", "defaultPressed", "onPressedChange"]);
+    const _a5 = props, { pressed: pressedProp, defaultPressed = false, onPressedChange } = _a5, buttonProps = __objRest(_a5, ["pressed", "defaultPressed", "onPressedChange"]);
     const [pressed = false, setPressed] = $71cd76cc60e0454e$export$6f32135080cb4c3({
       prop: pressedProp,
       onChange: onPressedChange,
@@ -35306,7 +35622,7 @@
   ]);
   var $6c1fd9e6a8969628$var$useRovingFocusGroupScope = $d7bdfb9eb0fdf311$export$c7109489551a4f4();
   var $6c1fd9e6a8969628$export$af3ec21f6cfb5e30 = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a3 = props, { type } = _a3, toggleGroupProps = __objRest(_a3, ["type"]);
+    const _a5 = props, { type } = _a5, toggleGroupProps = __objRest(_a5, ["type"]);
     if (type === "single") {
       const singleProps = toggleGroupProps;
       return /* @__PURE__ */ import_react30.default.createElement($6c1fd9e6a8969628$var$ToggleGroupImplSingle, _extends2({}, singleProps, {
@@ -35323,8 +35639,8 @@
   });
   var [$6c1fd9e6a8969628$var$ToggleGroupValueProvider, $6c1fd9e6a8969628$var$useToggleGroupValueContext] = $6c1fd9e6a8969628$var$createToggleGroupContext($6c1fd9e6a8969628$var$TOGGLE_GROUP_NAME);
   var $6c1fd9e6a8969628$var$ToggleGroupImplSingle = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a3 = props, { value: valueProp, defaultValue, onValueChange = () => {
-    } } = _a3, toggleGroupSingleProps = __objRest(_a3, ["value", "defaultValue", "onValueChange"]);
+    const _a5 = props, { value: valueProp, defaultValue, onValueChange = () => {
+    } } = _a5, toggleGroupSingleProps = __objRest(_a5, ["value", "defaultValue", "onValueChange"]);
     const [value, setValue] = $71cd76cc60e0454e$export$6f32135080cb4c3({
       prop: valueProp,
       defaultProp: defaultValue,
@@ -35348,8 +35664,8 @@
     })));
   });
   var $6c1fd9e6a8969628$var$ToggleGroupImplMultiple = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a3 = props, { value: valueProp, defaultValue, onValueChange = () => {
-    } } = _a3, toggleGroupMultipleProps = __objRest(_a3, ["value", "defaultValue", "onValueChange"]);
+    const _a5 = props, { value: valueProp, defaultValue, onValueChange = () => {
+    } } = _a5, toggleGroupMultipleProps = __objRest(_a5, ["value", "defaultValue", "onValueChange"]);
     const [value1 = [], setValue] = $71cd76cc60e0454e$export$6f32135080cb4c3({
       prop: valueProp,
       defaultProp: defaultValue,
@@ -35388,7 +35704,7 @@
   });
   var [$6c1fd9e6a8969628$var$ToggleGroupContext, $6c1fd9e6a8969628$var$useToggleGroupContext] = $6c1fd9e6a8969628$var$createToggleGroupContext($6c1fd9e6a8969628$var$TOGGLE_GROUP_NAME);
   var $6c1fd9e6a8969628$var$ToggleGroupImpl = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a3 = props, { __scopeToggleGroup, disabled = false, rovingFocus = true, orientation, dir, loop = true } = _a3, toggleGroupProps = __objRest(_a3, ["__scopeToggleGroup", "disabled", "rovingFocus", "orientation", "dir", "loop"]);
+    const _a5 = props, { __scopeToggleGroup, disabled = false, rovingFocus = true, orientation, dir, loop = true } = _a5, toggleGroupProps = __objRest(_a5, ["__scopeToggleGroup", "disabled", "rovingFocus", "orientation", "dir", "loop"]);
     const rovingFocusGroupScope = $6c1fd9e6a8969628$var$useRovingFocusGroupScope(__scopeToggleGroup);
     const direction = $f631663db3294ace$export$b39126d51d94e6f3(dir);
     const commonProps = __spreadValues({
@@ -35436,7 +35752,7 @@
     }));
   });
   var $6c1fd9e6a8969628$var$ToggleGroupItemImpl = /* @__PURE__ */ import_react30.default.forwardRef((props, forwardedRef) => {
-    const _a3 = props, { __scopeToggleGroup, value } = _a3, itemProps = __objRest(_a3, ["__scopeToggleGroup", "value"]);
+    const _a5 = props, { __scopeToggleGroup, value } = _a5, itemProps = __objRest(_a5, ["__scopeToggleGroup", "value"]);
     const valueContext = $6c1fd9e6a8969628$var$useToggleGroupValueContext($6c1fd9e6a8969628$var$ITEM_NAME, __scopeToggleGroup);
     const singleProps = {
       role: "radio",
@@ -35458,9 +35774,9 @@
   var $6c1fd9e6a8969628$export$6d08773d2e66f8f2 = $6c1fd9e6a8969628$export$b453109e13abe10b;
 
   // ../assets/js/components/ToggleGroup/index.tsx
-  var import_jsx_runtime46 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime53 = __toESM(require_jsx_runtime());
   function ToggleRoot(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
       StyledRoot2,
       {
         type: "single",
@@ -35474,10 +35790,10 @@
   function ToggleItem(props) {
     return (
       // @ts-ignore
-      /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(StyledItem2, { value: props.value, ref: props.itemRef, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime53.jsxs)(StyledItem2, { value: props.value, ref: props.itemRef, children: [
         props.children ? props.children : null,
-        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(Icon, { name: props.icon }) : null,
-        props.label ? /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(Label2, { children: props.label }) : null
+        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(Icon_default, { name: props.icon }) : null,
+        props.label ? /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(Label2, { children: props.label }) : null
       ] })
     );
   }
@@ -35648,216 +35964,8 @@
   ];
 
   // ../assets/js/features/ElectronTrayWindow/index.tsx
-  var import_jsx_runtime47 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime54 = __toESM(require_jsx_runtime());
   var log6 = logger("electron-tray-window");
-  var fakeState = `{
-    "state": {
-        "entities": {
-            "users": {
-                "9": {
-                    "id": "9",
-                    "email": "azer@roadbeats.com",
-                    "name": "Azer Koculu",
-                    "photoUrl": "https://lh3.googleusercontent.com/a/AEdFTp4Kha4u3O8XfD0xjN8mU8RIZobSpzrUtB3x-ejcww=s96-c"
-                },
-                "10": {
-                    "id": "10",
-                    "email": "herzamanharman@gmail.com",
-                    "name": "Nova Togatorop",
-                    "photoUrl": "https://lh3.googleusercontent.com/a/AEdFTp42NzIXu4OxA0R4hzGvGbAT2rn5UW3XyBReRFbZ=s96-c"
-                }
-            },
-            "memberships": {
-                "3": {
-                    "id": "3",
-                    "inserted_at": "2023-01-29T13:57:22",
-                    "is_admin": true,
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "4": {
-                    "id": "4",
-                    "inserted_at": "2023-01-31T08:26:58",
-                    "is_admin": false,
-                    "user_id": "10",
-                    "workspace_id": "3"
-                }
-            },
-            "workspaces": {
-                "3": {
-                    "domain": "testing",
-                    "id": "3",
-                    "is_active": true,
-                    "logo_url": "https://cldup.com/H5Y6L9jt3v.png",
-                    "name": "Team Sway",
-                    "slug": "testing"
-                }
-            },
-            "rooms": {
-                "69": {
-                    "id": "69",
-                    "inserted_at": "2023-01-30T12:45:11",
-                    "is_active": false,
-                    "is_default": true,
-                    "name": "watercooler",
-                    "slug": "watercooler",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "70": {
-                    "id": "70",
-                    "inserted_at": "2023-01-30T22:23:15",
-                    "is_active": true,
-                    "is_default": false,
-                    "name": "tech",
-                    "slug": "tech",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "71": {
-                    "id": "71",
-                    "inserted_at": "2023-01-30T22:24:57",
-                    "is_active": true,
-                    "is_default": false,
-                    "name": "design",
-                    "slug": "design",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "72": {
-                    "id": "72",
-                    "inserted_at": "2023-01-30T22:26:22",
-                    "is_active": false,
-                    "is_default": false,
-                    "name": "hey",
-                    "slug": "hey",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "73": {
-                    "id": "73",
-                    "inserted_at": "2023-01-31T14:34:05",
-                    "is_active": true,
-                    "is_default": false,
-                    "name": "watercooler",
-                    "slug": "spiral",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "74": {
-                    "id": "74",
-                    "inserted_at": "2023-01-31T16:24:49",
-                    "is_active": false,
-                    "is_default": false,
-                    "name": "ben",
-                    "slug": "ben",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "75": {
-                    "id": "75",
-                    "inserted_at": "2023-01-31T16:25:31",
-                    "is_active": false,
-                    "is_default": false,
-                    "name": "yolo",
-                    "slug": "yolo",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "76": {
-                    "id": "76",
-                    "inserted_at": "2023-01-31T16:28:04",
-                    "is_active": false,
-                    "is_default": false,
-                    "name": "sade",
-                    "slug": "sade",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "77": {
-                    "id": "77",
-                    "inserted_at": "2023-01-31T16:38:37",
-                    "is_active": false,
-                    "is_default": false,
-                    "name": "afrrica",
-                    "slug": "afrrica",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "78": {
-                    "id": "78",
-                    "inserted_at": "2023-01-31T17:46:41",
-                    "is_active": false,
-                    "is_default": false,
-                    "name": "bir",
-                    "slug": "bir",
-                    "user_id": "10",
-                    "workspace_id": "3"
-                },
-                "79": {
-                    "id": "79",
-                    "inserted_at": "2023-02-08T12:48:57",
-                    "is_active": true,
-                    "is_default": false,
-                    "name": "pomodoro",
-                    "slug": "pomodoro",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "80": {
-                    "id": "80",
-                    "inserted_at": "2023-02-08T12:49:20",
-                    "is_active": true,
-                    "is_default": false,
-                    "name": "pair-programming",
-                    "slug": "pair-programming",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                },
-                "81": {
-                    "id": "81",
-                    "inserted_at": "2023-02-08T12:49:26",
-                    "is_active": true,
-                    "is_default": false,
-                    "name": "office-hours",
-                    "slug": "office-hours",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                }
-            },
-            "statuses": {
-                "318": {
-                    "camera_on": false,
-                    "id": "318",
-                    "inserted_at": "2023-02-14T12:14:55",
-                    "message": null,
-                    "mic_on": false,
-                    "room_id": "71",
-                    "speaker_on": true,
-                    "status": "zen",
-                    "user_id": "9",
-                    "workspace_id": "3"
-                }
-            },
-            "daily_participants": {}
-        },
-        "localUserId": "9",
-        "focusedRoomId": "71",
-        "focusedRoomMode": "focus",
-        "otherUsers": [],
-        "userStatuses": {
-            "9": "318"
-        },
-        "onlineUsers": [
-            "9"
-        ],
-        "usersByRooms": {
-            "71": [
-                "9"
-            ]
-        }
-    }
-}`;
   function ElectronTrayWindow(props) {
     globalStyles();
     const inputRef = (0, import_react31.useRef)(null);
@@ -35931,10 +36039,9 @@
       });
     }, [emojiQuery]);
     (0, import_react31.useEffect)(() => {
-      var _a3;
+      var _a5;
       log6.info("Listen tray state");
-      (_a3 = ipcRenderer) == null ? void 0 : _a3.on("tray-window", onMessage);
-      onMessage(null, fakeState);
+      (_a5 = ipcRenderer) == null ? void 0 : _a5.on("tray-window", onMessage);
       log6.info("Fetching emoji data");
       fetch("https://cdn.jsdelivr.net/npm/@emoji-mart/data").then((resp) => __async(this, null, function* () {
         $7adb23b0109cc36a$export$2cd8252107eb640b({ data: yield resp.json() });
@@ -35955,36 +36062,36 @@
         log6.info("Updated tray window state", parsed, entities, localUserId);
       }
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Container, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Room2, { onClick: showMainWindow, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(RoomStatusIcon, { mode: focusedRoomMode }),
-        /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(RoomName, { children: room == null ? void 0 : room.name })
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(Container, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(Room2, { onClick: showMainWindow, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(RoomStatusIcon, { mode: focusedRoomMode }),
+        /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(RoomName, { children: room == null ? void 0 : room.name })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(UserList, { children: userList.map((u5) => {
-        var _a3, _b2, _c, _d;
-        return /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(User, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(UserList, { children: userList.map((u5) => {
+        var _a5, _b2, _c, _d;
+        return /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(User, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
             Avatar,
             {
-              src: ((_a3 = u5.user) == null ? void 0 : _a3.photoUrl) || "",
+              src: ((_a5 = u5.user) == null ? void 0 : _a5.profile_photo_url) || "",
               fallback: (_b2 = u5.user) == null ? void 0 : _b2.name.slice(0),
               alt: (_c = u5.user) == null ? void 0 : _c.name
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(UserStatusIcon, { status: userStatus(u5.isOnline, u5.status) }),
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(UserInfo, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Username, { children: (_d = u5.user) == null ? void 0 : _d.name }),
-            /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Status, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(LocalTime, { children: u5.localTime }),
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(UserStatusIcon, { status: userStatus(u5.isOnline, u5.status) }),
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(UserInfo, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Username, { children: (_d = u5.user) == null ? void 0 : _d.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(Status, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(LocalTime, { children: u5.localTime }),
               " ",
               userStatusLabel(u5.isOnline, u5.status)
             ] })
           ] })
         ] });
       }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Dock, { open: isDropdownOpen, children: /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Dropdown.Menu, { onOpenChange: handleDropdownState, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Dropdown.Trigger, { children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(StatusButton, { children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Icon, { name: "emoji" }) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Dock, { open: isDropdownOpen, children: /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(Dropdown.Menu, { onOpenChange: handleDropdownState, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Dropdown.Trigger, { children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(StatusButton, { children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Icon_default, { name: "emoji" }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
           MessageInput,
           {
             type: "text",
@@ -35994,24 +36101,24 @@
             onBlur: () => setIsFocusOnMessageInput(false)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(StatusDropdown, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Dropdown.Label, { children: "Set your flow" }),
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ToggleGroup.Root, { value: "online" /* Online */, children: PresenceModes.map((m5) => /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(StatusDropdown, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Dropdown.Label, { children: "Set your flow" }),
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(ToggleGroup.Root, { value: "online" /* Online */, children: PresenceModes.map((m5) => /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(
             ToggleGroup.Item,
             {
               "data-mode": m5.status,
               value: m5.status,
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ModeIcon, { mode: m5.status }),
-                /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ToggleGroup.Label, { children: titleCase(m5.status) })
+                /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(ModeIcon, { mode: m5.status }),
+                /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(ToggleGroup.Label, { children: titleCase(m5.status) })
               ]
             },
             m5.status
           )) }),
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Separator, {}),
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(SearchField, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Icon, { name: "search" }),
-            /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Separator, {}),
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(SearchField, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Icon_default, { name: "search" }),
+            /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
               EmojiSearchInput,
               {
                 value: emojiQuery,
@@ -36022,7 +36129,7 @@
               }
             )
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(EmojiPicker, { children: emojiResults.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(NoEmoji, { children: "No emojis found" }) : emojiResults.slice(0, 10).map((e3, ind) => /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(EmojiPicker, { children: emojiResults.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(NoEmoji, { children: "No emojis found" }) : emojiResults.slice(0, 10).map((e3, ind) => /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
             Emoji,
             {
               role: "img",
@@ -36374,7 +36481,7 @@
       color: "$electronTrayTextFieldPlaceholder"
     }
   });
-  import_react_dom5.default.render(/* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ElectronTrayWindow, {}), document.getElementById("root"));
+  import_react_dom5.default.render(/* @__PURE__ */ (0, import_jsx_runtime54.jsx)(ElectronTrayWindow, {}), document.getElementById("root"));
 })();
 /*! Bundled license information:
 

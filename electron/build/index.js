@@ -142,7 +142,8 @@ function createMainWindow() {
     icon: "file:///" + __dirname + "/../priv/static/images/logo.ico",
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      partition: "persist:sway"
     }
   });
   win.setMinimumSize(800, 600);

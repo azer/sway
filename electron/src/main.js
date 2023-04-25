@@ -151,6 +151,7 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      partition: "persist:sway",
     },
   });
 
