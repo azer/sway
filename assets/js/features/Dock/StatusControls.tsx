@@ -7,16 +7,16 @@ import { PresenceModes, PresenceStatus } from 'state/presence'
 import { DockFocus, DockFocusRegion } from './focus'
 import { EmojiObject } from 'features/Emoji/use-emoji-search'
 import { Status, User } from 'state/entities'
-import { FocusRegion, StyledFocusRegion } from 'components/FocusRegion'
+import { FocusRegion } from 'components/FocusRegion'
 import { Tooltip } from 'components/Tooltip'
 import { logger } from 'lib/log'
 import * as Popover from '@radix-ui/react-popover'
-import { DockSection } from './CallControls'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { StatusCircle, StatusIcon } from './StatusIcon'
+import { FocusItem } from 'components/FocusItem/FocusItem'
 
 interface Props {
-  localStatus: Status
+  localStatus?: Status
   localUser?: User
   message: string
   setMessage: (m: string) => void
@@ -34,6 +34,8 @@ interface Props {
   isDropdownOpen: boolean
   setDropdownOpen: (o: boolean) => void
   setFocusAway: () => void
+  reverseOrder?: boolean
+  tray?: boolean
 }
 
 const log = logger('dock/status-controls')
@@ -94,10 +96,13 @@ export function StatusControls(props: Props) {
   useEffect(() => {
     if (!props.isDropdownOpen) return
 
-    if (props.emojiResults.length > 0) {
+    if (
+      props.focus?.region === DockFocusRegion.EmojiSearch &&
+      props.emojiResults.length > 0
+    ) {
       log.info('Focus on first emoji')
       props.setFocusedEmojiId(props.emojiResults[0].id)
-    } else {
+    } else if (props.emojiResults.length === 0) {
       log.info('Clean up emoji focus')
       props.setFocusedEmojiId(undefined)
     }
@@ -164,19 +169,19 @@ export function StatusControls(props: Props) {
       if (props.isDropdownOpen) {
         props.setDropdownOpen(false)
       } else {
-        log.info('esc')
         props.setFocusAway()
       }
     },
     {
       enabled: !!focus,
       enableOnFormTags: true,
+      preventDefault: true,
     },
     [props.isDropdownOpen]
   )
 
   return (
-    <Container>
+    <StatusControlsRoot>
       <Popover.Root
         open={props.isDropdownOpen}
         onOpenChange={props.setDropdownOpen}
@@ -185,15 +190,27 @@ export function StatusControls(props: Props) {
           regionId={DockFocusRegion.Message}
           focusSwitcher={props.setFocusRegion}
           regionRef={triggerRef}
+          onClick={() => {
+            if (
+              props.tray &&
+              props.focus?.region === DockFocusRegion.Message &&
+              !props.isDropdownOpen
+            ) {
+              props.setDropdownOpen(true)
+            }
+          }}
         >
-          <StyledAnchor />
+          <StyledAnchor reverse={props.reverseOrder} />
           <MessageSection
-            focused={props.focus?.region === DockFocusRegion.Message}
+            tray={props.tray}
+            focused={
+              props.tray && props.focus?.region === DockFocusRegion.Message
+            }
           >
             <Tooltip content="Set emoji & flow">
               <Popover.Trigger asChild>
                 <CurrentStatusIcon>
-                  {props.localStatus.emoji ? (
+                  {props.localStatus?.emoji ? (
                     <StatusIcon status={props.localStatus} />
                   ) : (
                     <Icon name="emoji" />
@@ -217,23 +234,18 @@ export function StatusControls(props: Props) {
           <Popover.Content
             onFocusOutside={handleFocusOutside}
             onPointerDownOutside={handlePointerDownOutside}
+            side={props.reverseOrder ? 'top' : 'bottom'}
             asChild
           >
-            <ControlMenu>
+            <ControlMenu tray={props.tray} reverse={props.reverseOrder}>
               <FocusRegion
                 regionId={DockFocusRegion.EmojiSearch}
                 focusSwitcher={props.setFocusRegion}
               >
                 <DockSection
                   focused={props.focus?.region === DockFocusRegion.EmojiSearch}
+                  nolabel
                 >
-                  <Label
-                    focused={
-                      props.focus?.region === DockFocusRegion.EmojiSearch
-                    }
-                  >
-                    Emoji
-                  </Label>
                   <SearchField>
                     <Icon name="search" />
                     <EmojiSearchInput
@@ -307,7 +319,7 @@ export function StatusControls(props: Props) {
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>
-    </Container>
+    </StatusControlsRoot>
   )
 
   function handleFocusOutside(event: Event) {
@@ -341,9 +353,27 @@ export function StatusControls(props: Props) {
   }
 }
 
-const Container = styled('div', {
-  vcenter: true,
+export const DockSection = styled(FocusItem, {
+  width: '100%',
+  height: '100%',
+  padding: '8px 8px 8px 12px',
+  variants: {
+    focused: {
+      true: {
+        background: '$dockFocusSectionBg',
+      },
+    },
+    nolabel: {
+      true: {
+        paddingTop: '16px',
+      },
+    },
+  },
+})
 
+export const StatusControlsRoot = styled('div', {
+  vcenter: true,
+  width: '100%',
   [`& ${DockSection}`]: {
     padding: '8px 8px 8px 5.5px',
     borderTop: '1px solid rgba(255, 255, 255, 0.025)',
@@ -356,21 +386,35 @@ export const MessageSection = styled(DockSection, {
   padding: '0 0 0 0 !important',
   borderTop: '0 !important',
   gap: '6px',
+  variants: {
+    tray: {
+      true: {
+        padding: '4px 12px !important',
+      },
+    },
+  },
 })
 
 const StyledAnchor = styled(Popover.Anchor, {
   position: 'absolute',
   left: '50%',
   bottom: '0',
+  zIndex: '99999',
   width: '0',
   height: '0',
+  variants: {
+    reverse: {
+      true: {
+        top: '0',
+      },
+    },
+  },
 })
 
 const ControlMenu = styled('div', {
   padding: '0',
   width: '300px',
   overflow: 'hidden',
-  background: '$dockBg',
   backdropFilter: 'blur(20px) saturate(190%) contrast(70%) brightness(45%)',
   border: '1px solid $dockBorderColor',
   borderTop: '0',
@@ -378,6 +422,8 @@ const ControlMenu = styled('div', {
   borderBottomLeftRadius: '$medium',
   borderBottomRightRadius: '$medium',
   boxShadow: 'rgb(0 0 0 / 10%) 0px -10px 8px',
+  display: 'flex',
+  flexDirection: 'column',
   [`& ${ToggleGroup.StyledRoot}`]: {
     width: '100%',
     margin: '2px 0 8px 0',
@@ -395,10 +441,29 @@ const ControlMenu = styled('div', {
   [`& ${DockSection}`]: {
     borderTop: '1px solid rgba(255, 255, 255, 0.03)',
   },
+  variants: {
+    tray: {
+      true: {
+        width: 'calc(100vw - 30px)',
+        margin: '0 auto',
+        flexDirection: 'column-reverse',
+        background: '$electronTrayDockBg',
+      },
+    },
+    reverse: {
+      true: {
+        borderBottom: '0',
+        borderRadius: '0',
+        borderTopLeftRadius: '$medium',
+        borderTopRightRadius: '$medium',
+      },
+    },
+  },
 })
 
 const CurrentStatusIcon = styled('label', {
   display: 'flex',
+  width: '21px',
   '& svg': {
     aspectRatio: '1',
     height: '21px',

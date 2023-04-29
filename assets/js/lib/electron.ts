@@ -27,7 +27,7 @@ export function setTray(options: {
   title?: string
   tooltip?: string
 }) {
-  sendMessage('tray', {
+  sendMessage('set-tray', {
     image: options.image,
     title: options.title || '',
     tooltip: options.tooltip || '',

@@ -13,6 +13,7 @@ interface Props {
   on?: boolean
   tooltipLabel?: string
   tooltipShortcut?: string[]
+  naked?: boolean
 }
 
 export function Button(props: Props) {
@@ -21,8 +22,13 @@ export function Button(props: Props) {
       content={props.tooltipLabel || ''}
       shortcut={props.tooltipShortcut}
     >
-      <Container onClick={props.onClick}>
-        <StyledButton onClick={props.onClick} off={props.off} on={props.on}>
+      <Container onClick={props.onClick} naked={props.naked}>
+        <StyledButton
+          onClick={props.onClick}
+          off={props.off}
+          on={props.on}
+          naked={props.naked}
+        >
           <Icon name={props.icon} />
         </StyledButton>
       </Container>
@@ -55,12 +61,18 @@ export const StyledButton = styled('button', {
     borderColor: 'rgba(255, 255, 255, 0.03),',
   },
   variants: {
+    naked: {
+      true: {
+        border: '0',
+        background: '0',
+        boxShadow: 'none',
+        outline: 'none',
+      },
+    },
     off: {
       true: {
         color: '$dockButtonOffFg',
-        '&:hover': {
-          color: 'rgba(255, 255, 255, 0.7)',
-        },
+        '&:hover': {},
       },
     },
     on: {
@@ -71,7 +83,7 @@ export const StyledButton = styled('button', {
   },
 })
 
-const Container = styled('div', {
+export const Container = styled('div', {
   position: 'relative',
   '&::after': {
     content: ' ',
@@ -83,5 +95,14 @@ const Container = styled('div', {
     borderRadius: '0.5rem',
     boxShadow:
       '0 0 #0000, 0 0 #0000, inset 0px 0px 0px 1px rgb(255 255 255 / 0.05)',
+  },
+  variants: {
+    naked: {
+      true: {
+        '&::after': {
+          display: 'none',
+        },
+      },
+    },
   },
 })

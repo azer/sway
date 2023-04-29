@@ -22,6 +22,7 @@ import {
 import { addRoomMembers } from 'features/RoomMembers/slice'
 import Icon from 'components/Icon'
 import { setWorkspaceRoomIds } from 'features/Room/slice'
+import { usePresence } from 'features/Presence/use-presence'
 
 interface Props {}
 
@@ -30,6 +31,7 @@ const log = logger('navigation')
 export function Navigation(props: Props) {
   const dispatch = useDispatch()
   const inviteModal = useInvitePeople()
+  const presence = usePresence()
 
   const [
     workspace,
@@ -124,7 +126,7 @@ export function Navigation(props: Props) {
         <People>
           <Title>People</Title>
           {people.map((uid) => (
-            <UserButton key={uid} id={uid} />
+            <UserButton key={uid} id={uid} tap={() => presence.tap(uid)} />
           ))}
         </People>
         <Fill />

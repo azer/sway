@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface Props {
   id: string
+  tap: (id: string) => void
 }
 
 export function UserButton(props: Props) {
@@ -63,7 +64,7 @@ export function UserButton(props: Props) {
   const selected = focused === privateRoomId
 
   return (
-    <UserContextMenu user={user} status={status} tap={tap}>
+    <UserContextMenu user={user} status={status} tap={props.tap}>
       <StyledUserButton
         onClick={handleClick}
         selected={selected || userIdOnSidebar === props.id}
@@ -79,8 +80,6 @@ export function UserButton(props: Props) {
       </StyledUserButton>
     </UserContextMenu>
   )
-
-  function tap() {}
 
   function handleClick(event: MouseEvent) {
     event.preventDefault()

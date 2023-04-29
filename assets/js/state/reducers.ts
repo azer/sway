@@ -12,6 +12,7 @@ import workspaces from 'features/Workspace/slice'
 import taps from 'features/Tap/slice'
 import roomMembers from 'features/RoomMembers/slice'
 import chat from 'features/Chat/slice'
+import electronTray from 'features/ElectronTray/slice'
 
 export default {
   //undotree,
@@ -28,4 +29,5 @@ export default {
   taps,
   roomMembers,
   chat,
+  electronTray,
 }

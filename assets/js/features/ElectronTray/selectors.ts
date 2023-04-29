@@ -1,33 +1,37 @@
-import { RoomStatus } from 'features/Room/selectors'
 import selectors from 'selectors'
 import { RootState } from 'state'
-import { initialState, PresenceMode } from 'state/entities'
+import { TrayWindowState } from './index'
 
-export interface TrayWindowState {
-  entities: typeof initialState
-  localUserId?: string
-  focusedRoomId?: string
-  otherUsers: string[]
-  userStatuses: { [id: string]: string }
-  focusedRoomMode?: RoomStatus
-  onlineUsers: string[]
-  usersByRooms: { [id: string]: string[] }
+export function isTrayWindowOpen(state: RootState): boolean {
+  return state.electronTray.windowOpen
 }
 
-export function snapshotForTrayWindow(state: RootState): TrayWindowState {
-  const room = selectors.rooms.getFocusedRoom(state)
-  const roomMode = room && selectors.rooms.getRoomStatus(state, room?.id)
+export function trayWindowState(state: RootState): TrayWindowState {
+  const focusedRoom = selectors.rooms.getFocusedRoom(state)
+  const focusedRoomStatus = selectors.rooms.getRoomStatus(
+    state,
+    focusedRoom?.id || ''
+  )
   const localUser = selectors.users.getSelf(state)
-  const otherUsers = selectors.rooms.getOtherUsersInSameRoom(state)
+  const localStatus = selectors.statuses.getLocalStatus(state)
+  const participants = selectors.rooms
+    .getOtherUsersInRoom(state, focusedRoom?.id || '')
+    .map((userId) => {
+      return {
+        userId: userId,
+        user: selectors.users.getById(state, userId),
+        participant: selectors.call.getParticipantStatusByUserId(state, userId),
+        status: selectors.statuses.getByUserId(state, userId),
+        isOnline: selectors.presence.isUserOnline(state, userId),
+        isActive: selectors.presence.isUserActive(state, userId),
+      }
+    })
 
   return {
-    entities: state.entities,
-    localUserId: localUser?.id,
-    focusedRoomId: room?.id,
-    focusedRoomMode: roomMode,
-    otherUsers: otherUsers,
-    userStatuses: state.presence.userStatuses,
-    onlineUsers: state.userSocket.onlineUsers,
-    usersByRooms: state.rooms.userIdsByRoom,
+    focusedRoom,
+    focusedRoomStatus,
+    localUser,
+    localStatus,
+    participants,
   }
 }

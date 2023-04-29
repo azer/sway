@@ -24,15 +24,12 @@ const log = logger('room/participant')
 
 export function RoomParticipant(props: Props) {
   const socket = useUserSocket()
-  const [user, participant, status, isActive, presenceIcon] = useSelector(
-    (state) => [
-      selectors.users.getById(state, props.userId),
-      selectors.call.getParticipantStatusByUserId(state, props.userId),
-      selectors.statuses.getByUserId(state, props.userId),
-      selectors.presence.isUserActive(state, props.userId),
-      selectors.presence.getPresenceIconByUserId(state, props.userId),
-    ]
-  )
+  const [user, participant, status, isActive] = useSelector((state) => [
+    selectors.users.getById(state, props.userId),
+    selectors.call.getParticipantStatusByUserId(state, props.userId),
+    selectors.statuses.getByUserId(state, props.userId),
+    selectors.presence.isUserActive(state, props.userId),
+  ])
 
   useEffect(() => {
     if (!user) {

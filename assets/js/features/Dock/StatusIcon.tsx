@@ -5,7 +5,7 @@ import { PresenceStatus } from 'state/presence'
 import { styled } from 'themes'
 
 interface Props {
-  status: Status
+  status?: Status
   noEmoji?: boolean
   isOnline?: boolean
   isActive?: boolean
@@ -14,11 +14,11 @@ interface Props {
 export function StatusIcon(props: Props) {
   return (
     <StyledStatusIcon>
-      {props.status.emoji && !props.noEmoji && props.isOnline !== false ? (
-        <Emoji id={props.status.emoji} size="1.35em" />
+      {props.status?.emoji && !props.noEmoji && props.isOnline !== false ? (
+        <Emoji id={props.status?.emoji} size="1.35em" />
       ) : (
         <StatusCircle
-          presence={props.status.status}
+          presence={props.status?.status}
           isOnline={props.isOnline}
           isActive={props.isActive}
         />

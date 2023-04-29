@@ -10,6 +10,7 @@ interface Props {
   isActive: boolean
   joinCall: () => void
   leaveCall: () => void
+  naked?: boolean
 }
 
 export function CallSwitch(props: Props) {
@@ -20,9 +21,10 @@ export function CallSwitch(props: Props) {
         shortcut={['Space']}
       >
         <Button
-          onClick={() => handleClick()}
+          onClick={() => handleClick(undefined)}
           on={props.isActive}
           off={!props.isActive}
+          naked={props.naked}
         >
           <StyledSwitch>
             <Icon name="headphones" />
@@ -49,7 +51,7 @@ export function CallSwitch(props: Props) {
   }
 }
 
-const CustomStyledRoot = styled(StyledRoot, {
+export const CustomStyledRoot = styled(StyledRoot, {
   width: '44px',
   height: '24px',
   borderRadius: '9999px',
@@ -72,7 +74,7 @@ const CustomStyledRoot = styled(StyledRoot, {
 const CustomStyledThumb = styled(StyledThumb, {
   width: '14px',
   height: '14px',
-  transform: 'translateX(4px)',
+  transform: 'translateX(6px)',
   willChange: 'transform',
   '&[data-state="checked"]': {
     transform: 'translateX(24px)',
@@ -81,7 +83,7 @@ const CustomStyledThumb = styled(StyledThumb, {
 
 const shadow = 'rgba(0,0,0, 0.05)'
 
-const Button = styled(StyledButton, {
+export const Button = styled(StyledButton, {
   display: 'flex',
   position: 'relative',
   aspectRatio: 'inherit',
@@ -104,5 +106,14 @@ const Button = styled(StyledButton, {
     borderRadius: '0.5rem',
     boxShadow:
       '0 0 #0000, 0 0 #0000, inset 0px 0px 0px 1px rgb(255 255 255 / 0.05)',
+  },
+  variants: {
+    naked: {
+      true: {
+        '&::after': {
+          display: 'none',
+        },
+      },
+    },
   },
 })

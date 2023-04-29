@@ -1,32 +1,31 @@
 import { styled } from 'themes'
-import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { globalCss } from '@stitches/react'
-import {
-  initialState,
-  Memberships,
-  Room,
-  Rooms,
-  Status,
-  Statuses,
-  Users,
-} from 'state/entities'
-import { ipcRenderer, sendMessage } from 'lib/electron'
+import React, { useEffect, useRef, useState } from 'react'
 import { logger } from 'lib/log'
-import { TrayWindowState } from 'features/ElectronTray/selectors'
-import { RoomStatus } from 'features/Room/selectors'
+import { globalCss } from '@stitches/react'
+import { ipcRenderer, sendMessage } from 'lib/electron'
+import {
+  TrayWindowState,
+  ElectronWindow,
+  TrayWindowRequest,
+} from 'features/ElectronTray'
 import { RoomStatusIcon } from 'components/RoomStatusIcon'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { Avatar, AvatarRoot } from 'components/Avatar'
-import { init, SearchIndex } from 'emoji-mart'
-import Icon from 'components/Icon'
-import { Dropdown, StyledDropdownContent } from 'components/DropdownMenu'
-import { titleCase, firstName } from 'lib/string'
-import { ToggleGroup } from 'components/ToggleGroup'
-import { commonEmojis, EmojiObject } from './selectors'
-import { PresenceStatus, PresenceModes } from 'state/presence'
-
-//import selectors from 'selectors'
+import { EmojiProvider } from 'features/Emoji/Provider'
+import { useEmojiSearch } from 'features/Emoji/use-emoji-search'
+import { commonEmojis } from './selectors'
+import { DockFocus, DockFocusRegion } from 'features/Dock/focus'
+import {
+  MessageSection,
+  StatusControls,
+  StatusControlsRoot,
+} from 'features/Dock/StatusControls'
+import * as Tooltip from '@radix-ui/react-tooltip'
+import { TrayCallControls } from './TrayCallControls'
+import { Button } from 'features/Dock/Button'
+import { UserIconView } from 'components/UserView'
+import { UserListView } from 'components/UserView/UserListView'
+import { PresenceStatus } from 'state/presence'
 // import { useSelector, useDispatch } from 'state'
 
 const log = logger('electron-tray-window')
@@ -34,208 +33,242 @@ const log = logger('electron-tray-window')
 interface Props {}
 
 export function ElectronTrayWindow(props: Props) {
-  globalStyles()
+  const dockEl = useRef<HTMLDivElement>(null)
+  const containerEl = useRef<HTMLDivElement>(null)
 
-  const inputRef = useRef<HTMLInputElement | null>(null)
-  const [emojiQuery, setEmojiQuery] = useState('')
-  const [emojiResults, setEmojiResults] = useState<EmojiObject[]>(commonEmojis)
-  const [entities, setEntities] = useState<typeof initialState>(initialState)
-  const [localUserId, setLocalUserId] = useState<string | undefined>()
-  const [userStatuses, setUserStatuses] = useState<{ [id: string]: string }>({})
-  const [onlineUsers, setOnlineUsers] = useState<string[]>([])
-  const [focusedRoomId, setFocusedRoomId] = useState<string | undefined>()
-  const [focusedRoomMode, setFocusedRoomMode] = useState<RoomStatus>(
-    RoomStatus.Offline
-  )
-  const [otherUsers, setOtherUsers] = useState<string[]>([])
+  const [trayState, setTrayState] = useState<TrayWindowState>({})
+  const [dockFocus, setDockFocus] = useState<DockFocus>()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [selectedEmojiIndex, setSelectedEmojiIndex] = useState(-1)
-  const [isFocusOnEmoji, setIsFocusOnEmoji] = useState(false)
-  const [isFocusOnMessageInput, setIsFocusOnMessageInput] = useState(false)
-
-  const room = entities[Rooms][focusedRoomId || '']
-  const localUser = entities[Users][localUserId || '']
-  const localPresence = localUserId
-    ? entities[Statuses][userStatuses[localUserId]]
-    : undefined
-  const userList = Object.values(entities[Memberships]).map((m) => ({
-    id: m.user_id,
-    user: entities[Users][m.user_id],
-    status: entities[Statuses][userStatuses[m.user_id]],
-    isOnline: onlineUsers.includes(m.user_id),
-    localTime: new Date().toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      timeZone: 'America/New_York',
-    }),
-  }))
-
-  useHotkeys('esc', hideTrayWindow, { enabled: !isDropdownOpen }, [
-    isDropdownOpen,
-  ])
-
-  useHotkeys(
-    'left, up',
-    () => setSelectedEmojiIndex(Math.max(0, selectedEmojiIndex - 1)),
-    { enabled: isFocusOnEmoji, enableOnFormTags: true, preventDefault: true },
-    [isFocusOnEmoji, selectedEmojiIndex]
+  const [statusMessage, setStatusMessage] = useState(
+    trayState.localStatus?.message || ''
   )
 
-  useHotkeys(
-    'right, down',
-    () => setSelectedEmojiIndex((selectedEmojiIndex + 1) % 10),
-    { enabled: isFocusOnEmoji, enableOnFormTags: true, preventDefault: true },
-    [isFocusOnEmoji, selectedEmojiIndex]
-  )
+  const [videoFrame, setVideoFrame] = useState<
+    Record<string, { ts: number; frame: string }>
+  >({})
 
-  useHotkeys(
-    'enter',
-    handleEmojiSelect,
-    { enabled: isFocusOnEmoji, enableOnFormTags: true },
-    [isFocusOnEmoji, selectedEmojiIndex]
-  )
+  const emojiSearch = useEmojiSearch()
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus()
-    }
-  }, [!!inputRef.current])
+    sendMessage(ElectronWindow.Main, { setWindowCreated: { created: true } })
+  }, [])
 
   useEffect(() => {
-    log.info('Updating emoji search results', emojiQuery)
-    if (emojiQuery.trim().length === 0) {
-      setEmojiResults(commonEmojis)
-      return
-    }
-    // @ts-ignore
-    SearchIndex.search(emojiQuery, { maxResults: 25 })
-      .then((results) => {
-        log.info('Update emoji results', results)
-        setEmojiResults(results || [])
-        setSelectedEmojiIndex(results.length ? 0 : -1)
-      })
-      .catch((err) => {
-        log.error('Something went wrong with emoji search', err)
-      })
-  }, [emojiQuery])
+    log.info('listen messages')
 
-  useEffect(() => {
-    log.info('Listen tray state')
-    ipcRenderer?.on('tray-window', onMessage)
+    ipcRenderer.on(ElectronWindow.Tray, onMessage)
 
-    log.info('Fetching emoji data')
-    fetch('https://cdn.jsdelivr.net/npm/@emoji-mart/data')
-      .then(async (resp) => {
-        init({ data: await resp.json() })
-      })
-      .catch((err) => log.error("can't load emojis", err))
-
+    sendMessage(ElectronWindow.Main, { requestState: true })
     return () => {
-      ipcRenderer.removeListener('tray-window', onMessage)
-    }
-
-    function onMessage(event: Event, msg: string) {
-      const parsed = JSON.parse(msg) as { state: TrayWindowState }
-      setEntities(parsed.state.entities)
-      setLocalUserId(parsed.state.localUserId)
-      setFocusedRoomId(parsed.state.focusedRoomId)
-      setOtherUsers(parsed.state.otherUsers)
-      setOnlineUsers(parsed.state.onlineUsers)
-      setUserStatuses(parsed.state.userStatuses)
-
-      if (parsed.state.focusedRoomMode)
-        setFocusedRoomMode(parsed.state.focusedRoomMode)
-
-      log.info('Updated tray window state', parsed, entities, localUserId)
+      ipcRenderer.removeListener(ElectronWindow.Tray, onMessage)
     }
   }, [])
 
-  return (
-    <Container>
-      <Room onClick={showMainWindow}>
-        <RoomStatusIcon mode={focusedRoomMode} />
-        <RoomName>{room?.name}</RoomName>
-      </Room>
-      <UserList>
-        {userList.map((u) => (
-          <User>
-            <Avatar
-              src={u.user?.profile_photo_url || ''}
-              fallback={u.user?.name.slice(0)}
-              alt={u.user?.name}
-            />
-            <UserStatusIcon status={userStatus(u.isOnline, u.status)} />
-            <UserInfo>
-              <Username>{u.user?.name}</Username>
-              <Status>
-                <LocalTime>{u.localTime}</LocalTime>{' '}
-                {userStatusLabel(u.isOnline, u.status)}
-              </Status>
-            </UserInfo>
-          </User>
-        ))}
-      </UserList>
+  useEffect(() => {
+    if (trayState.localStatus && statusMessage === '') {
+      setStatusMessage(trayState.localStatus.message)
+    }
+  }, [!trayState.localStatus])
 
-      <Dock open={isDropdownOpen}>
-        <Dropdown.Menu onOpenChange={handleDropdownState}>
-          <Dropdown.Trigger>
-            <StatusButton>
-              <Icon name="emoji" />
-            </StatusButton>
-          </Dropdown.Trigger>
-          <MessageInput
-            type="text"
-            ref={inputRef}
-            placeholder={`What's cookin, ${firstName(localUser?.name || '')}?`}
-            onFocus={() => setIsFocusOnMessageInput(true)}
-            onBlur={() => setIsFocusOnMessageInput(false)}
-          />
+  useEffect(() => {
+    if (
+      trayState.localStatus?.message &&
+      trayState.localStatus?.message !== statusMessage
+    ) {
+      log.info(
+        'Local status message changed:',
+        trayState.localStatus?.message,
+        statusMessage
+      )
+      setStatusMessage(trayState.localStatus?.message)
+    }
+  }, [trayState.localStatus?.id])
 
-          <StatusDropdown>
-            <Dropdown.Label>Set your flow</Dropdown.Label>
-            <ToggleGroup.Root value={PresenceStatus.Online}>
-              {PresenceModes.map((m) => (
-                <ToggleGroup.Item
-                  data-mode={m.status}
-                  value={m.status}
-                  key={m.status}
-                >
-                  <ModeIcon mode={m.status} />
-                  <ToggleGroup.Label>{titleCase(m.status)}</ToggleGroup.Label>
-                </ToggleGroup.Item>
-              ))}
-            </ToggleGroup.Root>
-            <Separator />
-            <SearchField>
-              <Icon name="search" />
-              <EmojiSearchInput
-                value={emojiQuery}
-                onChange={handleEmojiQuery}
-                placeholder="Emoji search"
-                onFocus={() => setIsFocusOnEmoji(true)}
-                onBlur={() => setIsFocusOnEmoji(false)}
-              />
-            </SearchField>
-            <EmojiPicker>
-              {emojiResults.length === 0 ? (
-                <NoEmoji>No emojis found</NoEmoji>
-              ) : (
-                emojiResults.slice(0, 10).map((e, ind) => (
-                  <Emoji
-                    role="img"
-                    aria-label={e.id}
-                    highlighted={ind === selectedEmojiIndex}
-                  >
-                    {e.skins[0].native}
-                  </Emoji>
-                ))
-              )}
-            </EmojiPicker>
-          </StatusDropdown>
-        </Dropdown.Menu>
-      </Dock>
-    </Container>
+  useHotkeys('esc', hideTrayWindow)
+
+  useHotkeys(
+    'up',
+    moveFocus(-1),
+    {
+      enabled: !!dockFocus,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [dockFocus]
   )
+
+  useHotkeys(
+    'down',
+    moveFocus(1),
+    {
+      enabled: !!dockFocus,
+      enableOnFormTags: true,
+      preventDefault: true,
+    },
+    [dockFocus]
+  )
+
+  globalStyles()
+
+  const active = trayState.participants?.filter((p) => p.isActive) || []
+  const inactive = trayState.participants?.filter((p) => !p.isActive) || []
+
+  return (
+    <Tooltip.Provider>
+      <EmojiProvider />
+      <Container onClick={handleClick} ref={containerEl}>
+        <RoomHeader onClick={showMainWindow}>
+          <RoomStatusIcon mode={trayState.focusedRoomStatus} />
+          <RoomName>{trayState.focusedRoom?.name}</RoomName>
+        </RoomHeader>
+        {active.length === 0 && inactive.length === 0 ? (
+          <Empty onClick={showMainWindow}>
+            It{"'"}s just you at the moment.
+            <br /> Check out other rooms?
+          </Empty>
+        ) : null}
+        {active.length ? (
+          <>
+            <Title>
+              In call {active.length > 1 ? `({active.length})` : ''}
+            </Title>
+            <Active>
+              {active.map((p) => (
+                <UserIconView
+                  userId={p.userId}
+                  user={p.user}
+                  status={p.status}
+                  small
+                  tap={tap}
+                  isOnline={p.isOnline}
+                  createStatusHook={createStatusHook}
+                  videoFrame={
+                    videoFrame[p.userId]?.ts >= Date.now() - 3000
+                      ? videoFrame[p.userId].frame
+                      : undefined
+                  }
+                />
+              ))}
+            </Active>
+          </>
+        ) : null}
+        {inactive.length > 0 ? (
+          <>
+            <Title>
+              {active.length ? 'Others' : 'Present'}{' '}
+              {inactive.length > 1 ? `({inactive.length})` : ''}
+            </Title>
+            <Inactive>
+              {inactive.map((p) => (
+                <UserRow>
+                  <UserListView
+                    userId={p.userId}
+                    user={p.user}
+                    status={p.status}
+                    small
+                    tap={tap}
+                    isOnline={p.isOnline}
+                    createStatusHook={createStatusHook}
+                  />
+                </UserRow>
+              ))}
+            </Inactive>
+          </>
+        ) : null}
+        <Dock dropdownOpen={isDropdownOpen} focus={dockFocus?.region}>
+          <StatusRoot ref={dockEl}>
+            <StatusControls
+              localStatus={trayState.localStatus}
+              localUser={trayState.localUser}
+              message={statusMessage}
+              setMessage={setStatusMessage}
+              resetMessage={() =>
+                setStatusMessage(trayState.localStatus?.message || '')
+              }
+              saveMessage={saveStatusMessage}
+              emojiResults={
+                emojiSearch.results.length > 0
+                  ? emojiSearch.results
+                  : commonEmojis
+              }
+              emojiQuery={emojiSearch.query}
+              setEmojiQuery={emojiSearch.setQuery}
+              selectEmoji={saveEmojiSelection}
+              focus={dockFocus}
+              handleBlur={() => setDockFocus(undefined)}
+              setFocusRegion={(region: DockFocusRegion) =>
+                setDockFocus({ ...dockFocus, region })
+              }
+              setPresence={savePresenceMode}
+              isDropdownOpen={isDropdownOpen}
+              setDropdownOpen={setIsDropdownOpen}
+              setFocusedEmojiId={(id: string | undefined) => {
+                setDockFocus((current) => ({
+                  // ts-ignore
+                  ...current,
+                  emoji: {
+                    id,
+                  },
+                }))
+              }}
+              setFocusAway={() => setDockFocus(undefined)}
+              reverseOrder
+              tray
+            />
+          </StatusRoot>
+          <TrayCallControls
+            isActive={
+              trayState.localStatus?.camera_on || trayState.localStatus?.mic_on
+            }
+            cameraOn={trayState.localStatus?.camera_on || false}
+            micOn={trayState.localStatus?.mic_on || false}
+            speakerOn={trayState.localStatus?.speaker_on || false}
+            toggleMic={() =>
+              sendToggleCommand('setMicOn', !trayState.localStatus?.mic_on)
+            }
+            toggleCamera={() =>
+              sendToggleCommand(
+                'setCameraOn',
+                !trayState.localStatus?.camera_on
+              )
+            }
+            toggleSpeaker={() =>
+              sendToggleCommand(
+                'setSpeakerOn',
+                !trayState.localStatus?.speaker_on
+              )
+            }
+            joinCall={() =>
+              sendMessage(ElectronWindow.Main, { joinCall: true })
+            }
+            leaveCall={() =>
+              sendMessage(ElectronWindow.Main, { leaveCall: true })
+            }
+          />
+        </Dock>
+      </Container>
+    </Tooltip.Provider>
+  )
+
+  function onMessage(event: Event, msg: string) {
+    log.info('Received', msg)
+
+    const parsed = JSON.parse(msg) as TrayWindowRequest
+
+    if (parsed.provideState) {
+      setTrayState(parsed.provideState.state)
+    } else if (parsed.sendVideoFrame) {
+      setVideoFrame((videoFrames) => {
+        return {
+          ...videoFrames,
+          [parsed.sendVideoFrame?.userId]: {
+            frame: parsed.sendVideoFrame?.base64Image,
+            ts: Date.now(),
+          },
+        }
+      })
+    }
+  }
 
   function showMainWindow() {
     sendMessage('commands', { command: 'show-main-window' })
@@ -245,42 +278,92 @@ export function ElectronTrayWindow(props: Props) {
     sendMessage('commands', { command: 'hide-tray-window' })
   }
 
-  function handleEmojiQuery(e: Event) {
-    setEmojiQuery(e.currentTarget.value)
+  function saveStatusMessage() {
+    sendMessage(ElectronWindow.Main, {
+      saveStatusMessage: {
+        message: statusMessage,
+      },
+    })
   }
 
-  function handleEmojiSelect() {
-    log.info('selected emoji', emojiResults[selectedEmojiIndex])
+  function saveEmojiSelection(emoji: string | undefined) {
+    sendMessage(ElectronWindow.Main, {
+      saveStatusEmoji: {
+        emoji,
+      },
+    })
   }
 
-  function handleDropdownState(open: boolean) {
-    setIsDropdownOpen(open)
+  function savePresenceMode(presenceStatus: PresenceStatus) {
+    sendMessage(ElectronWindow.Main, {
+      savePresenceStatus: {
+        status: presenceStatus,
+      },
+    })
   }
 
-  function userStatus(
-    online: boolean,
-    status?: Status
-  ): 'offline' | 'active' | 'inactive' {
-    if (!online) return 'offline'
-    if (status?.mic_on || status?.camera_on) return 'active'
-    return 'inactive'
+  function sendToggleCommand(cmd: string, value: boolean) {
+    sendMessage(ElectronWindow.Main, {
+      [cmd]: {
+        on: value,
+      },
+    })
   }
 
-  function userStatusLabel(online: boolean, status?: Status): string {
-    if (!online) return 'Offline'
+  function tap(userId: string) {
+    sendMessage(ElectronWindow.Main, {
+      tap: {
+        userId,
+      },
+    })
+  }
 
-    if (status?.mic_on) {
-      return 'Active'
+  function createStatusHook(targetUserId: string) {
+    sendMessage(ElectronWindow.Main, {
+      createStatusHook: {
+        targetUserId,
+      },
+    })
+  }
+
+  function moveFocus(shiftBy: number) {
+    return () => {
+      if (!dockFocus) return
+
+      const order = [
+        DockFocusRegion.Status,
+        DockFocusRegion.EmojiSearch,
+        DockFocusRegion.Message,
+      ]
+
+      const ind = order.indexOf(dockFocus?.region)
+      let next = ind + shiftBy
+      if (next === -1) {
+        next = 0
+      } else if (next === order.length) {
+        next = order.length - 1
+      }
+
+      setDockFocus((focus) => ({ ...focus, region: order[next] }))
     }
+  }
 
-    if (!status) return 'Focus'
-
-    return status.status.slice(0, 1).toUpperCase() + status.status.slice(1)
+  function handleClick(event: MouseEvent) {
+    if (
+      event.target &&
+      dockEl.current &&
+      containerEl.current &&
+      !dockEl.current.contains(event.target) &&
+      containerEl.current.contains(event.target)
+    ) {
+      setDockFocus(undefined)
+    }
   }
 }
 
 const globalStyles = globalCss({
   html: {
+    color: '$electronTrayWindowFg',
     background: '$electronTrayWindowBg',
     overflow: 'hidden',
     padding: 0,
@@ -303,7 +386,7 @@ const Container = styled('div', {
   border: '0.5px solid $electronTrayWindowBorder',
 })
 
-const Room = styled('header', {
+const RoomHeader = styled('header', {
   vcenter: true,
   height: '36px',
   gap: '8px',
@@ -317,296 +400,93 @@ const Room = styled('header', {
 
 const RoomName = styled('label', {
   label: true,
-  fontSize: '14px',
+  fontSize: '$base',
 })
 
-const UserInfo = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '2px',
-})
-
-const Username = styled('div', {
-  label: true,
-  color: '$electronTrayUsernameFg',
-  fontWeight: '$medium',
-})
-
-const Status = styled('div', {
-  label: true,
-  color: '$electronTrayUserStatusFg',
-  fontWeight: '$medium',
-  fontSize: '12px',
-})
-
-const User = styled('div', {
-  display: 'flex',
-  height: '48px',
-  gap: '12px',
-  padding: '0 15px',
-  vcenter: true,
-  position: 'relative',
-  [`& ${AvatarRoot}`]: {
-    height: '24px',
-    borderRadius: '100%',
-  },
-  '&:hover': {
-    background: '$electronTrayHighlightedUserBg',
-  },
-  [`&:hover ${Username}`]: {
-    color: '$electronTrayHighlightedUsernameFg',
-  },
-  [`&:hover ${Status}`]: {
-    color: '$electronTrayHighlightedUserStatusFg',
-  },
-})
-
-const LocalTime = styled('label', {
-  label: true,
-  fontSize: '12px',
-  fontWeight: '$medium',
-  '&::after': {
-    marginLeft: '2px',
-    content: '·',
-  },
-})
-
-const UserStatusIcon = styled('div', {
-  position: 'absolute',
-  left: '31px',
-  top: '26px',
-  width: '12px',
-  aspectRatio: '1',
-  border: '2px solid $gray1',
-  round: true,
-  variants: {
-    status: {
-      offline: {
-        background: '$gray1',
-        border: '2px solid transparent',
-        '&::after': {
-          content: ' ',
-          width: '5px',
-          borderRadius: '100%',
-          aspectRatio: '1',
-          border: '1.5px solid rgba(255, 255, 255, 0.3)',
-          position: 'absolute',
-          top: '0px',
-          left: '0px',
-        },
-      },
-      inactive: {
-        background: '$yellow',
-      },
-      active: {
-        background: '$green',
-      },
-    },
-  },
-})
-
-const UserList = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  overflowY: 'auto',
+const StatusRoot = styled('div', {
+  width: '100%',
 })
 
 const Dock = styled('div', {
   position: 'absolute',
   left: '15px',
   bottom: '15px',
-  width: 'calc(100% - 30px)',
-  height: '44px',
-  padding: '0 12px',
-  vcenter: true,
-  background: '$electronTrayDockBg',
-  borderRadius: '$medium',
-  border: '1px solid transparent',
-  display: 'flex',
-  flexDirection: 'row',
-  gap: '8px',
-  '&:focus-within': {
-    borderTop: '0',
-    border: '1px solid rgba(255,255,255,0.05)',
-    boxShadow: 'rgb(0 0 0 / 10%) 0px 3px 8px',
-    background: '$electronTrayDockOpenBg',
-  },
-  variants: {
-    open: {
-      true: {
-        border: '1px solid rgba(255,255,255,0.05)',
-        boxShadow: 'rgb(0 0 0 / 10%) 0px 3px 8px',
-        background: '$electronTrayDockOpenBg',
-        borderTopLeftRadius: '0',
-        borderTopRightRadius: '0',
-        borderTop: '0',
-      },
-    },
-  },
-})
-
-const StatusDropdown = styled(StyledDropdownContent, {
   width: 'calc(100vw - 30px)',
-  marginLeft: '15px',
-  marginBottom: '8px',
-  background: '$electronTrayDropdownOpenBg',
-  border: '1px solid rgba(255,255,255,0.05)',
-  borderBottom: '0',
-  borderRadius: '0',
-  borderTopLeftRadius: '$medium',
-  borderTopRightRadius: '$medium',
-  backdropFilter: 'none',
-  boxShadow: 'rgb(0 0 0 / 10%) 0px -10px 8px',
-  [`& ${ToggleGroup.StyledRoot}`]: {
-    width: '100%',
-    margin: '2px 0 8px 0',
-    fontFamily: '$sans',
-    fontSize: '$base',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-  },
-  [`& ${ToggleGroup.StyledItem}`]: {
-    fontFamily: '$sans',
-    fontSize: '$base',
-    center: true,
-    flexDirection: 'row',
-  },
-  [`& ${Dropdown.Label}`]: {
-    paddingLeft: '6px',
-    fontSize: '$base',
-    color: 'rgba(255, 255, 255, 0.5)',
-  },
-})
-
-const StatusButton = styled('div', {
-  width: '20px',
-  height: '20px',
-  color: 'rgba(255, 255, 255, 0.4)',
-})
-
-const EmojiPicker = styled('div', {
+  color: '$dockFg',
   display: 'flex',
-  vcenter: true,
-  height: '28px',
+  flexDirection: 'column',
+  alignItems: 'center',
+  background: '$electronTrayDockBg',
+  border: '1px solid $dockBorderColor',
+  round: 'medium',
   overflow: 'hidden',
-  margin: '12px 2px 6px 2px',
-})
-
-const Emoji = styled('span', {
-  display: 'inline-flex',
-  aspectRatio: '1',
-  height: '100%',
-  center: true,
-  fontSize: '21px',
-  borderRadius: '$medium',
-  label: true,
-  '&:hover': {
-    background: 'rgba(255, 255, 255, 0.1)',
-  },
+  boxShadow: 'rgb(0 0 0 / 20%) 0px 0 8px',
   variants: {
-    highlighted: {
+    hasFocus: {
+      true: {},
+    },
+    focus: {
+      [DockFocusRegion.Message]: {
+        borderColor: '$dockFocusBorderColor',
+        //background: '$dockFocusSectionBg',
+      },
+    },
+    dropdownOpen: {
       true: {
-        background: 'rgba(255, 255, 255, 0.1)',
+        borderTopColor: 'transparent',
+        borderTopRightRadius: '0',
+        borderTopLeftRadius: '0',
       },
     },
   },
-})
-
-const NoEmoji = styled('div', {
-  textAlign: 'center',
-  paddingLeft: '8px',
-  color: '$gray9',
-})
-
-const MessageInput = styled('input', {
-  display: 'block',
-  border: 0,
-  width: '100%',
-  height: '100%',
-  background: 'transparent',
-  outline: 'none',
-  font: '$sans',
-  fontSize: '$base',
-  color: '$electronTrayTextFieldFg',
-  fontWeight: '$medium',
-  caretColor: '$electronTrayTextFieldCaret',
-  '&::selection': {
-    background: '$electronTrayTextFieldSelectionBg',
+  [`& ${StatusControlsRoot}, & ${StatusControlsRoot} > section`]: {
+    height: '40px',
   },
-  '&::placeholder': {
-    color: '$electronTrayTextFieldPlaceholder',
-  },
-})
-
-const ModeIcon = styled('div', {
-  width: '8px',
-  aspectRatio: '1',
-  round: true,
-  background: '$green',
-  marginTop: '2px',
-  variants: {
-    mode: {
-      [PresenceStatus.Online]: {
-        background: '$green',
-      },
-      [PresenceStatus.Focus]: {
-        background: '$yellow',
-      },
-      [PresenceStatus.Zen]: {
-        background: '$red',
-      },
-    },
-  },
-})
-
-const SearchField = styled('div', {
-  position: 'relative',
-  height: '32px',
-  vcenter: true,
-  background: 'rgba(115, 120, 125, 0.2)',
-  borderRadius: '$medium',
-  [`& svg`]: {
-    position: 'absolute',
-    width: '12px',
-    height: '12px',
-    color: 'rgba(255, 255, 255, 0.5)',
-    left: '8px',
-  },
-})
-
-const LocalPresenceMode = styled('div', {
-  height: '24px',
-  '& div': {
+  [`& ${MessageSection}`]: {
     height: '100%',
   },
+  [`& ${Button}`]: {
+    background: 'transparent',
+    border: '0',
+    boxShadow: 'none',
+  },
 })
 
-const Separator = styled('div', {
-  height: '1px',
-  background: 'rgba(255, 255, 255, 0.05)',
-  width: 'calc(100% + 12px)',
-  margin: '4px 0 8px -6px',
+const Active = styled('div', {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr 1fr',
+  gap: '4px',
+  margin: '0 12px',
 })
 
-const EmojiSearchInput = styled('input', {
-  display: 'block',
-  width: '100%',
-  border: '0',
-  background: 'transparent',
-  height: '100%',
-  padding: '0 0 0 28px',
-  color: '$electronTrayTextFieldFg',
-  fontWeight: '$medium',
-  caretColor: '$electronTrayTextFieldCaret',
-  outline: 'none',
-  fontSize: '$base',
-  fontFamily: '$sans',
-  '&::selection': {
-    background: '$electronTrayTextFieldSelectionBg',
-  },
-  '&::placeholder': {
-    color: '$electronTrayTextFieldPlaceholder',
-  },
+const Inactive = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+})
+
+const UserRow = styled('div', {
+  height: '48px',
+  padding: '0 12px',
+})
+
+const Empty = styled('div', {
+  margin: '24px 12px',
+  color: 'rgba(245, 250, 255, 0.3)',
+  borderLeft: '2.5px solid rgba(255, 255, 255, 0.1)',
+  paddingLeft: '10px',
+  lineHeight: '1.4',
+  label: true,
+})
+
+const Title = styled('div', {
+  fontSize: '$small',
+  fontWeight: '$semibold',
+  textTransform: 'uppercase',
+  color: 'rgba(245, 250, 255, 0.2)',
+  padding: '0 12px',
+  height: '32px',
+  label: true,
+  vcenter: true,
 })
 
 ReactDOM.render(<ElectronTrayWindow />, document.getElementById('root'))

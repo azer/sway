@@ -23,7 +23,7 @@ const socket = new Socket('/socket', {
   params: { token: (window as any).initialState.session.token },
 })
 
-const context = React.createContext<{
+export const SocketContext = React.createContext<{
   socket: Socket
   channel?: Channel
   presence?: Presence
@@ -119,6 +119,7 @@ export function UserSocketProvider(props: Props) {
     )
 
     const channel = socket.channel('workspace:' + workspaceId)
+    log.info('Workspace channel created')
     setChannel(channel)
 
     log.info('Join workspace channel', { workspaceId })
@@ -184,12 +185,16 @@ export function UserSocketProvider(props: Props) {
     })
   }, [workspaceId, userId])
 
-  return <context.Provider value={ctx}>{props.children}</context.Provider>
+  return (
+    <SocketContext.Provider value={ctx}>
+      {props.children}
+    </SocketContext.Provider>
+  )
 }
 
 export function useUserSocket() {
   const dispatch = useDispatch()
-  const ctx = useContext(context)
+  const ctx = useContext(SocketContext)
 
   return {
     ...ctx,

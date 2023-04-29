@@ -13,13 +13,12 @@ import {
 } from './slice'
 
 import { usePresence } from 'features/Presence/use-presence'
-import { MessageSection, StatusControls } from './StatusControls'
+import { MessageSection, DockSection, StatusControls } from './StatusControls'
 import { useEmojiSearch } from 'features/Emoji/use-emoji-search'
 import { DockFocusRegion } from './focus'
 import { commonEmojis } from 'features/ElectronTrayWindow/selectors'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Mirror, MirrorRoot } from './Mirror'
-import { DockSection } from './CallControls'
 import { findModeByStatus } from 'state/presence'
 
 interface Props {
@@ -93,6 +92,13 @@ export function Dock(props: Props) {
       document.removeEventListener('mousedown', handleMouseDown, false)
     }
   }, [isDropdownOpen, focus])
+
+  useEffect(() => {
+    if (localStatus?.message && localStatus?.message !== message) {
+      log.info('Local status message changed:', localStatus?.message, message)
+      setMessage(localStatus?.message)
+    }
+  }, [localStatus?.id])
 
   return (
     <>
@@ -180,7 +186,6 @@ export function Dock(props: Props) {
   }
 
   function handleBlur(e: Event) {
-    log.info('handle blur')
     dispatch(setFocusAway())
   }
 

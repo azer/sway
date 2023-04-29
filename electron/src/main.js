@@ -53,7 +53,7 @@ app.whenReady().then(async () => {
   setInterval(() => autoUpdater.checkForUpdates(), 600000);
 });
 
-ipcMain.on("tray", (event, options) => {
+ipcMain.on("set-tray", (event, options) => {
   log.info("Setting tray", options);
 
   if (!tray) {
@@ -66,8 +66,16 @@ ipcMain.on("tray", (event, options) => {
   tray.setToolTip(parsed.tooltip);
 });
 
-ipcMain.on("tray-window", (event, msg) => {
-  trayWindow.webContents.send("tray-window", msg);
+ipcMain.on("to-tray-window", (event, msg) => {
+  try {
+    trayWindow.webContents.send("to-tray-window", msg);
+  } catch (err) {
+    console.error("Error", err);
+  }
+});
+
+ipcMain.on("to-main-window", (event, msg) => {
+  mainWindow.webContents.send("to-main-window", msg);
 });
 
 ipcMain.on("commands", (event, msg) => {
@@ -91,12 +99,20 @@ function createTray() {
     log.info("Show tray window");
     if (trayWindow.isVisible()) {
       trayWindow.hide();
+      mainWindow.webContents.send(
+        "to-main-window",
+        JSON.stringify({ setWindowOpen: { open: false } })
+      );
     } else {
       const position = getTrayWindowPosition();
       trayWindow.setPosition(position.x, position.y, false);
       trayWindow.setVisibleOnAllWorkspaces(true);
       trayWindow.show();
       trayWindow.focus();
+      mainWindow.webContents.send(
+        "to-main-window",
+        JSON.stringify({ setWindowOpen: { open: true } })
+      );
     }
   });
 
@@ -129,6 +145,11 @@ function createTrayWindow() {
   win.on("blur", () => {
     if (!win.webContents.isDevToolsOpened()) {
       win.hide();
+
+      mainWindow.webContents.send(
+        "to-main-window",
+        JSON.stringify({ setWindowOpen: { open: false } })
+      );
     }
   });
 
@@ -169,11 +190,11 @@ function createMainWindow() {
   // Hot Reloading
   if (isDev) {
     // 'node_modules/.bin/electronPath'
-    require("electron-reload")(__dirname, {
+    /*require("electron-reload")(__dirname, {
       electron: path.join(__dirname, "../", "node_modules", ".bin", "electron"),
       forceHardReset: true,
       hardResetMethod: "exit",
-    });
+    });*/
 
     const devtools = require("electron-devtools-installer");
     // DevTools

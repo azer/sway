@@ -49,6 +49,7 @@ export function CallTile(props: Props) {
   }, [])
 
   useEffect(() => {
+    onResize(-300)
     setTimeout(onResize, 250)
   }, [sidebarOpen])
 
@@ -84,8 +85,8 @@ export function CallTile(props: Props) {
     </CallTileRoot>
   )
 
-  function onResize() {
-    const width = gridRef.current?.clientWidth
+  function onResize(add?: number) {
+    const width = (gridRef.current?.clientWidth || 0) + (add || 0)
     const height = gridRef.current?.clientHeight
     width && height && setDimensions({ width, height })
     log.info('resized', width, height)

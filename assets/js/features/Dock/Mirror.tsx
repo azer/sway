@@ -27,9 +27,13 @@ export function Mirror(props: Props) {
 
   return (
     <MirrorRoot onClick={cameraSettings.open}>
-      {localParticipant && isActive && localStatus.camera_on ? (
+      {localParticipant && user && isActive && localStatus.camera_on ? (
         <SelfVideo>
-          <Video id={localParticipant.session_id} />
+          <Video
+            mirror={true}
+            userId={user.id}
+            participantId={localParticipant.session_id}
+          />
         </SelfVideo>
       ) : (
         <Avatar src={user?.profile_photo_url} fallback={user?.name || 'You'} />

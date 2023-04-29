@@ -33,7 +33,8 @@ export const ActiveParticipant = React.memo(
     return (
       prev.muted === next.muted &&
       prev.participantId === next.participantId &&
-      prev.showScreen === next.showScreen
+      prev.showScreen === next.showScreen &&
+      prev.small === next.small
     )
   }
 )
@@ -119,7 +120,11 @@ function UActiveParticipant(props: Props) {
         ) : null}
 
         {isVideoOn ? (
-          <Video id={props.participantId} />
+          <Video
+            participantId={props.participantId}
+            userId={props.userId}
+            mirror={isSelf}
+          />
         ) : (
           <Avatar
             src={user?.profile_photo_url}

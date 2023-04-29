@@ -3,6 +3,7 @@ import selectors from 'selectors'
 import { PresenceStatus } from 'state/presence'
 import { useSelector } from 'state'
 import { logger } from 'lib/log'
+import { useEffect } from 'react'
 
 const log = logger('presence/use-presence')
 
@@ -25,6 +26,8 @@ export function usePresence() {
     setEmoji,
     setMessage,
     tap,
+    channel,
+    localStatus,
   }
 
   function setMedia(options: {

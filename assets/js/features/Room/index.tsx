@@ -133,7 +133,9 @@ export function RoomPage(props: Props) {
     </Container>
   )
 
-  function tap() {}
+  function tap(userId: string) {
+    presence.tap(userId)
+  }
 }
 
 export const topBlurEffect =

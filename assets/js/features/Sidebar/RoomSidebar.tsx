@@ -10,12 +10,9 @@ import {
 } from 'components/SidebarButton'
 import { Icon } from 'components/Icon'
 import { RoomParticipant } from 'features/Room/RoomParticipant'
-import { GET } from 'lib/api'
 import { logger } from 'lib/log'
-import { addBatch, Update } from 'state/entities'
-import { setRoomStatusUpdates } from 'features/Presence/slice'
-import { StatusUpdate, Updates } from './Update'
 import { Empty, StatusSidebar } from './StatusSidebar'
+import { usePresence } from 'features/Presence/use-presence'
 
 interface Props {
   roomId: string
@@ -25,6 +22,8 @@ const log = logger('sidebar/room-sidebar')
 
 export function RoomSidebar(props: Props) {
   const dispatch = useDispatch()
+  const presence = usePresence()
+
   const [room, roomStatus, usersInRoom, updates] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.roomId),
     selectors.rooms.getRoomStatus(state, props.roomId),
@@ -88,7 +87,7 @@ export function RoomSidebar(props: Props) {
             <RoomParticipant
               key={userId}
               userId={userId}
-              tap={() => {}}
+              tap={presence.tap}
               small
             />
           ))}

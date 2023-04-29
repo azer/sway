@@ -12,6 +12,7 @@ import { ScreenshareButton } from 'features/Screenshare/Provider'
 import { useBackgroundBlurSettings } from 'features/Settings/BackgroundBlur'
 import { FocusRegion } from 'components/FocusRegion'
 import { DockFocus, DockFocusRegion } from './focus'
+import { DockSection } from './StatusControls'
 
 interface Props {
   cameraOn: boolean
@@ -201,21 +202,6 @@ export function CallControls(props: Props) {
     </FocusRegion>
   )
 }
-
-export const DockSection = styled('div', {
-  width: '100%',
-  height: '100%',
-  padding: '8px 8px 8px 5.5px',
-  borderLeft: '2.5px solid transparent',
-  variants: {
-    focused: {
-      true: {
-        borderColor: '$dockFocusBorderColor',
-        background: '$dockFocusSectionBg',
-      },
-    },
-  },
-})
 
 const Container = styled(DockSection, {
   display: 'flex',

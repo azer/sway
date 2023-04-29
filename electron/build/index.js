@@ -60,7 +60,7 @@ import_electron.app.whenReady().then(async () => {
   }
   setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), 6e5);
 });
-import_electron.ipcMain.on("tray", (event, options) => {
+import_electron.ipcMain.on("set-tray", (event, options) => {
   import_electron_log.default.info("Setting tray", options);
   if (!tray) {
     tray = createTray();
@@ -70,8 +70,15 @@ import_electron.ipcMain.on("tray", (event, options) => {
   tray.setTitle(parsed.title);
   tray.setToolTip(parsed.tooltip);
 });
-import_electron.ipcMain.on("tray-window", (event, msg) => {
-  trayWindow.webContents.send("tray-window", msg);
+import_electron.ipcMain.on("to-tray-window", (event, msg) => {
+  try {
+    trayWindow.webContents.send("to-tray-window", msg);
+  } catch (err) {
+    console.error("Error", err);
+  }
+});
+import_electron.ipcMain.on("to-main-window", (event, msg) => {
+  mainWindow.webContents.send("to-main-window", msg);
 });
 import_electron.ipcMain.on("commands", (event, msg) => {
   const parsed = JSON.parse(msg);
@@ -92,12 +99,20 @@ function createTray() {
     import_electron_log.default.info("Show tray window");
     if (trayWindow.isVisible()) {
       trayWindow.hide();
+      mainWindow.webContents.send(
+        "to-main-window",
+        JSON.stringify({ setWindowOpen: { open: false } })
+      );
     } else {
       const position = getTrayWindowPosition();
       trayWindow.setPosition(position.x, position.y, false);
       trayWindow.setVisibleOnAllWorkspaces(true);
       trayWindow.show();
       trayWindow.focus();
+      mainWindow.webContents.send(
+        "to-main-window",
+        JSON.stringify({ setWindowOpen: { open: true } })
+      );
     }
   });
   return tray2;
@@ -124,6 +139,10 @@ function createTrayWindow() {
   win.on("blur", () => {
     if (!win.webContents.isDevToolsOpened()) {
       win.hide();
+      mainWindow.webContents.send(
+        "to-main-window",
+        JSON.stringify({ setWindowOpen: { open: false } })
+      );
     }
   });
   if (isDev) {
@@ -154,11 +173,6 @@ function createMainWindow() {
   }
   win.on("closed", () => mainWindow = null);
   if (isDev) {
-    require("electron-reload")(__dirname, {
-      electron: path.join(__dirname, "../", "node_modules", ".bin", "electron"),
-      forceHardReset: true,
-      hardResetMethod: "exit"
-    });
     const devtools = require("electron-devtools-installer");
     devtools.default(devtools.REACT_DEVELOPER_TOOLS).then((name) => console.log(`Added Extension:  ${name}`)).catch((err) => console.log("An error occurred: ", err));
   }

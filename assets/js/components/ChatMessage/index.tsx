@@ -7,6 +7,7 @@ import { format } from 'date-fns'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { ChatInput } from 'features/Chat/Input'
 import { AutoLinkText } from 'components/AutoLinkText'
+import { FocusItem } from 'components/FocusItem/FocusItem'
 
 interface Props {
   id: string
@@ -136,12 +137,11 @@ const Right = styled('div', {
   gap: '4px',
 })
 
-const Container = styled('div', {
+const Container = styled(FocusItem, {
   display: 'grid',
   gridTemplateColumns: '26px auto',
   gap: '12px',
   padding: '12px',
-  position: 'relative',
   '&:hover': {
     background: 'rgba(245, 250, 255, 0.025)',
   },
@@ -149,26 +149,10 @@ const Container = styled('div', {
     height: '26px',
     round: 'small',
   },
-  '&::before': {
-    content: ' ',
-    position: 'absolute',
-    width: '2.5px',
-    height: '100%',
-    background: 'transparent',
-    top: '0',
-    left: '0',
-  },
   variants: {
     highlight: {
       true: {
         background: '$gray2 !important',
-      },
-    },
-    focused: {
-      true: {
-        '&::before': {
-          background: '$focusItemBg',
-        },
       },
     },
   },
