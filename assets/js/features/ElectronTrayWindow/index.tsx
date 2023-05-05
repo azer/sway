@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom'
 import React, { useEffect, useRef, useState } from 'react'
 import { logger } from 'lib/log'
 import { globalCss } from '@stitches/react'
-import { ipcRenderer, sendMessage } from 'lib/electron'
 import {
-  TrayWindowState,
-  ElectronWindow,
-  TrayWindowRequest,
-} from 'features/ElectronTray'
+  ElectronMessage,
+  getIpcRenderer,
+  messageMainWindow,
+  messageWindowManager,
+} from 'lib/electron'
+import { TrayWindowState } from 'features/ElectronTray'
+import { ElectronWindow } from 'lib/electron'
 import { RoomStatusIcon } from 'components/RoomStatusIcon'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { EmojiProvider } from 'features/Emoji/Provider'
@@ -50,17 +52,17 @@ export function ElectronTrayWindow(props: Props) {
   const emojiSearch = useEmojiSearch()
 
   useEffect(() => {
-    sendMessage(ElectronWindow.Main, { setWindowCreated: { created: true } })
+    messageMainWindow({ trayWindowCreated: true })
   }, [])
 
   useEffect(() => {
-    log.info('listen messages')
+    log.info('Listen messages')
 
-    ipcRenderer.on(ElectronWindow.Tray, onMessage)
+    getIpcRenderer()?.on('message', onMessage)
+    messageMainWindow({ requestState: true })
 
-    sendMessage(ElectronWindow.Main, { requestState: true })
     return () => {
-      ipcRenderer.removeListener(ElectronWindow.Tray, onMessage)
+      getIpcRenderer()?.removeListener('message', onMessage)
     }
   }, [])
 
@@ -110,8 +112,10 @@ export function ElectronTrayWindow(props: Props) {
 
   globalStyles()
 
-  const active = trayState.participants?.filter((p) => p.isActive) || []
-  const inactive = trayState.participants?.filter((p) => !p.isActive) || []
+  const active =
+    trayState.participants?.filter((p) => !p.isSelf && p.isActive) || []
+  const inactive =
+    trayState.participants?.filter((p) => !p.isSelf && !p.isActive) || []
 
   return (
     <Tooltip.Provider>
@@ -238,31 +242,31 @@ export function ElectronTrayWindow(props: Props) {
                 !trayState.localStatus?.speaker_on
               )
             }
-            joinCall={() =>
-              sendMessage(ElectronWindow.Main, { joinCall: true })
-            }
-            leaveCall={() =>
-              sendMessage(ElectronWindow.Main, { leaveCall: true })
-            }
+            joinCall={() => messageMainWindow({ joinCall: true })}
+            leaveCall={() => messageMainWindow({ leaveCall: true })}
           />
         </Dock>
       </Container>
     </Tooltip.Provider>
   )
 
-  function onMessage(event: Event, msg: string) {
-    log.info('Received', msg)
+  function onMessage(event: Event, parsed: ElectronMessage) {
+    log.info('Received', parsed)
 
-    const parsed = JSON.parse(msg) as TrayWindowRequest
+    if (parsed.payload.provideState) {
+      setTrayState(parsed.payload.provideState.state)
+      return
+    }
 
-    if (parsed.provideState) {
-      setTrayState(parsed.provideState.state)
-    } else if (parsed.sendVideoFrame) {
+    if (parsed.payload.sendVideoFrame) {
+      const userId = parsed.payload.sendVideoFrame?.userId
+      if (!userId) return
+
       setVideoFrame((videoFrames) => {
         return {
           ...videoFrames,
-          [parsed.sendVideoFrame?.userId]: {
-            frame: parsed.sendVideoFrame?.base64Image,
+          [userId]: {
+            frame: parsed.payload.sendVideoFrame?.base64Image,
             ts: Date.now(),
           },
         }
@@ -271,15 +275,15 @@ export function ElectronTrayWindow(props: Props) {
   }
 
   function showMainWindow() {
-    sendMessage('commands', { command: 'show-main-window' })
+    messageWindowManager({ showMainWindow: true })
   }
 
   function hideTrayWindow() {
-    sendMessage('commands', { command: 'hide-tray-window' })
+    messageWindowManager({ hideTrayWindow: true })
   }
 
   function saveStatusMessage() {
-    sendMessage(ElectronWindow.Main, {
+    messageMainWindow({
       saveStatusMessage: {
         message: statusMessage,
       },
@@ -287,7 +291,7 @@ export function ElectronTrayWindow(props: Props) {
   }
 
   function saveEmojiSelection(emoji: string | undefined) {
-    sendMessage(ElectronWindow.Main, {
+    messageMainWindow({
       saveStatusEmoji: {
         emoji,
       },
@@ -295,7 +299,7 @@ export function ElectronTrayWindow(props: Props) {
   }
 
   function savePresenceMode(presenceStatus: PresenceStatus) {
-    sendMessage(ElectronWindow.Main, {
+    messageMainWindow({
       savePresenceStatus: {
         status: presenceStatus,
       },
@@ -303,7 +307,7 @@ export function ElectronTrayWindow(props: Props) {
   }
 
   function sendToggleCommand(cmd: string, value: boolean) {
-    sendMessage(ElectronWindow.Main, {
+    messageMainWindow({
       [cmd]: {
         on: value,
       },
@@ -311,7 +315,7 @@ export function ElectronTrayWindow(props: Props) {
   }
 
   function tap(userId: string) {
-    sendMessage(ElectronWindow.Main, {
+    messageMainWindow({
       tap: {
         userId,
       },
@@ -319,7 +323,7 @@ export function ElectronTrayWindow(props: Props) {
   }
 
   function createStatusHook(targetUserId: string) {
-    sendMessage(ElectronWindow.Main, {
+    messageMainWindow({
       createStatusHook: {
         targetUserId,
       },
@@ -452,7 +456,7 @@ const Dock = styled('div', {
   },
 })
 
-const Active = styled('div', {
+export const Active = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr 1fr 1fr',
   gap: '4px',

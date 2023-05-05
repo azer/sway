@@ -40,4 +40,5 @@ const StyledContent = styled(Content, {
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
   backdrop: { blur: 10, saturate: 190, contrast: 70, brightness: 80 },
   cursor: 'default',
+  zIndex: '$aboveOverlay',
 })

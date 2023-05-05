@@ -40,6 +40,7 @@ export const ParticipantLabelRoot = styled('div', {
   gap: '6px',
   padding: '0 8px',
   height: '28px',
+  zIndex: '$aboveBase',
 })
 
 const Name = styled('label', {

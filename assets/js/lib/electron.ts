@@ -1,10 +1,15 @@
+import { MediaTrackState } from '@daily-co/daily-react-hooks/dist/hooks/useMediaTrack'
+import { TrayWindowState } from 'features/ElectronTray'
+import { PresenceStatus } from 'state/presence'
 import { logger } from './log'
 
-export const isElectron = /electron/i.test(window.navigator.userAgent)
 const log = logger('electron')
 
-// @ts-ignore
-export const ipcRenderer = window.electron?.ipcRenderer as {
+const isNode = isRunningInElectron() && process?.type !== 'renderer'
+let ipcRenderer: IpcRenderer | null =
+  typeof window !== 'undefined' ? window.electron?.ipcRenderer : null
+
+interface IpcRenderer {
   send: (chan: string, payload: unknown) => void
   on: (chan: string, cb: (event: Event, msg: string) => void) => void
   removeListener: (
@@ -13,13 +18,100 @@ export const ipcRenderer = window.electron?.ipcRenderer as {
   ) => void
 }
 
-export function sendMessage(chan: string, payload: unknown) {
+export const isElectron =
+  !isNode && /electron/i.test(window.navigator.userAgent)
+
+export enum ElectronWindow {
+  WindowManager = 'window-manager',
+  Main = 'main-window',
+  Tray = 'tray-window',
+  Pip = 'pip',
+}
+
+export interface ElectronMessage {
+  target: ElectronWindow
+  payload: ElectronPayload
+}
+
+export interface ElectronPayload {
+  provideState?: {
+    state: TrayWindowState
+  }
+  setCameraOn?: {
+    on: boolean
+  }
+  setMicOn?: {
+    on: boolean
+  }
+  setSpeakerOn?: {
+    on: boolean
+  }
+  savePresenceStatus?: {
+    status: PresenceStatus
+  }
+  saveStatusEmoji?: {
+    emoji: string | undefined
+  }
+  saveStatusMessage?: {
+    message: string
+  }
+  sendVideoFrame?: {
+    userId: string
+    base64Image: string
+  }
+  setTrayIcon?: {
+    image: string
+    title: string
+    tooltip: string
+  }
+  showNotification?: {
+    title: string
+    image: string
+    tooltip: string
+  }
+  tap?: {
+    userId: string
+  }
+  createStatusHook?: {
+    targetUserId: string
+  }
+  sendTrack?: {
+    userId: string
+    track: MediaTrackState
+  }
+  requestState?: true
+  joinCall?: true
+  leaveCall?: true
+  showMainWindow?: true
+  showTrayWindow?: true
+  hideMainWindow?: true
+  hideTrayWindow?: true
+  trayWindowCreated?: true
+  showPipWindow?: true
+  hidePipWindow?: true
+  isTrayWindowVisible?: boolean
+  isPipWindowVisible?: boolean
+  isMainWindowFocused?: boolean
+}
+
+export const messageMainWindow = createMessageFn(ElectronWindow.Main)
+export const messageTrayWindow = createMessageFn(ElectronWindow.Tray)
+export const messagePipWindow = createMessageFn(ElectronWindow.Pip)
+export const messageWindowManager = createMessageFn(
+  ElectronWindow.WindowManager
+)
+
+export function sendMessage(chan: string, message: ElectronMessage) {
+  if (isNode) throw Error('Not implemented for Node')
   if (!isElectron) return
-  if (!ipcRenderer) log.error('ipcRenderer undefined')
+  if (!ipcRenderer) {
+    log.error('ipcRenderer undefined')
+    return
+  }
 
-  log.info('Sending message', chan, payload)
+  log.info('Sending message', chan, message)
 
-  ipcRenderer.send(chan, JSON.stringify(payload))
+  ipcRenderer.send(chan, message)
 }
 
 export function setTray(options: {
@@ -27,13 +119,38 @@ export function setTray(options: {
   title?: string
   tooltip?: string
 }) {
-  sendMessage('set-tray', {
-    image: options.image,
-    title: options.title || '',
-    tooltip: options.tooltip || '',
+  messageWindowManager({
+    setTrayIcon: {
+      image: options.image || '',
+      title: options.title || '',
+      tooltip: options.tooltip || '',
+    },
   })
 }
 
-export function notify(options: { title: string; msg: string }) {
-  sendMessage('notify', options)
+export function createMessageFn(
+  target: ElectronWindow
+): (p: ElectronPayload) => void {
+  return (payload: ElectronPayload) => {
+    return sendMessage('message', {
+      target,
+      payload,
+    })
+  }
+}
+
+function isRunningInElectron() {
+  return (
+    typeof process !== 'undefined' &&
+    typeof process.versions !== 'undefined' &&
+    typeof process.versions.electron !== 'undefined'
+  )
+}
+
+export function getIpcRenderer() {
+  return ipcRenderer
+}
+
+export function setIpcRenderer(renderer: IpcRenderer) {
+  ipcRenderer = renderer
 }

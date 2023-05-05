@@ -57,6 +57,7 @@ export const tokens = {
     circle: '100%',
   },
   zIndices: {
+    belowBase: 1,
     base: 10,
     aboveBase: 20,
     content: 30,

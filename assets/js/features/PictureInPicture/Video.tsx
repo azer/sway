@@ -1,20 +1,21 @@
 import { styled } from 'themes'
-import React, { useEffect, useMemo } from 'react'
-import { useMediaTrack } from '@daily-co/daily-react-hooks'
+import React, { useEffect, useMemo, useRef } from 'react'
+import { useMediaTrack, useVideoTrack } from '@daily-co/daily-react-hooks'
 import { logger } from 'lib/log'
 
 const log = logger('picture-in-picture/video')
 
 interface Props {
   participantId: string
-  playerRef: React.MutableRefObject<HTMLVideoElement | null>
+  mirror?: boolean
 }
 
 export function PictureInPictureVideo(props: Props) {
-  const track = useMediaTrack(props.participantId, 'video')
+  const track = useVideoTrack(props.participantId, 'video')
+  const el = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
-    const playerEl = props.playerRef.current
+    const playerEl = el.current
 
     if (!playerEl || !track?.persistentTrack) return
 
@@ -24,19 +25,22 @@ export function PictureInPictureVideo(props: Props) {
 
   const videoEl = useMemo(() => {
     log.info('Re-render element')
-    return <Player autoPlay muted playsInline ref={props.playerRef} />
-  }, [props.participantId])
+    return <Player autoPlay muted playsInline ref={el} />
+  }, [track.persistentTrack])
 
   return videoEl
 }
 
 export const Player = styled('video', {
   aspectRatio: '1',
-  width: '50px',
-  height: '50px',
-  visibility: 'hidden',
+  width: '100%',
+  height: '100%',
   'object-fit': 'cover',
-  position: 'absolute',
-  top: '0',
-  left: '0',
+  variants: {
+    mirror: {
+      true: {
+        transform: 'rotateY(180deg)',
+      },
+    },
+  },
 })

@@ -25,13 +25,13 @@ export function TapProvider(props: Props) {
   ])
 
   useEffect(() => {
-    log.info('last tapping user?', lastTappingUserId, tappingUser)
     if (!lastTappingUserId || !tappingUser) return
 
     log.info('Show notification for tap', lastTappingUserId)
 
     if (localStatus.status === PresenceStatus.Zen) {
       log.info('Silenced tap notification on zen mode')
+      setLastTappingUserId(undefined)
       return
     }
 

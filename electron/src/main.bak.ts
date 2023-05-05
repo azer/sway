@@ -70,12 +70,16 @@ ipcMain.on("to-tray-window", (event, msg) => {
   try {
     trayWindow.webContents.send("to-tray-window", msg);
   } catch (err) {
-    console.error("Error", err);
+    console.error("Error (to-tray-window)", err);
   }
 });
 
 ipcMain.on("to-main-window", (event, msg) => {
-  mainWindow.webContents.send("to-main-window", msg);
+  try {
+    mainWindow.webContents.send("to-main-window", msg);
+  } catch (err) {
+    console.error("Error (to--window)", err);
+  }
 });
 
 ipcMain.on("commands", (event, msg) => {
@@ -211,6 +215,8 @@ function createMainWindow() {
 
 function setupAutoUpdater() {
   autoUpdater.logger = log;
+
+  // @ts-ignore
   autoUpdater.logger.transports.file.level = "debug";
 
   autoUpdater.setFeedURL({

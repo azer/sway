@@ -16,17 +16,22 @@ electron-dev:
 ## electron-compile: Compile Electron code
 .PHONY: electron-compile
 electron-compile:
-	@cd electron && $(ELECTRONBIN)/esbuild src/main.js --outfile=build/index.js --format=cjs
+	@cd electron && $(ELECTRONBIN)/esbuild src/main.ts --bundle --outfile=build/index.js --format=cjs --target=es6 --platform=node  --external:electron --external:electron-updater --external:electron-devtools-installer --external:electron-log
 
 ## electron-compile-watch: Compile & watch Electron code
 .PHONY: electron-compile-watch
 electron-compile-watch:
-	@cd electron && $(ELECTRONBIN)/esbuild src/main.js --outfile=build/index.js --format=cjs --watch
+	@cd electron && $(ELECTRONBIN)/esbuild src/main.ts --bundle --outfile=build/index.js --format=cjs --watch --target=es6 --platform=node --external:electron --external:electron-updater --external:electron-devtools-installer --external:electron-log
 
-## tray-watch: Compile & watch Electron Tray Window code
+## tray-compile-watch: Compile & watch Electron Tray Window code
 .PHONY: tray-compile-watch
 tray-compile-watch:
-	@cd electron && $(ELECTRONBIN)/esbuild --bundle ../assets/js/features/ElectronTrayWindow/index.tsx --outfile=build/tray-window.js --format=iife --watch --target=es6
+	@cd electron && $(ELECTRONBIN)/esbuild --bundle ../assets/js/features/ElectronTrayWindow/index.tsx --outfile=build/tray-window.js --format=iife --watch --target=es6 --platform=node
+
+## tray-compile-watch: Compile & watch Electron Tray Window code
+.PHONY: pip-compile-watch
+pip-compile-watch:
+	@cd electron && $(ELECTRONBIN)/esbuild --bundle ../assets/js/features/ElectronPipWindow/index.tsx --outfile=build/pip-window.js --format=iife --watch --target=es6 --platform=node
 
 ## electron-compile: Compile Electron
 .PHONY: electron-build

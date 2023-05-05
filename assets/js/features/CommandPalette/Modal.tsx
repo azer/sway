@@ -279,22 +279,6 @@ const Separator = styled('div', {
 const Commands = styled('nav', {
   height: '100%',
   overflowY: 'auto',
-  /*'&::-webkit-scrollbar': {
-    width: '7.5px',
-    opacity: '0',
-    background: 'transparent',
-  },
-  '&::-webkit-scrollbar-track': {
-    background: '$scrollTrackBg',
-  },
-  '&::-webkit-scrollbar-thumb': {
-    background: '$scrollThumbBg',
-    borderRadius: '2px',
-    width: '6px',
-  },
-  '&::-webkit-scrollbar:hover': {
-    opacity: '1',
-  },*/
   variants: {
     pin: {
       true: {

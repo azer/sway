@@ -1,11 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import selectors from 'selectors'
-import { setWindowCreated, setWindowOpen } from './slice'
+import { setPipOpen, setTrayCreated, setTrayOpen } from './slice'
 import { useSelector, useDispatch } from 'state'
-import { ipcRenderer, isElectron, sendMessage, setTray } from 'lib/electron'
+import {
+  ElectronMessage,
+  getIpcRenderer,
+  isElectron,
+  messagePipWindow,
+  messageTrayWindow,
+  messageWindowManager,
+  setTray,
+} from 'lib/electron'
 import { logger } from 'lib/log'
 import { usePresence } from 'features/Presence/use-presence'
-import { ElectronWindow, TrayWindowRequest } from '.'
 import { SocketContext } from 'features/UserSocket'
 
 interface Props {}
@@ -14,6 +21,7 @@ const log = logger('electron-tray-provider')
 
 export function ElectronTrayProvider(props: Props) {
   if (!isElectron) {
+    log.info('Not running on Electron, return early')
     return null
   }
 
@@ -24,20 +32,23 @@ export function ElectronTrayProvider(props: Props) {
   const ctx = useContext(SocketContext)
 
   const [trayStateRequested, setTrayStateRequested] = useState(false)
+  const [mainWindowFocused, setMainWindowFocused] = useState(
+    document.hasFocus()
+  )
 
-  const [isActive, users, trayWindowState, isTrayWindowOpen] = useSelector(
-    (state) => [
+  const [isActive, users, trayWindowState, isTrayWindowOpen, isPipWindowOpen] =
+    useSelector((state) => [
       selectors.presence.isLocalUserActive(state),
       selectors.rooms.getOtherUsersInSameRoom(state),
       selectors.electronTray.trayWindowState(state),
       selectors.electronTray.isTrayWindowOpen(state),
-    ]
-  )
+      selectors.electronTray.isPipWindowOpen(state),
+    ])
 
   useEffect(() => {
-    ipcRenderer.on(ElectronWindow.Main, onMessage)
+    getIpcRenderer()?.on('message', onMessage)
     return () => {
-      ipcRenderer.removeListener(ElectronWindow.Main, onMessage)
+      getIpcRenderer()?.removeListener('message', onMessage)
     }
   }, [presence.channel, presence.localStatus])
 
@@ -52,19 +63,25 @@ export function ElectronTrayProvider(props: Props) {
     } else {
       setTray({ image: 'tray_icon_activeTemplate.png', tooltip: 'Open Sway' })
     }
-
-    //log.info('Send state:', snapshotForTrayWindow)
   }, [])
 
   useEffect(() => {
     if (isTrayWindowOpen) {
       log.info('State changed, send it to tray window', isTrayWindowOpen)
 
-      sendMessage(ElectronWindow.Tray, {
+      messageTrayWindow({
         provideState: { state: trayWindowState },
       })
     }
-  }, [isTrayWindowOpen, trayWindowState])
+
+    if (isPipWindowOpen) {
+      log.info('State changed, send it to pip window')
+
+      messagePipWindow({
+        provideState: { state: trayWindowState },
+      })
+    }
+  }, [isTrayWindowOpen, isPipWindowOpen, trayWindowState])
 
   useEffect(() => {
     if (!trayStateRequested) return
@@ -73,69 +90,99 @@ export function ElectronTrayProvider(props: Props) {
 
     log.info('Sending state')
 
-    sendMessage(ElectronWindow.Tray, {
+    messageTrayWindow({
       provideState: { state: trayWindowState },
     })
   }, [trayStateRequested])
 
+  useEffect(() => {
+    log.info(
+      'Main window focused:',
+      mainWindowFocused,
+      isTrayWindowOpen,
+      isActive
+    )
+
+    if (!mainWindowFocused && isActive && !isTrayWindowOpen) {
+      messageWindowManager({
+        showPipWindow: true,
+      })
+    } else if (mainWindowFocused || !isActive) {
+      messageWindowManager({
+        hidePipWindow: true,
+      })
+    }
+  }, [mainWindowFocused, isActive, isTrayWindowOpen])
+
   return <></>
 
-  function onMessage(event: Event, msg: string) {
-    log.info('Message received', msg)
+  function onMessage(event: Event, parsed: ElectronMessage) {
+    log.info('Message received', parsed)
 
-    const parsed = JSON.parse(msg) as TrayWindowRequest
-    if (parsed.setWindowOpen) {
-      dispatch(setWindowOpen(parsed.setWindowOpen.open))
+    const payload = parsed.payload
+
+    if (payload.isTrayWindowVisible !== undefined) {
+      dispatch(setTrayOpen(payload.isTrayWindowVisible))
       return
     }
 
-    if (parsed.setWindowCreated) {
-      dispatch(setWindowCreated(parsed.setWindowCreated.created))
+    if (payload.isPipWindowVisible !== undefined) {
+      dispatch(setPipOpen(payload.isPipWindowVisible))
       return
     }
 
-    if (parsed.requestState) {
+    if (payload.isMainWindowFocused !== undefined) {
+      setMainWindowFocused(payload.isMainWindowFocused)
+      return
+    }
+
+    if (payload.trayWindowCreated !== undefined) {
+      dispatch(setTrayCreated(payload.trayWindowCreated))
+      return
+    }
+
+    if (payload.requestState) {
       setTrayStateRequested(true)
       return
     }
 
-    if (parsed.setCameraOn) {
-      presence.setMedia({ camera: parsed.setCameraOn.on })
+    if (payload.setCameraOn) {
+      presence.setMedia({ camera: payload.setCameraOn.on })
       return
     }
 
-    if (parsed.setMicOn) {
-      presence.setMedia({ mic: parsed.setMicOn.on })
+    if (payload.setMicOn) {
+      presence.setMedia({ mic: payload.setMicOn.on })
       return
     }
 
-    if (parsed.setSpeakerOn) {
-      presence.setMedia({ speaker: parsed.setSpeakerOn.on })
+    if (payload.setSpeakerOn) {
+      presence.setMedia({ speaker: payload.setSpeakerOn.on })
       return
     }
 
-    if (parsed.joinCall) {
+    if (payload.joinCall) {
       presence.setMedia({ camera: true, mic: true })
       return
     }
 
-    if (parsed.leaveCall) {
+    if (payload.leaveCall) {
       presence.setMedia({ camera: false, mic: false })
       return
     }
 
-    if (parsed.saveStatusEmoji) {
-      presence.setEmoji(parsed.saveStatusEmoji.emoji)
+    if (payload.saveStatusEmoji) {
+      presence.setEmoji(payload.saveStatusEmoji.emoji)
       return
     }
 
-    if (parsed.saveStatusMessage) {
-      presence.setMessage(parsed.saveStatusMessage.message)
+    if (payload.saveStatusMessage) {
+      presence.setMessage(payload.saveStatusMessage.message)
       return
     }
 
-    if (parsed.savePresenceStatus) {
-      presence.setMode(parsed.savePresenceStatus.status)
+    if (payload.savePresenceStatus) {
+      presence.setMode(payload.savePresenceStatus.status)
       return
     }
 

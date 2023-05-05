@@ -2,15 +2,17 @@ import { styled } from 'themes'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useMediaTrack } from '@daily-co/daily-react-hooks'
 import { logger } from 'lib/log'
-import { isElectron, sendMessage } from 'lib/electron'
-import { useFetcher } from 'react-router-dom'
-import { sendVideoFrame } from 'features/ElectronTray/slice'
+import {
+  isElectron,
+  messagePipWindow,
+  messageTrayWindow,
+  sendMessage,
+} from 'lib/electron'
 import { useSelector, useDispatch } from 'state'
 import selectors from 'selectors'
-import { ElectronWindow } from 'features/ElectronTray'
 
 const THUMBNAIL_HEIGHT = 100
-const FRAME_RATE = 5 // per second
+const FRAME_RATE = 1 // per second
 
 interface Props {
   participantId: string
@@ -33,8 +35,9 @@ function UVideo(props: Props) {
 
   const [drawing, setDrawing] = useState(false)
 
-  const [isTrayOpen] = useSelector((state) => [
+  const [isTrayOpen, isPipOpen] = useSelector((state) => [
     selectors.electronTray.isTrayWindowOpen(state),
+    selectors.electronTray.isPipWindowOpen(state),
   ])
 
   useEffect(() => {
@@ -44,9 +47,8 @@ function UVideo(props: Props) {
 
     log.info('Set track', track.persistentTrack)
     /*  The track is ready to be played. We can show video of the participant in the UI. */
-    video.srcObject = new MediaStream([track?.persistentTrack])
 
-    log.info('src', video.srcObject)
+    video.srcObject = new MediaStream([track?.persistentTrack])
   }, [track?.persistentTrack?.id])
 
   useEffect(() => {
@@ -144,12 +146,21 @@ function UVideo(props: Props) {
 
     const base64Image = canvasEl.current.toDataURL('image/jpeg')
 
-    sendMessage(ElectronWindow.Tray, {
-      sendVideoFrame: {
-        userId: props.userId,
-        base64Image,
-      },
-    })
+    if (isTrayOpen) {
+      messageTrayWindow({
+        sendVideoFrame: {
+          userId: props.userId,
+          base64Image,
+        },
+      })
+    } else if (isPipOpen) {
+      messagePipWindow({
+        sendVideoFrame: {
+          userId: props.userId,
+          base64Image,
+        },
+      })
+    }
   }
 }
 
@@ -169,7 +180,6 @@ export const CallVideoRoot = styled('video', {
 const Canvas = styled('canvas', {
   position: 'absolute',
   minHeight: '100px',
-  position: 'absolute',
   border: '1px solid red',
   display: 'none',
 })

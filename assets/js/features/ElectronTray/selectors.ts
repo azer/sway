@@ -3,7 +3,11 @@ import { RootState } from 'state'
 import { TrayWindowState } from './index'
 
 export function isTrayWindowOpen(state: RootState): boolean {
-  return state.electronTray.windowOpen
+  return state.electronTray.trayOpen
+}
+
+export function isPipWindowOpen(state: RootState): boolean {
+  return state.electronTray.pipOpen
 }
 
 export function trayWindowState(state: RootState): TrayWindowState {
@@ -12,10 +16,11 @@ export function trayWindowState(state: RootState): TrayWindowState {
     state,
     focusedRoom?.id || ''
   )
+
   const localUser = selectors.users.getSelf(state)
   const localStatus = selectors.statuses.getLocalStatus(state)
   const participants = selectors.rooms
-    .getOtherUsersInRoom(state, focusedRoom?.id || '')
+    .getUsersInRoom(state, focusedRoom?.id || '')
     .map((userId) => {
       return {
         userId: userId,
@@ -24,6 +29,7 @@ export function trayWindowState(state: RootState): TrayWindowState {
         status: selectors.statuses.getByUserId(state, userId),
         isOnline: selectors.presence.isUserOnline(state, userId),
         isActive: selectors.presence.isUserActive(state, userId),
+        isSelf: userId === localUser?.id,
       }
     })
 

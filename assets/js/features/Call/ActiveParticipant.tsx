@@ -15,6 +15,7 @@ import { Avatar, AvatarRoot } from 'components/Avatar'
 import { participantLabelBg } from 'themes/colors'
 import { firstName } from 'lib/string'
 import { UserContextMenu } from 'components/UserContextMenu'
+import { stringToRGB } from 'lib/colors'
 
 interface Props {
   participantId: string
@@ -79,13 +80,11 @@ function UActiveParticipant(props: Props) {
     }
   }, [audioTrack])
 
-  const showScreen = isScreenOn && props.showScreen
+  const color = useMemo(() => {
+    return stringToRGB(user?.name || props.userId, participantLabelBg)
+  }, [user?.name])
 
-  const labelColor = useMemo(() => {
-    return participantLabelBg[
-      Math.floor(Math.random() * participantLabelBg.length)
-    ]
-  }, [props.participantId])
+  const showScreen = isScreenOn && props.showScreen
 
   return (
     <UserContextMenu user={user} status={status} tap={props.tap}>
@@ -93,7 +92,7 @@ function UActiveParticipant(props: Props) {
         data-participant-id={props.participantId}
         screenOn={showScreen}
         small={props.small}
-        css={{ '--participant-bg': labelColor }}
+        css={{ '--participant-bg': color }}
       >
         {!isMicOn && isVideoOn ? (
           <MuteIcon>

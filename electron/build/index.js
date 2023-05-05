@@ -20,106 +20,195 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var import_config = require("dotenv/config");
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+
+// src/main-window.ts
+var import_electron2 = require("electron");
+var import_electron_log2 = __toESM(require("electron-log"));
+
+// src/utils.ts
 var import_electron = require("electron");
-var path = __toESM(require("path"));
-var import_electron_updater = require("electron-updater");
 var import_electron_log = __toESM(require("electron-log"));
-let mainWindow = null;
-let trayWindow = null;
-let tray = null;
-const isDev = !import_electron.app.isPackaged;
-const assetsDir = path.join(__dirname, "../assets");
-import_electron_log.default.initialize({ preload: true });
-setupAutoUpdater();
-import_electron.app.on("ready", () => {
-  mainWindow = createMainWindow();
-  trayWindow = createTrayWindow();
-});
-import_electron.app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    import_electron.app.quit();
-  }
-});
-import_electron.app.on("activate", () => {
-  if (mainWindow === null) {
+var path = __toESM(require("path"));
+var isDev = !import_electron.app.isPackaged;
+var assetsDir = path.join(__dirname, "../assets");
+function assetPath(filename) {
+  return path.join(assetsDir, filename);
+}
+function htmlPath(filename) {
+  return "file://" + path.join(__dirname, filename);
+}
+function staticFilePath(filename) {
+  return "file://" + path.join(__dirname, "../priv/static", filename);
+}
+function loadExtensions() {
+  const devtoolsStr = (process.env.DEVTOOLS_EXTENSIONS || "").trim();
+  if (!devtoolsStr)
+    return import_electron_log.default.info("No extensions to load");
+  const devtoolsExtensions = devtoolsStr.split(/\s*,\s*/);
+  Promise.all(
+    devtoolsExtensions.map((path2) => import_electron.session.defaultSession.loadExtension(path2))
+  ).then(() => {
+    import_electron_log.default.info("Extensions loaded");
+  });
+}
+
+// src/main-window.ts
+var mainWindow = null;
+function getMainWindow() {
+  if (mainWindow.isDestroyed()) {
+    import_electron_log2.default.info("Main window is destroyed, recreating");
     createMainWindow();
   }
-});
-import_electron.app.whenReady().then(async () => {
-  if (isDev) {
-    const devtoolsStr = (process.env.DEVTOOLS_EXTENSIONS || "").trim();
-    if (!devtoolsStr)
-      return;
-    const devtoolsExtensions = devtoolsStr.split(/\s*,\s*/);
-    await Promise.all(
-      devtoolsExtensions.map(
-        (path2) => import_electron.session.defaultSession.loadExtension(path2)
-      )
-    );
-  }
-  setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), 6e5);
-});
-import_electron.ipcMain.on("set-tray", (event, options) => {
-  import_electron_log.default.info("Setting tray", options);
-  if (!tray) {
-    tray = createTray();
-  }
-  const parsed = JSON.parse(options);
-  tray.setImage(path.join(assetsDir, parsed.image));
-  tray.setTitle(parsed.title);
-  tray.setToolTip(parsed.tooltip);
-});
-import_electron.ipcMain.on("to-tray-window", (event, msg) => {
-  try {
-    trayWindow.webContents.send("to-tray-window", msg);
-  } catch (err) {
-    console.error("Error", err);
-  }
-});
-import_electron.ipcMain.on("to-main-window", (event, msg) => {
-  mainWindow.webContents.send("to-main-window", msg);
-});
-import_electron.ipcMain.on("commands", (event, msg) => {
-  const parsed = JSON.parse(msg);
-  switch (parsed.command) {
-    case "show-main-window":
-      trayWindow.hide();
-      mainWindow.show();
-      break;
-    case "hide-tray-window":
-      trayWindow.hide();
-      break;
-  }
-});
-function createTray() {
-  const tray2 = new import_electron.Tray(path.join(assetsDir, "tray_icon_emptyTemplate.png"));
-  tray2.setToolTip("Sway");
-  tray2.on("click", () => {
-    import_electron_log.default.info("Show tray window");
-    if (trayWindow.isVisible()) {
-      trayWindow.hide();
-      mainWindow.webContents.send(
-        "to-main-window",
-        JSON.stringify({ setWindowOpen: { open: false } })
-      );
-    } else {
-      const position = getTrayWindowPosition();
-      trayWindow.setPosition(position.x, position.y, false);
-      trayWindow.setVisibleOnAllWorkspaces(true);
-      trayWindow.show();
-      trayWindow.focus();
-      mainWindow.webContents.send(
-        "to-main-window",
-        JSON.stringify({ setWindowOpen: { open: true } })
-      );
+  return mainWindow;
+}
+function createMainWindow() {
+  mainWindow = new import_electron2.BrowserWindow({
+    width: 800,
+    height: 650,
+    title: "Sway",
+    trafficLightPosition: { x: 12, y: 16 },
+    titleBarStyle: "customButtonsOnHover",
+    transparent: true,
+    icon: staticFilePath("images/logo.ico"),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      partition: "persist:sway"
     }
   });
-  return tray2;
+  mainWindow.setMinimumSize(800, 600);
+  if (isDev) {
+    mainWindow.loadURL("http://localhost:4000/login");
+  } else {
+    mainWindow.loadURL(`https://sway.so/login`);
+  }
+  if (isDev) {
+    const devtools = require("electron-devtools-installer");
+    devtools.default(devtools.REACT_DEVELOPER_TOOLS).then((name) => console.log(`Added Extension:  ${name}`)).catch((err) => console.log("An error occurred: ", err));
+  }
+}
+
+// src/tray.ts
+var import_electron4 = require("electron");
+var import_electron_log3 = __toESM(require("electron-log"));
+
+// ../assets/js/lib/log.ts
+var c = 0;
+var colors = ["red", "blue", "green", "purple", "orange"];
+function logger(name) {
+  const color = colors[c++ % colors.length];
+  return {
+    info,
+    error
+  };
+  function info(msg, ...props) {
+    log8(console.info, msg, props);
+  }
+  function error(msg, ...props) {
+    log8(console.error, msg, props);
+  }
+  function log8(fn, msg, props) {
+    const args = [
+      `%c<${name}>%c ${msg}`,
+      `color: ${color};font-weight: bold;`,
+      "color: inherit"
+    ];
+    if (props.length > 1) {
+      args.push(...props.slice(0, -1));
+      args.push(props[props.length - 1]);
+    } else if (props.length > 0) {
+      args.push(props[0]);
+    }
+    fn.apply(console, args);
+  }
+}
+
+// ../assets/js/lib/electron.ts
+var log3 = logger("electron");
+var isNode = isRunningInElectron() && (process == null ? void 0 : process.type) !== "renderer";
+var _a;
+var ipcRenderer = typeof window !== "undefined" ? (_a = window.electron) == null ? void 0 : _a.ipcRenderer : null;
+var isElectron = !isNode && /electron/i.test(window.navigator.userAgent);
+var messageMainWindow = createMessageFn("main-window" /* Main */);
+var messageTrayWindow = createMessageFn("tray-window" /* Tray */);
+var messagePipWindow = createMessageFn("pip" /* Pip */);
+var messageWindowManager = createMessageFn(
+  "window-manager" /* WindowManager */
+);
+function sendMessage(chan, message) {
+  if (isNode)
+    throw Error("Not implemented for Node");
+  if (!isElectron)
+    return;
+  if (!ipcRenderer) {
+    log3.error("ipcRenderer undefined");
+    return;
+  }
+  log3.info("Sending message", chan, message);
+  ipcRenderer.send(chan, message);
+}
+function createMessageFn(target) {
+  return (payload) => {
+    return sendMessage("message", {
+      target,
+      payload
+    });
+  };
+}
+function isRunningInElectron() {
+  return typeof process !== "undefined" && typeof process.versions !== "undefined" && typeof process.versions.electron !== "undefined";
+}
+
+// src/messaging.ts
+var messageMainWindow2 = createMessageFn2(
+  getMainWindow,
+  "main-window" /* Main */
+);
+var messageTrayWindow2 = createMessageFn2(
+  getTrayWindow,
+  "tray-window" /* Tray */
+);
+function createMessageFn2(windowFn, target) {
+  return (payload) => {
+    return windowFn().webContents.send("message", {
+      target,
+      payload
+    });
+  };
+}
+
+// src/tray.ts
+var trayWindow = null;
+var trayButton = null;
+function getTrayWindow() {
+  if (trayWindow.isDestroyed()) {
+    createTrayWindow();
+  }
+  return trayWindow;
 }
 function createTrayWindow() {
-  import_electron_log.default.info("Creating tray window");
-  const win = new import_electron.BrowserWindow({
+  import_electron_log3.default.info("Creating tray window");
+  trayWindow = new import_electron4.BrowserWindow({
     width: 300,
     height: 350,
     fullscreenable: false,
@@ -135,58 +224,79 @@ function createTrayWindow() {
       backgroundThrottling: false
     }
   });
-  win.loadURL(`file://${path.join(__dirname, "tray-window.html")}`);
-  win.on("blur", () => {
-    if (!win.webContents.isDevToolsOpened()) {
-      win.hide();
-      mainWindow.webContents.send(
-        "to-main-window",
-        JSON.stringify({ setWindowOpen: { open: false } })
-      );
+  trayWindow.loadURL(htmlPath("tray-window.html"));
+  trayWindow.on("blur", () => {
+    if (!trayWindow.webContents.isDevToolsOpened()) {
+      trayWindow.hide();
+      messageMainWindow2({
+        isTrayWindowVisible: false
+      });
     }
   });
   if (isDev) {
-    win.webContents.openDevTools();
+    trayWindow.webContents.openDevTools();
   }
-  return win;
 }
-function createMainWindow() {
-  const win = new import_electron.BrowserWindow({
-    width: 800,
-    height: 650,
-    title: "Sway",
-    trafficLightPosition: { x: 12, y: 16 },
-    titleBarStyle: "customButtonsOnHover",
-    transparent: true,
-    icon: "file:///" + __dirname + "/../priv/static/images/logo.ico",
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      partition: "persist:sway"
+function createTrayButton() {
+  trayButton = new import_electron4.Tray(assetPath("tray_icon_emptyTemplate.png"));
+  trayButton.setToolTip("Sway");
+  trayButton.on("click", () => {
+    import_electron_log3.default.info("Show tray window");
+    if (trayWindow.isDestroyed()) {
+      createTrayWindow();
+    }
+    if (trayWindow.isVisible()) {
+      trayWindow.hide();
+      messageMainWindow2({ isTrayWindowVisible: false });
+    } else {
+      const position = getTrayWindowPosition();
+      trayWindow.setPosition(position.x, position.y, false);
+      trayWindow.setVisibleOnAllWorkspaces(true);
+      trayWindow.show();
+      trayWindow.focus();
+      messageMainWindow2({ isTrayWindowVisible: true });
     }
   });
-  win.setMinimumSize(800, 600);
-  if (isDev) {
-    win.loadURL("http://localhost:4000/login");
-  } else {
-    win.loadURL(`https://sway.so/login`);
-  }
-  win.on("closed", () => mainWindow = null);
-  if (isDev) {
-    const devtools = require("electron-devtools-installer");
-    devtools.default(devtools.REACT_DEVELOPER_TOOLS).then((name) => console.log(`Added Extension:  ${name}`)).catch((err) => console.log("An error occurred: ", err));
-  }
-  return win;
+  return trayButton;
+}
+function getTrayWindowPosition() {
+  const windowBounds = trayWindow.getBounds();
+  const trayBounds = trayButton.getBounds();
+  console.log("Window bounds:", windowBounds);
+  console.log("Tray bounds:", trayBounds);
+  const x = Math.round(
+    trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2
+  );
+  const y = Math.round(trayBounds.y);
+  console.log("tray window position: ", x, y);
+  return { x, y: -20 };
+}
+function setTray(title, tooltip, image) {
+  import_electron_log3.default.info("Set tray. Title: ", title, " Tooltip:", tooltip, " Image:", image);
+  trayButton.setImage(assetPath(image));
+  trayButton.setTitle(title);
+  trayButton.setToolTip(tooltip);
+}
+
+// src/main.ts
+var import_electron7 = require("electron");
+
+// src/auto-updater.ts
+var import_electron5 = require("electron");
+var import_electron_updater = require("electron-updater");
+var import_electron_log4 = __toESM(require("electron-log"));
+function checkForUpdates() {
+  setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), 6e5);
 }
 function setupAutoUpdater() {
-  import_electron_updater.autoUpdater.logger = import_electron_log.default;
+  import_electron_updater.autoUpdater.logger = import_electron_log4.default;
   import_electron_updater.autoUpdater.logger.transports.file.level = "debug";
   import_electron_updater.autoUpdater.setFeedURL({
     provider: "generic",
     url: "http://downloads.sway.so/releases/"
   });
   import_electron_updater.autoUpdater.checkForUpdatesAndNotify();
-  import_electron_updater.autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
+  import_electron_updater.autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
       type: "info",
       buttons: ["Restart", "Later"],
@@ -194,21 +304,172 @@ function setupAutoUpdater() {
       message: process.platform === "win32" ? releaseNotes : releaseName,
       detail: "A new version has been downloaded. Restart the application to apply the updates."
     };
-    import_electron.dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    import_electron5.dialog.showMessageBox(dialogOpts).then((returnValue) => {
       if (returnValue.response === 0)
         import_electron_updater.autoUpdater.quitAndInstall();
     });
   });
 }
-function getTrayWindowPosition() {
-  const windowBounds = trayWindow.getBounds();
-  const trayBounds = tray.getBounds();
-  import_electron_log.default.info("Window bounds:", windowBounds);
-  import_electron_log.default.info("Tray bounds:", trayBounds);
-  const x = Math.round(
-    trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2
-  );
-  const y = Math.round(trayBounds.y);
-  import_electron_log.default.info("tray window position: ", x, y);
-  return { x, y: -20 };
+
+// src/main.ts
+var import_electron_log6 = __toESM(require("electron-log"));
+
+// src/pip.ts
+var import_electron6 = require("electron");
+var import_electron_log5 = __toESM(require("electron-log"));
+var size = {
+  width: 175,
+  height: 350
+};
+var pipWindow = null;
+function getPipWindow() {
+  if (pipWindow.isDestroyed()) {
+    createPipWindow(getPipWindowPosition(getMainWindow()));
+  }
+  return pipWindow;
+}
+function createPipWindow(position) {
+  import_electron_log5.default.info("Creating PIP window");
+  pipWindow = new import_electron6.BrowserWindow({
+    width: size.width,
+    height: size.height,
+    x: position.x,
+    y: position.y,
+    fullscreenable: false,
+    resizable: true,
+    show: false,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      // Prevents renderer process code from not running when window is
+      // hidden
+      backgroundThrottling: false,
+      experimentalFeatures: true
+    }
+  });
+  pipWindow.on("show", () => {
+    messageMainWindow2({ isPipWindowVisible: true });
+  });
+  pipWindow.on("hide", () => {
+    messageMainWindow2({ isPipWindowVisible: false });
+  });
+  pipWindow.setVisibleOnAllWorkspaces(true);
+  pipWindow.loadURL(htmlPath("pip-window.html"));
+  if (isDev) {
+    pipWindow.webContents.openDevTools();
+  }
+}
+function getPipWindowPosition(mainWindow2) {
+  const mainWindowBounds = mainWindow2.getBounds();
+  return {
+    x: mainWindowBounds.x + mainWindowBounds.width + 50,
+    y: mainWindowBounds.y + mainWindowBounds.height - size.height
+  };
+}
+
+// src/main.ts
+import_electron_log6.default.initialize({ preload: true });
+setupAutoUpdater();
+import_electron7.app.on("ready", () => {
+  createMainWindow();
+  createTrayWindow();
+  createTrayButton();
+  createPipWindow(getPipWindowPosition(getMainWindow()));
+  getMainWindow().on("blur", () => {
+    messageMainWindow2({ isMainWindowFocused: false });
+  });
+  getMainWindow().on("show", () => {
+    messageMainWindow2({ isMainWindowFocused: true });
+  });
+  getMainWindow().on("focus", () => {
+    messageMainWindow2({ isMainWindowFocused: true });
+  });
+});
+import_electron7.app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    import_electron7.app.quit();
+  }
+});
+import_electron7.app.on("activate", () => {
+  if (getMainWindow() === null) {
+    createMainWindow();
+  }
+});
+import_electron7.app.whenReady().then(() => __async(exports, null, function* () {
+  if (isDev) {
+    loadExtensions();
+  }
+  checkForUpdates();
+}));
+import_electron7.ipcMain.on(
+  "message",
+  (event, parsed) => {
+    import_electron_log6.default.info("Received", parsed);
+    const message = parsed;
+    let window2 = null;
+    switch (parsed.target) {
+      case "window-manager" /* WindowManager */:
+        handleMessages(parsed);
+        break;
+      case "main-window" /* Main */:
+        window2 = getMainWindow();
+        break;
+      case "tray-window" /* Tray */:
+        window2 = getTrayWindow();
+        break;
+      case "pip" /* Pip */:
+        window2 = getPipWindow();
+        break;
+    }
+    if (window2) {
+      try {
+        window2.webContents.send("message", message);
+      } catch (err) {
+        console.error(
+          "Can not direct message. Target: " + parsed.target + " Message:" + message
+        );
+        import_electron_log6.default.error(
+          "Can not direct message. Target: " + parsed.target + " Message:" + message
+        );
+      }
+    }
+  }
+);
+function handleMessages(message) {
+  if (message.payload.hideMainWindow) {
+    getMainWindow().hide();
+    return;
+  }
+  if (message.payload.hideTrayWindow) {
+    getTrayWindow().hide();
+    return;
+  }
+  if (message.payload.showTrayWindow) {
+    getTrayWindow().show();
+    return;
+  }
+  if (message.payload.showMainWindow) {
+    getMainWindow().show();
+    return;
+  }
+  if (message.payload.showPipWindow) {
+    getPipWindow().show();
+    return;
+  }
+  if (message.payload.hidePipWindow) {
+    getPipWindow().hide();
+    return;
+  }
+  if (message.payload.setTrayIcon) {
+    setTray(
+      message.payload.setTrayIcon.title,
+      message.payload.setTrayIcon.tooltip,
+      message.payload.setTrayIcon.image
+    );
+    return;
+  }
+  import_electron_log6.default.error("Unhandled message", JSON.stringify(message));
 }

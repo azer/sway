@@ -104,7 +104,7 @@ export const CallTileRoot = styled('main', {
   gap: '8px',
 })
 
-function calcTileSize(
+export function calcTileSize(
   numParticipants: number,
   screenWidth: number,
   screenHeight: number

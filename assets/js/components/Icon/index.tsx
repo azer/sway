@@ -46,6 +46,7 @@ import { ChatIcon } from './Chat'
 import { DoorEnterIcon } from './DoorEnter'
 import { ActivityIcon } from './Activity'
 import { UserPlusIcon } from './UserPlus'
+import { PhoneHangUp } from './PhoneHangup'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -97,6 +98,7 @@ const icons: {
   doorEnter: DoorEnterIcon,
   activity: ActivityIcon,
   userPlus: UserPlusIcon,
+  phoneHangUp: PhoneHangUp,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {
