@@ -100,14 +100,20 @@ export function ElectronTrayProvider(props: Props) {
       'Main window focused:',
       mainWindowFocused,
       isTrayWindowOpen,
+      isPipWindowOpen,
       isActive
     )
 
-    if (!mainWindowFocused && isActive && !isTrayWindowOpen) {
+    if (
+      !mainWindowFocused &&
+      isActive &&
+      !isTrayWindowOpen &&
+      !isPipWindowOpen
+    ) {
       messageWindowManager({
         showPipWindow: true,
       })
-    } else if (mainWindowFocused || !isActive) {
+    } else if ((mainWindowFocused || !isActive) && isPipWindowOpen) {
       messageWindowManager({
         hidePipWindow: true,
       })

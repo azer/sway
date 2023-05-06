@@ -30,7 +30,7 @@
       "output": "dist"
     },
     "files": [
-      "build/index.js",
+      "build/*",
       "assets",
       "!dist${/*}"
     ],

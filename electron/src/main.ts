@@ -23,18 +23,21 @@ app.on("ready", () => {
   createPipWindow(getPipWindowPosition(getMainWindow()));
 
   getMainWindow().on("blur", () => {
+    log.info("Blur, show pip window");
     messageMainWindow({ isMainWindowFocused: false });
     //getPipWindow().show();
   });
 
   getMainWindow().on("show", () => {
+    log.info("Show main window, hide pip window");
     messageMainWindow({ isMainWindowFocused: true });
-    //getPipWindow().hide();
+    // getPipWindow().hide();
   });
 
   getMainWindow().on("focus", () => {
+    log.info("Focus main window, hide pip window");
     messageMainWindow({ isMainWindowFocused: true });
-    //getPipWindow().hide();
+    // getPipWindow().hide();
   });
 });
 
@@ -61,7 +64,6 @@ app.whenReady().then(async () => {
 ipcMain.on(
   "message",
   (event: Electron.IpcMainEvent, parsed: ElectronMessage) => {
-    log.info("Received", parsed);
     const message = parsed;
     //log.info("Received message", message.slice(0, 256));
 

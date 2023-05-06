@@ -12,15 +12,11 @@ import {
   getIpcRenderer,
   messageMainWindow,
 } from 'lib/electron'
-import { StyledUserIconView, UserIconView } from 'components/UserView'
+import { UserIconView } from 'components/UserView'
 import { BoxTile } from 'components/BoxTile'
 import { PipCallProvider } from './PipCallProvider'
-import { Video } from 'features/Call/Video'
-import { PictureInPictureVideo } from 'features/PictureInPicture/Video'
 // import selectors from 'selectors'
 // import { useSelector, useDispatch } from 'state'
-
-const MIN_COL_WIDTH = 100
 
 const log = logger('electron-pip-window')
 

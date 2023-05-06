@@ -215,7 +215,7 @@ export function CallControls(props: Props) {
       {props.isActive ? (
         <PhoneCallButton>
           <Button
-            icon="phone-call"
+            icon="phoneHangUp"
             label="Leave call"
             tooltipLabel="Leave call"
             tooltipShortcut={['space']}

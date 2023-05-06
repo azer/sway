@@ -379,12 +379,15 @@ import_electron7.app.on("ready", () => {
   createTrayButton();
   createPipWindow(getPipWindowPosition(getMainWindow()));
   getMainWindow().on("blur", () => {
+    import_electron_log6.default.info("Blur, show pip window");
     messageMainWindow2({ isMainWindowFocused: false });
   });
   getMainWindow().on("show", () => {
+    import_electron_log6.default.info("Show main window, hide pip window");
     messageMainWindow2({ isMainWindowFocused: true });
   });
   getMainWindow().on("focus", () => {
+    import_electron_log6.default.info("Focus main window, hide pip window");
     messageMainWindow2({ isMainWindowFocused: true });
   });
 });
@@ -407,7 +410,6 @@ import_electron7.app.whenReady().then(() => __async(exports, null, function* () 
 import_electron7.ipcMain.on(
   "message",
   (event, parsed) => {
-    import_electron_log6.default.info("Received", parsed);
     const message = parsed;
     let window2 = null;
     switch (parsed.target) {
