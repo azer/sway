@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
 import { setPipOpen, setTrayCreated, setTrayOpen } from './slice'
 import { useSelector, useDispatch } from 'state'
@@ -32,6 +32,7 @@ export function ElectronTrayProvider(props: Props) {
   const ctx = useContext(SocketContext)
 
   const [trayStateRequested, setTrayStateRequested] = useState(false)
+  const pipFocusTimerRef = useRef<NodeJS.Timer | null>(null)
   const [mainWindowFocused, setMainWindowFocused] = useState(
     document.hasFocus()
   )
@@ -96,29 +97,42 @@ export function ElectronTrayProvider(props: Props) {
   }, [trayStateRequested])
 
   useEffect(() => {
-    log.info(
-      'Main window focused:',
-      mainWindowFocused,
-      isTrayWindowOpen,
-      isPipWindowOpen,
-      isActive
-    )
-
-    if (
-      !mainWindowFocused &&
-      isActive &&
-      !isTrayWindowOpen &&
-      !isPipWindowOpen
-    ) {
-      messageWindowManager({
-        showPipWindow: true,
-      })
-    } else if ((mainWindowFocused || !isActive) && isPipWindowOpen) {
-      messageWindowManager({
-        hidePipWindow: true,
-      })
+    if (pipFocusTimerRef.current) {
+      clearTimeout(pipFocusTimerRef.current)
+      pipFocusTimerRef.current = null
     }
-  }, [mainWindowFocused, isActive, isTrayWindowOpen])
+
+    pipFocusTimerRef.current = setTimeout(() => {
+      log.info(
+        'Main window focused:',
+        mainWindowFocused,
+        isTrayWindowOpen,
+        isPipWindowOpen,
+        isActive,
+        mainWindowFocused && isPipWindowOpen
+      )
+
+      if (
+        !mainWindowFocused &&
+        isActive &&
+        !isTrayWindowOpen &&
+        !isPipWindowOpen
+      ) {
+        messageWindowManager({
+          showPipWindow: true,
+        })
+      } else if (mainWindowFocused && isPipWindowOpen) {
+        log.info('hide')
+        messageWindowManager({
+          hidePipWindow: true,
+        })
+      } else if ((mainWindowFocused || !isActive) && isPipWindowOpen) {
+        messageWindowManager({
+          hidePipWindow: true,
+        })
+      }
+    }, 70)
+  }, [mainWindowFocused, isActive, isTrayWindowOpen, isPipWindowOpen])
 
   return <></>
 
