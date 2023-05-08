@@ -8,6 +8,7 @@ import { participantLabelBg } from 'themes/colors'
 import { firstName } from 'lib/string'
 import { stringToRGB } from 'lib/colors'
 import { PictureInPictureVideo } from 'features/PictureInPicture/Video'
+import Icon from 'components/Icon'
 
 interface Props {
   userId: string
@@ -46,6 +47,7 @@ export function UserIconView(props: Props) {
             backgroundColor: color,
           }}
         >
+          {!props.status?.mic_on ? <Icon name="mic-off" /> : null}
           {firstName(props.user?.name || '')}
         </Label>
         {props.videoFrame ? (
@@ -138,11 +140,18 @@ export const Label = styled('div', {
   fontSize: '$small',
   round: 'small',
   label: true,
+  display: 'flex',
+  gap: '4px',
   variants: {
     tile: {
       true: {
         bottom: 'var(--tile-box-label-bottom)',
       },
     },
+  },
+  '& svg': {
+    height: '12px',
+    position: 'relative',
+    top: '1px',
   },
 })

@@ -28,7 +28,7 @@ electron-compile-watch:
 tray-compile-watch:
 	@cd electron && $(ELECTRONBIN)/esbuild --bundle ../assets/js/features/ElectronTrayWindow/index.tsx --outfile=build/tray-window.js --format=iife --watch --target=es6 --platform=node
 
-## tray-compile-watch: Compile & watch Electron Tray Window code
+## pip-compile-watch: Compile & watch Electron PiP Window code
 .PHONY: pip-compile-watch
 pip-compile-watch:
 	@cd electron && $(ELECTRONBIN)/esbuild --bundle ../assets/js/features/ElectronPipWindow/index.tsx --outfile=build/pip-window.js --format=iife --watch --target=es6 --platform=node

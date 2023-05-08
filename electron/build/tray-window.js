@@ -71085,7 +71085,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/components/UserView/index.tsx
   var import_jsx_runtime68 = __toESM(require_jsx_runtime());
   function UserIconView(props) {
-    var _a5, _b2, _c;
+    var _a5, _b2, _c, _d;
     const color = (0, import_react8.useMemo)(() => {
       var _a6;
       return stringToRGB(((_a6 = props.user) == null ? void 0 : _a6.name) || props.userId, participantLabelBg);
@@ -71101,14 +71101,17 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         isOnline: props.isOnline,
         createStatusHook: props.createStatusHook,
         children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(
             Label5,
             {
               tile: props.tile,
               css: {
                 backgroundColor: color
               },
-              children: firstName(((_a5 = props.user) == null ? void 0 : _a5.name) || "")
+              children: [
+                !((_a5 = props.status) == null ? void 0 : _a5.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Icon_default, { name: "mic-off" }) : null,
+                firstName(((_b2 = props.user) == null ? void 0 : _b2.name) || "")
+              ]
             }
           ),
           props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
@@ -71122,8 +71125,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
             Avatar,
             {
-              src: (_b2 = props.user) == null ? void 0 : _b2.profile_photo_url,
-              fallback: ((_c = props.user) == null ? void 0 : _c.name) || "User " + props.userId
+              src: (_c = props.user) == null ? void 0 : _c.profile_photo_url,
+              fallback: ((_d = props.user) == null ? void 0 : _d.name) || "User " + props.userId
             }
           ) : null
         ] })
@@ -71198,12 +71201,19 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     fontSize: "$small",
     round: "small",
     label: true,
+    display: "flex",
+    gap: "4px",
     variants: {
       tile: {
         true: {
           bottom: "var(--tile-box-label-bottom)"
         }
       }
+    },
+    "& svg": {
+      height: "12px",
+      position: "relative",
+      top: "1px"
     }
   });
 

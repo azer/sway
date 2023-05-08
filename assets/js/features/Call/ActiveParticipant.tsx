@@ -207,4 +207,5 @@ const MuteIcon = styled('div', {
   width: '16px',
   height: '16px',
   color: 'rgba(255, 255, 255, 0.6)',
+  zIndex: '$aboveContent',
 })
