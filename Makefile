@@ -33,7 +33,7 @@ tray-compile-watch:
 pip-compile-watch:
 	@cd electron && $(ELECTRONBIN)/esbuild --bundle ../assets/js/features/ElectronPipWindow/index.tsx --outfile=build/pip-window.js --format=iife --watch --target=es6 --platform=node
 
-## electron-compile: Compile Electron
+## electron-build: Build Electron
 .PHONY: electron-build
 electron-build:
 	@echo "Building $(VERSION)"

@@ -377,6 +377,7 @@ html, body {
 }
 
 .hero-img {
+    display: none;
     width: 100%;
     margin-top: 25px;
     border-radius: 10px;
@@ -390,6 +391,11 @@ html, body {
     text-align: left;
     margin-top: 0;
     margin-bottom: 30px;
+}
+
+.hero-vis video {
+    width: 100%;
+
 }
 
 .features {
