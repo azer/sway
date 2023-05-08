@@ -134,7 +134,9 @@ export function ElectronTrayWindow(props: Props) {
         {active.length ? (
           <>
             <Title>
-              In call {active.length > 1 ? `({active.length})` : ''}
+              <label>
+                Call {active.length > 1 ? `(${active.length})` : ''}
+              </label>
             </Title>
             <Active>
               {active.map((p) => (
@@ -159,8 +161,10 @@ export function ElectronTrayWindow(props: Props) {
         {inactive.length > 0 ? (
           <>
             <Title>
-              {active.length ? 'Others' : 'Present'}{' '}
-              {inactive.length > 1 ? `({inactive.length})` : ''}
+              <label>
+                {active.length ? 'Others' : 'Present'}{' '}
+                {inactive.length > 1 ? `(${inactive.length})` : ''}
+              </label>
             </Title>
             <Inactive>
               {inactive.map((p) => (
@@ -262,7 +266,7 @@ export function ElectronTrayWindow(props: Props) {
       const userId = parsed.payload.sendVideoFrame?.userId
       if (!userId) return
 
-      setVideoFrame((videoFrames) => {
+      return setVideoFrame((videoFrames) => {
         return {
           ...videoFrames,
           [userId]: {
@@ -272,6 +276,8 @@ export function ElectronTrayWindow(props: Props) {
         }
       })
     }
+
+    log.error('')
   }
 
   function showMainWindow() {
@@ -413,6 +419,7 @@ const StatusRoot = styled('div', {
 
 const Dock = styled('div', {
   position: 'absolute',
+  zIndex: '$aboveBase',
   left: '15px',
   bottom: '15px',
   width: 'calc(100vw - 30px)',
@@ -460,17 +467,18 @@ export const Active = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr 1fr 1fr',
   gap: '4px',
-  margin: '0 12px',
+  margin: '0 18px 0 18px',
 })
 
 const Inactive = styled('div', {
   display: 'flex',
   flexDirection: 'column',
+  gap: '6px',
+  margin: '0 18px',
 })
 
 const UserRow = styled('div', {
   height: '48px',
-  padding: '0 12px',
 })
 
 const Empty = styled('div', {
@@ -486,11 +494,17 @@ const Title = styled('div', {
   fontSize: '$small',
   fontWeight: '$semibold',
   textTransform: 'uppercase',
-  color: 'rgba(245, 250, 255, 0.2)',
-  padding: '0 12px',
+  padding: '0 14px',
+  marginTop: '4px',
   height: '32px',
   label: true,
   vcenter: true,
+  '& label': {
+    borderRadius: '$small',
+    padding: '4px 6px',
+    background: 'rgba(40, 44, 51, 0.9)',
+    color: 'rgba(245, 250, 255, 0.35)',
+  },
 })
 
 ReactDOM.render(<ElectronTrayWindow />, document.getElementById('root'))

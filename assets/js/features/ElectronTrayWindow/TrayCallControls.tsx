@@ -33,6 +33,7 @@ export function TrayCallControls(props: Props) {
           joinCall={props.joinCall}
           leaveCall={props.leaveCall}
           naked
+          tray
         />
       </Left>
       <Right>

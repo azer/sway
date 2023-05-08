@@ -70247,6 +70247,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     }
   });
   var ControlMenu = styled("div", {
+    zIndex: "$modal",
     padding: "0",
     width: "300px",
     overflow: "hidden",
@@ -70661,7 +70662,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           isActive: props.isActive,
           joinCall: props.joinCall,
           leaveCall: props.leaveCall,
-          naked: true
+          naked: true,
+          tray: true
         }
       ) }),
       /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(Right, { children: [
@@ -71414,10 +71416,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           " Check out other rooms?"
         ] }) : null,
         active.length ? /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(import_jsx_runtime71.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(Title, { children: [
-            "In call ",
-            active.length > 1 ? `({active.length})` : ""
-          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)("label", { children: [
+            "Call ",
+            active.length > 1 ? `(${active.length})` : ""
+          ] }) }),
           /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Active, { children: active.map((p2) => {
             var _a6;
             return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
@@ -71436,11 +71438,11 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           }) })
         ] }) : null,
         inactive.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(import_jsx_runtime71.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(Title, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)("label", { children: [
             active.length ? "Others" : "Present",
             " ",
-            inactive.length > 1 ? `({inactive.length})` : ""
-          ] }),
+            inactive.length > 1 ? `(${inactive.length})` : ""
+          ] }) }),
           /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Inactive, { children: inactive.map((p2) => /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(UserRow, { children: /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
             UserListView,
             {
@@ -71532,7 +71534,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         const userId = (_a6 = parsed.payload.sendVideoFrame) == null ? void 0 : _a6.userId;
         if (!userId)
           return;
-        setVideoFrame((videoFrames) => {
+        return setVideoFrame((videoFrames) => {
           var _a7;
           return __spreadProps(__spreadValues({}, videoFrames), {
             [userId]: {
@@ -71542,6 +71544,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           });
         });
       }
+      log10.error("");
     }
     function showMainWindow() {
       messageWindowManager({ showMainWindow: true });
@@ -71659,6 +71662,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
   var Dock = styled("div", {
     position: "absolute",
+    zIndex: "$aboveBase",
     left: "15px",
     bottom: "15px",
     width: "calc(100vw - 30px)",
@@ -71705,15 +71709,16 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     display: "grid",
     gridTemplateColumns: "1fr 1fr 1fr",
     gap: "4px",
-    margin: "0 12px"
+    margin: "0 18px 0 18px"
   });
   var Inactive = styled("div", {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    gap: "6px",
+    margin: "0 18px"
   });
   var UserRow = styled("div", {
-    height: "48px",
-    padding: "0 12px"
+    height: "48px"
   });
   var Empty = styled("div", {
     margin: "24px 12px",
@@ -71727,11 +71732,17 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     fontSize: "$small",
     fontWeight: "$semibold",
     textTransform: "uppercase",
-    color: "rgba(245, 250, 255, 0.2)",
-    padding: "0 12px",
+    padding: "0 14px",
+    marginTop: "4px",
     height: "32px",
     label: true,
-    vcenter: true
+    vcenter: true,
+    "& label": {
+      borderRadius: "$small",
+      padding: "4px 6px",
+      background: "rgba(40, 44, 51, 0.9)",
+      color: "rgba(245, 250, 255, 0.35)"
+    }
   });
   import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ElectronTrayWindow, {}), document.getElementById("root"));
 })();

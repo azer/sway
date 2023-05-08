@@ -412,6 +412,7 @@ const StyledAnchor = styled(Popover.Anchor, {
 })
 
 const ControlMenu = styled('div', {
+  zIndex: '$modal',
   padding: '0',
   width: '300px',
   overflow: 'hidden',
