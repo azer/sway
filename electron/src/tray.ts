@@ -83,9 +83,6 @@ function getTrayWindowPosition() {
   const windowBounds = trayWindow.getBounds();
   const trayBounds = trayButton.getBounds();
 
-  console.log("Window bounds:", windowBounds);
-  console.log("Tray bounds:", trayBounds);
-
   // Center window horizontally below the tray icon
   const x = Math.round(
     trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2
@@ -101,6 +98,10 @@ function getTrayWindowPosition() {
 
 export function setTray(title: string, tooltip: string, image: string) {
   log.info("Set tray. Title: ", title, " Tooltip:", tooltip, " Image:", image);
+  if (!trayButton) {
+    createTrayButton();
+  }
+
   trayButton.setImage(assetPath(image));
   trayButton.setTitle(title);
   trayButton.setToolTip(tooltip);

@@ -1,10 +1,5 @@
 import { createMainWindow, getMainWindow } from "./main-window";
-import {
-  createTrayWindow,
-  createTrayButton,
-  getTrayWindow,
-  setTray,
-} from "./tray";
+import { createTrayWindow, getTrayWindow, setTray } from "./tray";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { checkForUpdates, setupAutoUpdater } from "./auto-updater";
 import log from "electron-log";
@@ -19,7 +14,6 @@ setupAutoUpdater();
 app.on("ready", () => {
   createMainWindow();
   createTrayWindow();
-  createTrayButton();
   createPipWindow(getPipWindowPosition(getMainWindow()));
 
   getMainWindow().on("blur", () => {

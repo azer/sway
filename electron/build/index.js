@@ -262,8 +262,6 @@ function createTrayButton() {
 function getTrayWindowPosition() {
   const windowBounds = trayWindow.getBounds();
   const trayBounds = trayButton.getBounds();
-  console.log("Window bounds:", windowBounds);
-  console.log("Tray bounds:", trayBounds);
   const x = Math.round(
     trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2
   );
@@ -273,6 +271,9 @@ function getTrayWindowPosition() {
 }
 function setTray(title, tooltip, image) {
   import_electron_log3.default.info("Set tray. Title: ", title, " Tooltip:", tooltip, " Image:", image);
+  if (!trayButton) {
+    createTrayButton();
+  }
   trayButton.setImage(assetPath(image));
   trayButton.setTitle(title);
   trayButton.setToolTip(tooltip);
@@ -376,7 +377,6 @@ setupAutoUpdater();
 import_electron7.app.on("ready", () => {
   createMainWindow();
   createTrayWindow();
-  createTrayButton();
   createPipWindow(getPipWindowPosition(getMainWindow()));
   getMainWindow().on("blur", () => {
     import_electron_log6.default.info("Blur, show pip window");
