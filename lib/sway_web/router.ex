@@ -143,6 +143,7 @@ defmodule SwayWeb.Router do
   scope "/", SwayWeb do
     pipe_through [:browser, :require_authenticated_user]
     get "/", AppController, :index
+    get "/onboarding", AppController, :index
     get "/:workspace", AppController, :index
     get "/:workspace/room/:room_slug", AppController, :room
     get "/:workspace/room/:room_id/:room_slug", AppController, :private_room

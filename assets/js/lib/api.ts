@@ -20,6 +20,8 @@ export const POST = (url: string, options?: Options) =>
   request('post', url, options)
 export const PUT = (url: string, options?: Options) =>
   request('put', url, options)
+export const DELETE = (url: string, options?: Options) =>
+  request('delete', url, options)
 
 interface Options {
   body?: any

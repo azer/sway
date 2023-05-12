@@ -27,7 +27,6 @@ defmodule SwayWeb.AppController do
        |> put_status(:not_found)
        |> json(%{error: "Not found"})
     end
-
   end
 
   def room(conn, %{ "workspace" => workspace, "room_slug" => room_slug }) do

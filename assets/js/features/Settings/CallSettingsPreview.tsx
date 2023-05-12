@@ -152,8 +152,20 @@ export const CameraOff = styled('div', {
   fontSize: '$small',
   center: true,
   '& svg': {
-    width: '28px',
+    aspectRatio: '1',
     height: '28px',
+  },
+  variants: {
+    onboarding: {
+      true: {
+        background: 'transparent',
+        height: '100%',
+        svg: {
+          color: 'rgb(0,0,0,0.125)',
+          height: '72px',
+        },
+      },
+    },
   },
 })
 

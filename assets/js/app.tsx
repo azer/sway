@@ -46,6 +46,7 @@ import { TapProvider } from 'features/Tap/Provider'
 import { ChatProvider } from 'features/Chat/Provider'
 import { PictureInPictureProvider } from 'features/PictureInPicture/Provider'
 import { FocusProvider } from 'features/Focus/Provider'
+import { Onboarding } from 'features/Onboarding'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -69,25 +70,32 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+/*ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <Onboarding />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+)*/
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <UserSocketProvider>
         <CommandRegistryProvider>
-          <CallProvider>
-            <CommandPaletteProvider>
-              <FocusProvider />
-              <SettingsProvider />
-              <PresenceProvider />
-              <ElectronTrayProvider />
-              <EmojiProvider />
-              <TapProvider />
-              <ChatProvider />
-              <Tooltip.Provider>
-                <Routing />
-              </Tooltip.Provider>
-            </CommandPaletteProvider>
-          </CallProvider>
+          <CommandPaletteProvider>
+            <FocusProvider />
+            <SettingsProvider />
+            <PresenceProvider />
+            <ElectronTrayProvider />
+            <EmojiProvider />
+            <TapProvider />
+            <ChatProvider />
+            <Tooltip.Provider>
+              <Routing />
+            </Tooltip.Provider>
+          </CommandPaletteProvider>
         </CommandRegistryProvider>
       </UserSocketProvider>
     </Provider>

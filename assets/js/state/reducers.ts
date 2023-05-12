@@ -13,6 +13,7 @@ import taps from 'features/Tap/slice'
 import roomMembers from 'features/RoomMembers/slice'
 import chat from 'features/Chat/slice'
 import electronTray from 'features/ElectronTray/slice'
+import onboarding from 'features/Onboarding/slice'
 
 export default {
   //undotree,
@@ -30,4 +31,5 @@ export default {
   roomMembers,
   chat,
   electronTray,
+  onboarding,
 }

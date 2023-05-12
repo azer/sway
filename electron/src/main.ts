@@ -1,6 +1,6 @@
 import { createMainWindow, getMainWindow } from "./main-window";
 import { createTrayWindow, getTrayWindow, setTray } from "./tray";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, systemPreferences } from "electron";
 import { checkForUpdates, setupAutoUpdater } from "./auto-updater";
 import log from "electron-log";
 import { isDev, loadExtensions } from "./utils";
@@ -33,6 +33,9 @@ app.on("ready", () => {
     messageMainWindow({ isMainWindowFocused: true });
     // getPipWindow().hide();
   });
+
+  const microphone = systemPreferences.askForMediaAccess("microphone");
+  const camera = systemPreferences.askForMediaAccess("camera");
 });
 
 app.on("window-all-closed", () => {

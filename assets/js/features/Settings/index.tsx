@@ -20,6 +20,7 @@ import { useBackgroundBlurSettings } from './BackgroundBlur'
 import { usePresenceSettings } from './PresenceSettings'
 import { useInvitePeople } from './InvitePeople'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { deleteIDBDatabase } from 'state/persistency'
 
 interface Props {}
 
@@ -29,9 +30,9 @@ export function useSettings() {
   const dispatch = useDispatch()
   const commandPalette = useCommandPalette()
   const videoSettings = useVideoSettings()
-  const micSettings = useMicSettings()
-  const speakerSettings = useSpeakerSettings()
-  const pushToTalkSettings = usePushToTalkSettings()
+  //const micSettings = useMicSettings()
+  //const speakerSettings = useSpeakerSettings()
+  //const pushToTalkSettings = usePushToTalkSettings()
   const backgroundBlur = useBackgroundBlurSettings()
   const invitePeople = useInvitePeople()
 
@@ -107,7 +108,7 @@ export function useSettings() {
 
   function buildCommandList(): Command[] {
     return [
-      {
+      /*{
         id: 'video-settings',
         icon: 'video',
         name: 'Camera',
@@ -141,7 +142,7 @@ export function useSettings() {
         name: 'Background Blur',
         hint: backgroundBlurLabel,
         palette: backgroundBlur,
-      },
+      },*/
       {
         id: 'back',
         icon: 'undo',
@@ -168,10 +169,14 @@ export function SettingsProvider(props: Props) {
   )
 
   useRegister((register) => {
-    register(`Settings`, openSettings, {
+    /*register(`Settings`, openSettings, {
       icon: 'sliders',
       type: CommandType.Settings,
       palette: settings,
+      })*/
+
+    register('Developer: Delete offline database', deleteOfflineDB, {
+      keywords: ['db', 'clear', 'clean', 'cache'],
     })
 
     register(`Sign out`, logout, {
@@ -198,6 +203,16 @@ export function SettingsProvider(props: Props) {
     }).then((response) => {
       window.location.href = '/login'
     })
+  }
+
+  function deleteOfflineDB() {
+    deleteIDBDatabase()
+      .then(() => {
+        window.location.reload()
+      })
+      .catch((err: Error) => {
+        log.error('Can not delete idb', err)
+      })
   }
 }
 

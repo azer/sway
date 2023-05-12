@@ -3,16 +3,15 @@ import { styled } from 'themes'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { Navigation, navigationBlur1 } from 'features/Navigation'
-import { PresenceStatus } from 'state/presence'
 import { Titlebar } from 'features/Titlebar'
-import { globalCss } from '@stitches/react'
-import { isElectron } from 'lib/electron'
 import { notifications } from 'lib/notifications'
 import { Sidebar } from 'features/Sidebar'
 import { useCommandPalette } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { logger } from 'lib/log'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { ShellRoot } from './ShellRoot'
+import { CallProvider } from 'features/Call/Provider'
 
 interface Props {
   children?: React.ReactNode
@@ -44,19 +43,19 @@ export function Shell(props: Props) {
     [commandPalette.isOpen]
   )
 
-  globalStyles()
-
   return (
-    <Viewport>
+    <ShellRoot workspace>
       <Navigation />
       <Main>
         <Titlebar />
-        <Container status={localStatus.status}>
-          <Middle>{props.children}</Middle>
-          <Sidebar />
-        </Container>
+        <CallProvider>
+          <Container>
+            <Middle>{props.children}</Middle>
+            <Sidebar />
+          </Container>
+        </CallProvider>
       </Main>
-    </Viewport>
+    </ShellRoot>
   )
 
   function onPressCommandK() {
@@ -72,32 +71,6 @@ export function Shell(props: Props) {
     })
   }
 }
-
-const globalStyles = globalCss({
-  html: {
-    background: '$shellBg',
-    overflow: 'hidden',
-  },
-  body: {
-    background: '$shellBg',
-    overflow: 'hidden',
-  },
-  '::selection': {
-    background: '$textSelectionBg',
-    color: '$textSelectionFg',
-  },
-})
-
-const bottomBlurEffect = (color: string) =>
-  `radial-gradient(440px at calc(50% + 100px) calc(100vh + 300px), ${color}, transparent)`
-
-const Viewport = styled('div', {
-  width: '100vw',
-  minHeight: '100vh',
-  display: 'flex',
-  backgroundColor: '$shellBg',
-  backgroundImage: `${navigationBlur1}, radial-gradient(1000px at 500px -700px, $shellBlur1, transparent)`,
-})
 
 const Container = styled('main', {
   flex: '1',

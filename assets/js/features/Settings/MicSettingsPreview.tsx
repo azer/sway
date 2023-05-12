@@ -8,6 +8,7 @@ import { CameraOff as MicOff, Prop, Table, Value } from './CallSettingsPreview'
 
 interface Props {
   deviceId?: string
+  onboarding?: boolean
 }
 
 const log = logger('settings/audio-preview')
@@ -41,13 +42,7 @@ export function MicSettingsPreview(props: Props) {
     navigator.mediaDevices
       .getUserMedia({
         audio: {
-          mandatory: {
-            deviceId: props.deviceId,
-            googEchoCancellation: false,
-            googAutoGainControl: false,
-            googNoiseSuppression: false,
-            googHighpassFilter: false,
-          },
+          deviceId: props.deviceId,
         },
       })
       .then((stream) => {
@@ -56,6 +51,7 @@ export function MicSettingsPreview(props: Props) {
         log.info('Creating test audio for microphone', props.deviceId)
 
         const audio = new AudioContext()
+
         const source = audio.createMediaStreamSource(stream)
         const analyser = audio.createAnalyser()
         source.connect(analyser)
@@ -64,15 +60,21 @@ export function MicSettingsPreview(props: Props) {
 
         const updateLevel = () => {
           analyser.getByteTimeDomainData(dataArray)
+
           const values = dataArray.reduce(
             (acc, cur) => acc + Math.abs(cur - 128),
             0
           )
+
           const average = values / dataArray.length
+
           setLevel(average)
         }
 
         intervalRef.current = setInterval(updateLevel, 250)
+      })
+      .catch((err) => {
+        log.error('Something went wrong', err)
       })
 
     return () => {
@@ -97,23 +99,31 @@ export function MicSettingsPreview(props: Props) {
   return (
     <Container>
       {props.deviceId === 'off' ? (
-        <MicOff>
+        <MicOff onboarding={props.onboarding}>
           <Icon name="mic-off" />
         </MicOff>
       ) : (
-        <MicOff>
+        <MicOff onboarding={props.onboarding}>
           <Icon name="mic" />
           <InputLevel>
             {bars.map((n) => (
-              <Bar on={level > n} />
+              <Bar
+                onboarding={props.onboarding}
+                on={level > n}
+                onboardingOn={props.onboarding && level > n}
+              />
             ))}
           </InputLevel>
         </MicOff>
       )}
-      <Table>
-        <Prop>Microphone</Prop>
-        <Value off={props.deviceId === 'off'}>{label || props.deviceId}</Value>
-      </Table>
+      {!props.onboarding ? (
+        <Table>
+          <Prop>Microphone</Prop>
+          <Value off={props.deviceId === 'off'}>
+            {label || props.deviceId}
+          </Value>
+        </Table>
+      ) : null}
     </Container>
   )
 }
@@ -141,6 +151,16 @@ const Bar = styled('div', {
     on: {
       true: {
         background: 'rgba(255, 255, 255, 0.75)',
+      },
+    },
+    onboarding: {
+      true: {
+        background: 'rgba(0, 0, 0, 0.1)',
+      },
+    },
+    onboardingOn: {
+      true: {
+        background: 'rgba(0, 0, 0, 0.3)',
       },
     },
   },

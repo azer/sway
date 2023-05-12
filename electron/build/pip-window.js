@@ -32153,10 +32153,10 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx65 = jsxWithValidationDynamic;
+          var jsx69 = jsxWithValidationDynamic;
           var jsxs30 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx65;
+          exports.jsx = jsx69;
           exports.jsxs = jsxs30;
         })();
       }
@@ -54000,7 +54000,17 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     electronPipButtonHoverFg: "rgba(255, 255, 255, 0.95)",
     electronPipOnButtonFg: "rgba(245, 249, 255, 0.8)",
     electronPipHangUpButtonFg: "rgb(234, 68, 54)",
-    electronPipHangUpButtonHoverFg: "rgb(254, 88, 74)"
+    electronPipHangUpButtonHoverFg: "rgb(254, 88, 74)",
+    onboardingStepBg: "rgba(255, 255, 255, 0.9)",
+    onboardingStepBorder: "rgba(255, 255, 255, 0.1)",
+    onboardingBgGradient1Start: "rgba(18, 178, 130, 0.45)",
+    onboardingBgGradient1End: "rgba(18, 178, 130, 0)",
+    onboardingBgGradient2Start: "rgba(115, 115, 255, 0.1)",
+    onboardingBgGradient2End: "rgba(115, 115, 255, 0)",
+    onboardingBgGradient3Start: "rgba(255, 178, 64, 0.3)",
+    onboardingBgGradient3End: "rgba(255, 178, 64, 0)",
+    onboardingBgGradient4Start: "rgba(207, 58, 97, 0.35)",
+    onboardingBgGradient4End: "rgba(207, 58, 97, 0)"
   };
   var participantLabelBg = [
     [94, 106, 210],
@@ -54056,7 +54066,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       light: 300,
       normal: 400,
       medium: 500,
-      semibold: 600
+      semibold: 600,
+      bold: 700
     },
     lineHeights: {
       base: "1",
@@ -55848,8 +55859,112 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     );
   }
 
-  // ../assets/js/components/Icon/index.tsx
+  // ../assets/js/components/Icon/ArrowRight.tsx
   var import_jsx_runtime49 = __toESM(require_jsx_runtime());
+  function ArrowRight(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "m13.75 6.75 5.5 5.25-5.5 5.25M19 12H4.75"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/ArrowLeft.tsx
+  var import_jsx_runtime50 = __toESM(require_jsx_runtime());
+  function ArrowLeft(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M10.25 6.75 4.75 12l5.5 5.25M19.25 12H5"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/Close.tsx
+  var import_jsx_runtime51 = __toESM(require_jsx_runtime());
+  function CloseIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "m17.25 6.75-10.5 10.5M6.75 6.75l10.5 10.5"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/ChevronDown.tsx
+  var import_jsx_runtime52 = __toESM(require_jsx_runtime());
+  function ChevronDownIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M15.25 10.75 12 14.25l-3.25-3.5"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/index.tsx
+  var import_jsx_runtime53 = __toESM(require_jsx_runtime());
   var icons = {
     headphones: HeadphonesIcon,
     coffee: CoffeeIcon,
@@ -55898,21 +56013,25 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     doorEnter: DoorEnterIcon,
     activity: ActivityIcon,
     userPlus: UserPlusIcon,
-    phoneHangUp: PhoneHangUp
+    phoneHangUp: PhoneHangUp,
+    arrowRight: ArrowRight,
+    arrowLeft: ArrowLeft,
+    close: CloseIcon,
+    chevronDown: ChevronDownIcon
   };
   var log = logger("icons");
   function Icon(props) {
     if (!props.name)
-      return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(import_jsx_runtime49.Fragment, {});
+      return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(import_jsx_runtime53.Fragment, {});
     const IconComponent = icons[props.name] || icons[props.name.replace(/-([a-z])/g, function(g2) {
       return g2[1].toUpperCase();
     })];
     if (IconComponent) {
-      return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(IconComponent, __spreadValues({}, props));
+      return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(IconComponent, __spreadValues({}, props));
     } else {
       log.error("Can not find icon", props.name, Object.keys(icons));
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(import_jsx_runtime49.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(import_jsx_runtime53.Fragment, {});
   }
   var Icon_default = Icon;
 
@@ -55935,11 +56054,11 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/components/Kbd/index.tsx
-  var import_jsx_runtime50 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime54 = __toESM(require_jsx_runtime());
   function Kbd(props) {
-    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Keys, { children: props.keys.map((s2, ind) => /* @__PURE__ */ (0, import_jsx_runtime50.jsxs)(import_jsx_runtime50.Fragment, { children: [
-      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Sep, { children: "+" }, "step" + ind) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Key, { children: keySymbol(s2) }, ind)
+    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Keys, { children: props.keys.map((s2, ind) => /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(import_jsx_runtime54.Fragment, { children: [
+      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Sep, { children: "+" }, "step" + ind) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Key, { children: keySymbol(s2) }, ind)
     ] })) }) : null;
   }
   var Keys = styled("div", {
@@ -55964,13 +56083,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/Tooltip/index.tsx
-  var import_jsx_runtime51 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime55 = __toESM(require_jsx_runtime());
   function Tooltip(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(import_react_tooltip.Root, { delayDuration: 400, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(import_react_tooltip.Trigger, { asChild: true, children: props.children }),
-      /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(import_react_tooltip.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime51.jsxs)(StyledContent, { sideOffset: 10, hideWhenDetached: true, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(import_react_tooltip.Root, { delayDuration: 400, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(import_react_tooltip.Trigger, { asChild: true, children: props.children }),
+      /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(import_react_tooltip.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(StyledContent, { sideOffset: 10, hideWhenDetached: true, children: [
         props.content,
-        props.shortcut ? /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(Kbd, { keys: props.shortcut }) : null
+        props.shortcut ? /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(Kbd, { keys: props.shortcut }) : null
       ] }) })
     ] });
   }
@@ -56050,12 +56169,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/components/Avatar/index.tsx
-  var import_jsx_runtime52 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
   function Avatar(props) {
     const css2 = { fontSize: props.fontSize || "$small" };
-    return /* @__PURE__ */ (0, import_jsx_runtime52.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(StyledImage, { src: props.src, alt: props.alt }),
-      /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(StyledFallback, { children: initials(props.fallback) })
+    return /* @__PURE__ */ (0, import_jsx_runtime56.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(StyledImage, { src: props.src, alt: props.alt }),
+      /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(StyledFallback, { children: initials(props.fallback) })
     ] });
   }
   var AvatarRoot = styled(import_react_avatar.Root, {
@@ -56089,15 +56208,15 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_react_context_menu = __toESM(require_dist31());
 
   // ../assets/js/components/Emoji/index.tsx
-  var import_jsx_runtime53 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
   function Emoji(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("em-emoji", { id: props.id, size: props.size });
+    return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("em-emoji", { id: props.id, size: props.size });
   }
 
   // ../assets/js/components/ContextMenu/index.tsx
-  var import_jsx_runtime54 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
   function LocalContent(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(import_react_context_menu.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(StyledContent2, { children: props.children }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(import_react_context_menu.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(StyledContent2, { children: props.children }) });
   }
   var StyledContent2 = styled(import_react_context_menu.Content, {
     minWidth: "220px",
@@ -56113,13 +56232,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     zIndex: "$aboveContent"
   });
   function LocalItem(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(StyledItem, { onClick: props.onClick, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(LeftSlot, { children: [
-        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Icon_default, { name: props.icon }) : null,
-        props.emoji ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Emoji, { id: props.emoji }) : null
+    return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(StyledItem, { onClick: props.onClick, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(LeftSlot, { children: [
+        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Icon_default, { name: props.icon }) : null,
+        props.emoji ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Emoji, { id: props.emoji }) : null
       ] }),
       props.label,
-      /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(RightSlot, { children: props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Kbd, { keys: props.kbd }) : null })
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(RightSlot, { children: props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Kbd, { keys: props.kbd }) : null })
     ] });
   }
   var RightSlot = styled("div", {
@@ -56175,10 +56294,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   };
 
   // ../assets/js/components/Timestamp/index.tsx
-  var import_jsx_runtime55 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
 
   // ../assets/js/components/StatusUpdate/index.tsx
-  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
   var StyledStatusUpdate = styled("div", {
     display: "flex",
     gap: "8px"
@@ -56254,10 +56373,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/features/Dock/StatusIcon.tsx
-  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime61 = __toESM(require_jsx_runtime());
   function StatusIcon(props) {
     var _a2, _b, _c;
-    return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(StyledStatusIcon, { children: ((_a2 = props.status) == null ? void 0 : _a2.emoji) && !props.noEmoji && props.isOnline !== false ? /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Emoji, { id: (_b = props.status) == null ? void 0 : _b.emoji, size: "1.35em" }) : /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StyledStatusIcon, { children: ((_a2 = props.status) == null ? void 0 : _a2.emoji) && !props.noEmoji && props.isOnline !== false ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Emoji, { id: (_b = props.status) == null ? void 0 : _b.emoji, size: "1.35em" }) : /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
       StatusCircle,
       {
         presence: (_c = props.status) == null ? void 0 : _c.status,
@@ -56299,12 +56418,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserHeader/index.tsx
-  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime62 = __toESM(require_jsx_runtime());
   function UserHeader(props) {
     var _a2, _b, _c, _d, _e, _f, _g;
-    return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(Container, { children: [
-      props.status ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(StatusIcon, { status: props.status, noEmoji: true, isOnline: props.online }) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(Container, { children: [
+      props.status ? /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(StatusIcon, { status: props.status, noEmoji: true, isOnline: props.online }) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
         Avatar,
         {
           src: (_a2 = props.user) == null ? void 0 : _a2.profile_photo_url,
@@ -56312,12 +56431,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           fallback: ((_c = props.user) == null ? void 0 : _c.name) || "User"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(Right, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(StatusHeader, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(Right, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(StatusHeader, { children: [
           firstName(((_d = props.user) == null ? void 0 : _d.name) || ""),
-          ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Emoji, { id: props.status.emoji }) : null
+          ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Emoji, { id: props.status.emoji }) : null
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
+        /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
       ] })
     ] });
   }
@@ -56339,12 +56458,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserContextMenu/UserContextMenuView.tsx
-  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime63 = __toESM(require_jsx_runtime());
   function UserContextMenuView(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)(ContextMenu.Root, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(ContextMenu.Trigger, { asChild: true, children: props.children }),
-      /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)(ContextMenu.Content, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime63.jsxs)(ContextMenu.Root, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(ContextMenu.Trigger, { asChild: true, children: props.children }),
+      /* @__PURE__ */ (0, import_jsx_runtime63.jsxs)(ContextMenu.Content, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
           UserHeader,
           {
             user: props.user,
@@ -56352,8 +56471,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             online: props.isOnline
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(ContextMenu.Separator, {}),
-        /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(ContextMenu.Separator, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
           ContextMenu.Item,
           {
             emoji: "wave",
@@ -56361,7 +56480,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             onClick: () => props.tap(props.userId)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
           ContextMenu.Item,
           {
             icon: props.existingHook ? "checkmark" : "bell",
@@ -56369,8 +56488,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             onClick: () => props.createStatusHook(props.userId)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(ContextMenu.Item, { icon: "users", label: "Go to 1:1 room" }),
-        /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(ContextMenu.Item, { icon: "mail", label: "Send message" })
+        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(ContextMenu.Item, { icon: "users", label: "Go to 1:1 room" }),
+        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(ContextMenu.Item, { icon: "mail", label: "Send message" })
       ] })
     ] });
   }
@@ -56424,7 +56543,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/features/PictureInPicture/Video.tsx
   var import_react4 = __toESM(require_react());
   var import_daily_react_hooks = __toESM(require_dist32());
-  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
   var log3 = logger("picture-in-picture/video");
   function PictureInPictureVideo(props) {
     var _a2;
@@ -56439,7 +56558,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     }, [(_a2 = track2 == null ? void 0 : track2.persistentTrack) == null ? void 0 : _a2.id]);
     const videoEl = (0, import_react4.useMemo)(() => {
       log3.info("Re-render element");
-      return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Player, { autoPlay: true, muted: true, playsInline: true, ref: el });
+      return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Player, { autoPlay: true, muted: true, playsInline: true, ref: el });
     }, [track2.persistentTrack]);
     return videoEl;
   }
@@ -56458,14 +56577,14 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserView/index.tsx
-  var import_jsx_runtime61 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
   function UserIconView(props) {
     var _a2, _b, _c, _d;
     const color = (0, import_react5.useMemo)(() => {
       var _a3;
       return stringToRGB(((_a3 = props.user) == null ? void 0 : _a3.name) || props.userId, participantLabelBg);
     }, [props.userId]);
-    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
       UserContextMenuView,
       {
         userId: props.userId,
@@ -56475,8 +56594,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         existingHook: props.existingHook,
         isOnline: props.isOnline,
         createStatusHook: props.createStatusHook,
-        children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(
             Label2,
             {
               tile: props.tile,
@@ -56484,20 +56603,20 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 backgroundColor: color
               },
               children: [
-                !((_a2 = props.status) == null ? void 0 : _a2.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Icon_default, { name: "mic-off" }) : null,
+                !((_a2 = props.status) == null ? void 0 : _a2.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Icon_default, { name: "mic-off" }) : null,
                 firstName(((_b = props.user) == null ? void 0 : _b.name) || "")
               ]
             }
           ),
-          props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
-          props.videoParticipantId ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+          props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
+          props.videoParticipantId ? /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
             PictureInPictureVideo,
             {
               participantId: props.videoParticipantId,
               mirror: props.self
             }
           ) : null,
-          !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+          !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
             Avatar,
             {
               src: (_c = props.user) == null ? void 0 : _c.profile_photo_url,
@@ -56594,7 +56713,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
 
   // ../assets/js/components/BoxTile/index.tsx
   var import_react6 = __toESM(require_react());
-  var import_jsx_runtime62 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
   var log4 = logger("boxtile");
   var RESIZE_DEBOUNCE_MS = 200;
   var TILE_GAP = 8;
@@ -56639,7 +56758,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       onResize(-300);
       setTimeout(onResize, 250);
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(StyledTile, { ref: containerRef, css: tileSizeVars, children: props.children });
+    return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(StyledTile, { ref: containerRef, css: tileSizeVars, children: props.children });
     function onResize(add) {
       var _a2, _b;
       const width = (((_a2 = containerRef.current) == null ? void 0 : _a2.clientWidth) || 0) + (add || 0);
@@ -56679,7 +56798,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_react7 = __toESM(require_react());
   var import_daily_js = __toESM(require_daily_iframe());
   var import_daily_react_hooks2 = __toESM(require_dist32());
-  var import_jsx_runtime63 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
   var log5 = logger("pip/pip-call-provider");
   function PipCallProvider(props) {
     const [callObject, setCallObject] = (0, import_react7.useState)();
@@ -56691,7 +56810,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         joinDailyCall(callObj);
       }
     }, [props.userId, props.roomUrl]);
-    return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(import_daily_react_hooks2.DailyProvider, { callObject, children: props.children });
+    return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(import_daily_react_hooks2.DailyProvider, { callObject, children: props.children });
     function createCallObject() {
       log5.info("Creating call object");
       return import_daily_js.default.createCallObject({
@@ -56738,7 +56857,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/features/ElectronPipWindow/index.tsx
-  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
   var log6 = logger("electron-pip-window");
   function ElectronPipWindow(props) {
     var _a2, _b, _c, _d, _e, _f, _g, _h, _i;
@@ -56756,15 +56875,15 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     }, []);
     const self2 = (_a2 = pipState.participants) == null ? void 0 : _a2.find((p2) => p2.isSelf);
     const active = ((_b = pipState.participants) == null ? void 0 : _b.filter((p2) => p2.isActive && !p2.isSelf)) || [];
-    return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(import_react_tooltip2.TooltipProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(import_react_tooltip2.TooltipProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
       PipCallProvider,
       {
         userId: (_c = pipState.localUser) == null ? void 0 : _c.id,
         roomUrl: "https://shtest.daily.co/bafapublic",
-        children: /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(Container2, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Handle, { children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(HandleButton, {}) }),
-          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Call, { children: /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(BoxTile, { numBoxes: active.length + (self2 ? 1 : 0), children: [
-            self2 ? /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(Container2, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Handle, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(HandleButton, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Call, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(BoxTile, { numBoxes: active.length + (self2 ? 1 : 0), children: [
+            self2 ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
               UserIconView,
               {
                 userId: self2.userId,
@@ -56781,7 +56900,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             ) : null,
             active.map((p2) => {
               var _a3, _b2;
-              return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+              return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
                 UserIconView,
                 {
                   userId: p2.userId,
@@ -56797,13 +56916,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               );
             })
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(Buttonset, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Tooltip, { content: "Turn off video", children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(Buttonset, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Tooltip, { content: "Turn off video", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
               Button,
               {
                 onClick: toggleCamera,
                 on: ((_f = pipState.localStatus) == null ? void 0 : _f.camera_on) || false,
-                children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+                children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
                   Icon,
                   {
                     name: ((_g = pipState.localStatus) == null ? void 0 : _g.camera_on) ? "video" : "videoOff"
@@ -56811,15 +56930,15 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 )
               }
             ) }),
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Tooltip, { content: "Turn off microphone", children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Tooltip, { content: "Turn off microphone", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
               Button,
               {
                 onClick: toggleMic,
                 on: ((_h = pipState.localStatus) == null ? void 0 : _h.mic_on) || false,
-                children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Icon, { name: ((_i = pipState.localStatus) == null ? void 0 : _i.mic_on) ? "mic" : "micOff" })
+                children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Icon, { name: ((_i = pipState.localStatus) == null ? void 0 : _i.mic_on) ? "mic" : "micOff" })
               }
             ) }),
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Tooltip, { content: "Hang up call", children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(HangUpButton, { onClick: leaveCall, children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Icon, { name: "phoneHangUp" }) }) })
+            /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Tooltip, { content: "Hang up call", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(HangUpButton, { onClick: leaveCall, children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Icon, { name: "phoneHangUp" }) }) })
           ] })
         ] })
       }
@@ -56947,7 +57066,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       color: "$electronPipHangUpButtonFg"
     }
   });
-  import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime64.jsx)(ElectronPipWindow, {}), document.getElementById("root"));
+  import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime68.jsx)(ElectronPipWindow, {}), document.getElementById("root"));
 })();
 /*! Bundled license information:
 

@@ -46,7 +46,7 @@ export function useVideoSettings() {
 
   useRegister(
     (register) => {
-      register(`Camera Settings`, open, {
+      /*register(`Camera Settings`, open, {
         icon: 'video',
         type: CommandType.Settings,
 
@@ -54,7 +54,7 @@ export function useVideoSettings() {
           modal: modalProps,
           commands: buildCommandList,
         },
-      })
+      })*/
 
       register(
         `Turn off the camera`,

@@ -62,8 +62,12 @@ export function isPushToTalkVideoOn(state: RootState): boolean {
   return state.settings.pushToTalkVideo
 }
 
+export function getBackgroundColor(state: RootState): string | undefined {
+  return state.settings.backgroundColor
+}
+
 export function getBackgroundBlurValue(state: RootState): number {
-  return state.settings.backgroundBlur
+  return state.settings.backgroundBlur || 0
 }
 
 export function getBackgroundBlurLabel(state: RootState): string {

@@ -171,6 +171,16 @@ export const dark = {
   electronPipOnButtonFg: 'rgba(245, 249, 255, 0.8)',
   electronPipHangUpButtonFg: 'rgb(234, 68, 54)',
   electronPipHangUpButtonHoverFg: 'rgb(254, 88, 74)',
+  onboardingStepBg: 'rgba(255, 255, 255, 0.9)',
+  onboardingStepBorder: 'rgba(255, 255, 255, 0.1)',
+  onboardingBgGradient1Start: 'rgba(18, 178, 130, 0.45)',
+  onboardingBgGradient1End: 'rgba(18, 178, 130, 0)',
+  onboardingBgGradient2Start: 'rgba(115, 115, 255, 0.1)',
+  onboardingBgGradient2End: 'rgba(115, 115, 255, 0)',
+  onboardingBgGradient3Start: 'rgba(255, 178, 64, 0.3)',
+  onboardingBgGradient3End: 'rgba(255, 178, 64, 0)',
+  onboardingBgGradient4Start: 'rgba(207, 58, 97, 0.35)',
+  onboardingBgGradient4End: 'rgba(207, 58, 97, 0)',
 }
 
 export const participantLabelBg = [

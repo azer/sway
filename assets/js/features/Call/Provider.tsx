@@ -30,7 +30,7 @@ interface Props {
 
 const log = logger('call/provider')
 const dlog = logger('daily')
-const roomUrl = 'https://shtest.daily.co/bafapublic'
+export const roomUrl = 'https://shtest.daily.co/bafapublic'
 
 export function CallProvider(props: Props) {
   const dispatch = useDispatch()

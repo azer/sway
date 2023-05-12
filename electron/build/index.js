@@ -83,16 +83,18 @@ function getMainWindow() {
 }
 function createMainWindow() {
   mainWindow = new import_electron2.BrowserWindow({
-    width: 800,
-    height: 650,
+    width: 1e3,
+    height: 750,
     title: "Sway",
     trafficLightPosition: { x: 12, y: 16 },
     titleBarStyle: "customButtonsOnHover",
-    transparent: true,
+    //transparent: true,
+    backgroundColor: "#00000022",
     icon: staticFilePath("images/logo.ico"),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      autoplayPolicy: "no-user-gesture-required",
       partition: "persist:sway"
     }
   });
@@ -390,6 +392,8 @@ import_electron7.app.on("ready", () => {
     import_electron_log6.default.info("Focus main window, hide pip window");
     messageMainWindow2({ isMainWindowFocused: true });
   });
+  const microphone = import_electron7.systemPreferences.askForMediaAccess("microphone");
+  const camera = import_electron7.systemPreferences.askForMediaAccess("camera");
 });
 import_electron7.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

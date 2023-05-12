@@ -204,7 +204,7 @@ const Header = styled('header', {
   },
 })
 
-const TrafficLights = styled('div', {
+export const TrafficLights = styled('div', {
   position: 'relative',
   display: 'flex',
   height: '48px',
@@ -213,13 +213,20 @@ const TrafficLights = styled('div', {
   '-webkit-app-region': 'drag',
 })
 
-const TrafficLight = styled('div', {
+export const TrafficLight = styled('div', {
   '-webkit-app-region': 'no-drag',
   position: 'relative',
   'border-radius': '50%',
   width: '12px',
   height: '12px',
   border: '1px solid rgba(255,255,255,.15)',
+  variants: {
+    fill: {
+      true: {
+        background: 'rgba(0,0,0,.1)',
+      },
+    },
+  },
 })
 
 const ImageLogo = styled('img', {

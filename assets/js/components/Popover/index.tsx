@@ -1,6 +1,5 @@
 import React from 'react'
 import { Root, Content, Portal } from '@radix-ui/react-popover'
-import { styled } from '@stitches/react'
 
 interface PopoverProps {
   children: React.ReactNode

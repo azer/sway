@@ -1,5 +1,6 @@
 import { useCommandPalette } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
+import { Onboarding } from 'features/Onboarding'
 import { RoomPage } from 'features/Room'
 import { Shell } from 'features/Shell'
 import { logger } from 'lib/log'
@@ -24,6 +25,7 @@ export default function Routing(): JSX.Element {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<DefaultWorkspace />} />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/:workspace" element={<DefaultRoom />} />
         <Route path="/:workspace/room/:room_slug" element={<RoomRoute />} />
         <Route
@@ -57,13 +59,20 @@ function DefaultRoom(): JSX.Element {
   const navigate = useNavigate()
   const params = useParams()
 
-  const [room] = useSelector((state) => [selectors.rooms.getDefaultRoom(state)])
+  const [room, isOnboardingDone] = useSelector((state) => [
+    selectors.rooms.getDefaultRoom(state),
+    selectors.onboarding.isDone(state),
+  ])
 
   useEffect(() => {
+    if (isOnboardingDone === false) {
+      return navigate(`/onboarding`)
+    }
+
     if (!room) return
     log.info('Redirecting to default room')
     navigate(`/${params.workspace}/room/${room?.slug}`)
-  }, [room?.slug])
+  }, [room?.slug, isOnboardingDone])
 
   return <></>
 }

@@ -1,15 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { DeviceInfo, getDefaultDevices, getUserDevices } from 'lib/devices'
 import { logger } from 'lib/log'
 import { AppDispatch, RootState } from 'state'
 
 const log = logger('settings/slice')
 
 export const name = 'settings'
-
-export interface DeviceInfo {
-  id: string
-  label: string
-}
 
 interface State {
   videoInputError?: boolean
@@ -22,10 +18,13 @@ interface State {
   audioInputDevices: DeviceInfo[]
   audioOutputDevices: DeviceInfo[]
   pushToTalkVideo: boolean
-  backgroundBlur: number
+  backgroundBlur?: number
+  backgroundColor?: string
+  audioOnly: boolean
 }
 
 export const initialState: State = {
+  audioOnly: false,
   pushToTalkVideo: true,
   videoInputDevices: [],
   audioInputDevices: [],
@@ -70,6 +69,9 @@ export const slice = createSlice({
     setAudioOutputError: (state, action: PayloadAction<boolean>) => {
       state.audioOutputError = action.payload
     },
+    setBackgroundColor: (state, action: PayloadAction<string>) => {
+      state.backgroundColor = action.payload
+    },
   },
 })
 
@@ -92,35 +94,14 @@ export function syncDevices() {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     log.info('Sync devices')
 
-    navigator.mediaDevices
-      .getUserMedia({ audio: true, video: true })
-      .then((stream) => {
-        stream.getTracks().forEach((track) => {
-          track.stop()
-
-          const id = track.getSettings().deviceId
-
-          if (track.kind === 'video' && id) {
-            log.info('Default video device found', id)
-            dispatch(setVideoInputDeviceId(id))
-          }
-
-          if (track.kind === 'audio' && id) {
-            log.info('Default audio input device found', id)
-            dispatch(setAudioInputDeviceId(id))
-          }
-
-          log.info('Stop media device', track)
-        })
+    getDefaultDevices()
+      .then(({ camera, mic }) => {
+        if (camera) dispatch(setVideoInputDeviceId(camera))
+        if (mic) dispatch(setAudioInputDeviceId(mic))
       })
       .catch((err) => {
+        log.error('Unable to find out default devices', err)
         const state = getState()
-
-        log.error(
-          'Unable to access user media to find out default devices:',
-          err,
-          state.settings.videoInputDevices.length
-        )
 
         if (state.settings.videoInputDevices.length > 0)
           dispatch(
@@ -132,36 +113,16 @@ export function syncDevices() {
           )
       })
 
-    listDevices('videoinput').then((allCameras) => {
-      log.info('All video video input devices', allCameras)
-      dispatch(setVideoInputDevices(allCameras))
-    })
+    getUserDevices()
+      .then((userDevices) => {
+        log.info('User devices', userDevices)
 
-    listDevices('audioinput').then((allMics) => {
-      dispatch(setAudioInputDevices(allMics))
-    })
-
-    listDevices('audiooutput').then((allSpeakers) => {
-      dispatch(setAudioOutputDevices(allSpeakers))
-    })
+        dispatch(setVideoInputDevices(userDevices.cameras))
+        dispatch(setAudioInputDevices(userDevices.mics))
+        dispatch(setAudioOutputDevices(userDevices.speakers))
+      })
+      .catch((err) => {
+        log.error('Can not get user devices', err)
+      })
   }
-}
-
-async function listDevices(kind: MediaDeviceKind): Promise<DeviceInfo[]> {
-  const all = await navigator.mediaDevices.enumerateDevices()
-  const labels: Record<string, boolean> = {}
-
-  return all
-    .filter((device) => {
-      if (labels[key(device.label)]) return false
-      labels[key(device.label)] = true
-      return device.kind === kind
-    })
-    .map((d) => {
-      return { id: d.deviceId, label: d.label }
-    })
-}
-
-function key(label: string): string {
-  return label.replace(/^Default - /, '')
 }
