@@ -29,7 +29,7 @@ export function useBackgroundBlurSettings() {
     commandPalette.setCommands(buildCommandList())
   }, [commandPalette.isOpen, commandPalette.id, blur])
 
-  useRegister((register) => {
+  /*useRegister((register) => {
     register(`Blur Effect Settings`, open, {
       icon: 'dots',
       type: CommandType.Settings,
@@ -38,7 +38,7 @@ export function useBackgroundBlurSettings() {
         commands: buildCommandList,
       },
     })
-  }, [])
+  }, [])*/
 
   return {
     modal: modalProps,
