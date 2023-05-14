@@ -7,7 +7,16 @@ defmodule SwayWeb.UserSessionController do
   plug Ueberauth
 
   def new(conn, _params) do
-    render(conn, "new.html", error_message: nil)
+    user_agent = get_req_header(conn, "user-agent") |> List.first()
+    is_electron = user_agent && String.contains?(user_agent, "Electron")
+
+    oauth_login_url = if is_electron do
+      "/desktop/auth/oauth_login"
+    else
+      Routes.user_oauth_path(conn, :request, "google")
+    end
+
+    render(conn, "new.html", oauth_login_url: oauth_login_url, is_electron: is_electron, error_message: nil)
   end
 
   def create(conn, %{"user" => user_params}) do

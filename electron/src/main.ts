@@ -1,9 +1,16 @@
 import { createMainWindow, getMainWindow } from "./main-window";
 import { createTrayWindow, getTrayWindow, setTray } from "./tray";
-import { app, BrowserWindow, ipcMain, systemPreferences } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  shell,
+  systemPreferences,
+  protocol,
+} from "electron";
 import { checkForUpdates, setupAutoUpdater } from "./auto-updater";
 import log from "electron-log";
-import { isDev, loadExtensions } from "./utils";
+import { isDev, loadExtensions, swayPath } from "./utils";
 import { ElectronMessage, ElectronWindow } from "../../assets/js/lib/electron";
 import { createPipWindow, getPipWindow, getPipWindowPosition } from "./pip";
 import { messageMainWindow } from "./messaging";
@@ -36,6 +43,8 @@ app.on("ready", () => {
 
   const microphone = systemPreferences.askForMediaAccess("microphone");
   const camera = systemPreferences.askForMediaAccess("camera");
+
+  app.setAsDefaultProtocolClient("sway");
 });
 
 app.on("window-all-closed", () => {
@@ -56,6 +65,20 @@ app.whenReady().then(async () => {
   }
 
   checkForUpdates();
+});
+
+app.on("open-url", (event, url) => {
+  const u = new URL(url);
+
+  if (u.protocol === "sway:") {
+    event.preventDefault();
+
+    log.info("Opening url", url);
+
+    getMainWindow().loadURL(
+      swayPath(`desktop/auth/start?key=${u.searchParams.get("key")}`)
+    );
+  }
 });
 
 ipcMain.on(

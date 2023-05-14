@@ -1,6 +1,6 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow, shell } from "electron";
 import log from "electron-log";
-import { isDev } from "./utils";
+import { isDev, swayPath } from "./utils";
 import { staticFilePath } from "./utils";
 
 let mainWindow: BrowserWindow | null = null;
@@ -34,17 +34,12 @@ export function createMainWindow() {
 
   mainWindow.setMinimumSize(800, 600);
 
-  if (isDev) {
-    //
-    //
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: "deny" };
+  });
 
-    // https://webcammictest.com/check-mic.html
-    // https://loving-swartz-d74604.netlify.app/
-    mainWindow.loadURL("http://localhost:4000/login");
-  } else {
-    // 'build/index.html'
-    mainWindow.loadURL(`https://sway.so/login`);
-  }
+  mainWindow.loadURL(swayPath("login"));
 
   // mainWindow.on("closed", () => (mainWindow = null));
 

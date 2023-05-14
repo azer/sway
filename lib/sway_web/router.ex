@@ -103,6 +103,7 @@ defmodule SwayWeb.Router do
     post "/users/reset_password", UserResetPasswordController, :create
     get "/users/reset_password/:token", UserResetPasswordController, :edit
     put "/users/reset_password/:token", UserResetPasswordController, :update
+
   end
 
   scope "/", SwayWeb do
@@ -140,10 +141,20 @@ defmodule SwayWeb.Router do
     get "/rooms/:room_id/updates", StatusController, :list_updates_by_room
   end
 
+  scope "/desktop", SwayWeb do
+    pipe_through [:browser]
+
+    get "/auth/oauth_login", AuthDesktopController, :oauth_login
+    get "/auth/oauth_callback", AuthDesktopController, :oauth_callback
+    get "/auth/start", AuthDesktopController, :auth_start
+  end
+
+
   scope "/", SwayWeb do
     pipe_through [:browser, :require_authenticated_user]
     get "/", AppController, :index
     get "/onboarding", AppController, :index
+    get "/desktop/auth/redirect", AuthDesktopController, :desktop_redirect
     get "/:workspace", AppController, :index
     get "/:workspace/room/:room_slug", AppController, :room
     get "/:workspace/room/:room_id/:room_slug", AppController, :private_room

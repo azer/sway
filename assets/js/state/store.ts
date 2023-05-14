@@ -25,5 +25,5 @@ export const persistor = persistStore(persistentStore)
 
 export const store = persistentStore
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof basicStore.getState>
+export type AppDispatch = typeof basicStore.dispatch

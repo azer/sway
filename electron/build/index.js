@@ -71,6 +71,13 @@ function loadExtensions() {
     import_electron_log.default.info("Extensions loaded");
   });
 }
+function swayPath(dir) {
+  if (isDev) {
+    return path.join("http://localhost:4000", dir);
+  } else {
+    return path.join("https://sway.so", dir);
+  }
+}
 
 // src/main-window.ts
 var mainWindow = null;
@@ -99,11 +106,11 @@ function createMainWindow() {
     }
   });
   mainWindow.setMinimumSize(800, 600);
-  if (isDev) {
-    mainWindow.loadURL("http://localhost:4000/login");
-  } else {
-    mainWindow.loadURL(`https://sway.so/login`);
-  }
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    import_electron2.shell.openExternal(url);
+    return { action: "deny" };
+  });
+  mainWindow.loadURL(swayPath("login"));
   if (isDev) {
     const devtools = require("electron-devtools-installer");
     devtools.default(devtools.REACT_DEVELOPER_TOOLS).then((name) => console.log(`Added Extension:  ${name}`)).catch((err) => console.log("An error occurred: ", err));
@@ -394,6 +401,7 @@ import_electron7.app.on("ready", () => {
   });
   const microphone = import_electron7.systemPreferences.askForMediaAccess("microphone");
   const camera = import_electron7.systemPreferences.askForMediaAccess("camera");
+  import_electron7.app.setAsDefaultProtocolClient("sway");
 });
 import_electron7.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -411,6 +419,16 @@ import_electron7.app.whenReady().then(() => __async(exports, null, function* () 
   }
   checkForUpdates();
 }));
+import_electron7.app.on("open-url", (event, url) => {
+  const u = new URL(url);
+  if (u.protocol === "sway:") {
+    event.preventDefault();
+    import_electron_log6.default.info("Opening url", url);
+    getMainWindow().loadURL(
+      swayPath(`desktop/auth/start?key=${u.searchParams.get("key")}`)
+    );
+  }
+});
 import_electron7.ipcMain.on(
   "message",
   (event, parsed) => {

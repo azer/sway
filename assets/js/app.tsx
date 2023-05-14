@@ -27,7 +27,7 @@ import Routing from 'features/Routing'
 import { UserSocketProvider } from 'features/UserSocket'
 import CommandRegistryProvider from 'features/CommandRegistry'
 import { Provider } from 'react-redux'
-import { store } from 'state/store'
+import { persistor, store } from 'state/store'
 // import './user_socket.js'
 
 import 'phoenix_html'
@@ -37,16 +37,14 @@ import { LiveSocket } from 'phoenix_live_view'
 import topbar from '../vendor/topbar'
 import { CommandPaletteProvider } from 'features/CommandPalette'
 import { SettingsProvider } from 'features/Settings'
-import { CallProvider } from 'features/Call/Provider'
 import PresenceProvider from 'features/Presence/Provider'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { ElectronTrayProvider } from 'features/ElectronTray/ElectronTrayProvider'
 import { EmojiProvider } from 'features/Emoji/Provider'
 import { TapProvider } from 'features/Tap/Provider'
 import { ChatProvider } from 'features/Chat/Provider'
-import { PictureInPictureProvider } from 'features/PictureInPicture/Provider'
 import { FocusProvider } from 'features/Focus/Provider'
-import { Onboarding } from 'features/Onboarding'
+import { PersistGate } from 'reduxjs-toolkit-persist/integration/react'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -82,22 +80,24 @@ window.liveSocket = liveSocket
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <UserSocketProvider>
-        <CommandRegistryProvider>
-          <CommandPaletteProvider>
-            <FocusProvider />
-            <SettingsProvider />
-            <PresenceProvider />
-            <ElectronTrayProvider />
-            <EmojiProvider />
-            <TapProvider />
-            <ChatProvider />
-            <Tooltip.Provider>
-              <Routing />
-            </Tooltip.Provider>
-          </CommandPaletteProvider>
-        </CommandRegistryProvider>
-      </UserSocketProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <UserSocketProvider>
+          <CommandRegistryProvider>
+            <CommandPaletteProvider>
+              <FocusProvider />
+              <SettingsProvider />
+              <PresenceProvider />
+              <ElectronTrayProvider />
+              <EmojiProvider />
+              <TapProvider />
+              <ChatProvider />
+              <Tooltip.Provider>
+                <Routing />
+              </Tooltip.Provider>
+            </CommandPaletteProvider>
+          </CommandRegistryProvider>
+        </UserSocketProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

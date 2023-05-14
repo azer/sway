@@ -30,3 +30,11 @@ export function loadExtensions() {
     log.info("Extensions loaded");
   });
 }
+
+export function swayPath(dir: string): string {
+  if (isDev) {
+    return path.join("http://localhost:4000", dir);
+  } else {
+    return path.join("https://sway.so", dir);
+  }
+}

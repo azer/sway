@@ -1,0 +1,29 @@
+<SwayWeb.FormPageComponent.form hide_waitlist>
+  <SwayWeb.FormPageComponent.header title={"Signing in..."} conn={@conn} />
+
+
+
+  <a id="open_desktop_button" href={"sway://desktop/auth/desktop-redirect?key=" <> @key} class="oauth-button">
+    Open Sway
+  </a>
+
+      <footer>
+	Not <%= @conn.assigns.current_user.name %>? —
+	<%= link "Sign out", to: Routes.user_session_path(@conn, :delete), method: :delete %>
+      </footer>
+
+      <script type="text/javascript">
+	window.addEventListener('open_desktop_button', redirect, false)
+
+	redirect()
+
+    function redirect(event) {
+      if (event) event.preventDefault()
+
+      document.location.href = "<%= raw("sway://desktop/auth/desktop-redirect?key=" <> @key) %>";
+
+      window.close()
+    }
+  </script>
+
+</SwayWeb.FormPageComponent.form>

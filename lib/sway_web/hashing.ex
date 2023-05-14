@@ -19,6 +19,8 @@ defmodule SwayWeb.Hashing do
   def decode_message(id), do: decode(7, id)
   def encode_blog(id), do: encode(8, id)
   def decode_blog(id), do: decode(8, id)
+  def encode_auth_state(id), do: encode(999, id)
+  def decode_auth_state(id), do: decode(999, id)
 
   def decode_any(hash) do
     hd(Hashids.decode!(provider(), hash))
