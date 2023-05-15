@@ -16,7 +16,7 @@ defmodule SwayWeb.UserSessionController do
       Routes.user_oauth_path(conn, :request, "google")
     end
 
-    render(conn, "new.html", oauth_login_url: oauth_login_url, is_electron: is_electron, error_message: nil)
+    render(conn, "new.html", oauth_login_url: oauth_login_url, is_electron: is_electron, hide_waitlist: is_electron, error_message: nil)
   end
 
   def create(conn, %{"user" => user_params}) do

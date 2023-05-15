@@ -1,6 +1,5 @@
-<SwayWeb.FormPageComponent.form>
+<SwayWeb.FormPageComponent.form hide_waitlist={@conn.assigns[:is_electron]}>
   <SwayWeb.FormPageComponent.header title="Log in to Sway" conn={@conn} />
-
 
     <.form let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
 
