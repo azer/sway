@@ -51,6 +51,10 @@ export function RequestAccess(props: Props) {
 
   useEffect(() => {
     getIpcRenderer()?.on('message', onMessage)
+
+    messageWindowManager({ requestCameraAccess: true })
+    messageWindowManager({ requestMicAccess: true })
+
     return () => {
       getIpcRenderer()?.removeListener('message', onMessage)
     }
