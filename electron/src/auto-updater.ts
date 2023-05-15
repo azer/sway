@@ -1,6 +1,9 @@
 import { dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
+import { getMainWindow } from "./main-window";
+
+let downloadedUpdate: null | any = null;
 
 export function checkForUpdates() {
   setInterval(() => autoUpdater.checkForUpdates(), 600000);
@@ -21,6 +24,8 @@ export function setupAutoUpdater() {
 
   // @ts-ignore
   autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
+    if (!getMainWindow().isFocused()) return;
+
     const dialogOpts = {
       type: "info",
       buttons: ["Restart", "Later"],
