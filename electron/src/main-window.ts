@@ -37,8 +37,9 @@ export function createMainWindow() {
   mainWindow.setMinimumSize(800, 600);
   mainWindow.on("close", (event) => {
     if (quitting) {
-      log.info("Close main window. Quitting ?", quitting);
-      mainWindow.close();
+      //log.info("Close main window. Quitting ?", quitting);
+      // mainWindow.close();
+      mainWindow = null;
     } else {
       log.info("Hide main window");
       event.preventDefault();

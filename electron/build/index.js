@@ -109,8 +109,7 @@ function createMainWindow() {
   mainWindow.setMinimumSize(800, 600);
   mainWindow.on("close", (event) => {
     if (quitting) {
-      import_electron_log2.default.info("Close main window. Quitting ?", quitting);
-      mainWindow.close();
+      mainWindow = null;
     } else {
       import_electron_log2.default.info("Hide main window");
       event.preventDefault();
@@ -417,6 +416,12 @@ import_electron7.app.on("ready", () => {
   });
   const setProtocol = import_electron7.app.setAsDefaultProtocolClient("sway");
   import_electron_log7.default.info("Set as default protocol client", setProtocol);
+  import_electron7.systemPreferences.askForMediaAccess("microphone").then((mic) => {
+    import_electron_log7.default.info("Mic", mic);
+  }).catch((err) => import_electron_log7.default.error("Error", err));
+  import_electron7.systemPreferences.askForMediaAccess("camera").then((camera) => {
+    import_electron_log7.default.info("Camera", camera);
+  }).catch((err) => import_electron_log7.default.error("Error", err));
 });
 import_electron7.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

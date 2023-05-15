@@ -41,6 +41,21 @@ app.on("ready", () => {
 
   const setProtocol = app.setAsDefaultProtocolClient("sway");
   log.info("Set as default protocol client", setProtocol);
+
+  //
+  systemPreferences
+    .askForMediaAccess("microphone")
+    .then((mic) => {
+      log.info("Mic", mic);
+    })
+    .catch((err) => log.error("Error", err));
+
+  systemPreferences
+    .askForMediaAccess("camera")
+    .then((camera) => {
+      log.info("Camera", camera);
+    })
+    .catch((err) => log.error("Error", err));
 });
 
 app.on("window-all-closed", () => {
