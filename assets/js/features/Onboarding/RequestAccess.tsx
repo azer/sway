@@ -20,6 +20,12 @@ import {
   setVideoInputDeviceId,
   setVideoInputDevices,
 } from 'features/Settings/slice'
+import {
+  ElectronMessage,
+  getIpcRenderer,
+  isElectron,
+  messageWindowManager,
+} from 'lib/electron'
 
 const log = logger('onboarding/request-access')
 
@@ -42,6 +48,13 @@ export function RequestAccess(props: Props) {
     video: false,
   })
   const [error, setError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    getIpcRenderer()?.on('message', onMessage)
+    return () => {
+      getIpcRenderer()?.removeListener('message', onMessage)
+    }
+  }, [])
 
   useEffect(() => {
     if (!accessStatus.video || !accessStatus.audio) return
@@ -242,6 +255,11 @@ export function RequestAccess(props: Props) {
 
   async function requestVideoAccess() {
     log.info('Request video access', 123)
+    if (isElectron) {
+      messageWindowManager({ requestCameraAccess: true })
+      return
+    }
+
     const constraints = {
       audio: false,
       video: {
@@ -261,6 +279,11 @@ export function RequestAccess(props: Props) {
   }
 
   async function requestAudioAccess() {
+    if (isElectron) {
+      messageWindowManager({ requestMicAccess: true })
+      return
+    }
+
     try {
       log.info('Request audio access')
       await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -268,6 +291,22 @@ export function RequestAccess(props: Props) {
     } catch (err) {
       setError(err)
       setAccessStatus((current) => ({ ...current, audio: false }))
+    }
+  }
+
+  function onMessage(event: Event, msg: ElectronMessage) {
+    if (msg.payload.hasCameraAccess !== undefined) {
+      setAccessStatus((accessStatus) => ({
+        ...accessStatus,
+        camera: msg.payload.hasCameraAccess || false,
+      }))
+    }
+
+    if (msg.payload.hasMicAccess !== undefined) {
+      setAccessStatus((accessStatus) => ({
+        ...accessStatus,
+        audio: msg.payload.hasMicAccess || false,
+      }))
     }
   }
 }

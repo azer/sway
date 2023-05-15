@@ -36,26 +36,10 @@ app.on("ready", () => {
     // getPipWindow().hide();
   });
 
-  //const microphone = systemPreferences.askForMediaAccess("microphone");
-  //const camera = systemPreferences.askForMediaAccess("camera");
-
   const setProtocol = app.setAsDefaultProtocolClient("sway");
   log.info("Set as default protocol client", setProtocol);
 
   //
-  systemPreferences
-    .askForMediaAccess("microphone")
-    .then((mic) => {
-      log.info("Mic", mic);
-    })
-    .catch((err) => log.error("Error", err));
-
-  systemPreferences
-    .askForMediaAccess("camera")
-    .then((camera) => {
-      log.info("Camera", camera);
-    })
-    .catch((err) => log.error("Error", err));
 });
 
 app.on("window-all-closed", () => {
@@ -174,6 +158,16 @@ function handleMessages(message: ElectronMessage) {
     return;
   }
 
+  if (message.payload.requestCameraAccess) {
+    requestCameraAccess();
+    return;
+  }
+
+  if (message.payload.requestMicAccess) {
+    requestMicAccess();
+    return;
+  }
+
   if (message.payload.setTrayIcon) {
     setTray(
       message.payload.setTrayIcon.title,
@@ -184,4 +178,24 @@ function handleMessages(message: ElectronMessage) {
   }
 
   log.error("Unhandled message", JSON.stringify(message));
+}
+
+function requestCameraAccess() {
+  systemPreferences
+    .askForMediaAccess("camera")
+    .then((hasCameraAccess) => {
+      log.info("Camera access?", hasCameraAccess);
+      messageMainWindow({ hasCameraAccess });
+    })
+    .catch((err) => log.error("Error", err));
+}
+
+function requestMicAccess() {
+  systemPreferences
+    .askForMediaAccess("microphone")
+    .then((hasMicAccess) => {
+      log.info("Mic access?", hasMicAccess);
+      messageMainWindow({ hasMicAccess });
+    })
+    .catch((err) => log.error("Error", err));
 }

@@ -92,6 +92,10 @@ export interface ElectronPayload {
   isTrayWindowVisible?: boolean
   isPipWindowVisible?: boolean
   isMainWindowFocused?: boolean
+  requestCameraAccess?: boolean
+  requestMicAccess?: boolean
+  hasCameraAccess?: boolean
+  hasMicAccess?: boolean
 }
 
 export const messageMainWindow = createMessageFn(ElectronWindow.Main)

@@ -416,12 +416,6 @@ import_electron7.app.on("ready", () => {
   });
   const setProtocol = import_electron7.app.setAsDefaultProtocolClient("sway");
   import_electron_log7.default.info("Set as default protocol client", setProtocol);
-  import_electron7.systemPreferences.askForMediaAccess("microphone").then((mic) => {
-    import_electron_log7.default.info("Mic", mic);
-  }).catch((err) => import_electron_log7.default.error("Error", err));
-  import_electron7.systemPreferences.askForMediaAccess("camera").then((camera) => {
-    import_electron_log7.default.info("Camera", camera);
-  }).catch((err) => import_electron_log7.default.error("Error", err));
 });
 import_electron7.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -508,6 +502,14 @@ function handleMessages(message) {
     getPipWindow().hide();
     return;
   }
+  if (message.payload.requestCameraAccess) {
+    requestCameraAccess();
+    return;
+  }
+  if (message.payload.requestMicAccess) {
+    requestMicAccess();
+    return;
+  }
   if (message.payload.setTrayIcon) {
     setTray(
       message.payload.setTrayIcon.title,
@@ -517,4 +519,16 @@ function handleMessages(message) {
     return;
   }
   import_electron_log7.default.error("Unhandled message", JSON.stringify(message));
+}
+function requestCameraAccess() {
+  import_electron7.systemPreferences.askForMediaAccess("camera").then((hasCameraAccess) => {
+    import_electron_log7.default.info("Camera access?", hasCameraAccess);
+    messageMainWindow2({ hasCameraAccess });
+  }).catch((err) => import_electron_log7.default.error("Error", err));
+}
+function requestMicAccess() {
+  import_electron7.systemPreferences.askForMediaAccess("microphone").then((hasMicAccess) => {
+    import_electron_log7.default.info("Mic access?", hasMicAccess);
+    messageMainWindow2({ hasMicAccess });
+  }).catch((err) => import_electron_log7.default.error("Error", err));
 }
