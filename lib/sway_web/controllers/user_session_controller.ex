@@ -30,7 +30,10 @@ defmodule SwayWeb.UserSessionController do
       |> UserAuth.log_in_user(user, user_params)
     else
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
-      render(conn, "new.html", error_message: "Invalid email or password")
+      user_agent = get_req_header(conn, "user-agent") |> List.first()
+      is_electron = user_agent && String.contains?(user_agent, "Electron")
+
+      render(conn, "new.html", error_message: "Invalid email or password", is_electron: is_electron)
     end
   end
 

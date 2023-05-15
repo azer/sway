@@ -23,36 +23,12 @@ defmodule SwayWeb.UserOauthController do
     end
   end
 
-  def desktop_callback(conn, params) do
-    provider_config =
-      {Ueberauth.Strategy.Google,
-       [
-         default_scope: "email profile",
-         request_path: "/oauth/desktop_login",
-         callback_path: "/oauth/desktop_callback"
-       ]}
-
-    conn = Ueberauth.run_callback(conn, "google", provider_config)
-    %{assigns: %{ueberauth_auth: %{info: user_info}}} = conn
-
-    case login_by_email(user_info.email, user_info) do
-      {:ok, user, workspace} ->
-        conn
-        |> put_session(:user_return_to, "/auth/desktop_redirect")
-        |> UserAuth.log_in_user(user)
-
-      {:error, _reason} ->
-        conn
-        |> put_flash(:error, "Oops! You don't have an invite to join Sway yet.")
-        |> redirect(to: "/login")
-    end
-  end
 
   defp random_password do
     :crypto.strong_rand_bytes(@rand_pass_length) |> Base.encode64()
   end
 
-  defp login_by_email(email, user_info) do
+  def login_by_email(email, user_info) do
     domain = Enum.at(String.split(email, "@"), 1)
 
     cond do

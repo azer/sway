@@ -207,7 +207,7 @@ export function RequestAccess(props: Props) {
               👾 Oops, something went wrong; {error.message}.<br />
               <br />
               If you{`'`}re on Safari, either{' '}
-              <a href="https://sway.so/download">download desktop app</a> or
+              <a href="https://downloads.sway.so/mac">download Mac app</a> or
               switch to Chrome.
             </ErrorMessage>
           ) : null}
