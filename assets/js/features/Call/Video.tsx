@@ -71,6 +71,9 @@ function UVideo(props: Props) {
           { userId: props.userId },
           timer.current
         )
+
+        if (timer.current) clearInterval(timer.current)
+
         timer.current = setInterval(draw, 1000)
 
         return true
@@ -112,7 +115,7 @@ function UVideo(props: Props) {
 
     if (!video?.videoWidth || !video?.videoHeight || !canvasEl.current) {
       log.info('Video is not ready, wait a little')
-      setTimeout(draw, 1000)
+      //setTimeout(draw, 1000)
       return
     }
 
@@ -148,13 +151,6 @@ function UVideo(props: Props) {
 
     if (isTrayOpen) {
       messageTrayWindow({
-        sendVideoFrame: {
-          userId: props.userId,
-          base64Image,
-        },
-      })
-    } else if (isPipOpen) {
-      messagePipWindow({
         sendVideoFrame: {
           userId: props.userId,
           base64Image,

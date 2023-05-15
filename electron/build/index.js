@@ -73,16 +73,17 @@ function loadExtensions() {
 }
 function swayPath(dir) {
   if (isDev) {
-    return path.join("http://localhost:4000", dir);
+    return "http://" + path.join("localhost:4000", dir);
   } else {
-    return path.join("https://sway.so", dir);
+    return "https://" + path.join("sway.so", dir);
   }
 }
 
 // src/main-window.ts
 var mainWindow = null;
+var quitting = false;
 function getMainWindow() {
-  if (mainWindow.isDestroyed()) {
+  if (!mainWindow || mainWindow.isDestroyed()) {
     import_electron_log2.default.info("Main window is destroyed, recreating");
     createMainWindow();
   }
@@ -106,20 +107,30 @@ function createMainWindow() {
     }
   });
   mainWindow.setMinimumSize(800, 600);
+  mainWindow.on("close", (event) => {
+    if (quitting) {
+      import_electron_log2.default.info("Close main window. Quitting ?", quitting);
+      mainWindow.close();
+    } else {
+      import_electron_log2.default.info("Hide main window");
+      event.preventDefault();
+      mainWindow.hide();
+    }
+  });
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     import_electron2.shell.openExternal(url);
     return { action: "deny" };
   });
+  import_electron_log2.default.info("Create main window", swayPath("login"));
   mainWindow.loadURL(swayPath("login"));
-  if (isDev) {
-    const devtools = require("electron-devtools-installer");
-    devtools.default(devtools.REACT_DEVELOPER_TOOLS).then((name) => console.log(`Added Extension:  ${name}`)).catch((err) => console.log("An error occurred: ", err));
-  }
+  import_electron2.app.on("before-quit", () => quitting = true);
+  mainWindow.on("closed", (event) => {
+  });
 }
 
 // src/tray.ts
 var import_electron4 = require("electron");
-var import_electron_log3 = __toESM(require("electron-log"));
+var import_electron_log4 = __toESM(require("electron-log"));
 
 // ../assets/js/lib/log.ts
 var c = 0;
@@ -131,12 +142,12 @@ function logger(name) {
     error
   };
   function info(msg, ...props) {
-    log8(console.info, msg, props);
+    log9(console.info, msg, props);
   }
   function error(msg, ...props) {
-    log8(console.error, msg, props);
+    log9(console.error, msg, props);
   }
-  function log8(fn, msg, props) {
+  function log9(fn, msg, props) {
     const args = [
       `%c<${name}>%c ${msg}`,
       `color: ${color};font-weight: bold;`,
@@ -189,6 +200,7 @@ function isRunningInElectron() {
 }
 
 // src/messaging.ts
+var import_electron_log3 = __toESM(require("electron-log"));
 var messageMainWindow2 = createMessageFn2(
   getMainWindow,
   "main-window" /* Main */
@@ -199,6 +211,7 @@ var messageTrayWindow2 = createMessageFn2(
 );
 function createMessageFn2(windowFn, target) {
   return (payload) => {
+    import_electron_log3.default.info("Send message");
     return windowFn().webContents.send("message", {
       target,
       payload
@@ -216,7 +229,7 @@ function getTrayWindow() {
   return trayWindow;
 }
 function createTrayWindow() {
-  import_electron_log3.default.info("Creating tray window");
+  import_electron_log4.default.info("Creating tray window");
   trayWindow = new import_electron4.BrowserWindow({
     width: 300,
     height: 350,
@@ -250,7 +263,7 @@ function createTrayButton() {
   trayButton = new import_electron4.Tray(assetPath("tray_icon_emptyTemplate.png"));
   trayButton.setToolTip("Sway");
   trayButton.on("click", () => {
-    import_electron_log3.default.info("Show tray window");
+    import_electron_log4.default.info("Show tray window");
     if (trayWindow.isDestroyed()) {
       createTrayWindow();
     }
@@ -279,7 +292,7 @@ function getTrayWindowPosition() {
   return { x, y: -20 };
 }
 function setTray(title, tooltip, image) {
-  import_electron_log3.default.info("Set tray. Title: ", title, " Tooltip:", tooltip, " Image:", image);
+  import_electron_log4.default.info("Set tray. Title: ", title, " Tooltip:", tooltip, " Image:", image);
   if (!trayButton) {
     createTrayButton();
   }
@@ -294,12 +307,12 @@ var import_electron7 = require("electron");
 // src/auto-updater.ts
 var import_electron5 = require("electron");
 var import_electron_updater = require("electron-updater");
-var import_electron_log4 = __toESM(require("electron-log"));
+var import_electron_log5 = __toESM(require("electron-log"));
 function checkForUpdates() {
   setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), 6e5);
 }
 function setupAutoUpdater() {
-  import_electron_updater.autoUpdater.logger = import_electron_log4.default;
+  import_electron_updater.autoUpdater.logger = import_electron_log5.default;
   import_electron_updater.autoUpdater.logger.transports.file.level = "debug";
   import_electron_updater.autoUpdater.setFeedURL({
     provider: "generic",
@@ -322,11 +335,11 @@ function setupAutoUpdater() {
 }
 
 // src/main.ts
-var import_electron_log6 = __toESM(require("electron-log"));
+var import_electron_log7 = __toESM(require("electron-log"));
 
 // src/pip.ts
 var import_electron6 = require("electron");
-var import_electron_log5 = __toESM(require("electron-log"));
+var import_electron_log6 = __toESM(require("electron-log"));
 var size = {
   width: 175,
   height: 350
@@ -339,7 +352,7 @@ function getPipWindow() {
   return pipWindow;
 }
 function createPipWindow(position) {
-  import_electron_log5.default.info("Creating PIP window");
+  import_electron_log6.default.info("Creating PIP window");
   pipWindow = new import_electron6.BrowserWindow({
     width: size.width,
     height: size.height,
@@ -347,6 +360,7 @@ function createPipWindow(position) {
     y: position.y,
     fullscreenable: false,
     resizable: true,
+    maximizable: false,
     show: false,
     frame: false,
     transparent: true,
@@ -360,6 +374,7 @@ function createPipWindow(position) {
       experimentalFeatures: true
     }
   });
+  pipWindow.setMinimumSize(size.width, size.height);
   pipWindow.on("show", () => {
     messageMainWindow2({ isPipWindowVisible: true });
   });
@@ -381,40 +396,40 @@ function getPipWindowPosition(mainWindow2) {
 }
 
 // src/main.ts
-import_electron_log6.default.initialize({ preload: true });
+import_electron_log7.default.initialize({ preload: true });
 setupAutoUpdater();
 import_electron7.app.on("ready", () => {
+  import_electron_log7.default.info("Ready");
   createMainWindow();
   createTrayWindow();
   createPipWindow(getPipWindowPosition(getMainWindow()));
   getMainWindow().on("blur", () => {
-    import_electron_log6.default.info("Blur, show pip window");
+    import_electron_log7.default.info("Blur, show pip window");
     messageMainWindow2({ isMainWindowFocused: false });
   });
   getMainWindow().on("show", () => {
-    import_electron_log6.default.info("Show main window, hide pip window");
+    import_electron_log7.default.info("Show main window, hide pip window");
     messageMainWindow2({ isMainWindowFocused: true });
   });
   getMainWindow().on("focus", () => {
-    import_electron_log6.default.info("Focus main window, hide pip window");
+    import_electron_log7.default.info("Focus main window, hide pip window");
     messageMainWindow2({ isMainWindowFocused: true });
   });
-  const microphone = import_electron7.systemPreferences.askForMediaAccess("microphone");
-  const camera = import_electron7.systemPreferences.askForMediaAccess("camera");
-  import_electron7.app.setAsDefaultProtocolClient("sway");
+  const setProtocol = import_electron7.app.setAsDefaultProtocolClient("sway");
+  import_electron_log7.default.info("Set as default protocol client", setProtocol);
 });
 import_electron7.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
+    import_electron_log7.default.info("Quit");
     import_electron7.app.quit();
   }
 });
 import_electron7.app.on("activate", () => {
-  if (getMainWindow() === null) {
-    createMainWindow();
-  }
+  getMainWindow().show();
 });
 import_electron7.app.whenReady().then(() => __async(exports, null, function* () {
   if (isDev) {
+    import_electron_log7.default.info("Load extensions");
     loadExtensions();
   }
   checkForUpdates();
@@ -423,7 +438,7 @@ import_electron7.app.on("open-url", (event, url) => {
   const u = new URL(url);
   if (u.protocol === "sway:") {
     event.preventDefault();
-    import_electron_log6.default.info("Opening url", url);
+    import_electron_log7.default.info("Opening url", url);
     getMainWindow().loadURL(
       swayPath(`desktop/auth/start?key=${u.searchParams.get("key")}`)
     );
@@ -432,6 +447,7 @@ import_electron7.app.on("open-url", (event, url) => {
 import_electron7.ipcMain.on(
   "message",
   (event, parsed) => {
+    import_electron_log7.default.info("Receive message");
     const message = parsed;
     let window2 = null;
     switch (parsed.target) {
@@ -455,7 +471,7 @@ import_electron7.ipcMain.on(
         console.error(
           "Can not direct message. Target: " + parsed.target + " Message:" + message
         );
-        import_electron_log6.default.error(
+        import_electron_log7.default.error(
           "Can not direct message. Target: " + parsed.target + " Message:" + message
         );
       }
@@ -495,5 +511,5 @@ function handleMessages(message) {
     );
     return;
   }
-  import_electron_log6.default.error("Unhandled message", JSON.stringify(message));
+  import_electron_log7.default.error("Unhandled message", JSON.stringify(message));
 }

@@ -56880,7 +56880,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       {
         userId: (_c = pipState.localUser) == null ? void 0 : _c.id,
         roomUrl: "https://shtest.daily.co/bafapublic",
-        children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(Container2, { children: [
+        children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(Container2, { onDoubleClick: showMainWindow, children: [
           /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Handle, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(HandleButton, {}) }),
           /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Call, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(BoxTile, { numBoxes: active.length + (self2 ? 1 : 0), children: [
             self2 ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
@@ -57000,6 +57000,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           on: value
         }
       });
+    }
+    function showMainWindow() {
+      console.log("show main window");
+      messageWindowManager({ showMainWindow: true });
     }
   }
   var Container2 = styled("div", {

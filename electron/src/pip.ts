@@ -29,6 +29,7 @@ export function createPipWindow(position: { x: number; y: number }) {
     y: position.y,
     fullscreenable: false,
     resizable: true,
+    maximizable: false,
     show: false,
     frame: false,
     transparent: true,
@@ -42,6 +43,8 @@ export function createPipWindow(position: { x: number; y: number }) {
       experimentalFeatures: true,
     },
   });
+
+  pipWindow.setMinimumSize(size.width, size.height);
 
   pipWindow.on("show", () => {
     messageMainWindow({ isPipWindowVisible: true });

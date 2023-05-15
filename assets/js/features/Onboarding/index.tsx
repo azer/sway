@@ -71,7 +71,7 @@ export function Onboarding(props: Props) {
   )
 
   function nextStep() {
-    if (currentStep + 1 < totalSteps - 1) {
+    if (currentStep + 1 < totalSteps) {
       dispatch(setCurrentStep(currentStep + 1))
     } else {
       dispatch(setDone(true))

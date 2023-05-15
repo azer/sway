@@ -11,6 +11,7 @@ import {
   ElectronMessage,
   getIpcRenderer,
   messageMainWindow,
+  messageWindowManager,
 } from 'lib/electron'
 import { UserIconView } from 'components/UserView'
 import { BoxTile } from 'components/BoxTile'
@@ -49,7 +50,7 @@ export function ElectronPipWindow(props: Props) {
         userId={pipState.localUser?.id}
         roomUrl="https://shtest.daily.co/bafapublic"
       >
-        <Container>
+        <Container onDoubleClick={showMainWindow}>
           <Handle>
             <HandleButton />
           </Handle>
@@ -187,6 +188,11 @@ export function ElectronPipWindow(props: Props) {
         on: value,
       },
     })
+  }
+
+  function showMainWindow() {
+    console.log('show main window')
+    messageWindowManager({ showMainWindow: true })
   }
 }
 

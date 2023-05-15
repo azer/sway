@@ -1,12 +1,13 @@
-import { BrowserWindow, shell } from "electron";
+import { app, BrowserWindow, shell } from "electron";
 import log from "electron-log";
 import { isDev, swayPath } from "./utils";
 import { staticFilePath } from "./utils";
 
 let mainWindow: BrowserWindow | null = null;
+let quitting = false;
 
 export function getMainWindow() {
-  if (mainWindow.isDestroyed()) {
+  if (!mainWindow || mainWindow.isDestroyed()) {
     log.info("Main window is destroyed, recreating");
     createMainWindow();
   }
@@ -24,6 +25,7 @@ export function createMainWindow() {
     //transparent: true,
     backgroundColor: "#00000022",
     icon: staticFilePath("images/logo.ico"),
+
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -33,24 +35,40 @@ export function createMainWindow() {
   });
 
   mainWindow.setMinimumSize(800, 600);
+  mainWindow.on("close", (event) => {
+    if (quitting) {
+      log.info("Close main window. Quitting ?", quitting);
+      mainWindow.close();
+    } else {
+      log.info("Hide main window");
+      event.preventDefault();
+      mainWindow.hide();
+    }
+  });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: "deny" };
   });
 
+  log.info("Create main window", swayPath("login"));
+
   mainWindow.loadURL(swayPath("login"));
 
-  // mainWindow.on("closed", () => (mainWindow = null));
+  app.on("before-quit", () => (quitting = true));
+
+  mainWindow.on("closed", (event) => {
+    //log.info("Window closed", event);
+  });
 
   // Hot Reloading
-  if (isDev) {
+  /*if (isDev) {
     // 'node_modules/.bin/electronPath'
-    /*require("electron-reload")(__dirname, {
+    require("electron-reload")(__dirname, {
       electron: path.join(__dirname, "../", "node_modules", ".bin", "electron"),
       forceHardReset: true,
       hardResetMethod: "exit",
-    });*/
+    });
 
     const devtools = require("electron-devtools-installer");
     // DevTools
@@ -60,5 +78,5 @@ export function createMainWindow() {
       .catch((err) => console.log("An error occurred: ", err));
 
     //win.webContents.openDevTools()
-  }
+  }*/
 }

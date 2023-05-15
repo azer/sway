@@ -1,13 +1,6 @@
 import { createMainWindow, getMainWindow } from "./main-window";
 import { createTrayWindow, getTrayWindow, setTray } from "./tray";
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  shell,
-  systemPreferences,
-  protocol,
-} from "electron";
+import { app, BrowserWindow, ipcMain, systemPreferences } from "electron";
 import { checkForUpdates, setupAutoUpdater } from "./auto-updater";
 import log from "electron-log";
 import { isDev, loadExtensions, swayPath } from "./utils";
@@ -19,6 +12,8 @@ log.initialize({ preload: true });
 setupAutoUpdater();
 
 app.on("ready", () => {
+  log.info("Ready");
+
   createMainWindow();
   createTrayWindow();
   createPipWindow(getPipWindowPosition(getMainWindow()));
@@ -41,26 +36,27 @@ app.on("ready", () => {
     // getPipWindow().hide();
   });
 
-  const microphone = systemPreferences.askForMediaAccess("microphone");
-  const camera = systemPreferences.askForMediaAccess("camera");
+  //const microphone = systemPreferences.askForMediaAccess("microphone");
+  //const camera = systemPreferences.askForMediaAccess("camera");
 
-  app.setAsDefaultProtocolClient("sway");
+  const setProtocol = app.setAsDefaultProtocolClient("sway");
+  log.info("Set as default protocol client", setProtocol);
 });
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
+    log.info("Quit");
     app.quit();
   }
 });
 
 app.on("activate", () => {
-  if (getMainWindow() === null) {
-    createMainWindow();
-  }
+  getMainWindow().show();
 });
 
 app.whenReady().then(async () => {
   if (isDev) {
+    log.info("Load extensions");
     loadExtensions();
   }
 
@@ -84,6 +80,8 @@ app.on("open-url", (event, url) => {
 ipcMain.on(
   "message",
   (event: Electron.IpcMainEvent, parsed: ElectronMessage) => {
+    log.info("Receive message");
+
     const message = parsed;
     //log.info("Received message", message.slice(0, 256));
 
