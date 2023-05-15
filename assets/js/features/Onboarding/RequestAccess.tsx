@@ -216,9 +216,8 @@ export function RequestAccess(props: Props) {
     </StepGrid>
   )
 
-  async function done() {
-    await requestVideoAccess()
-    props.done()
+  function done() {
+    requestVideoAndMicAccess()
   }
 
   function requestVideoAndMicAccess() {
@@ -255,7 +254,7 @@ export function RequestAccess(props: Props) {
     try {
       await navigator.mediaDevices.getUserMedia(constraints)
       setAccessStatus((current) => ({ ...current, video: true }))
-    } catch (err: Error) {
+    } catch (err) {
       setError(err)
       setAccessStatus((current) => ({ ...current, video: false }))
     }
@@ -266,7 +265,7 @@ export function RequestAccess(props: Props) {
       log.info('Request audio access')
       await navigator.mediaDevices.getUserMedia({ audio: true })
       setAccessStatus((current) => ({ ...current, audio: true }))
-    } catch (err: Error) {
+    } catch (err) {
       setError(err)
       setAccessStatus((current) => ({ ...current, audio: false }))
     }
