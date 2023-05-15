@@ -13,11 +13,16 @@ defmodule SwayWeb.AuthDesktopController do
                     ]}
 
   def desktop_redirect(conn, _params) do
+    IO.puts "redirected"
     {:ok, key, claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{}, auth_time: true)
     render(conn, "desktop_redirect.html", user: conn.assigns.current_user, key: key)
   end
 
   def oauth_login(conn, _params) do
+    IO.puts "Desktop OAuth login"
+    IO.inspect @provider_config
+    IO.puts "===="
+
     conn
     |> Ueberauth.run_request("google", @provider_config)
   end
@@ -47,22 +52,25 @@ defmodule SwayWeb.AuthDesktopController do
   end
 
   def oauth_callback(conn, params) do
+    IO.puts "oauth callback"
+
     case Ueberauth.run_callback(conn, "google", @provider_config) do
       %{assigns: %{ueberauth_auth: %{info: user_info}}} ->
         case SwayWeb.UserOauthController.login_by_email(user_info.email, user_info) do
           {:ok, user, workspace} ->
+
             conn
             |> put_session(:user_return_to, "/desktop/auth/redirect")
             |> SwayWeb.UserAuth.log_in_user(user)
 
           {:error, _reason} ->
-            conn
+	    conn
             |> put_flash(:error, "Oops! You don't have an invite to join Sway yet.")
-            |> redirect(to: "/login")
+            |> render("desktop_auth_error.html")
         end
 
       %{assigns: %{ueberauth_failure: failure}} ->
-        error_message = failure.error_message || failure.errors |> List.first() |> Map.get(:message) || "An unknown error occurred."
+        error_message = failure.errors |> List.first() |> Map.get(:message) || "An unknown error occurred."
 
         conn
         |> put_flash(:error, "Failed to authenticate. Reason: #{error_message}")
