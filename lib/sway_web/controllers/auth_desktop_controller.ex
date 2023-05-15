@@ -13,15 +13,12 @@ defmodule SwayWeb.AuthDesktopController do
                     ]}
 
   def desktop_redirect(conn, _params) do
-    IO.puts "redirected"
     {:ok, key, claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{}, auth_time: true)
     render(conn, "desktop_redirect.html", user: conn.assigns.current_user, key: key)
   end
 
   def oauth_login(conn, _params) do
-    IO.puts "Desktop OAuth login"
     IO.inspect @provider_config
-    IO.puts "===="
 
     conn
     |> Ueberauth.run_request("google", @provider_config)
@@ -48,12 +45,15 @@ defmodule SwayWeb.AuthDesktopController do
         conn
         |> put_flash(:error, "Oops! There token is expired.")
         |> redirect(to: "/login")
+
+      {:error, _reason} ->
+        conn
+        |> put_flash(:error, "Oops! The token is invalid.")
+        |> redirect(to: "/login")
     end
   end
 
   def oauth_callback(conn, params) do
-    IO.puts "oauth callback"
-
     case Ueberauth.run_callback(conn, "google", @provider_config) do
       %{assigns: %{ueberauth_auth: %{info: user_info}}} ->
         case SwayWeb.UserOauthController.login_by_email(user_info.email, user_info) do
