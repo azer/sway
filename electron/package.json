@@ -20,12 +20,15 @@
     "electron": "^23.0.0",
     "electron-build": "^0.0.3",
     "electron-builder": "^23.6.0",
+    "electron-notarize": "^1.2.2",
+    "electron-osx-sign": "^0.6.0",
     "electron-reload": "^2.0.0-alpha.1",
     "esbuild": "^0.17.8"
   },
   "build": {
     "productName": "Sway",
     "appId": "com.sway.sway",
+    "afterSign": "scripts/notarize.js",
     "directories": {
       "output": "dist"
     },
@@ -42,13 +45,16 @@
         "NSMicrophoneUsageDescription": "Allow microphone access",
         "NSCameraUsageDescription": "Allow camera access"
       },
-      "target": [{
-	"arch": "universal",
-	"target": "dmg"
-      }, {
-	"target": "zip",
-	"arch": "universal"
-      }]
+      "target": [
+        {
+          "arch": "universal",
+          "target": "dmg"
+        },
+        {
+          "target": "zip",
+          "arch": "universal"
+        }
+      ]
     },
     "publish": {
       "provider": "generic",
