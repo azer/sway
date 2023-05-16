@@ -3,8 +3,6 @@ import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import selectors from 'selectors'
 import DailyIframe, { DailyCall } from '@daily-co/daily-js'
 import {
-  StepButton,
-  StepButtonset,
   StepContent,
   StepDesc,
   StepGrid,
@@ -16,7 +14,6 @@ import { OnboardingButtonset } from 'components/Onboarding/Buttonset'
 import { CurrentStep } from './CurrentStep'
 import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
-import { roomUrl } from 'features/Call/Provider'
 import { DailyProvider } from '@daily-co/daily-react-hooks'
 import { HaircheckVideo } from './Video'
 import { CameraSwitcher } from './CameraSwitcher'
@@ -32,6 +29,10 @@ interface Props {
 
 export function CustomizeCamera(props: Props) {
   const [callObject, setCallObject] = useState<DailyCall | null>(null)
+
+  const [workspace] = useSelector((state) => [
+    selectors.workspaces.getSelfWorkspace(state),
+  ])
 
   const startHairCheck = useCallback(async (url: string) => {
     log.info('Starting hair check')
@@ -63,8 +64,9 @@ export function CustomizeCamera(props: Props) {
   }, [])
 
   useEffect(() => {
-    startHairCheck(roomUrl)
-  }, [startHairCheck])
+    if (!workspace) return
+    startHairCheck(workspace.daily_room_url)
+  }, [startHairCheck, !!workspace])
 
   return (
     <StepGrid>

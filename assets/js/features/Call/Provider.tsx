@@ -16,7 +16,7 @@ import {
 } from '@daily-co/daily-react-hooks'
 import { useSelector, useDispatch } from 'state'
 import { logger } from 'lib/log'
-import { User } from 'state/entities'
+import { User, Workspace } from 'state/entities'
 import {
   ConnectionState,
   setDailyCallConnectionStatus,
@@ -30,13 +30,13 @@ interface Props {
 
 const log = logger('call/provider')
 const dlog = logger('daily')
-export const roomUrl = 'https://shtest.daily.co/bafapublic'
 
 export function CallProvider(props: Props) {
   const dispatch = useDispatch()
   const [callObject, setCallObject] = useState<DailyCall>()
 
-  const [localUser, shouldReconnect] = useSelector((state) => [
+  const [workspace, localUser, shouldReconnect] = useSelector((state) => [
+    selectors.workspaces.getSelfWorkspace(state),
     selectors.users.getSelf(state),
     selectors.call.shouldReconnect(state),
   ])
@@ -65,7 +65,7 @@ export function CallProvider(props: Props) {
   )
 
   const handleJoiningCall = useCallback(async () => {
-    if (!localUser) return
+    if (!localUser || !workspace) return
 
     dispatch(
       setDailyCallConnectionStatus({
@@ -81,8 +81,8 @@ export function CallProvider(props: Props) {
     callObject.setLocalAudio(false)
 
     setCallObject(callObject)
-    joinDailyCall(callObject, localUser)
-  }, [localUser])
+    joinDailyCall(callObject, localUser, workspace)
+  }, [localUser, workspace])
 
   return (
     <DailyProvider callObject={callObject}>
@@ -117,7 +117,11 @@ export function CallProvider(props: Props) {
       .on('network-connection', logEvent)
   }
 
-  async function joinDailyCall(callObject: DailyCall, user: User) {
+  async function joinDailyCall(
+    callObject: DailyCall,
+    user: User,
+    workspace: Workspace
+  ) {
     callObject.setLocalVideo(false)
     callObject.setLocalAudio(false)
 
@@ -129,7 +133,7 @@ export function CallProvider(props: Props) {
     callObject
       .join({
         userData: { id: localUser?.id },
-        url: roomUrl,
+        url: workspace.daily_room_url,
         videoSource: false,
         audioSource: false,
         startVideoOff: true,

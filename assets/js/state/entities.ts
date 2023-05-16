@@ -58,6 +58,7 @@ export interface Workspace {
   domain: string
   logoUrl: string
   slug: string
+  daily_room_url: string
 }
 
 export const Rooms = 'rooms'

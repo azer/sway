@@ -1,4 +1,4 @@
-import { Room, Status, User } from 'state/entities'
+import { Room, Status, User, Workspace } from 'state/entities'
 import { CallParticipantStatus } from 'features/Call/slice'
 import { RoomStatus } from 'features/Room/selectors'
 
@@ -7,6 +7,7 @@ export type TrayWindowState = {
   focusedRoomStatus?: RoomStatus
   localUser?: User
   localStatus?: Status
+  workspace?: Workspace
   participants?: {
     userId: string
     participant?: CallParticipantStatus

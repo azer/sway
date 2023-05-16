@@ -46,80 +46,86 @@ export function ElectronPipWindow(props: Props) {
 
   return (
     <TooltipProvider>
-      <PipCallProvider
-        userId={pipState.localUser?.id}
-        roomUrl="https://shtest.daily.co/bafapublic"
-      >
-        <Container onDoubleClick={showMainWindow}>
-          <Handle>
-            <HandleButton />
-          </Handle>
-          <Call>
-            <BoxTile numBoxes={active.length + (self ? 1 : 0)}>
-              {self ? (
-                <UserIconView
-                  userId={self.userId}
-                  user={self.user}
-                  status={self.status}
-                  small={active.length > 0}
-                  tap={tap}
-                  isOnline={self.isOnline}
-                  createStatusHook={createStatusHook}
-                  videoParticipantId={
-                    self.participant?.cameraOn
-                      ? self.participant?.dailyUserId
-                      : undefined
-                  }
-                  self
-                  tile
-                />
-              ) : null}
-              {active.map((p) => (
-                <UserIconView
-                  userId={p.userId}
-                  user={p.user}
-                  status={p.status}
-                  small={active.length > 0}
-                  tap={tap}
-                  isOnline={p.isOnline}
-                  createStatusHook={createStatusHook}
-                  videoParticipantId={
-                    p.participant?.cameraOn
-                      ? p.participant?.dailyUserId
-                      : undefined
-                  }
-                  tile
-                />
-              ))}
-            </BoxTile>
-          </Call>
-          <Buttonset>
-            <Tooltip content={'Turn off video'}>
-              <Button
-                onClick={toggleCamera}
-                on={pipState.localStatus?.camera_on || false}
-              >
-                <Icon
-                  name={pipState.localStatus?.camera_on ? 'video' : 'videoOff'}
-                />
-              </Button>
-            </Tooltip>
-            <Tooltip content={'Turn off microphone'}>
-              <Button
-                onClick={toggleMic}
-                on={pipState.localStatus?.mic_on || false}
-              >
-                <Icon name={pipState.localStatus?.mic_on ? 'mic' : 'micOff'} />
-              </Button>
-            </Tooltip>
-            <Tooltip content={'Hang up call'}>
-              <HangUpButton onClick={leaveCall}>
-                <Icon name="phoneHangUp" />
-              </HangUpButton>
-            </Tooltip>
-          </Buttonset>
-        </Container>
-      </PipCallProvider>
+      {pipState.workspace ? (
+        <PipCallProvider
+          userId={pipState.localUser?.id}
+          roomUrl={pipState.workspace?.daily_room_url}
+        >
+          <Container onDoubleClick={showMainWindow}>
+            <Handle>
+              <HandleButton />
+            </Handle>
+            <Call>
+              <BoxTile numBoxes={active.length + (self ? 1 : 0)}>
+                {self ? (
+                  <UserIconView
+                    userId={self.userId}
+                    user={self.user}
+                    status={self.status}
+                    small={active.length > 0}
+                    tap={tap}
+                    isOnline={self.isOnline}
+                    createStatusHook={createStatusHook}
+                    videoParticipantId={
+                      self.participant?.cameraOn
+                        ? self.participant?.dailyUserId
+                        : undefined
+                    }
+                    self
+                    tile
+                  />
+                ) : null}
+                {active.map((p) => (
+                  <UserIconView
+                    userId={p.userId}
+                    user={p.user}
+                    status={p.status}
+                    small={active.length > 0}
+                    tap={tap}
+                    isOnline={p.isOnline}
+                    createStatusHook={createStatusHook}
+                    videoParticipantId={
+                      p.participant?.cameraOn
+                        ? p.participant?.dailyUserId
+                        : undefined
+                    }
+                    tile
+                  />
+                ))}
+              </BoxTile>
+            </Call>
+            <Buttonset>
+              <Tooltip content={'Turn off video'}>
+                <Button
+                  onClick={toggleCamera}
+                  on={pipState.localStatus?.camera_on || false}
+                >
+                  <Icon
+                    name={
+                      pipState.localStatus?.camera_on ? 'video' : 'videoOff'
+                    }
+                  />
+                </Button>
+              </Tooltip>
+              <Tooltip content={'Turn off microphone'}>
+                <Button
+                  onClick={toggleMic}
+                  on={pipState.localStatus?.mic_on || false}
+                >
+                  <Icon
+                    name={pipState.localStatus?.mic_on ? 'mic' : 'micOff'}
+                  />
+                </Button>
+              </Tooltip>
+              <Tooltip content={'Hang up call'}>
+                <HangUpButton onClick={leaveCall}>
+                  <Icon name="phoneHangUp" />
+                </HangUpButton>
+              </Tooltip>
+            </Buttonset>
+          </Container>
+        </PipCallProvider>
+      ) : null}
     </TooltipProvider>
   )
 

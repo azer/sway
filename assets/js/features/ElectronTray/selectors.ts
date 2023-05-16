@@ -17,6 +17,7 @@ export function trayWindowState(state: RootState): TrayWindowState {
     focusedRoom?.id || ''
   )
 
+  const workspace = selectors.workspaces.getSelfWorkspace(state)
   const localUser = selectors.users.getSelf(state)
   const localStatus = selectors.statuses.getLocalStatus(state)
   const participants = selectors.rooms
@@ -39,5 +40,6 @@ export function trayWindowState(state: RootState): TrayWindowState {
     localUser,
     localStatus,
     participants,
+    workspace,
   }
 }

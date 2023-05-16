@@ -52,8 +52,10 @@ export function RequestAccess(props: Props) {
   useEffect(() => {
     getIpcRenderer()?.on('message', onMessage)
 
-    messageWindowManager({ requestCameraAccess: true })
-    messageWindowManager({ requestMicAccess: true })
+    if (isElectron) {
+      messageWindowManager({ requestCameraAccess: true })
+      messageWindowManager({ requestMicAccess: true })
+    }
 
     return () => {
       getIpcRenderer()?.removeListener('message', onMessage)
@@ -107,7 +109,7 @@ export function RequestAccess(props: Props) {
   }, [accessStatus.video && accessStatus.audio])
 
   useEffect(() => {
-    if (!navigator.permissions) return
+    if (!navigator.permissions || isElectron) return
 
     let videoStatus: PermissionStatus | undefined
     let audioStatus: PermissionStatus | undefined
@@ -234,27 +236,12 @@ export function RequestAccess(props: Props) {
   )
 
   function done() {
-    requestVideoAndMicAccess()
+    props.done()
   }
 
   function requestVideoAndMicAccess() {
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: true,
-        video: {
-          width: {
-            min: 640,
-            ideal: 1280,
-            max: 1920,
-          },
-        },
-      })
-      .then(() => {
-        setAccessStatus((current) => ({ ...current, video: true, audio: true }))
-      })
-      .catch((err) => {
-        setError(err)
-      })
+    requestVideoAccess()
+    requestAudioAccess()
   }
 
   async function requestVideoAccess() {
@@ -302,7 +289,7 @@ export function RequestAccess(props: Props) {
     if (msg.payload.hasCameraAccess !== undefined) {
       setAccessStatus((accessStatus) => ({
         ...accessStatus,
-        camera: msg.payload.hasCameraAccess || false,
+        video: msg.payload.hasCameraAccess || false,
       }))
     }
 

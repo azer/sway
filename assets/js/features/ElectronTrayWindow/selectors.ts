@@ -1,5 +1,3 @@
-import { RootState } from 'state'
-
 export type EmojiObject = {
   id: string
   name: string

@@ -56860,7 +56860,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_jsx_runtime68 = __toESM(require_jsx_runtime());
   var log6 = logger("electron-pip-window");
   function ElectronPipWindow(props) {
-    var _a2, _b, _c, _d, _e, _f, _g, _h, _i;
+    var _a2, _b, _c, _d, _e, _f, _g, _h, _i, _j;
     const [pipState, setPipState] = (0, import_react8.useState)({});
     const [videoFrame, setVideoFrame] = (0, import_react8.useState)({});
     (0, import_react8.useEffect)(() => {
@@ -56875,11 +56875,11 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     }, []);
     const self2 = (_a2 = pipState.participants) == null ? void 0 : _a2.find((p2) => p2.isSelf);
     const active = ((_b = pipState.participants) == null ? void 0 : _b.filter((p2) => p2.isActive && !p2.isSelf)) || [];
-    return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(import_react_tooltip2.TooltipProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(import_react_tooltip2.TooltipProvider, { children: pipState.workspace ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
       PipCallProvider,
       {
         userId: (_c = pipState.localUser) == null ? void 0 : _c.id,
-        roomUrl: "https://shtest.daily.co/bafapublic",
+        roomUrl: (_d = pipState.workspace) == null ? void 0 : _d.daily_room_url,
         children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(Container2, { onDoubleClick: showMainWindow, children: [
           /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Handle, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(HandleButton, {}) }),
           /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Call, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(BoxTile, { numBoxes: active.length + (self2 ? 1 : 0), children: [
@@ -56893,7 +56893,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 tap,
                 isOnline: self2.isOnline,
                 createStatusHook,
-                videoParticipantId: ((_d = self2.participant) == null ? void 0 : _d.cameraOn) ? (_e = self2.participant) == null ? void 0 : _e.dailyUserId : void 0,
+                videoParticipantId: ((_e = self2.participant) == null ? void 0 : _e.cameraOn) ? (_f = self2.participant) == null ? void 0 : _f.dailyUserId : void 0,
                 self: true,
                 tile: true
               }
@@ -56921,11 +56921,11 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               Button,
               {
                 onClick: toggleCamera,
-                on: ((_f = pipState.localStatus) == null ? void 0 : _f.camera_on) || false,
+                on: ((_g = pipState.localStatus) == null ? void 0 : _g.camera_on) || false,
                 children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
                   Icon,
                   {
-                    name: ((_g = pipState.localStatus) == null ? void 0 : _g.camera_on) ? "video" : "videoOff"
+                    name: ((_h = pipState.localStatus) == null ? void 0 : _h.camera_on) ? "video" : "videoOff"
                   }
                 )
               }
@@ -56934,15 +56934,20 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               Button,
               {
                 onClick: toggleMic,
-                on: ((_h = pipState.localStatus) == null ? void 0 : _h.mic_on) || false,
-                children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Icon, { name: ((_i = pipState.localStatus) == null ? void 0 : _i.mic_on) ? "mic" : "micOff" })
+                on: ((_i = pipState.localStatus) == null ? void 0 : _i.mic_on) || false,
+                children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+                  Icon,
+                  {
+                    name: ((_j = pipState.localStatus) == null ? void 0 : _j.mic_on) ? "mic" : "micOff"
+                  }
+                )
               }
             ) }),
             /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Tooltip, { content: "Hang up call", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(HangUpButton, { onClick: leaveCall, children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Icon, { name: "phoneHangUp" }) }) })
           ] })
         ] })
       }
-    ) });
+    ) : null });
     function onMessage(event, msg) {
       var _a3;
       log6.info("Received message", msg);

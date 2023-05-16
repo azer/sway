@@ -30,12 +30,14 @@ defmodule SwayWeb.WorkspaceController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => raw_id}) do
+    id = SwayWeb.Hashing.decode_workspace(raw_id)
     workspace = Workspaces.get_workspace!(id)
     render(conn, "show.json", workspace: workspace)
   end
 
-  def update(conn, %{"id" => id, "workspace" => workspace_params}) do
+  def update(conn, %{"id" => raw_id, "workspace" => workspace_params}) do
+    id = SwayWeb.Hashing.decode_workspace(raw_id)
     workspace = Workspaces.get_workspace!(id)
 
     with {:ok, %Workspace{} = workspace} <-
