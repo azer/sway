@@ -181,7 +181,6 @@ const Top = styled('div', {
   center: true,
   position: 'relative',
   flexDirection: 'row',
-  overflowX: 'scroll',
   gap: '8px',
   height: '90px',
   [`& ${RoomParticipantRoot}`]: {
