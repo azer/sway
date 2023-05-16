@@ -181,6 +181,7 @@ const Top = styled('div', {
   center: true,
   position: 'relative',
   flexDirection: 'row',
+  overflow: 'hidden', // FIXME: enable horizontal scroll
   gap: '8px',
   height: '90px',
   [`& ${RoomParticipantRoot}`]: {
