@@ -38,18 +38,19 @@ export function createTrayWindow() {
 
   // Hide the window when it loses focus
   trayWindow.on("blur", () => {
-    if (!trayWindow.webContents.isDevToolsOpened()) {
-      trayWindow.hide();
+    trayWindow.hide();
 
-      messageMainWindow({
-        isTrayWindowVisible: false,
-      });
-    }
+    messageMainWindow({
+      isTrayWindowVisible: false,
+    });
+
+    //if (!trayWindow.webContents.isDevToolsOpened()) {
+    //}
   });
 
-  if (isDev) {
+  /*if (isDev) {
     trayWindow.webContents.openDevTools();
-  }
+  }*/
 }
 
 export function createTrayButton() {
@@ -83,6 +84,9 @@ function getTrayWindowPosition() {
   const windowBounds = trayWindow.getBounds();
   const trayBounds = trayButton.getBounds();
 
+  console.log("window bounds:", windowBounds);
+  console.log("tray bounds:", trayBounds);
+
   // Center window horizontally below the tray icon
   const x = Math.round(
     trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2
@@ -93,7 +97,7 @@ function getTrayWindowPosition() {
 
   console.log("tray window position: ", x, y);
 
-  return { x: x, y: -20 };
+  return { x: x, y: y };
 }
 
 export function setTray(title: string, tooltip: string, image: string) {

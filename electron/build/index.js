@@ -247,16 +247,11 @@ function createTrayWindow() {
   });
   trayWindow.loadURL(htmlPath("tray-window.html"));
   trayWindow.on("blur", () => {
-    if (!trayWindow.webContents.isDevToolsOpened()) {
-      trayWindow.hide();
-      messageMainWindow2({
-        isTrayWindowVisible: false
-      });
-    }
+    trayWindow.hide();
+    messageMainWindow2({
+      isTrayWindowVisible: false
+    });
   });
-  if (isDev) {
-    trayWindow.webContents.openDevTools();
-  }
 }
 function createTrayButton() {
   trayButton = new import_electron4.Tray(assetPath("tray_icon_emptyTemplate.png"));
@@ -283,12 +278,14 @@ function createTrayButton() {
 function getTrayWindowPosition() {
   const windowBounds = trayWindow.getBounds();
   const trayBounds = trayButton.getBounds();
+  console.log("window bounds:", windowBounds);
+  console.log("tray bounds:", trayBounds);
   const x = Math.round(
     trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2
   );
   const y = Math.round(trayBounds.y);
   console.log("tray window position: ", x, y);
-  return { x, y: -20 };
+  return { x, y };
 }
 function setTray(title, tooltip, image) {
   import_electron_log4.default.info("Set tray. Title: ", title, " Tooltip:", tooltip, " Image:", image);
@@ -319,6 +316,8 @@ function setupAutoUpdater() {
   });
   import_electron_updater.autoUpdater.checkForUpdatesAndNotify();
   import_electron_updater.autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
+    if (!getMainWindow().isFocused())
+      return;
     const dialogOpts = {
       type: "info",
       buttons: ["Restart", "Later"],

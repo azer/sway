@@ -25,7 +25,6 @@ export function createMainWindow() {
     //transparent: true,
     backgroundColor: "#00000022",
     icon: staticFilePath("images/logo.ico"),
-
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
