@@ -45,11 +45,11 @@ export function CallControls(props: Props) {
   // const dispatch = useDispatch()
   // const [] = useSelector((state) => [])
 
-  const settings = useSettings()
+  /*const settings = useSettings()
   const cameraSettings = useVideoSettings()
   const micSettings = useMicSettings()
   const speakerSettings = useSpeakerSettings()
-  const blurSettings = useBackgroundBlurSettings()
+  const blurSettings = useBackgroundBlurSettings()*/
 
   return (
     <Container>
@@ -101,13 +101,6 @@ export function CallControls(props: Props) {
             checked={props.blurValue !== 0}
             onCheckedChange={props.toggleBlur}
           />
-          <Dropdown.Item label="Customize blur" onClick={blurSettings.open} />
-          <Dropdown.Separator />
-          <Dropdown.Item
-            label="Camera settings"
-            icon="sliders"
-            onClick={cameraSettings.open}
-          />
         </Dropdown.Content>
       </Dropdown.Menu>
       <Dropdown.Menu>
@@ -146,12 +139,6 @@ export function CallControls(props: Props) {
             kbd={props.micOn ? ['Cmd', 'd'] : []}
             onClick={() => props.setMicOn(false)}
           />
-          <Dropdown.Separator />
-          <Dropdown.Item
-            label="Microphone settings"
-            icon="sliders"
-            onClick={micSettings.open}
-          />
         </Dropdown.Content>
       </Dropdown.Menu>
 
@@ -160,7 +147,6 @@ export function CallControls(props: Props) {
           <Button
             icon={!props.speakerOn ? 'speaker-off' : 'speaker-volume-high'}
             label="Speaker"
-            onClick={speakerSettings.open}
             off={!props.speakerOn}
             tooltipLabel={
               props.speakerOn ? 'Turn off speaker' : 'Turn on speaker'
@@ -192,12 +178,6 @@ export function CallControls(props: Props) {
             kbd={props.speakerOn ? ['control', 'm'] : []}
             onClick={() => props.setSpeakerOn(false)}
           />
-          <Dropdown.Separator />
-          <Dropdown.Item
-            label="Speaker settings"
-            icon="sliders"
-            onClick={speakerSettings.open}
-          />
         </Dropdown.Content>
       </Dropdown.Menu>
       <ScreenshareButton
@@ -205,13 +185,7 @@ export function CallControls(props: Props) {
         startScreenShare={props.startPresentingScreen}
         stopScreenShare={props.stopPresentingScreen}
       />
-      <Button
-        icon="sliders"
-        label="Settings"
-        tooltipLabel="Settings"
-        tooltipShortcut={['opt', 's']}
-        onClick={settings.open}
-      ></Button>
+
       {props.isActive ? (
         <PhoneCallButton>
           <Button
@@ -225,6 +199,37 @@ export function CallControls(props: Props) {
       ) : null}
     </Container>
   )
+
+  /*
+
+    <Button
+        icon="sliders"
+        label="Settings"
+        tooltipLabel="Settings"
+        tooltipShortcut={['opt', 's']}
+        onClick={settings.open}
+        ></Button>
+ <Dropdown.Item
+            label="Speaker settings"
+            icon="sliders"
+            onClick={speakerSettings.open}
+            />
+
+                      <Dropdown.Item label="Customize blur" onClick={blurSettings.open} />
+          <Dropdown.Separator />
+          <Dropdown.Item
+            label="Camera settings"
+            icon="sliders"
+            onClick={cameraSettings.open}
+            />
+
+                      <Dropdown.Separator />
+          <Dropdown.Item
+            label="Microphone settings"
+            icon="sliders"
+            onClick={micSettings.open}
+          />
+        */
 }
 
 export const DockSection = styled('div', {
