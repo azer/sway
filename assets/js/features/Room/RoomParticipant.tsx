@@ -24,12 +24,15 @@ const log = logger('room/participant')
 
 export function RoomParticipant(props: Props) {
   const socket = useUserSocket()
-  const [user, participant, status, isActive] = useSelector((state) => [
-    selectors.users.getById(state, props.userId),
-    selectors.call.getParticipantStatusByUserId(state, props.userId),
-    selectors.statuses.getByUserId(state, props.userId),
-    selectors.presence.isUserActive(state, props.userId),
-  ])
+  const [user, participant, status, isActive, isOnline] = useSelector(
+    (state) => [
+      selectors.users.getById(state, props.userId),
+      selectors.call.getParticipantStatusByUserId(state, props.userId),
+      selectors.statuses.getByUserId(state, props.userId),
+      selectors.presence.isUserActive(state, props.userId),
+      selectors.presence.isUserOnline(state, props.userId),
+    ]
+  )
 
   useEffect(() => {
     if (!user) {
@@ -53,7 +56,9 @@ export function RoomParticipant(props: Props) {
       <RoomParticipantRoot data-user-id={props.userId} small={props.small}>
         {props.small ? <StatusIcon status={status} noEmoji /> : null}
         <ParticipantLabel id={props.userId} username={user?.name}>
-          {!props.small ? <StatusIcon status={status} noEmoji /> : null}
+          {!props.small ? (
+            <StatusIcon status={status} noEmoji isOnline={isOnline} />
+          ) : null}
         </ParticipantLabel>
         <Avatar
           src={user?.profile_photo_url}

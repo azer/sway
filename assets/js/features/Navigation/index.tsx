@@ -33,27 +33,19 @@ export function Navigation(props: Props) {
   const inviteModal = useInvitePeople()
   const presence = usePresence()
 
-  const [
-    workspace,
-    activeRoomIds,
-    focusedRoom,
-    people,
-    prevRoom,
-    userIdOnSidebar,
-    isSidebarOpen,
-  ] = useSelector((state) => {
-    const workspace = selectors.workspaces.getSelfWorkspace(state)
+  const [workspace, activeRoomIds, focusedRoom, people, prevRoom] = useSelector(
+    (state) => {
+      const workspace = selectors.workspaces.getSelfWorkspace(state)
 
-    return [
-      workspace,
-      selectors.rooms.listActiveRooms(state),
-      selectors.rooms.getFocusedRoom(state),
-      selectors.navigation.listPeople(state),
-      selectors.rooms.getPrevRoom(state),
-      selectors.sidebar.getFocusedUserId(state),
-      selectors.sidebar.isOpen(state),
-    ]
-  })
+      return [
+        workspace,
+        selectors.rooms.listActiveRooms(state),
+        selectors.rooms.getFocusedRoom(state),
+        selectors.navigation.listPeople(state),
+        selectors.rooms.getPrevRoom(state),
+      ]
+    }
+  )
 
   useEffect(() => {
     if (!workspace?.id) return

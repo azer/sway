@@ -42,10 +42,14 @@ export function RoomPage(props: Props) {
   ] = useSelector((state) => {
     const users = selectors.rooms.getOtherUsersInRoom(state, props.id)
 
-    const active = users.filter(
+    const online = users.filter((userId: string) =>
+      selectors.presence.isUserOnline(state, userId)
+    )
+
+    const active = online.filter(
       selectors.presence.filterActiveUsers(state, true)
     )
-    const inactive = users.filter(
+    const inactive = online.filter(
       selectors.presence.filterActiveUsers(state, false)
     )
 

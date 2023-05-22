@@ -38,6 +38,7 @@ export function UserButton(props: Props) {
     localUserId,
     focused,
     isLocalUserActive,
+    isActive,
   ] = useSelector((state) => {
     const privateRoomId = selectors.rooms.get1v1RoomIdByUserId(state, props.id)
 
@@ -52,6 +53,7 @@ export function UserButton(props: Props) {
       selectors.session.getUserId(state),
       selectors.rooms.getFocusedRoomId(state),
       selectors.presence.isLocalUserActive(state),
+      selectors.presence.isUserActive(state, props.id),
     ]
   })
 
@@ -70,7 +72,12 @@ export function UserButton(props: Props) {
         selected={selected || userIdOnSidebar === props.id}
         onSidebar={!selected && userIdOnSidebar === props.id}
       >
-        <StatusIcon status={status} isOnline={isOnline} noEmoji />
+        <StatusIcon
+          status={status}
+          isActive={isActive}
+          isOnline={isOnline}
+          noEmoji
+        />
         <Name online={isOnline}>{user?.name}</Name>
         {!selected && isPresentInPrivateRoom ? (
           <AvatarStack>

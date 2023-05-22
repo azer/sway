@@ -64,7 +64,7 @@ export const dark = {
   statusIconActiveBg: '$green',
   statusIconFocusBg: '$yellow',
   statusIconZenBg: '$purple',
-  statusIconOfflineBg: 'rgb(50, 54, 61, 1)',
+  statusIconOfflineBg: 'rgb(60, 64, 71, 1)',
   presenceModelineFocusFg: 'rgba(242, 201, 76, 0.9)',
   presenceModelineFocusBlur: 'rgba(242, 201, 76, 0.2)',
   presenceModelineSoloFg: 'rgba(255, 93, 224, 0.9)',
