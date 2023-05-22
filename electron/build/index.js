@@ -247,6 +247,8 @@ function createTrayWindow() {
   });
   trayWindow.loadURL(htmlPath("tray-window.html"));
   trayWindow.on("blur", () => {
+    if (trayWindow.webContents.isDevToolsOpened())
+      return;
     trayWindow.hide();
     messageMainWindow2({
       isTrayWindowVisible: false

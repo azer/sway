@@ -38,6 +38,8 @@ export function createTrayWindow() {
 
   // Hide the window when it loses focus
   trayWindow.on("blur", () => {
+    if (trayWindow.webContents.isDevToolsOpened()) return;
+
     trayWindow.hide();
 
     messageMainWindow({

@@ -496,13 +496,14 @@ const Title = styled('div', {
   textTransform: 'uppercase',
   padding: '0 14px',
   marginTop: '4px',
+  marginBottom: '4px',
   height: '32px',
   label: true,
   vcenter: true,
   '& label': {
     borderRadius: '$small',
     padding: '4px 6px',
-    background: 'rgba(40, 44, 51, 0.9)',
+    background: 'rgba(40, 44, 51, 0.3)',
     color: 'rgba(245, 250, 255, 0.35)',
   },
 })
