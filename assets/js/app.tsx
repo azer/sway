@@ -45,6 +45,7 @@ import { TapProvider } from 'features/Tap/Provider'
 import { ChatProvider } from 'features/Chat/Provider'
 import { FocusProvider } from 'features/Focus/Provider'
 import { PersistGate } from 'reduxjs-toolkit-persist/integration/react'
+import { registerServiceWorker } from 'features/ServiceWorker'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -102,3 +103,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 )
+
+registerServiceWorker()

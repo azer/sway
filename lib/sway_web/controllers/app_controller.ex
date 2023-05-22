@@ -11,7 +11,9 @@ defmodule SwayWeb.AppController do
       [rooms, status, privateRooms] = fetchRoomData(workspace.id, user_id)
        {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
 
-       render(conn, "app_home.html",
+       conn
+       |> put_resp_header("Service-Worker-Allowed", "/")
+       |> render("app_home.html",
       jwt: jwt,
       user: SwayWeb.UserView.encode(conn.assigns.current_user),
       membership: SwayWeb.MembershipView.encode(membership),
@@ -42,8 +44,10 @@ defmodule SwayWeb.AppController do
     end)
 
     # FIXME:
-    # Change the room
-    render(conn, "app_home.html",
+# Change the room
+    conn
+    |> put_resp_header("Service-Worker-Allowed", "/")
+    |> render("app_home.html",
       user: SwayWeb.UserView.encode(conn.assigns.current_user),
       membership: SwayWeb.MembershipView.encode(membership),
       workspace: SwayWeb.WorkspaceView.encode(workspace),
@@ -72,7 +76,9 @@ defmodule SwayWeb.AppController do
 
     # FIXME:
     # Change the room
-    render(conn, "app_home.html",
+    conn
+    |> put_resp_header("Service-Worker-Allowed", "/")
+    |> render("app_home.html",
       user: SwayWeb.UserView.encode(conn.assigns.current_user),
       membership: SwayWeb.MembershipView.encode(membership),
       workspace: SwayWeb.WorkspaceView.encode(workspace),
