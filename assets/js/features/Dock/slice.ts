@@ -15,6 +15,7 @@ export enum ConnectionState {
   Failed = 'failed',
   Timeout = 'timeout',
   Disconnected = 'disconnected',
+  Retry = 'retry',
 }
 
 export interface ConnectionStatus {

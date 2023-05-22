@@ -133,8 +133,8 @@ self.addEventListener('fetch', (event) => {
 })
 
 // Handle incoming push notifications
-self.addEventListener('push', (event) => {
-  /*try {
+/*self.addEventListener('push', (event) => {
+  try {
     const data = event.data.text()
     const parsedData = JSON.parse(data)
 
@@ -162,5 +162,5 @@ self.addEventListener('push', (event) => {
         message: 'Failed to handle web push notification',
         error: error,
       })
-      }*/
-})
+      }
+})*/

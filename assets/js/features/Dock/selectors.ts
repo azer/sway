@@ -59,6 +59,10 @@ export function getStatusMessage(state: RootState): {
     return { msg: 'Opening socket', status: ConnectionState.Connecting }
   }
 
+  if (status.swaySocket === ConnectionState.Retry) {
+    return { msg: 'Reconnecting', status: ConnectionState.Retry }
+  }
+
   if (status.swayRoom === ConnectionState.Connecting) {
     return { msg: 'Joining room', status: ConnectionState.Connecting }
   }

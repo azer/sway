@@ -1,6 +1,6 @@
 import { entities, useSelector } from 'state'
 import { syncOnline } from './slice'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
 import { Socket, Presence, Channel } from 'phoenix'
 import { useDispatch } from 'react-redux'
@@ -35,11 +35,16 @@ export function UserSocketProvider(props: Props) {
   const dispatch = useDispatch()
   const [channel, setChannel] = useState<Channel>()
   const [presence, setPresence] = useState<Presence>()
-  const [userId, workspaceId, status] = useSelector((state) => [
-    selectors.session.getUserId(state),
-    selectors.memberships.getSelfMembership(state)?.workspace_id,
-    selectors.dock.getSelfConnectionStatus(state),
-  ])
+  const retryTimer = useRef<NodeJS.Timer | null>()
+
+  const [userId, workspaceId, status, shouldReconnect] = useSelector(
+    (state) => [
+      selectors.session.getUserId(state),
+      selectors.memberships.getSelfMembership(state)?.workspace_id,
+      selectors.dock.getSelfConnectionStatus(state),
+      selectors.usersocket.shouldReconnect(state),
+    ]
+  )
 
   const ctx = {
     channel,
@@ -75,6 +80,42 @@ export function UserSocketProvider(props: Props) {
       })
     }
   }, [status?.swaySocket, channel?.state])
+
+  useEffect(() => {
+    if (!shouldReconnect || !userId) {
+      return
+    }
+
+    let delay = 100
+
+    if (retryTimer.current !== null) {
+      clearTimeout(retryTimer.current)
+      retryTimer.current = null
+      delay = 3000
+    }
+
+    retryTimer.current = setTimeout(() => {
+      retryTimer.current = null
+
+      log.info('Retry...')
+
+      dispatch(
+        setSwaySocketConnectionStatus({
+          userId,
+          state: ConnectionState.Retry,
+        })
+      )
+
+      socket.connect()
+    }, delay)
+
+    return () => {
+      if (retryTimer.current !== null) {
+        clearTimeout(retryTimer.current)
+        retryTimer.current = null
+      }
+    }
+  }, [shouldReconnect])
 
   useEffect(() => {
     if (!workspaceId || !userId) return

@@ -19,6 +19,7 @@ import * as navigation from 'features/Navigation/selectors'
 import * as chat from 'features/Chat/selectors'
 import * as pip from 'features/PictureInPicture/selectors'
 import * as onboarding from 'features/Onboarding/selectors'
+import * as usersocket from 'features/UserSocket/selectors'
 
 export default {
   session,
@@ -42,4 +43,5 @@ export default {
   chatMessages,
   pip,
   onboarding,
+  usersocket,
 }
