@@ -10,6 +10,7 @@ defmodule Sway.Accounts.User do
     field :name, :string
     field :profile_photo_url, :string
     field :is_superuser, :boolean
+    field :is_active, :boolean, default: true
 
     timestamps()
   end
@@ -38,6 +39,12 @@ defmodule Sway.Accounts.User do
     |> validate_password(opts)
   end
 
+  def update_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :name, :profile_photo_url, :is_active])
+    |> validate_email()
+  end
+
   defp validate_email(changeset) do
     changeset
     |> validate_required([:email])
@@ -56,6 +63,8 @@ defmodule Sway.Accounts.User do
     # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
     |> maybe_hash_password(opts)
   end
+
+
 
   defp maybe_hash_password(changeset, opts) do
     hash_password? = Keyword.get(opts, :hash_password, true)

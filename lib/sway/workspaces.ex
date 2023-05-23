@@ -57,7 +57,7 @@ defmodule Sway.Workspaces do
 	[nil, nil]
       end
     else
-      membership = Repo.get_by(Membership, user_id: user_id)
+      membership = Repo.get_by(Membership, user_id: user_id, is_active: true)
       workspace = get_workspace!(membership.workspace_id)
       [workspace, membership]
     end
@@ -164,7 +164,7 @@ defmodule Sway.Workspaces do
   end
 
   def get_membership_by_workspace(user_id, workspace_id) do
-    Repo.get_by(Membership, user_id: user_id, workspace_id: workspace_id)
+    Repo.get_by(Membership, user_id: user_id, workspace_id: workspace_id, is_active: true)
   end
 
   @doc """

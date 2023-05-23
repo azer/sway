@@ -4,6 +4,7 @@ defmodule Sway.Workspaces.Membership do
 
   schema "memberships" do
     field :is_admin, :boolean, default: false
+    field :is_active, :boolean, default: true
     #field :workspace_id, :id
     #field :user_id, :id
 
@@ -16,7 +17,7 @@ defmodule Sway.Workspaces.Membership do
   @doc false
   def changeset(membership, attrs) do
     membership
-    |> cast(attrs, [:is_admin, :workspace_id, :user_id])
+    |> cast(attrs, [:is_admin, :workspace_id, :user_id, :is_active])
     |> validate_required([:is_admin, :workspace_id, :user_id])
   end
 end
