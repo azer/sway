@@ -13,20 +13,35 @@ defmodule SwayWeb.WorkspaceController do
 
   def create(conn, %{"workspace" => workspace_params}) do
     with  {:ok, %Workspace{} = workspace} <- Workspaces.create_workspace(workspace_params) do
-      {:ok, room} =
-          Sway.Rooms.create_room(%{
+      room_params = %{
             "name" => "watercooler",
             "slug" => "watercooler",
             "is_default" => true,
             "is_active" => true,
             "workspace_id" => workspace.id,
             "user_id" => conn.assigns.current_user.id
-          })
+      }
 
-        conn
-        |> put_status(:created)
-        |> put_resp_header("location", Routes.workspace_path(conn, :show, workspace))
-        |> render("show.json", workspace: workspace)
+      case Sway.Rooms.create_room(room_params) do
+	{:ok, room} ->
+          conn
+          |> put_status(:created)
+          |> put_resp_header("location", Routes.workspace_path(conn, :show, workspace))
+          |> render("show.json", workspace: workspace)
+	{:error, changeset} ->
+	  IO.inspect(changeset, label: "default room creation failed")
+
+          conn
+          |> put_status(:bad_request)
+          |> render(SwayWeb.ChangesetView, "error.json", changeset: changeset)
+      end
+
+    else
+      {:error, changeset} ->
+        IO.inspect(changeset, label: "workspace creation failed")
+      conn
+          |> put_status(:bad_request)
+          |> render(SwayWeb.ChangesetView, "error.json", changeset: changeset)
     end
   end
 
