@@ -92,14 +92,19 @@ function PrivateRoomRoute() {
 
 function RoomRoute() {
   const params = useParams()
+  const navigate = useNavigate()
 
-  const [roomId] = useSelector((state) => {
+  const [roomId, isOnboardingDone] = useSelector((state) => {
     const room = params.room_slug
       ? selectors.rooms.getRoomBySlug(state, params.room_slug)
       : undefined
 
-    return [room?.id]
+    return [room?.id, selectors.onboarding.isDone(state),]
   })
+
+  if (isOnboardingDone === false) {
+    return navigate(`/onboarding`)
+  }
 
   return <Shell>{roomId ? <RoomPage id={roomId} /> : null}</Shell>
 }

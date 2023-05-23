@@ -8,7 +8,7 @@ import Terminal from './Terminal'
 import Command from './Command'
 import MicIcon from './Mic'
 import VideoIcon from './Video'
-import MonitorIcon from './Monitor'
+import { MonitorIcon } from './Monitor'
 import SpeakerIcon from './Speaker'
 import MicOffIcon from './Mic-off'
 import VideoOffIcon from './Video-off'
@@ -51,6 +51,8 @@ import { ArrowRight } from './ArrowRight'
 import { ArrowLeft } from './ArrowLeft'
 import { CloseIcon } from './Close'
 import { ChevronDownIcon } from './ChevronDown'
+import { PictureInPictureIcon } from './PictureInPicture'
+
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -107,6 +109,7 @@ const icons: {
   arrowLeft: ArrowLeft,
   close: CloseIcon,
   chevronDown: ChevronDownIcon,
+  pictureInPicture: PictureInPictureIcon
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {
@@ -121,9 +124,9 @@ export function Icon(props: Props) {
   const IconComponent =
     icons[props.name] ||
     icons[
-      props.name.replace(/-([a-z])/g, function (g) {
-        return g[1].toUpperCase()
-      })
+    props.name.replace(/-([a-z])/g, function(g) {
+      return g[1].toUpperCase()
+    })
     ]
   if (IconComponent) {
     return <IconComponent {...props} />

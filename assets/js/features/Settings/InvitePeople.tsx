@@ -210,8 +210,8 @@ export function useInvitePeople() {
         error: !inviteProps.email
           ? 'Needs input'
           : !emailValid
-          ? 'Needs correction'
-          : '',
+            ? 'Needs correction'
+            : '',
         palette: email,
       },
       {
@@ -320,8 +320,8 @@ export function useEmailDialog() {
               hint: valid
                 ? 'Looks good'
                 : query
-                ? 'Needs correction'
-                : 'Not set',
+                  ? 'Needs correction'
+                  : 'Not set',
             }
           }
 

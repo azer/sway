@@ -14,13 +14,13 @@ import {
 } from 'features/Settings/slice'
 import {
   useLocalParticipant,
-  useScreenShare,
 } from '@daily-co/daily-react-hooks'
 import { setParticipantStatus } from 'features/Call/slice'
 import { logger } from 'lib/log'
 import { ConnectionStatus } from 'features/Dock/ConnectionStatus'
+import { useScreenShare } from 'features/Screenshare/use-screenshare'
 
-interface Props {}
+interface Props { }
 
 const log = logger('call-dock')
 
@@ -29,13 +29,12 @@ export function CallDock(props: Props) {
   const presence = usePresence()
 
   const localParticipant = useLocalParticipant()
-  const { isSharingScreen, startScreenShare, stopScreenShare } =
-    useScreenShare()
+  const screenshare = useScreenShare()
 
   useEffect(() => {
     if (!localParticipant || !localUser) return
 
-    log.info('Sync local participant props', localParticipant, isSharingScreen)
+    log.info('Sync local participant props', localParticipant, screenshare.isSharingScreen)
 
     dispatch(
       setParticipantStatus({
@@ -45,13 +44,13 @@ export function CallDock(props: Props) {
           swayUserId: localUser.id,
           sessionId: localParticipant?.session_id,
           cameraOn: localParticipant.video,
-          screenOn: isSharingScreen,
+          screenOn: screenshare.isSharingScreen,
           micOn: localParticipant.audio,
         },
       })
     )
   }, [
-    isSharingScreen,
+    screenshare.isSharingScreen,
     localParticipant?.video,
     localParticipant?.audio,
     localParticipant?.screen,
@@ -95,7 +94,7 @@ export function CallDock(props: Props) {
         cameraOn={localStatus.camera_on}
         micOn={localStatus.mic_on}
         speakerOn={localStatus.speaker_on}
-        screenOn={isSharingScreen}
+        screenOn={screenshare.isSharingScreen}
         selectedCameraId={selectedVideoInputDeviceId}
         selectedMicId={selectedAudioInputDeviceId}
         selectedSpeakerId={selectedAudioOutputDeviceId}
@@ -108,8 +107,8 @@ export function CallDock(props: Props) {
         speakers={allAudioOutputDevices}
         blurValue={blurValue}
         toggleBlur={toggleBlurValue}
-        startPresentingScreen={startScreenShare}
-        stopPresentingScreen={stopScreenShare}
+        startPresentingScreen={screenshare.start}
+        stopPresentingScreen={screenshare.stop}
         isActive={isActive}
         joinCall={() => presence.setMedia({ camera: true, mic: true })}
         leaveCall={() => presence.setMedia({ camera: false, mic: false })}

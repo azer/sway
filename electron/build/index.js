@@ -1,9 +1,26 @@
 var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -44,6 +61,7 @@ var __async = (__this, __arguments, generator) => {
 // src/main-window.ts
 var import_electron2 = require("electron");
 var import_electron_log2 = __toESM(require("electron-log"));
+var import_path = require("path");
 
 // src/utils.ts
 var import_electron = require("electron");
@@ -100,8 +118,9 @@ function createMainWindow() {
     backgroundColor: "#00000022",
     icon: staticFilePath("images/logo.ico"),
     webPreferences: {
+      preload: (0, import_path.join)(__dirname, "preload.js"),
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
       autoplayPolicy: "no-user-gesture-required",
       partition: "persist:sway"
     }
@@ -165,8 +184,7 @@ function logger(name) {
 // ../assets/js/lib/electron.ts
 var log3 = logger("electron");
 var isNode = isRunningInElectron() && (process == null ? void 0 : process.type) !== "renderer";
-var _a;
-var ipcRenderer = typeof window !== "undefined" ? (_a = window.electron) == null ? void 0 : _a.ipcRenderer : null;
+var ipcRenderer = typeof window !== "undefined" ? window.electronIpcRenderer : null;
 var isElectron = !isNode && /electron/i.test(window.navigator.userAgent);
 var messageMainWindow = createMessageFn("main-window" /* Main */);
 var messageTrayWindow = createMessageFn("tray-window" /* Tray */);
@@ -398,6 +416,16 @@ function getPipWindowPosition(mainWindow2) {
 // src/main.ts
 import_electron_log7.default.initialize({ preload: true });
 setupAutoUpdater();
+import_electron7.ipcMain.handle("get-sources", () => {
+  import_electron_log7.default.info("Handle get-sources call");
+  const access = import_electron7.systemPreferences.getMediaAccessStatus("screen");
+  import_electron_log7.default.info("Access status:", access);
+  return new Promise((resolve, reject) => {
+    import_electron7.desktopCapturer.getSources({ types: ["window", "screen"], thumbnailSize: { width: 800, height: 600 } }).then((sources) => resolve(sources.map((source) => __spreadProps(__spreadValues({}, source), {
+      thumbnail: source.thumbnail.toDataURL()
+    })))).catch(reject);
+  });
+});
 import_electron7.app.on("ready", () => {
   import_electron_log7.default.info("Ready");
   createMainWindow();
@@ -511,6 +539,10 @@ function handleMessages(message) {
     requestMicAccess();
     return;
   }
+  if (message.payload.requestScreenAccess) {
+    requestScreenAccess();
+    return;
+  }
   if (message.payload.setTrayIcon) {
     setTray(
       message.payload.setTrayIcon.title,
@@ -532,4 +564,8 @@ function requestMicAccess() {
     import_electron_log7.default.info("Mic access?", hasMicAccess);
     messageMainWindow2({ hasMicAccess });
   }).catch((err) => import_electron_log7.default.error("Error", err));
+}
+function requestScreenAccess() {
+  import_electron_log7.default.info("Request access for media access");
+  import_electron7.shell.openExternal("x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture");
 }

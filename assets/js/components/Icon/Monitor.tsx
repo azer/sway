@@ -1,20 +1,22 @@
 import * as React from 'react'
 
-export default function MonitorIcon(props: React.SVGProps<SVGSVGElement>) {
+export function MonitorIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      viewBox="0 0 24 24"
+      viewBox="4 4 16 16"
       width="100%"
       height="100%"
-      stroke="currentColor"
-      strokeWidth={2}
       fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <rect x={2} y={3} width={20} height={14} rx={2} ry={2} />
-      <path d="M8 21h8M12 17v4" />
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M4.75 6.75a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H6.75a2 2 0 0 1-2-2v-7.5ZM15.25 19.25l-3.25-2-3.25 2"
+      />
     </svg>
   )
 }

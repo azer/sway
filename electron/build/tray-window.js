@@ -36785,12 +36785,12 @@
               }
               var promise2 = function() {
                 return __async2(this, null, function() {
-                  var _a5, _b2, finalAction, conditionResult, err_1, skipDispatch;
+                  var _a4, _b2, finalAction, conditionResult, err_1, skipDispatch;
                   return __generator2(this, function(_c) {
                     switch (_c.label) {
                       case 0:
                         _c.trys.push([0, 4, , 5]);
-                        conditionResult = (_a5 = options == null ? void 0 : options.condition) == null ? void 0 : _a5.call(options, arg, { getState, extra });
+                        conditionResult = (_a4 = options == null ? void 0 : options.condition) == null ? void 0 : _a4.call(options, arg, { getState, extra });
                         if (!isThenable(conditionResult))
                           return [3, 2];
                         return [4, conditionResult];
@@ -37551,9 +37551,9 @@
                 };
               },
               dispatch: function(action) {
-                var _a5;
+                var _a4;
                 try {
-                  notifying = !((_a5 = action == null ? void 0 : action.meta) == null ? void 0 : _a5[SHOULD_AUTOBATCH]);
+                  notifying = !((_a4 = action == null ? void 0 : action.meta) == null ? void 0 : _a4[SHOULD_AUTOBATCH]);
                   shouldNotifyAtEndOfTick = !notifying;
                   if (shouldNotifyAtEndOfTick) {
                     if (!notificationQueued) {
@@ -38482,10 +38482,10 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx76 = jsxWithValidationDynamic;
+          var jsx77 = jsxWithValidationDynamic;
           var jsxs35 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx76;
+          exports.jsx = jsx77;
           exports.jsxs = jsxs35;
         })();
       }
@@ -44242,7 +44242,7 @@
       function $dec3cc0142d4f286$export$fd42f52fd3ae1109(rootComponentName, defaultContext) {
         const Context = /* @__PURE__ */ $4O1Ne$react.createContext(defaultContext);
         function Provider2(props) {
-          const _a5 = props, { children } = _a5, context = __objRest(_a5, ["children"]);
+          const _a4 = props, { children } = _a4, context = __objRest(_a4, ["children"]);
           const value = $4O1Ne$react.useMemo(
             () => context,
             Object.values(context)
@@ -44275,7 +44275,7 @@
             defaultContext
           ];
           function Provider2(props) {
-            const _a5 = props, { scope, children } = _a5, context = __objRest(_a5, ["scope", "children"]);
+            const _a4 = props, { scope, children } = _a4, context = __objRest(_a4, ["scope", "children"]);
             const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
             const value = $4O1Ne$react.useMemo(
               () => context,
@@ -44400,7 +44400,7 @@
       $parcel$export(module.exports, "Slottable", () => $82dc8d030dec7549$export$d9f1ccf0bdb05d45);
       $parcel$export(module.exports, "Root", () => $82dc8d030dec7549$export$be92b6f5f03c0fe9);
       var $82dc8d030dec7549$export$8c6ed5c666ac1360 = /* @__PURE__ */ $dAvBt$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { children } = _a5, slotProps = __objRest(_a5, ["children"]);
+        const _a4 = props, { children } = _a4, slotProps = __objRest(_a4, ["children"]);
         const childrenArray = $dAvBt$react.Children.toArray(children);
         const slottable = childrenArray.find($82dc8d030dec7549$var$isSlottable);
         if (slottable) {
@@ -44423,7 +44423,7 @@
       });
       $82dc8d030dec7549$export$8c6ed5c666ac1360.displayName = "Slot";
       var $82dc8d030dec7549$var$SlotClone = /* @__PURE__ */ $dAvBt$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { children } = _a5, slotProps = __objRest(_a5, ["children"]);
+        const _a4 = props, { children } = _a4, slotProps = __objRest(_a4, ["children"]);
         if (/* @__PURE__ */ $dAvBt$react.isValidElement(children))
           return /* @__PURE__ */ $dAvBt$react.cloneElement(children, __spreadProps(__spreadValues({}, $82dc8d030dec7549$var$mergeProps(slotProps, children.props)), {
             ref: $dAvBt$radixuireactcomposerefs.composeRefs(forwardedRef, children.ref)
@@ -44499,7 +44499,7 @@
       ];
       var $c3def6332c2749a6$export$250ffa63cdc0d034 = $c3def6332c2749a6$var$NODES.reduce((primitive, node) => {
         const Node = /* @__PURE__ */ $iMixA$react.forwardRef((props, forwardedRef) => {
-          const _a5 = props, { asChild } = _a5, primitiveProps = __objRest(_a5, ["asChild"]);
+          const _a4 = props, { asChild } = _a4, primitiveProps = __objRest(_a4, ["asChild"]);
           const Comp = asChild ? $iMixA$radixuireactslot.Slot : node;
           $iMixA$react.useEffect(() => {
             window[Symbol.for("radix-ui")] = true;
@@ -44591,7 +44591,7 @@
         const ITEM_SLOT_NAME = name3 + "CollectionItemSlot";
         const ITEM_DATA_ATTR = "data-radix-collection-item";
         const CollectionItemSlot = /* @__PURE__ */ $parcel$interopDefault($hnlpS$react).forwardRef((props, forwardedRef) => {
-          const _a5 = props, { scope, children } = _a5, itemData = __objRest(_a5, ["scope", "children"]);
+          const _a4 = props, { scope, children } = _a4, itemData = __objRest(_a4, ["scope", "children"]);
           const ref = $parcel$interopDefault($hnlpS$react).useRef(null);
           const composedRefs = $hnlpS$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
           const context = useCollectionContext(ITEM_SLOT_NAME, scope);
@@ -44831,7 +44831,7 @@
         }))));
       });
       var $0063afae63b3fa70$var$RovingFocusGroupImpl = /* @__PURE__ */ $9QJ9Y$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a5, groupProps = __objRest(_a5, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
+        const _a4 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a4, groupProps = __objRest(_a4, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
         const ref = $9QJ9Y$react.useRef(null);
         const composedRefs = $9QJ9Y$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
         const direction = $9QJ9Y$radixuireactdirection.useDirection(dir);
@@ -44929,7 +44929,7 @@
       });
       var $0063afae63b3fa70$var$ITEM_NAME = "RovingFocusGroupItem";
       var $0063afae63b3fa70$export$ab9df7c53fe8454 = /* @__PURE__ */ $9QJ9Y$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a5, itemProps = __objRest(_a5, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
+        const _a4 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a4, itemProps = __objRest(_a4, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
         const autoId = $9QJ9Y$radixuireactid.useId();
         const id = tabStopId || autoId;
         const context = $0063afae63b3fa70$var$useRovingFocusContext($0063afae63b3fa70$var$ITEM_NAME, __scopeRovingFocusGroup);
@@ -45063,7 +45063,7 @@
       $parcel$export(module.exports, "Toggle", () => $7d30e3d88c861f40$export$bea8ebba691c5813);
       $parcel$export(module.exports, "Root", () => $7d30e3d88c861f40$export$be92b6f5f03c0fe9);
       var $7d30e3d88c861f40$export$bea8ebba691c5813 = /* @__PURE__ */ $kLydb$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { pressed: pressedProp, defaultPressed = false, onPressedChange } = _a5, buttonProps = __objRest(_a5, ["pressed", "defaultPressed", "onPressedChange"]);
+        const _a4 = props, { pressed: pressedProp, defaultPressed = false, onPressedChange } = _a4, buttonProps = __objRest(_a4, ["pressed", "defaultPressed", "onPressedChange"]);
         const [pressed = false, setPressed] = $kLydb$radixuireactusecontrollablestate.useControllableState({
           prop: pressedProp,
           onChange: onPressedChange,
@@ -45114,7 +45114,7 @@
       ]);
       var $14b404ddd46c8376$var$useRovingFocusGroupScope = $1z6X1$radixuireactrovingfocus.createRovingFocusGroupScope();
       var $14b404ddd46c8376$export$af3ec21f6cfb5e30 = /* @__PURE__ */ $parcel$interopDefault($1z6X1$react).forwardRef((props, forwardedRef) => {
-        const _a5 = props, { type } = _a5, toggleGroupProps = __objRest(_a5, ["type"]);
+        const _a4 = props, { type } = _a4, toggleGroupProps = __objRest(_a4, ["type"]);
         if (type === "single") {
           const singleProps = toggleGroupProps;
           return /* @__PURE__ */ $parcel$interopDefault($1z6X1$react).createElement($14b404ddd46c8376$var$ToggleGroupImplSingle, $parcel$interopDefault($1z6X1$babelruntimehelpersextends)({}, singleProps, {
@@ -45131,8 +45131,8 @@
       });
       var [$14b404ddd46c8376$var$ToggleGroupValueProvider, $14b404ddd46c8376$var$useToggleGroupValueContext] = $14b404ddd46c8376$var$createToggleGroupContext($14b404ddd46c8376$var$TOGGLE_GROUP_NAME);
       var $14b404ddd46c8376$var$ToggleGroupImplSingle = /* @__PURE__ */ $parcel$interopDefault($1z6X1$react).forwardRef((props, forwardedRef) => {
-        const _a5 = props, { value: valueProp, defaultValue, onValueChange = () => {
-        } } = _a5, toggleGroupSingleProps = __objRest(_a5, ["value", "defaultValue", "onValueChange"]);
+        const _a4 = props, { value: valueProp, defaultValue, onValueChange = () => {
+        } } = _a4, toggleGroupSingleProps = __objRest(_a4, ["value", "defaultValue", "onValueChange"]);
         const [value, setValue] = $1z6X1$radixuireactusecontrollablestate.useControllableState({
           prop: valueProp,
           defaultProp: defaultValue,
@@ -45156,8 +45156,8 @@
         })));
       });
       var $14b404ddd46c8376$var$ToggleGroupImplMultiple = /* @__PURE__ */ $parcel$interopDefault($1z6X1$react).forwardRef((props, forwardedRef) => {
-        const _a5 = props, { value: valueProp, defaultValue, onValueChange = () => {
-        } } = _a5, toggleGroupMultipleProps = __objRest(_a5, ["value", "defaultValue", "onValueChange"]);
+        const _a4 = props, { value: valueProp, defaultValue, onValueChange = () => {
+        } } = _a4, toggleGroupMultipleProps = __objRest(_a4, ["value", "defaultValue", "onValueChange"]);
         const [value1 = [], setValue] = $1z6X1$radixuireactusecontrollablestate.useControllableState({
           prop: valueProp,
           defaultProp: defaultValue,
@@ -45196,7 +45196,7 @@
       });
       var [$14b404ddd46c8376$var$ToggleGroupContext, $14b404ddd46c8376$var$useToggleGroupContext] = $14b404ddd46c8376$var$createToggleGroupContext($14b404ddd46c8376$var$TOGGLE_GROUP_NAME);
       var $14b404ddd46c8376$var$ToggleGroupImpl = /* @__PURE__ */ $parcel$interopDefault($1z6X1$react).forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeToggleGroup, disabled = false, rovingFocus = true, orientation, dir, loop = true } = _a5, toggleGroupProps = __objRest(_a5, ["__scopeToggleGroup", "disabled", "rovingFocus", "orientation", "dir", "loop"]);
+        const _a4 = props, { __scopeToggleGroup, disabled = false, rovingFocus = true, orientation, dir, loop = true } = _a4, toggleGroupProps = __objRest(_a4, ["__scopeToggleGroup", "disabled", "rovingFocus", "orientation", "dir", "loop"]);
         const rovingFocusGroupScope = $14b404ddd46c8376$var$useRovingFocusGroupScope(__scopeToggleGroup);
         const direction = $1z6X1$radixuireactdirection.useDirection(dir);
         const commonProps = __spreadValues({
@@ -45244,7 +45244,7 @@
         }));
       });
       var $14b404ddd46c8376$var$ToggleGroupItemImpl = /* @__PURE__ */ $parcel$interopDefault($1z6X1$react).forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeToggleGroup, value } = _a5, itemProps = __objRest(_a5, ["__scopeToggleGroup", "value"]);
+        const _a4 = props, { __scopeToggleGroup, value } = _a4, itemProps = __objRest(_a4, ["__scopeToggleGroup", "value"]);
         const valueContext = $14b404ddd46c8376$var$useToggleGroupValueContext($14b404ddd46c8376$var$ITEM_NAME, __scopeToggleGroup);
         const singleProps = {
           role: "radio",
@@ -45324,7 +45324,7 @@
       });
       var $d715e0554b679f1f$export$177fb62ff3ec1f22 = /* @__PURE__ */ $g2vWm$react.forwardRef((props, forwardedRef) => {
         var _node$ownerDocument;
-        const _a5 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a5, layerProps = __objRest(_a5, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
+        const _a4 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a4, layerProps = __objRest(_a4, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
         const context = $g2vWm$react.useContext($d715e0554b679f1f$var$DismissableLayerContext);
         const [node1, setNode] = $g2vWm$react.useState(null);
         const ownerDocument = (_node$ownerDocument = node1 === null || node1 === void 0 ? void 0 : node1.ownerDocument) !== null && _node$ownerDocument !== void 0 ? _node$ownerDocument : globalThis === null || globalThis === void 0 ? void 0 : globalThis.document;
@@ -45961,11 +45961,11 @@
                 platform: platform2,
                 elements
               } = middlewareArguments;
-              const _a6 = options, {
+              const _a5 = options, {
                 alignment = null,
                 allowedPlacements = allPlacements,
                 autoAlignment = true
-              } = _a6, detectOverflowOptions = __objRest(_a6, [
+              } = _a5, detectOverflowOptions = __objRest(_a5, [
                 "alignment",
                 "allowedPlacements",
                 "autoAlignment"
@@ -46049,13 +46049,13 @@
                 platform: platform2,
                 elements
               } = middlewareArguments;
-              const _a6 = options, {
+              const _a5 = options, {
                 mainAxis: checkMainAxis = true,
                 crossAxis: checkCrossAxis = true,
                 fallbackPlacements: specifiedFallbackPlacements,
                 fallbackStrategy = "bestFit",
                 flipAlignment = true
-              } = _a6, detectOverflowOptions = __objRest(_a6, [
+              } = _a5, detectOverflowOptions = __objRest(_a5, [
                 "mainAxis",
                 "crossAxis",
                 "fallbackPlacements",
@@ -46126,9 +46126,9 @@
         };
       };
       hide = function(_temp) {
-        let _a5 = _temp === void 0 ? {} : _temp, {
+        let _a4 = _temp === void 0 ? {} : _temp, {
           strategy = "referenceHidden"
-        } = _a5, detectOverflowOptions = __objRest(_a5, [
+        } = _a4, detectOverflowOptions = __objRest(_a4, [
           "strategy"
         ]);
         return {
@@ -46208,7 +46208,7 @@
                 y: y2,
                 placement
               } = middlewareArguments;
-              const _a6 = options, {
+              const _a5 = options, {
                 mainAxis: checkMainAxis = true,
                 crossAxis: checkCrossAxis = false,
                 limiter = {
@@ -46223,7 +46223,7 @@
                     };
                   }
                 }
-              } = _a6, detectOverflowOptions = __objRest(_a6, [
+              } = _a5, detectOverflowOptions = __objRest(_a5, [
                 "mainAxis",
                 "crossAxis",
                 "limiter"
@@ -46346,9 +46346,9 @@
                 platform: platform2,
                 elements
               } = middlewareArguments;
-              const _a6 = options, {
+              const _a5 = options, {
                 apply
-              } = _a6, detectOverflowOptions = __objRest(_a6, [
+              } = _a5, detectOverflowOptions = __objRest(_a5, [
                 "apply"
               ]);
               const overflow = yield detectOverflow(middlewareArguments, detectOverflowOptions);
@@ -47191,7 +47191,7 @@
       $parcel$export(module.exports, "Arrow", () => $09f4ad68a9251bc3$export$21b07c8f274aebd5);
       $parcel$export(module.exports, "Root", () => $09f4ad68a9251bc3$export$be92b6f5f03c0fe9);
       var $09f4ad68a9251bc3$export$21b07c8f274aebd5 = /* @__PURE__ */ $eQpDd$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { children, width = 10, height = 5 } = _a5, arrowProps = __objRest(_a5, ["children", "width", "height"]);
+        const _a4 = props, { children, width = 10, height = 5 } = _a4, arrowProps = __objRest(_a4, ["children", "width", "height"]);
         return /* @__PURE__ */ $eQpDd$react.createElement($eQpDd$radixuireactprimitive.Primitive.svg, $parcel$interopDefault($eQpDd$babelruntimehelpersextends)({}, arrowProps, {
           ref: forwardedRef,
           width,
@@ -47314,7 +47314,7 @@
       };
       var $34310caa050a8d63$var$ANCHOR_NAME = "PopperAnchor";
       var $34310caa050a8d63$export$ecd4e1ccab6ed6d = /* @__PURE__ */ $50Iv9$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopePopper, virtualRef } = _a5, anchorProps = __objRest(_a5, ["__scopePopper", "virtualRef"]);
+        const _a4 = props, { __scopePopper, virtualRef } = _a4, anchorProps = __objRest(_a4, ["__scopePopper", "virtualRef"]);
         const context = $34310caa050a8d63$var$usePopperContext($34310caa050a8d63$var$ANCHOR_NAME, __scopePopper);
         const ref = $50Iv9$react.useRef(null);
         const composedRefs = $50Iv9$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
@@ -47333,7 +47333,7 @@
       });
       var $34310caa050a8d63$export$bc4ae5855d3c4fc = /* @__PURE__ */ $50Iv9$react.forwardRef((props, forwardedRef) => {
         var _arrowSize$width, _arrowSize$height, _middlewareData$arrow, _middlewareData$arrow2, _middlewareData$arrow3, _middlewareData$hide, _middlewareData$trans, _middlewareData$trans2;
-        const _a5 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a5, contentProps = __objRest(_a5, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
+        const _a4 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a4, contentProps = __objRest(_a4, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
         const context = $34310caa050a8d63$var$usePopperContext($34310caa050a8d63$var$CONTENT_NAME, __scopePopper);
         const [content, setContent] = $50Iv9$react.useState(null);
         const composedRefs = $50Iv9$radixuireactcomposerefs.useComposedRefs(
@@ -47498,7 +47498,7 @@
         left: "right"
       };
       var $34310caa050a8d63$export$79d62cd4e10a3fd0 = /* @__PURE__ */ $50Iv9$react.forwardRef(function $34310caa050a8d63$export$79d62cd4e10a3fd02(props, forwardedRef) {
-        const _a5 = props, { __scopePopper } = _a5, arrowProps = __objRest(_a5, ["__scopePopper"]);
+        const _a4 = props, { __scopePopper } = _a4, arrowProps = __objRest(_a4, ["__scopePopper"]);
         const contentContext = $34310caa050a8d63$var$useContentContext($34310caa050a8d63$var$ARROW_NAME, __scopePopper);
         const baseSide = $34310caa050a8d63$var$OPPOSITE_SIDE[contentContext.placedSide];
         return (
@@ -47623,7 +47623,7 @@
       $parcel$export(module.exports, "Root", () => $913a70b877676c16$export$be92b6f5f03c0fe9);
       var $913a70b877676c16$export$602eac185826482c = /* @__PURE__ */ $amzHf$react.forwardRef((props, forwardedRef) => {
         var _globalThis$document;
-        const _a5 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a5, portalProps = __objRest(_a5, ["container"]);
+        const _a4 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a4, portalProps = __objRest(_a4, ["container"]);
         return container ? /* @__PURE__ */ $parcel$interopDefault($amzHf$reactdom).createPortal(/* @__PURE__ */ $amzHf$react.createElement($amzHf$radixuireactprimitive.Primitive.div, $parcel$interopDefault($amzHf$babelruntimehelpersextends)({}, portalProps, {
           ref: forwardedRef
         })), container) : null;
@@ -47958,7 +47958,7 @@
       };
       var $c34afbc43c90cc6f$var$TRIGGER_NAME = "TooltipTrigger";
       var $c34afbc43c90cc6f$export$8c610744efcf8a1d = /* @__PURE__ */ $iVrL9$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeTooltip } = _a5, triggerProps = __objRest(_a5, ["__scopeTooltip"]);
+        const _a4 = props, { __scopeTooltip } = _a4, triggerProps = __objRest(_a4, ["__scopeTooltip"]);
         const context = $c34afbc43c90cc6f$var$useTooltipContext($c34afbc43c90cc6f$var$TRIGGER_NAME, __scopeTooltip);
         const providerContext = $c34afbc43c90cc6f$var$useTooltipProviderContext($c34afbc43c90cc6f$var$TRIGGER_NAME, __scopeTooltip);
         const popperScope = $c34afbc43c90cc6f$var$usePopperScope(__scopeTooltip);
@@ -48030,7 +48030,7 @@
       var $c34afbc43c90cc6f$var$CONTENT_NAME = "TooltipContent";
       var $c34afbc43c90cc6f$export$e9003e2be37ec060 = /* @__PURE__ */ $iVrL9$react.forwardRef((props, forwardedRef) => {
         const portalContext = $c34afbc43c90cc6f$var$usePortalContext($c34afbc43c90cc6f$var$CONTENT_NAME, props.__scopeTooltip);
-        const _a5 = props, { forceMount = portalContext.forceMount, side = "top" } = _a5, contentProps = __objRest(_a5, ["forceMount", "side"]);
+        const _a4 = props, { forceMount = portalContext.forceMount, side = "top" } = _a4, contentProps = __objRest(_a4, ["forceMount", "side"]);
         const context = $c34afbc43c90cc6f$var$useTooltipContext($c34afbc43c90cc6f$var$CONTENT_NAME, props.__scopeTooltip);
         return /* @__PURE__ */ $iVrL9$react.createElement($iVrL9$radixuireactpresence.Presence, {
           present: forceMount || context.open
@@ -48142,7 +48142,7 @@
         isInside: false
       });
       var $c34afbc43c90cc6f$var$TooltipContentImpl = /* @__PURE__ */ $iVrL9$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeTooltip, children, "aria-label": ariaLabel, onEscapeKeyDown, onPointerDownOutside } = _a5, contentProps = __objRest(_a5, ["__scopeTooltip", "children", "aria-label", "onEscapeKeyDown", "onPointerDownOutside"]);
+        const _a4 = props, { __scopeTooltip, children, "aria-label": ariaLabel, onEscapeKeyDown, onPointerDownOutside } = _a4, contentProps = __objRest(_a4, ["__scopeTooltip", "children", "aria-label", "onEscapeKeyDown", "onPointerDownOutside"]);
         const context = $c34afbc43c90cc6f$var$useTooltipContext($c34afbc43c90cc6f$var$CONTENT_NAME, __scopeTooltip);
         const popperScope = $c34afbc43c90cc6f$var$usePopperScope(__scopeTooltip);
         const { onClose } = context;
@@ -48195,7 +48195,7 @@
       });
       var $c34afbc43c90cc6f$var$ARROW_NAME = "TooltipArrow";
       var $c34afbc43c90cc6f$export$c27ee0ad710f7559 = /* @__PURE__ */ $iVrL9$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeTooltip } = _a5, arrowProps = __objRest(_a5, ["__scopeTooltip"]);
+        const _a4 = props, { __scopeTooltip } = _a4, arrowProps = __objRest(_a4, ["__scopeTooltip"]);
         const popperScope = $c34afbc43c90cc6f$var$usePopperScope(__scopeTooltip);
         const visuallyHiddenContentContext = $c34afbc43c90cc6f$var$useVisuallyHiddenContentContext($c34afbc43c90cc6f$var$ARROW_NAME, __scopeTooltip);
         return visuallyHiddenContentContext.isInside ? null : /* @__PURE__ */ $iVrL9$react.createElement($iVrL9$radixuireactpopper.Arrow, $parcel$interopDefault($iVrL9$babelruntimehelpersextends)({}, popperScope, arrowProps, {
@@ -48381,7 +48381,7 @@
         cancelable: true
       };
       var $2bc01e66e04aa9ed$export$20e40289641fbbb6 = /* @__PURE__ */ $buum9$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a5, scopeProps = __objRest(_a5, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
+        const _a4 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a4, scopeProps = __objRest(_a4, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
         const [container1, setContainer] = $buum9$react.useState(null);
         const onMountAutoFocus = $buum9$radixuireactusecallbackref.useCallbackRef(onMountAutoFocusProp);
         const onUnmountAutoFocus = $buum9$radixuireactusecallbackref.useCallbackRef(onUnmountAutoFocusProp);
@@ -49450,9 +49450,9 @@
       function useRealSidecar(importer, effect) {
         var options = effect && effect.options || NO_OPTIONS;
         var couldUseCache = env_1.env.forceCache || env_1.env.isNode && !!options.ssr || !options.async;
-        var _a5 = (0, react_1.useState)(couldUseCache ? function() {
+        var _a4 = (0, react_1.useState)(couldUseCache ? function() {
           return cache.get(importer);
-        } : void 0), Car = _a5[0], setCar = _a5[1];
+        } : void 0), Car = _a4[0], setCar = _a4[1];
         var _b2 = (0, react_1.useState)(null), error = _b2[0], setError = _b2[1];
         (0, react_1.useEffect)(function() {
           if (!Car) {
@@ -49502,7 +49502,7 @@
           return errorComponent;
         };
         return function Sidecar(props) {
-          var _a5 = (0, hook_1.useSidecar)(importer, props.sideCar), Car = _a5[0], error = _a5[1];
+          var _a4 = (0, hook_1.useSidecar)(importer, props.sideCar), Car = _a4[0], error = _a4[1];
           if (error && errorComponent) {
             return ErrorCase;
           }
@@ -49643,8 +49643,8 @@
       var React7 = tslib_1.__importStar(require_react());
       var react_1 = require_react();
       function renderCar(WrappedComponent, defaults) {
-        function State(_a5) {
-          var stateRef = _a5.stateRef, props = _a5.props;
+        function State(_a4) {
+          var stateRef = _a4.stateRef, props = _a4.props;
           var renderTarget = (0, react_1.useCallback)(function SideTarget() {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -49657,8 +49657,8 @@
           }, []);
           return React7.createElement(WrappedComponent, tslib_1.__assign({}, props, { children: renderTarget }));
         }
-        var Children = React7.memo(function(_a5) {
-          var stateRef = _a5.stateRef, defaultState = _a5.defaultState, children = _a5.children;
+        var Children = React7.memo(function(_a4) {
+          var stateRef = _a4.stateRef, defaultState = _a4.defaultState, children = _a4.children;
           var _b2 = (0, react_1.useState)(defaultState.current), state = _b2[0], setState = _b2[1];
           (0, react_1.useEffect)(function() {
             stateRef.current = setState;
@@ -49692,8 +49692,8 @@
       exports.exportSidecar = void 0;
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
       var React7 = tslib_1.__importStar(require_react());
-      var SideCar = function(_a5) {
-        var sideCar = _a5.sideCar, rest = tslib_1.__rest(_a5, ["sideCar"]);
+      var SideCar = function(_a4) {
+        var sideCar = _a4.sideCar, rest = tslib_1.__rest(_a4, ["sideCar"]);
         if (!sideCar) {
           throw new Error("Sidecar: please provide `sideCar` property to import the right car");
         }
@@ -49775,11 +49775,11 @@
       };
       var RemoveScroll = React7.forwardRef(function(props, parentRef) {
         var ref = React7.useRef(null);
-        var _a5 = React7.useState({
+        var _a4 = React7.useState({
           onScrollCapture: nothing,
           onWheelCapture: nothing,
           onTouchMoveCapture: nothing
-        }), callbacks = _a5[0], setCallbacks = _a5[1];
+        }), callbacks = _a4[0], setCallbacks = _a4[1];
         var forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b2 = props.as, Container5 = _b2 === void 0 ? "div" : _b2, rest = tslib_1.__rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noIsolation", "inert", "allowPinchZoom", "as"]);
         var SideCar = sideCar;
         var containerRef = (0, use_callback_ref_1.useMergeRefs)([ref, parentRef]);
@@ -49913,8 +49913,8 @@
       var hook_1 = require_hook2();
       var styleSingleton = function() {
         var useStyle = (0, hook_1.styleHookSingleton)();
-        var Sheet = function(_a5) {
-          var styles = _a5.styles, dynamic = _a5.dynamic;
+        var Sheet = function(_a4) {
+          var styles = _a4.styles, dynamic = _a4.dynamic;
           useStyle(styles, dynamic);
           return null;
         };
@@ -50000,8 +50000,8 @@
       var constants_1 = require_constants();
       var utils_1 = require_utils();
       var Style = (0, react_style_singleton_1.styleSingleton)();
-      var getStyles = function(_a5, allowRelative, gapMode, important) {
-        var left = _a5.left, top = _a5.top, right = _a5.right, gap = _a5.gap;
+      var getStyles = function(_a4, allowRelative, gapMode, important) {
+        var left = _a4.left, top = _a4.top, right = _a4.right, gap = _a4.gap;
         if (gapMode === void 0) {
           gapMode = "margin";
         }
@@ -50012,7 +50012,7 @@
         ].filter(Boolean).join(""), "\n  }\n  \n  .").concat(constants_1.zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(constants_1.fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(constants_1.zeroRightClassName, " .").concat(constants_1.zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(constants_1.fullWidthClassName, " .").concat(constants_1.fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body {\n    ").concat(constants_1.removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
       };
       var RemoveScrollBar = function(props) {
-        var noRelative = props.noRelative, noImportant = props.noImportant, _a5 = props.gapMode, gapMode = _a5 === void 0 ? "margin" : _a5;
+        var noRelative = props.noRelative, noImportant = props.noImportant, _a4 = props.gapMode, gapMode = _a4 === void 0 ? "margin" : _a4;
         var gap = React7.useMemo(function() {
           return (0, utils_1.getGapWidth)(gapMode);
         }, [gapMode]);
@@ -50109,7 +50109,7 @@
           }
           var isScrollable = elementCouldBeScrolled(axis, current);
           if (isScrollable) {
-            var _a5 = getScrollVariables(axis, current), s2 = _a5[1], d2 = _a5[2];
+            var _a4 = getScrollVariables(axis, current), s2 = _a4[1], d2 = _a4[2];
             if (s2 > d2) {
               return true;
             }
@@ -50119,16 +50119,16 @@
         return false;
       };
       exports.locationCouldBeScrolled = locationCouldBeScrolled;
-      var getVScrollVariables = function(_a5) {
-        var scrollTop = _a5.scrollTop, scrollHeight = _a5.scrollHeight, clientHeight = _a5.clientHeight;
+      var getVScrollVariables = function(_a4) {
+        var scrollTop = _a4.scrollTop, scrollHeight = _a4.scrollHeight, clientHeight = _a4.clientHeight;
         return [
           scrollTop,
           scrollHeight,
           clientHeight
         ];
       };
-      var getHScrollVariables = function(_a5) {
-        var scrollLeft = _a5.scrollLeft, scrollWidth = _a5.scrollWidth, clientWidth = _a5.clientWidth;
+      var getHScrollVariables = function(_a4) {
+        var scrollLeft = _a4.scrollLeft, scrollWidth = _a4.scrollWidth, clientWidth = _a4.clientWidth;
         return [
           scrollLeft,
           scrollWidth,
@@ -50154,7 +50154,7 @@
         var availableScroll = 0;
         var availableScrollTop = 0;
         do {
-          var _a5 = getScrollVariables(axis, target), position = _a5[0], scroll_1 = _a5[1], capacity = _a5[2];
+          var _a4 = getScrollVariables(axis, target), position = _a4[0], scroll_1 = _a4[1], capacity = _a4[2];
           var elementScroll = scroll_1 - capacity - directionFactor * position;
           if (position || elementScroll) {
             if (elementCouldBeScrolled(axis, target)) {
@@ -50477,7 +50477,7 @@
       };
       var $7d632c09314cddaf$var$ANCHOR_NAME = "PopoverAnchor";
       var $7d632c09314cddaf$export$96e5381f42521a79 = /* @__PURE__ */ $aJPOC$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopePopover } = _a5, anchorProps = __objRest(_a5, ["__scopePopover"]);
+        const _a4 = props, { __scopePopover } = _a4, anchorProps = __objRest(_a4, ["__scopePopover"]);
         const context = $7d632c09314cddaf$var$usePopoverContext($7d632c09314cddaf$var$ANCHOR_NAME, __scopePopover);
         const popperScope = $7d632c09314cddaf$var$usePopperScope(__scopePopover);
         const { onCustomAnchorAdd, onCustomAnchorRemove } = context;
@@ -50494,7 +50494,7 @@
       });
       var $7d632c09314cddaf$var$TRIGGER_NAME = "PopoverTrigger";
       var $7d632c09314cddaf$export$7dacb05d26466c3 = /* @__PURE__ */ $aJPOC$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopePopover } = _a5, triggerProps = __objRest(_a5, ["__scopePopover"]);
+        const _a4 = props, { __scopePopover } = _a4, triggerProps = __objRest(_a4, ["__scopePopover"]);
         const context = $7d632c09314cddaf$var$usePopoverContext($7d632c09314cddaf$var$TRIGGER_NAME, __scopePopover);
         const popperScope = $7d632c09314cddaf$var$usePopperScope(__scopePopover);
         const composedTriggerRef = $aJPOC$radixuireactcomposerefs.useComposedRefs(forwardedRef, context.triggerRef);
@@ -50532,7 +50532,7 @@
       var $7d632c09314cddaf$var$CONTENT_NAME = "PopoverContent";
       var $7d632c09314cddaf$export$d7e1f420b25549ff = /* @__PURE__ */ $aJPOC$react.forwardRef((props, forwardedRef) => {
         const portalContext = $7d632c09314cddaf$var$usePortalContext($7d632c09314cddaf$var$CONTENT_NAME, props.__scopePopover);
-        const _a5 = props, { forceMount = portalContext.forceMount } = _a5, contentProps = __objRest(_a5, ["forceMount"]);
+        const _a4 = props, { forceMount = portalContext.forceMount } = _a4, contentProps = __objRest(_a4, ["forceMount"]);
         const context = $7d632c09314cddaf$var$usePopoverContext($7d632c09314cddaf$var$CONTENT_NAME, props.__scopePopover);
         return /* @__PURE__ */ $aJPOC$react.createElement($aJPOC$radixuireactpresence.Presence, {
           present: forceMount || context.open
@@ -50613,7 +50613,7 @@
         }));
       });
       var $7d632c09314cddaf$var$PopoverContentImpl = /* @__PURE__ */ $aJPOC$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopePopover, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside } = _a5, contentProps = __objRest(_a5, ["__scopePopover", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside"]);
+        const _a4 = props, { __scopePopover, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside } = _a4, contentProps = __objRest(_a4, ["__scopePopover", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside"]);
         const context = $7d632c09314cddaf$var$usePopoverContext($7d632c09314cddaf$var$CONTENT_NAME, __scopePopover);
         const popperScope = $7d632c09314cddaf$var$usePopperScope(__scopePopover);
         $aJPOC$radixuireactfocusguards.useFocusGuards();
@@ -50648,7 +50648,7 @@
       });
       var $7d632c09314cddaf$var$CLOSE_NAME = "PopoverClose";
       var $7d632c09314cddaf$export$d6ac43ebaa40d53e = /* @__PURE__ */ $aJPOC$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopePopover } = _a5, closeProps = __objRest(_a5, ["__scopePopover"]);
+        const _a4 = props, { __scopePopover } = _a4, closeProps = __objRest(_a4, ["__scopePopover"]);
         const context = $7d632c09314cddaf$var$usePopoverContext($7d632c09314cddaf$var$CLOSE_NAME, __scopePopover);
         return /* @__PURE__ */ $aJPOC$react.createElement($aJPOC$radixuireactprimitive.Primitive.button, $parcel$interopDefault($aJPOC$babelruntimehelpersextends)({
           type: "button"
@@ -50661,7 +50661,7 @@
         }));
       });
       var $7d632c09314cddaf$export$3152841115e061b2 = /* @__PURE__ */ $aJPOC$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopePopover } = _a5, arrowProps = __objRest(_a5, ["__scopePopover"]);
+        const _a4 = props, { __scopePopover } = _a4, arrowProps = __objRest(_a4, ["__scopePopover"]);
         const popperScope = $7d632c09314cddaf$var$usePopperScope(__scopePopover);
         return /* @__PURE__ */ $aJPOC$react.createElement($aJPOC$radixuireactpopper.Arrow, $parcel$interopDefault($aJPOC$babelruntimehelpersextends)({}, popperScope, arrowProps, {
           ref: forwardedRef
@@ -50733,7 +50733,7 @@
       var [$4465bdeb0ef4ccd7$var$createSwitchContext, $4465bdeb0ef4ccd7$export$cf7f5f17f69cbd43] = $cWV9h$radixuireactcontext.createContextScope($4465bdeb0ef4ccd7$var$SWITCH_NAME);
       var [$4465bdeb0ef4ccd7$var$SwitchProvider, $4465bdeb0ef4ccd7$var$useSwitchContext] = $4465bdeb0ef4ccd7$var$createSwitchContext($4465bdeb0ef4ccd7$var$SWITCH_NAME);
       var $4465bdeb0ef4ccd7$export$b5d5cf8927ab7262 = /* @__PURE__ */ $cWV9h$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeSwitch, name: name3, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange } = _a5, switchProps = __objRest(_a5, ["__scopeSwitch", "name", "checked", "defaultChecked", "required", "disabled", "value", "onCheckedChange"]);
+        const _a4 = props, { __scopeSwitch, name: name3, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange } = _a4, switchProps = __objRest(_a4, ["__scopeSwitch", "name", "checked", "defaultChecked", "required", "disabled", "value", "onCheckedChange"]);
         const [button, setButton] = $cWV9h$react.useState(null);
         const composedRefs = $cWV9h$radixuireactcomposerefs.useComposedRefs(
           forwardedRef,
@@ -50786,7 +50786,7 @@
       });
       var $4465bdeb0ef4ccd7$var$THUMB_NAME = "SwitchThumb";
       var $4465bdeb0ef4ccd7$export$4d07bf653ea69106 = /* @__PURE__ */ $cWV9h$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeSwitch } = _a5, thumbProps = __objRest(_a5, ["__scopeSwitch"]);
+        const _a4 = props, { __scopeSwitch } = _a4, thumbProps = __objRest(_a4, ["__scopeSwitch"]);
         const context = $4465bdeb0ef4ccd7$var$useSwitchContext($4465bdeb0ef4ccd7$var$THUMB_NAME, __scopeSwitch);
         return /* @__PURE__ */ $cWV9h$react.createElement($cWV9h$radixuireactprimitive.Primitive.span, $parcel$interopDefault($cWV9h$babelruntimehelpersextends)({
           "data-state": $4465bdeb0ef4ccd7$var$getState(context.checked),
@@ -50796,7 +50796,7 @@
         }));
       });
       var $4465bdeb0ef4ccd7$var$BubbleInput = (props) => {
-        const _a5 = props, { control, checked, bubbles = true } = _a5, inputProps = __objRest(_a5, ["control", "checked", "bubbles"]);
+        const _a4 = props, { control, checked, bubbles = true } = _a4, inputProps = __objRest(_a4, ["control", "checked", "bubbles"]);
         const ref = $cWV9h$react.useRef(null);
         const prevChecked = $cWV9h$radixuireactuseprevious.usePrevious(checked);
         const controlSize = $cWV9h$radixuireactusesize.useSize(control);
@@ -50866,7 +50866,7 @@
       var [$94437fed6c1d6d8a$var$createAvatarContext, $94437fed6c1d6d8a$export$90370d16b488820f] = $6FDFN$radixuireactcontext.createContextScope($94437fed6c1d6d8a$var$AVATAR_NAME);
       var [$94437fed6c1d6d8a$var$AvatarProvider, $94437fed6c1d6d8a$var$useAvatarContext] = $94437fed6c1d6d8a$var$createAvatarContext($94437fed6c1d6d8a$var$AVATAR_NAME);
       var $94437fed6c1d6d8a$export$e2255cf6045e8d47 = /* @__PURE__ */ $6FDFN$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeAvatar } = _a5, avatarProps = __objRest(_a5, ["__scopeAvatar"]);
+        const _a4 = props, { __scopeAvatar } = _a4, avatarProps = __objRest(_a4, ["__scopeAvatar"]);
         const [imageLoadingStatus, setImageLoadingStatus] = $6FDFN$react.useState("idle");
         return /* @__PURE__ */ $6FDFN$react.createElement($94437fed6c1d6d8a$var$AvatarProvider, {
           scope: __scopeAvatar,
@@ -50878,8 +50878,8 @@
       });
       var $94437fed6c1d6d8a$var$IMAGE_NAME = "AvatarImage";
       var $94437fed6c1d6d8a$export$2cd8ae1985206fe8 = /* @__PURE__ */ $6FDFN$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeAvatar, src, onLoadingStatusChange = () => {
-        } } = _a5, imageProps = __objRest(_a5, ["__scopeAvatar", "src", "onLoadingStatusChange"]);
+        const _a4 = props, { __scopeAvatar, src, onLoadingStatusChange = () => {
+        } } = _a4, imageProps = __objRest(_a4, ["__scopeAvatar", "src", "onLoadingStatusChange"]);
         const context = $94437fed6c1d6d8a$var$useAvatarContext($94437fed6c1d6d8a$var$IMAGE_NAME, __scopeAvatar);
         const imageLoadingStatus = $94437fed6c1d6d8a$var$useImageLoadingStatus(src);
         const handleLoadingStatusChange = $6FDFN$radixuireactusecallbackref.useCallbackRef((status) => {
@@ -50900,7 +50900,7 @@
       });
       var $94437fed6c1d6d8a$var$FALLBACK_NAME = "AvatarFallback";
       var $94437fed6c1d6d8a$export$69fffb6a9571fbfe = /* @__PURE__ */ $6FDFN$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeAvatar, delayMs } = _a5, fallbackProps = __objRest(_a5, ["__scopeAvatar", "delayMs"]);
+        const _a4 = props, { __scopeAvatar, delayMs } = _a4, fallbackProps = __objRest(_a4, ["__scopeAvatar", "delayMs"]);
         const context = $94437fed6c1d6d8a$var$useAvatarContext($94437fed6c1d6d8a$var$FALLBACK_NAME, __scopeAvatar);
         const [canRender, setCanRender] = $6FDFN$react.useState(delayMs === void 0);
         $6FDFN$react.useEffect(() => {
@@ -50986,7 +50986,7 @@
       ];
       var $c3def6332c2749a6$export$250ffa63cdc0d034 = $c3def6332c2749a6$var$NODES.reduce((primitive, node) => {
         const Node = /* @__PURE__ */ $iMixA$react.forwardRef((props, forwardedRef) => {
-          const _a5 = props, { asChild } = _a5, primitiveProps = __objRest(_a5, ["asChild"]);
+          const _a4 = props, { asChild } = _a4, primitiveProps = __objRest(_a4, ["asChild"]);
           const Comp = asChild ? $iMixA$radixuireactslot.Slot : node;
           $iMixA$react.useEffect(() => {
             window[Symbol.for("radix-ui")] = true;
@@ -51061,7 +51061,7 @@
         const ITEM_SLOT_NAME = name3 + "CollectionItemSlot";
         const ITEM_DATA_ATTR = "data-radix-collection-item";
         const CollectionItemSlot = /* @__PURE__ */ $parcel$interopDefault($hnlpS$react).forwardRef((props, forwardedRef) => {
-          const _a5 = props, { scope, children } = _a5, itemData = __objRest(_a5, ["scope", "children"]);
+          const _a4 = props, { scope, children } = _a4, itemData = __objRest(_a4, ["scope", "children"]);
           const ref = $parcel$interopDefault($hnlpS$react).useRef(null);
           const composedRefs = $hnlpS$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
           const context = useCollectionContext(ITEM_SLOT_NAME, scope);
@@ -51141,7 +51141,7 @@
       });
       var $d715e0554b679f1f$export$177fb62ff3ec1f22 = /* @__PURE__ */ $g2vWm$react.forwardRef((props, forwardedRef) => {
         var _node$ownerDocument;
-        const _a5 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a5, layerProps = __objRest(_a5, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
+        const _a4 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a4, layerProps = __objRest(_a4, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
         const context = $g2vWm$react.useContext($d715e0554b679f1f$var$DismissableLayerContext);
         const [node1, setNode] = $g2vWm$react.useState(null);
         const ownerDocument = (_node$ownerDocument = node1 === null || node1 === void 0 ? void 0 : node1.ownerDocument) !== null && _node$ownerDocument !== void 0 ? _node$ownerDocument : globalThis === null || globalThis === void 0 ? void 0 : globalThis.document;
@@ -51382,7 +51382,7 @@
         cancelable: true
       };
       var $2bc01e66e04aa9ed$export$20e40289641fbbb6 = /* @__PURE__ */ $buum9$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a5, scopeProps = __objRest(_a5, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
+        const _a4 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a4, scopeProps = __objRest(_a4, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
         const [container1, setContainer] = $buum9$react.useState(null);
         const onMountAutoFocus = $buum9$radixuireactusecallbackref.useCallbackRef(onMountAutoFocusProp);
         const onUnmountAutoFocus = $buum9$radixuireactusecallbackref.useCallbackRef(onUnmountAutoFocusProp);
@@ -51630,7 +51630,7 @@
       $parcel$export(module.exports, "Arrow", () => $09f4ad68a9251bc3$export$21b07c8f274aebd5);
       $parcel$export(module.exports, "Root", () => $09f4ad68a9251bc3$export$be92b6f5f03c0fe9);
       var $09f4ad68a9251bc3$export$21b07c8f274aebd5 = /* @__PURE__ */ $eQpDd$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { children, width = 10, height = 5 } = _a5, arrowProps = __objRest(_a5, ["children", "width", "height"]);
+        const _a4 = props, { children, width = 10, height = 5 } = _a4, arrowProps = __objRest(_a4, ["children", "width", "height"]);
         return /* @__PURE__ */ $eQpDd$react.createElement($eQpDd$radixuireactprimitive.Primitive.svg, $parcel$interopDefault($eQpDd$babelruntimehelpersextends)({}, arrowProps, {
           ref: forwardedRef,
           width,
@@ -51700,7 +51700,7 @@
       };
       var $34310caa050a8d63$var$ANCHOR_NAME = "PopperAnchor";
       var $34310caa050a8d63$export$ecd4e1ccab6ed6d = /* @__PURE__ */ $50Iv9$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopePopper, virtualRef } = _a5, anchorProps = __objRest(_a5, ["__scopePopper", "virtualRef"]);
+        const _a4 = props, { __scopePopper, virtualRef } = _a4, anchorProps = __objRest(_a4, ["__scopePopper", "virtualRef"]);
         const context = $34310caa050a8d63$var$usePopperContext($34310caa050a8d63$var$ANCHOR_NAME, __scopePopper);
         const ref = $50Iv9$react.useRef(null);
         const composedRefs = $50Iv9$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
@@ -51719,7 +51719,7 @@
       });
       var $34310caa050a8d63$export$bc4ae5855d3c4fc = /* @__PURE__ */ $50Iv9$react.forwardRef((props, forwardedRef) => {
         var _arrowSize$width, _arrowSize$height, _middlewareData$arrow, _middlewareData$arrow2, _middlewareData$arrow3, _middlewareData$hide, _middlewareData$trans, _middlewareData$trans2;
-        const _a5 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a5, contentProps = __objRest(_a5, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
+        const _a4 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a4, contentProps = __objRest(_a4, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
         const context = $34310caa050a8d63$var$usePopperContext($34310caa050a8d63$var$CONTENT_NAME, __scopePopper);
         const [content, setContent] = $50Iv9$react.useState(null);
         const composedRefs = $50Iv9$radixuireactcomposerefs.useComposedRefs(
@@ -51884,7 +51884,7 @@
         left: "right"
       };
       var $34310caa050a8d63$export$79d62cd4e10a3fd0 = /* @__PURE__ */ $50Iv9$react.forwardRef(function $34310caa050a8d63$export$79d62cd4e10a3fd02(props, forwardedRef) {
-        const _a5 = props, { __scopePopper } = _a5, arrowProps = __objRest(_a5, ["__scopePopper"]);
+        const _a4 = props, { __scopePopper } = _a4, arrowProps = __objRest(_a4, ["__scopePopper"]);
         const contentContext = $34310caa050a8d63$var$useContentContext($34310caa050a8d63$var$ARROW_NAME, __scopePopper);
         const baseSide = $34310caa050a8d63$var$OPPOSITE_SIDE[contentContext.placedSide];
         return (
@@ -52009,7 +52009,7 @@
       $parcel$export(module.exports, "Root", () => $913a70b877676c16$export$be92b6f5f03c0fe9);
       var $913a70b877676c16$export$602eac185826482c = /* @__PURE__ */ $amzHf$react.forwardRef((props, forwardedRef) => {
         var _globalThis$document;
-        const _a5 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a5, portalProps = __objRest(_a5, ["container"]);
+        const _a4 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a4, portalProps = __objRest(_a4, ["container"]);
         return container ? /* @__PURE__ */ $parcel$interopDefault($amzHf$reactdom).createPortal(/* @__PURE__ */ $amzHf$react.createElement($amzHf$radixuireactprimitive.Primitive.div, $parcel$interopDefault($amzHf$babelruntimehelpersextends)({}, portalProps, {
           ref: forwardedRef
         })), container) : null;
@@ -52064,7 +52064,7 @@
         }))));
       });
       var $0063afae63b3fa70$var$RovingFocusGroupImpl = /* @__PURE__ */ $9QJ9Y$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a5, groupProps = __objRest(_a5, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
+        const _a4 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a4, groupProps = __objRest(_a4, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
         const ref = $9QJ9Y$react.useRef(null);
         const composedRefs = $9QJ9Y$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
         const direction = $9QJ9Y$radixuireactdirection.useDirection(dir);
@@ -52162,7 +52162,7 @@
       });
       var $0063afae63b3fa70$var$ITEM_NAME = "RovingFocusGroupItem";
       var $0063afae63b3fa70$export$ab9df7c53fe8454 = /* @__PURE__ */ $9QJ9Y$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a5, itemProps = __objRest(_a5, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
+        const _a4 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a4, itemProps = __objRest(_a4, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
         const autoId = $9QJ9Y$radixuireactid.useId();
         const id = tabStopId || autoId;
         const context = $0063afae63b3fa70$var$useRovingFocusContext($0063afae63b3fa70$var$ITEM_NAME, __scopeRovingFocusGroup);
@@ -52443,7 +52443,7 @@
         }, children)));
       };
       var $213e4d2df823067d$export$9fa5ebd18bee4d43 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeMenu } = _a5, anchorProps = __objRest(_a5, ["__scopeMenu"]);
+        const _a4 = props, { __scopeMenu } = _a4, anchorProps = __objRest(_a4, ["__scopeMenu"]);
         const popperScope = $213e4d2df823067d$var$usePopperScope(__scopeMenu);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactpopper.Anchor, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({}, popperScope, anchorProps, {
           ref: forwardedRef
@@ -52470,7 +52470,7 @@
       var [$213e4d2df823067d$var$MenuContentProvider, $213e4d2df823067d$var$useMenuContentContext] = $213e4d2df823067d$var$createMenuContext($213e4d2df823067d$var$CONTENT_NAME);
       var $213e4d2df823067d$export$479f0f2f71193efe = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
         const portalContext = $213e4d2df823067d$var$usePortalContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
-        const _a5 = props, { forceMount = portalContext.forceMount } = _a5, contentProps = __objRest(_a5, ["forceMount"]);
+        const _a4 = props, { forceMount = portalContext.forceMount } = _a4, contentProps = __objRest(_a4, ["forceMount"]);
         const context = $213e4d2df823067d$var$useMenuContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
         const rootContext = $213e4d2df823067d$var$useMenuRootContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
         return /* @__PURE__ */ $cnSS2$react.createElement($213e4d2df823067d$var$Collection.Provider, {
@@ -52520,7 +52520,7 @@
         }));
       });
       var $213e4d2df823067d$var$MenuContentImpl = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll } = _a5, contentProps = __objRest(_a5, ["__scopeMenu", "loop", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEntryFocus", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss", "disableOutsideScroll"]);
+        const _a4 = props, { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll } = _a4, contentProps = __objRest(_a4, ["__scopeMenu", "loop", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEntryFocus", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss", "disableOutsideScroll"]);
         const context = $213e4d2df823067d$var$useMenuContext($213e4d2df823067d$var$CONTENT_NAME, __scopeMenu);
         const rootContext = $213e4d2df823067d$var$useMenuRootContext($213e4d2df823067d$var$CONTENT_NAME, __scopeMenu);
         const popperScope = $213e4d2df823067d$var$usePopperScope(__scopeMenu);
@@ -52693,7 +52693,7 @@
         })))))));
       });
       var $213e4d2df823067d$export$22a631d1f72787bb = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeMenu } = _a5, groupProps = __objRest(_a5, ["__scopeMenu"]);
+        const _a4 = props, { __scopeMenu } = _a4, groupProps = __objRest(_a4, ["__scopeMenu"]);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactprimitive.Primitive.div, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({
           role: "group"
         }, groupProps, {
@@ -52701,7 +52701,7 @@
         }));
       });
       var $213e4d2df823067d$export$dd37bec0e8a99143 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeMenu } = _a5, labelProps = __objRest(_a5, ["__scopeMenu"]);
+        const _a4 = props, { __scopeMenu } = _a4, labelProps = __objRest(_a4, ["__scopeMenu"]);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactprimitive.Primitive.div, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({}, labelProps, {
           ref: forwardedRef
         }));
@@ -52709,7 +52709,7 @@
       var $213e4d2df823067d$var$ITEM_NAME = "MenuItem";
       var $213e4d2df823067d$var$ITEM_SELECT = "menu.itemSelect";
       var $213e4d2df823067d$export$2ce376c2cc3355c8 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { disabled = false, onSelect } = _a5, itemProps = __objRest(_a5, ["disabled", "onSelect"]);
+        const _a4 = props, { disabled = false, onSelect } = _a4, itemProps = __objRest(_a4, ["disabled", "onSelect"]);
         const ref = $cnSS2$react.useRef(null);
         const rootContext = $213e4d2df823067d$var$useMenuRootContext($213e4d2df823067d$var$ITEM_NAME, props.__scopeMenu);
         const contentContext = $213e4d2df823067d$var$useMenuContentContext($213e4d2df823067d$var$ITEM_NAME, props.__scopeMenu);
@@ -52762,7 +52762,7 @@
         }));
       });
       var $213e4d2df823067d$var$MenuItemImpl = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeMenu, disabled = false, textValue } = _a5, itemProps = __objRest(_a5, ["__scopeMenu", "disabled", "textValue"]);
+        const _a4 = props, { __scopeMenu, disabled = false, textValue } = _a4, itemProps = __objRest(_a4, ["__scopeMenu", "disabled", "textValue"]);
         const contentContext = $213e4d2df823067d$var$useMenuContentContext($213e4d2df823067d$var$ITEM_NAME, __scopeMenu);
         const rovingFocusGroupScope = $213e4d2df823067d$var$useRovingFocusGroupScope(__scopeMenu);
         const ref = $cnSS2$react.useRef(null);
@@ -52818,7 +52818,7 @@
         }))));
       });
       var $213e4d2df823067d$export$f6f243521332502d = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { checked = false, onCheckedChange } = _a5, checkboxItemProps = __objRest(_a5, ["checked", "onCheckedChange"]);
+        const _a4 = props, { checked = false, onCheckedChange } = _a4, checkboxItemProps = __objRest(_a4, ["checked", "onCheckedChange"]);
         return /* @__PURE__ */ $cnSS2$react.createElement($213e4d2df823067d$var$ItemIndicatorProvider, {
           scope: props.__scopeMenu,
           checked
@@ -52844,7 +52844,7 @@
         }
       });
       var $213e4d2df823067d$export$ea2200c9eee416b3 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { value, onValueChange } = _a5, groupProps = __objRest(_a5, ["value", "onValueChange"]);
+        const _a4 = props, { value, onValueChange } = _a4, groupProps = __objRest(_a4, ["value", "onValueChange"]);
         const handleValueChange = $cnSS2$radixuireactusecallbackref.useCallbackRef(onValueChange);
         return /* @__PURE__ */ $cnSS2$react.createElement($213e4d2df823067d$var$RadioGroupProvider, {
           scope: props.__scopeMenu,
@@ -52856,7 +52856,7 @@
       });
       var $213e4d2df823067d$var$RADIO_ITEM_NAME = "MenuRadioItem";
       var $213e4d2df823067d$export$69bd225e9817f6d0 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { value } = _a5, radioItemProps = __objRest(_a5, ["value"]);
+        const _a4 = props, { value } = _a4, radioItemProps = __objRest(_a4, ["value"]);
         const context = $213e4d2df823067d$var$useRadioGroupContext($213e4d2df823067d$var$RADIO_ITEM_NAME, props.__scopeMenu);
         const checked = value === context.value;
         return /* @__PURE__ */ $cnSS2$react.createElement($213e4d2df823067d$var$ItemIndicatorProvider, {
@@ -52881,7 +52881,7 @@
         checked: false
       });
       var $213e4d2df823067d$export$a2593e23056970a3 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeMenu, forceMount } = _a5, itemIndicatorProps = __objRest(_a5, ["__scopeMenu", "forceMount"]);
+        const _a4 = props, { __scopeMenu, forceMount } = _a4, itemIndicatorProps = __objRest(_a4, ["__scopeMenu", "forceMount"]);
         const indicatorContext = $213e4d2df823067d$var$useItemIndicatorContext($213e4d2df823067d$var$ITEM_INDICATOR_NAME, __scopeMenu);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactpresence.Presence, {
           present: forceMount || $213e4d2df823067d$var$isIndeterminate(indicatorContext.checked) || indicatorContext.checked === true
@@ -52891,7 +52891,7 @@
         })));
       });
       var $213e4d2df823067d$export$1cec7dcdd713e220 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeMenu } = _a5, separatorProps = __objRest(_a5, ["__scopeMenu"]);
+        const _a4 = props, { __scopeMenu } = _a4, separatorProps = __objRest(_a4, ["__scopeMenu"]);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactprimitive.Primitive.div, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({
           role: "separator",
           "aria-orientation": "horizontal"
@@ -52900,7 +52900,7 @@
         }));
       });
       var $213e4d2df823067d$export$bcdda4773debf5fa = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeMenu } = _a5, arrowProps = __objRest(_a5, ["__scopeMenu"]);
+        const _a4 = props, { __scopeMenu } = _a4, arrowProps = __objRest(_a4, ["__scopeMenu"]);
         const popperScope = $213e4d2df823067d$var$usePopperScope(__scopeMenu);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactpopper.Arrow, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({}, popperScope, arrowProps, {
           ref: forwardedRef
@@ -53065,7 +53065,7 @@
       var $213e4d2df823067d$var$SUB_CONTENT_NAME = "MenuSubContent";
       var $213e4d2df823067d$export$e7142ab31822bde6 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
         const portalContext = $213e4d2df823067d$var$usePortalContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
-        const _a5 = props, { forceMount = portalContext.forceMount } = _a5, subContentProps = __objRest(_a5, ["forceMount"]);
+        const _a4 = props, { forceMount = portalContext.forceMount } = _a4, subContentProps = __objRest(_a4, ["forceMount"]);
         const context = $213e4d2df823067d$var$useMenuContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
         const rootContext = $213e4d2df823067d$var$useMenuRootContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
         const subContext = $213e4d2df823067d$var$useMenuSubContext($213e4d2df823067d$var$SUB_CONTENT_NAME, props.__scopeMenu);
@@ -53281,7 +53281,7 @@
       };
       var $5de197f6cd80e8e9$var$TRIGGER_NAME = "ContextMenuTrigger";
       var $5de197f6cd80e8e9$export$be6fc7b1d5b0beb9 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu, disabled = false } = _a5, triggerProps = __objRest(_a5, ["__scopeContextMenu", "disabled"]);
+        const _a4 = props, { __scopeContextMenu, disabled = false } = _a4, triggerProps = __objRest(_a4, ["__scopeContextMenu", "disabled"]);
         const context = $5de197f6cd80e8e9$var$useContextMenuContext($5de197f6cd80e8e9$var$TRIGGER_NAME, __scopeContextMenu);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         const pointRef = $l8XVT$react.useRef({
@@ -53347,13 +53347,13 @@
         })));
       });
       var $5de197f6cd80e8e9$export$14afd0be83e45060 = (props) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, portalProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, portalProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Portal, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, portalProps));
       };
       var $5de197f6cd80e8e9$var$CONTENT_NAME = "ContextMenuContent";
       var $5de197f6cd80e8e9$export$572205900c9369e = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, contentProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, contentProps = __objRest(_a4, ["__scopeContextMenu"]);
         const context = $5de197f6cd80e8e9$var$useContextMenuContext($5de197f6cd80e8e9$var$CONTENT_NAME, __scopeContextMenu);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         const hasInteractedOutsideRef = $l8XVT$react.useRef(false);
@@ -53385,63 +53385,63 @@
         }));
       });
       var $5de197f6cd80e8e9$export$9860523b0fcdd664 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, groupProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, groupProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Group, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, groupProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$d4b9d3b609a10742 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, labelProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, labelProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Label, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, labelProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$16a26dc176a49100 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, itemProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, itemProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Item, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, itemProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$b6adbe51d5d8b7ec = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, checkboxItemProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, checkboxItemProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.CheckboxItem, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, checkboxItemProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$db5c89af5ed9aa07 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, radioGroupProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, radioGroupProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.RadioGroup, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, radioGroupProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$8a727d09a7d9bfc2 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, radioItemProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, radioItemProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.RadioItem, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, radioItemProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$9ed8194dee42d94b = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, itemIndicatorProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, itemIndicatorProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.ItemIndicator, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, itemIndicatorProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$8d6b009fadfe1207 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, separatorProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, separatorProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Separator, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, separatorProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$f47d0a58228a61e2 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, arrowProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, arrowProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Arrow, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, arrowProps, {
           ref: forwardedRef
@@ -53461,14 +53461,14 @@
         }), children);
       };
       var $5de197f6cd80e8e9$export$30b2b5c64556d316 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, triggerItemProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, triggerItemProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.SubTrigger, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, triggerItemProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$2c967063bd2dc512 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a5 = props, { __scopeContextMenu } = _a5, subContentProps = __objRest(_a5, ["__scopeContextMenu"]);
+        const _a4 = props, { __scopeContextMenu } = _a4, subContentProps = __objRest(_a4, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.SubContent, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, subContentProps, {
           ref: forwardedRef,
@@ -60975,9 +60975,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         }), children));
       }
       function RecoilRoot(props) {
-        const _a5 = props, {
+        const _a4 = props, {
           override
-        } = _a5, propsExceptOverride = __objRest(_a5, [
+        } = _a4, propsExceptOverride = __objRest(_a4, [
           "override"
         ]);
         const ancestorStoreRef = useStoreRef();
@@ -63487,9 +63487,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           if (cachedAtom != null) {
             return cachedAtom;
           }
-          const _a5 = options, {
+          const _a4 = options, {
             cachePolicyForParams_UNSTABLE
-          } = _a5, atomOptions = __objRest(_a5, [
+          } = _a4, atomOptions = __objRest(_a4, [
             "cachePolicyForParams_UNSTABLE"
           ]);
           const optionsDefault = "default" in options ? (
@@ -66914,8 +66914,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           t3.constructor !== Object || t3.$$typeof ? null == n2.type && (n2.type = t3) : n2.composers.add(C(t3, e2));
     return null == n2.type && (n2.type = "span"), n2.composers.size || n2.composers.add(["PJLV", {}, [], [], {}, []]), P(e2, n2, t2);
   });
-  var C = (_a5, i2) => {
-    var _b2 = _a5, { variants: e2, compoundVariants: t2, defaultVariants: r2 } = _b2, n2 = __objRest(_b2, ["variants", "compoundVariants", "defaultVariants"]);
+  var C = (_a4, i2) => {
+    var _b2 = _a4, { variants: e2, compoundVariants: t2, defaultVariants: r2 } = _b2, n2 = __objRest(_b2, ["variants", "compoundVariants", "defaultVariants"]);
     const o2 = `${S(i2.prefix)}c-${z(n2)}`, l2 = [], s2 = [], d2 = /* @__PURE__ */ Object.create(null), g2 = [];
     for (const e3 in r2)
       d2[e3] = String(r2[e3]);
@@ -66933,7 +66933,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     var p2, u2;
     if ("object" == typeof t2 && t2)
       for (const e3 of t2) {
-        let _a6 = e3, { css: t3 } = _a6, r3 = __objRest(_a6, ["css"]);
+        let _a5 = e3, { css: t3 } = _a5, r3 = __objRest(_a5, ["css"]);
         t3 = "object" == typeof t3 && t3 || {};
         for (const e4 in r3)
           r3[e4] = String(r3[e4]);
@@ -66954,7 +66954,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       return t3[T] = [], t3.rules = {}, W.forEach((e4) => t3.rules[e4] = { apply: (r3) => t3[T].push([e4, r3]) }), t3;
     })(r2) : null, d2 = (c3 || r2).rules, g2 = `.${n2}${i2.length > 1 ? `:where(.${i2.slice(1).join(".")})` : ""}`, p2 = (l2) => {
       l2 = "object" == typeof l2 && l2 || A;
-      const _a5 = l2, { css: s2 } = _a5, p3 = __objRest(_a5, ["css"]), u2 = {};
+      const _a4 = l2, { css: s2 } = _a4, p3 = __objRest(_a4, ["css"]), u2 = {};
       for (const e3 in o2)
         if (delete p3[e3], e3 in l2) {
           let t3 = l2[e3];
@@ -67667,8 +67667,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/lib/electron.ts
   var log = logger("electron");
   var isNode = isRunningInElectron() && (process == null ? void 0 : process.type) !== "renderer";
-  var _a;
-  var ipcRenderer = typeof window !== "undefined" ? (_a = window.electron) == null ? void 0 : _a.ipcRenderer : null;
+  var ipcRenderer = typeof window !== "undefined" ? window.electronIpcRenderer : null;
   var isElectron = !isNode && /electron/i.test(window.navigator.userAgent);
   var messageMainWindow = createMessageFn("main-window" /* Main */);
   var messageTrayWindow = createMessageFn("tray-window" /* Tray */);
@@ -67748,8 +67747,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         }
       },
       addInitialState: (state, action) => {
-        var _a5;
-        const entities = (_a5 = window.initialState) == null ? void 0 : _a5.entities;
+        var _a4;
+        const entities = (_a4 = window.initialState) == null ? void 0 : _a4.entities;
         if (!entities)
           return;
         for (const table in entities) {
@@ -67784,9 +67783,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_toolkit2 = __toESM(require_dist2());
 
   // ../assets/js/features/Room/focus.ts
-  var _a2;
+  var _a;
   var initialRoomFocus = {
-    roomId: (_a2 = window.initialState) == null ? void 0 : _a2.focus.roomId,
+    roomId: (_a = window.initialState) == null ? void 0 : _a.focus.roomId,
     dock: void 0
   };
 
@@ -67797,10 +67796,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   };
 
   // ../assets/js/features/Workspace/focus.ts
-  var _a3;
+  var _a2;
   var initialWorkspaceFocus = {
     // @ts-ignore
-    workspaceId: (_a3 = window.initialState) == null ? void 0 : _a3.focus.workspaceId,
+    workspaceId: (_a2 = window.initialState) == null ? void 0 : _a2.focus.workspaceId,
     room: initialRoomFocus,
     region: "room" /* Room */,
     sidebar: initialSidebarFocus
@@ -67835,12 +67834,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/features/Dock/slice.ts
   var log3 = logger("dock/slice");
   var name2 = "status";
-  var _a4, _b;
+  var _a3, _b;
   var initialState3 = {
     presence: {},
     connection: {
       // @ts-ignore
-      [(_a4 = window.initialState) == null ? void 0 : _a4.session.userId]: {
+      [(_a3 = window.initialState) == null ? void 0 : _a3.session.userId]: {
         // @ts-ignore
         userId: (_b = window.initialState) == null ? void 0 : _b.session.userId,
         internet: navigator.onLine ? "connected" /* Connected */ : "disconnected" /* Disconnected */
@@ -68386,22 +68385,25 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/components/Icon/Monitor.tsx
   var import_jsx_runtime11 = __toESM(require_jsx_runtime());
   function MonitorIcon(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
       "svg",
       __spreadProps(__spreadValues({
-        viewBox: "0 0 24 24",
+        viewBox: "4 4 16 16",
         width: "100%",
         height: "100%",
-        stroke: "currentColor",
-        strokeWidth: 2,
         fill: "none",
-        strokeLinecap: "round",
-        strokeLinejoin: "round"
+        xmlns: "http://www.w3.org/2000/svg"
       }, props), {
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("rect", { x: 2, y: 3, width: 20, height: 14, rx: 2, ry: 2 }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("path", { d: "M8 21h8M12 17v4" })
-        ]
+        children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M4.75 6.75a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H6.75a2 2 0 0 1-2-2v-7.5ZM15.25 19.25l-3.25-2-3.25 2"
+          }
+        )
       })
     );
   }
@@ -69691,8 +69693,46 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     );
   }
 
-  // ../assets/js/components/Icon/index.tsx
+  // ../assets/js/components/Icon/PictureInPicture.tsx
   var import_jsx_runtime53 = __toESM(require_jsx_runtime());
+  function PictureInPictureIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime53.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M7.25 17.25h-.5a2 2 0 0 1-2-2v-8.5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v2.5"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M10.75 13.75a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v4.5a1 1 0 0 1-1 1h-6.5a1 1 0 0 1-1-1v-4.5Z"
+            }
+          )
+        ]
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/index.tsx
+  var import_jsx_runtime54 = __toESM(require_jsx_runtime());
   var icons = {
     headphones: HeadphonesIcon,
     coffee: CoffeeIcon,
@@ -69745,29 +69785,30 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     arrowRight: ArrowRight,
     arrowLeft: ArrowLeft,
     close: CloseIcon,
-    chevronDown: ChevronDownIcon
+    chevronDown: ChevronDownIcon,
+    pictureInPicture: PictureInPictureIcon
   };
   var log7 = logger("icons");
   function Icon(props) {
     if (!props.name)
-      return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(import_jsx_runtime53.Fragment, {});
+      return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(import_jsx_runtime54.Fragment, {});
     const IconComponent = icons[props.name] || icons[props.name.replace(/-([a-z])/g, function(g2) {
       return g2[1].toUpperCase();
     })];
     if (IconComponent) {
-      return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(IconComponent, __spreadValues({}, props));
+      return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(IconComponent, __spreadValues({}, props));
     } else {
       log7.error("Can not find icon", props.name, Object.keys(icons));
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(import_jsx_runtime53.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(import_jsx_runtime54.Fragment, {});
   }
   var Icon_default = Icon;
 
   // ../assets/js/components/ToggleGroup/index.tsx
   var import_react_toggle_group = __toESM(require_dist17());
-  var import_jsx_runtime54 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime55 = __toESM(require_jsx_runtime());
   function ToggleRoot(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
       StyledRoot,
       {
         type: "single",
@@ -69781,10 +69822,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   function ToggleItem(props) {
     return (
       // @ts-ignore
-      /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(StyledItem, { value: props.value, ref: props.itemRef, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(StyledItem, { value: props.value, ref: props.itemRef, children: [
         props.children ? props.children : null,
-        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Icon_default, { name: props.icon }) : null,
-        props.label ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Label, { children: props.label }) : null
+        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(Icon_default, { name: props.icon }) : null,
+        props.label ? /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(Label, { children: props.label }) : null
       ] })
     );
   }
@@ -69839,9 +69880,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   };
 
   // ../assets/js/components/FocusRegion/index.tsx
-  var import_jsx_runtime55 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
   function FocusRegion(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
       StyledFocusRegion,
       {
         "data-region-id": props.regionId,
@@ -69881,11 +69922,11 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/components/Kbd/index.tsx
-  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
   function Kbd(props) {
-    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Keys, { children: props.keys.map((s2, ind) => /* @__PURE__ */ (0, import_jsx_runtime56.jsxs)(import_jsx_runtime56.Fragment, { children: [
-      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Sep, { children: "+" }, "step" + ind) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Key, { children: keySymbol(s2) }, ind)
+    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Keys, { children: props.keys.map((s2, ind) => /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)(import_jsx_runtime57.Fragment, { children: [
+      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Sep, { children: "+" }, "step" + ind) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Key, { children: keySymbol(s2) }, ind)
     ] })) }) : null;
   }
   var Keys = styled("div", {
@@ -69910,13 +69951,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/Tooltip/index.tsx
-  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
   function Tooltip(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)(import_react_tooltip.Root, { delayDuration: 400, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(import_react_tooltip.Trigger, { asChild: true, children: props.children }),
-      /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(import_react_tooltip.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)(StyledContent, { sideOffset: 10, hideWhenDetached: true, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(import_react_tooltip.Root, { delayDuration: 400, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(import_react_tooltip.Trigger, { asChild: true, children: props.children }),
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(import_react_tooltip.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(StyledContent, { sideOffset: 10, hideWhenDetached: true, children: [
         props.content,
-        props.shortcut ? /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Kbd, { keys: props.shortcut }) : null
+        props.shortcut ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Kbd, { keys: props.shortcut }) : null
       ] }) })
     ] });
   }
@@ -69944,16 +69985,16 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_react_hotkeys_hook = __toESM(require_dist3());
 
   // ../assets/js/components/Emoji/index.tsx
-  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
   function Emoji(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("em-emoji", { id: props.id, size: props.size });
+    return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("em-emoji", { id: props.id, size: props.size });
   }
 
   // ../assets/js/features/Dock/StatusIcon.tsx
-  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
   function StatusIcon(props) {
-    var _a5, _b2, _c;
-    return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(StyledStatusIcon, { children: ((_a5 = props.status) == null ? void 0 : _a5.emoji) && !props.noEmoji && props.isOnline !== false ? /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(Emoji, { id: (_b2 = props.status) == null ? void 0 : _b2.emoji, size: "1.35em" }) : /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(
+    var _a4, _b2, _c;
+    return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(StyledStatusIcon, { children: ((_a4 = props.status) == null ? void 0 : _a4.emoji) && !props.noEmoji && props.isOnline !== false ? /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Emoji, { id: (_b2 = props.status) == null ? void 0 : _b2.emoji, size: "1.35em" }) : /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
       StatusCircle,
       {
         presence: (_c = props.status) == null ? void 0 : _c.status,
@@ -70018,27 +70059,27 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/Dock/StatusControls.tsx
-  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime61 = __toESM(require_jsx_runtime());
   var log8 = logger("dock/status-controls");
   function StatusControls(props) {
-    var _a5, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p;
+    var _a4, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p;
     const messageInputRef = (0, import_react6.useRef)(null);
     const emojiInputRef = (0, import_react6.useRef)(null);
     const triggerRef = (0, import_react6.useRef)(null);
     const statusItemRef = (0, import_react6.useRef)(null);
-    const focusedEmojiId = ((_a5 = props.focus) == null ? void 0 : _a5.region) === "emoji" /* EmojiSearch */ ? (_c = (_b2 = props.focus) == null ? void 0 : _b2.emoji) == null ? void 0 : _c.id : void 0;
+    const focusedEmojiId = ((_a4 = props.focus) == null ? void 0 : _a4.region) === "emoji" /* EmojiSearch */ ? (_c = (_b2 = props.focus) == null ? void 0 : _b2.emoji) == null ? void 0 : _c.id : void 0;
     (0, import_react6.useEffect)(() => {
-      var _a6, _b3, _c2, _d2;
+      var _a5, _b3, _c2, _d2;
       if (!props.focus) {
-        (_a6 = messageInputRef.current) == null ? void 0 : _a6.blur();
+        (_a5 = messageInputRef.current) == null ? void 0 : _a5.blur();
         return;
       }
       log8.info("focus region changed", (_b3 = props.focus) == null ? void 0 : _b3.region);
       switch (props.focus.region) {
         case "message" /* Message */:
           setTimeout(() => {
-            var _a7;
-            (_a7 = messageInputRef.current) == null ? void 0 : _a7.focus();
+            var _a6;
+            (_a6 = messageInputRef.current) == null ? void 0 : _a6.focus();
           }, 100);
           break;
         case "emoji" /* EmojiSearch */:
@@ -70058,17 +70099,17 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       }
     }, [props.focus]);
     (0, import_react6.useEffect)(() => {
-      var _a6, _b3, _c2;
-      log8.info("focus region / dropdown status changed", (_a6 = props.focus) == null ? void 0 : _a6.region);
+      var _a5, _b3, _c2;
+      log8.info("focus region / dropdown status changed", (_a5 = props.focus) == null ? void 0 : _a5.region);
       if (((_b3 = props.focus) == null ? void 0 : _b3.region) === "message" /* Message */ && props.isDropdownOpen) {
         (_c2 = messageInputRef.current) == null ? void 0 : _c2.focus();
       }
     }, [(_d = props.focus) == null ? void 0 : _d.region, props.isDropdownOpen]);
     (0, import_react6.useEffect)(() => {
-      var _a6;
+      var _a5;
       if (!props.isDropdownOpen)
         return;
-      if (((_a6 = props.focus) == null ? void 0 : _a6.region) === "emoji" /* EmojiSearch */ && props.emojiResults.length > 0) {
+      if (((_a5 = props.focus) == null ? void 0 : _a5.region) === "emoji" /* EmojiSearch */ && props.emojiResults.length > 0) {
         log8.info("Focus on first emoji");
         props.setFocusedEmojiId(props.emojiResults[0].id);
       } else if (props.emojiResults.length === 0) {
@@ -70142,34 +70183,34 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       },
       [props.isDropdownOpen]
     );
-    return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(StatusControlsRoot, { children: /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StatusControlsRoot, { children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
       Popover.Root,
       {
         open: props.isDropdownOpen,
         onOpenChange: props.setDropdownOpen,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
             FocusRegion,
             {
               regionId: "message" /* Message */,
               focusSwitcher: props.setFocusRegion,
               regionRef: triggerRef,
               onClick: () => {
-                var _a6;
-                if (props.tray && ((_a6 = props.focus) == null ? void 0 : _a6.region) === "message" /* Message */ && !props.isDropdownOpen) {
+                var _a5;
+                if (props.tray && ((_a5 = props.focus) == null ? void 0 : _a5.region) === "message" /* Message */ && !props.isDropdownOpen) {
                   props.setDropdownOpen(true);
                 }
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(StyledAnchor, { reverse: props.reverseOrder }),
-                /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StyledAnchor, { reverse: props.reverseOrder }),
+                /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
                   MessageSection,
                   {
                     tray: props.tray,
                     focused: props.tray && ((_j = props.focus) == null ? void 0 : _j.region) === "message" /* Message */,
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Tooltip, { content: "Set emoji & flow", children: /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Popover.Trigger, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(CurrentStatusIcon, { children: ((_k = props.localStatus) == null ? void 0 : _k.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(StatusIcon, { status: props.localStatus }) : /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Icon_default, { name: "emoji" }) }) }) }),
-                      /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+                      /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Tooltip, { content: "Set emoji & flow", children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Popover.Trigger, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(CurrentStatusIcon, { children: ((_k = props.localStatus) == null ? void 0 : _k.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StatusIcon, { status: props.localStatus }) : /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Icon_default, { name: "emoji" }) }) }) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
                         MessageInput,
                         {
                           type: "text",
@@ -70187,28 +70228,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Popover.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Popover.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
             Popover.Content,
             {
               onFocusOutside: handleFocusOutside,
               onPointerDownOutside: handlePointerDownOutside,
               side: props.reverseOrder ? "top" : "bottom",
               asChild: true,
-              children: /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(ControlMenu, { tray: props.tray, reverse: props.reverseOrder, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+              children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(ControlMenu, { tray: props.tray, reverse: props.reverseOrder, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
                   FocusRegion,
                   {
                     regionId: "emoji" /* EmojiSearch */,
                     focusSwitcher: props.setFocusRegion,
-                    children: /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(
+                    children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
                       DockSection,
                       {
                         focused: ((_m = props.focus) == null ? void 0 : _m.region) === "emoji" /* EmojiSearch */,
                         nolabel: true,
                         children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(SearchField, { children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Icon_default, { name: "search" }),
-                            /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(SearchField, { children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Icon_default, { name: "search" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
                               EmojiSearchInput,
                               {
                                 value: props.emojiQuery,
@@ -70218,7 +70259,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                               }
                             )
                           ] }),
-                          /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(EmojiPicker, { children: props.emojiResults.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(NoEmoji, { children: "No emojis found" }) : props.emojiResults.slice(0, 10).map((e2, ind) => /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(EmojiPicker, { children: props.emojiResults.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(NoEmoji, { children: "No emojis found" }) : props.emojiResults.slice(0, 10).map((e2, ind) => /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
                             Emoji2,
                             {
                               role: "img",
@@ -70234,38 +70275,38 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                     )
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
                   FocusRegion,
                   {
                     regionId: "status" /* Status */,
                     focusSwitcher: props.setFocusRegion,
-                    children: /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(
+                    children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
                       DockSection,
                       {
                         focused: ((_n = props.focus) == null ? void 0 : _n.region) === "status" /* Status */,
                         children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
                             Label2,
                             {
                               focused: ((_o = props.focus) == null ? void 0 : _o.region) === "status" /* Status */,
                               children: "Set your flow"
                             }
                           ),
-                          /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
                             ToggleGroup.Root,
                             {
                               value: props.localPresence,
                               onValueChange: (presence) => props.setPresence(presence),
                               rovingFocus: ((_p = props.focus) == null ? void 0 : _p.region) === "status" /* Status */,
-                              children: PresenceModes.map((m2) => /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(
+                              children: PresenceModes.map((m2) => /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
                                 ToggleGroup.Item,
                                 {
                                   "data-mode": m2.status,
                                   value: m2.status,
                                   itemRef: m2.status === "online" /* Online */ ? statusItemRef : void 0,
                                   children: [
-                                    /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(ModeIcon, { presence: m2.status }),
-                                    /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(ToggleGroup.Label, { children: titleCase(m2.status) })
+                                    /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(ModeIcon, { presence: m2.status }),
+                                    /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(ToggleGroup.Label, { children: titleCase(m2.status) })
                                   ]
                                 },
                                 m2.status
@@ -70284,16 +70325,16 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       }
     ) });
     function handleFocusOutside(event) {
-      var _a6;
-      if ((_a6 = triggerRef.current) == null ? void 0 : _a6.contains(event.target)) {
+      var _a5;
+      if ((_a5 = triggerRef.current) == null ? void 0 : _a5.contains(event.target)) {
         event.preventDefault();
       } else {
         props.handleBlur(event);
       }
     }
     function handlePointerDownOutside(event) {
-      var _a6;
-      if ((_a6 = triggerRef.current) == null ? void 0 : _a6.contains(event.target)) {
+      var _a5;
+      if ((_a5 = triggerRef.current) == null ? void 0 : _a5.contains(event.target)) {
         event.preventDefault();
       }
     }
@@ -70301,8 +70342,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       return () => {
         const ind = props.emojiResults.findIndex(
           (e2) => {
-            var _a6, _b3;
-            return e2.id === ((_b3 = (_a6 = props.focus) == null ? void 0 : _a6.emoji) == null ? void 0 : _b3.id);
+            var _a5, _b3;
+            return e2.id === ((_b3 = (_a5 = props.focus) == null ? void 0 : _a5.emoji) == null ? void 0 : _b3.id);
           }
         );
         const nextInd = (ind + add2) % props.emojiResults.length;
@@ -70539,7 +70580,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
 
   // ../assets/js/components/Switch/index.tsx
   var import_react_switch = __toESM(require_dist31());
-  var import_jsx_runtime61 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime62 = __toESM(require_jsx_runtime());
   var StyledSwitch = styled("div", {
     display: "flex",
     vcenter: true,
@@ -70582,21 +70623,21 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var Label3 = styled("label", {});
 
   // ../assets/js/features/Dock/Button.tsx
-  var import_jsx_runtime62 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime63 = __toESM(require_jsx_runtime());
   function Button(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
       Tooltip,
       {
         content: props.tooltipLabel || "",
         shortcut: props.tooltipShortcut,
-        children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Container, { onClick: props.onClick, naked: props.naked, children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(Container, { onClick: props.onClick, naked: props.naked, children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
           StyledButton,
           {
             onClick: props.onClick,
             off: props.off,
             on: props.on,
             naked: props.naked,
-            children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Icon_default, { name: props.icon })
+            children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(Icon_default, { name: props.icon })
           }
         ) })
       }
@@ -70671,28 +70712,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/CallDock/CallSwitch.tsx
-  var import_jsx_runtime63 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
   function CallSwitch(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(import_jsx_runtime63.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(import_jsx_runtime64.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
       Tooltip,
       {
         content: props.isActive ? "Leave call" : "Join call",
         shortcut: ["Space"],
-        children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
           Button2,
           {
             onClick: () => handleClick(void 0),
             on: props.isActive,
             off: !props.isActive,
             naked: props.naked,
-            children: /* @__PURE__ */ (0, import_jsx_runtime63.jsxs)(StyledSwitch, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(Icon_default, { name: "headphones" }),
-              /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+            children: /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(StyledSwitch, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Icon_default, { name: "headphones" }),
+              /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
                 CustomStyledRoot,
                 {
                   checked: props.isActive,
                   onCheckedChange: handleClick,
-                  children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(CustomStyledThumb, {})
+                  children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(CustomStyledThumb, {})
                 }
               )
             ] })
@@ -70772,10 +70813,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/ElectronTrayWindow/TrayCallControls.tsx
-  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
   function TrayCallControls(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(Container2, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Left, { children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(Container2, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Left, { children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
         CallSwitch,
         {
           isActive: props.isActive,
@@ -70785,8 +70826,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           tray: true
         }
       ) }),
-      /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(Right, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(Right, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
           Button,
           {
             label: "Camera",
@@ -70797,7 +70838,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             naked: true
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
           Button,
           {
             label: "Microphone",
@@ -70808,7 +70849,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             naked: true
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
           Button,
           {
             label: "Speaker",
@@ -70880,12 +70921,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
 
   // ../assets/js/components/Avatar/index.tsx
   var import_react_avatar = __toESM(require_dist32());
-  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
   function Avatar(props) {
     const css2 = { fontSize: props.fontSize || "$small" };
-    return /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(StyledImage, { src: props.src, alt: props.alt }),
-      /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(StyledFallback, { children: initials(props.fallback) })
+    return /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(StyledImage, { src: props.src, alt: props.alt }),
+      /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(StyledFallback, { children: initials(props.fallback) })
     ] });
   }
   var AvatarRoot = styled(import_react_avatar.Root, {
@@ -70917,9 +70958,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
 
   // ../assets/js/components/ContextMenu/index.tsx
   var import_react_context_menu = __toESM(require_dist42());
-  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
   function LocalContent(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(import_react_context_menu.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(StyledContent2, { children: props.children }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(import_react_context_menu.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(StyledContent2, { children: props.children }) });
   }
   var StyledContent2 = styled(import_react_context_menu.Content, {
     minWidth: "220px",
@@ -70935,13 +70976,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     zIndex: "$aboveContent"
   });
   function LocalItem(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(StyledItem2, { onClick: props.onClick, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(LeftSlot, { children: [
-        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Icon_default, { name: props.icon }) : null,
-        props.emoji ? /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Emoji, { id: props.emoji }) : null
+    return /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(StyledItem2, { onClick: props.onClick, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(LeftSlot, { children: [
+        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Icon_default, { name: props.icon }) : null,
+        props.emoji ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Emoji, { id: props.emoji }) : null
       ] }),
       props.label,
-      /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(RightSlot, { children: props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Kbd, { keys: props.kbd }) : null })
+      /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(RightSlot, { children: props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Kbd, { keys: props.kbd }) : null })
     ] });
   }
   var RightSlot = styled("div", {
@@ -70997,10 +71038,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   };
 
   // ../assets/js/components/Timestamp/index.tsx
-  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
 
   // ../assets/js/components/StatusUpdate/index.tsx
-  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime69 = __toESM(require_jsx_runtime());
   var StyledStatusUpdate = styled("div", {
     display: "flex",
     gap: "8px"
@@ -71043,25 +71084,25 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserHeader/index.tsx
-  var import_jsx_runtime69 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime70 = __toESM(require_jsx_runtime());
   function UserHeader(props) {
-    var _a5, _b2, _c, _d, _e, _f, _g;
-    return /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(Container3, { children: [
-      props.status ? /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(StatusIcon, { status: props.status, noEmoji: true, isOnline: props.online }) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
+    var _a4, _b2, _c, _d, _e, _f, _g;
+    return /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(Container3, { children: [
+      props.status ? /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(StatusIcon, { status: props.status, noEmoji: true, isOnline: props.online }) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
         Avatar,
         {
-          src: (_a5 = props.user) == null ? void 0 : _a5.profile_photo_url,
+          src: (_a4 = props.user) == null ? void 0 : _a4.profile_photo_url,
           alt: (_b2 = props.user) == null ? void 0 : _b2.name,
           fallback: ((_c = props.user) == null ? void 0 : _c.name) || "User"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(Right2, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(StatusHeader, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(Right2, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(StatusHeader, { children: [
           firstName(((_d = props.user) == null ? void 0 : _d.name) || ""),
-          ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(Emoji, { id: props.status.emoji }) : null
+          ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(Emoji, { id: props.status.emoji }) : null
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
+        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
       ] })
     ] });
   }
@@ -71083,12 +71124,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserContextMenu/UserContextMenuView.tsx
-  var import_jsx_runtime70 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime71 = __toESM(require_jsx_runtime());
   function UserContextMenuView(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(ContextMenu.Root, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(ContextMenu.Trigger, { asChild: true, children: props.children }),
-      /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(ContextMenu.Content, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(ContextMenu.Root, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ContextMenu.Trigger, { asChild: true, children: props.children }),
+      /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(ContextMenu.Content, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
           UserHeader,
           {
             user: props.user,
@@ -71096,8 +71137,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             online: props.isOnline
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(ContextMenu.Separator, {}),
-        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ContextMenu.Separator, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
           ContextMenu.Item,
           {
             emoji: "wave",
@@ -71105,7 +71146,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             onClick: () => props.tap(props.userId)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
           ContextMenu.Item,
           {
             icon: props.existingHook ? "checkmark" : "bell",
@@ -71113,8 +71154,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             onClick: () => props.createStatusHook(props.userId)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(ContextMenu.Item, { icon: "users", label: "Go to 1:1 room" }),
-        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(ContextMenu.Item, { icon: "mail", label: "Send message" })
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ContextMenu.Item, { icon: "users", label: "Go to 1:1 room" }),
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ContextMenu.Item, { icon: "mail", label: "Send message" })
       ] })
     ] });
   }
@@ -71168,10 +71209,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/features/PictureInPicture/Video.tsx
   var import_react7 = __toESM(require_react());
   var import_daily_react_hooks = __toESM(require_dist43());
-  var import_jsx_runtime71 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime72 = __toESM(require_jsx_runtime());
   var log9 = logger("picture-in-picture/video");
   function PictureInPictureVideo(props) {
-    var _a5;
+    var _a4;
     const track2 = (0, import_daily_react_hooks.useVideoTrack)(props.participantId, "video");
     const el = (0, import_react7.useRef)(null);
     (0, import_react7.useEffect)(() => {
@@ -71180,10 +71221,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         return;
       log9.info("Set track", track2.persistentTrack);
       playerEl.srcObject = new MediaStream([track2 == null ? void 0 : track2.persistentTrack]);
-    }, [(_a5 = track2 == null ? void 0 : track2.persistentTrack) == null ? void 0 : _a5.id]);
+    }, [(_a4 = track2 == null ? void 0 : track2.persistentTrack) == null ? void 0 : _a4.id]);
     const videoEl = (0, import_react7.useMemo)(() => {
       log9.info("Re-render element");
-      return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Player, { autoPlay: true, muted: true, playsInline: true, ref: el });
+      return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Player, { autoPlay: true, muted: true, playsInline: true, ref: el });
     }, [track2.persistentTrack]);
     return videoEl;
   }
@@ -71202,14 +71243,14 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserView/index.tsx
-  var import_jsx_runtime72 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime73 = __toESM(require_jsx_runtime());
   function UserIconView(props) {
-    var _a5, _b2, _c, _d;
+    var _a4, _b2, _c, _d;
     const color = (0, import_react8.useMemo)(() => {
-      var _a6;
-      return stringToRGB(((_a6 = props.user) == null ? void 0 : _a6.name) || props.userId, participantLabelBg);
+      var _a5;
+      return stringToRGB(((_a5 = props.user) == null ? void 0 : _a5.name) || props.userId, participantLabelBg);
     }, [props.userId]);
-    return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
       UserContextMenuView,
       {
         userId: props.userId,
@@ -71219,8 +71260,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         existingHook: props.existingHook,
         isOnline: props.isOnline,
         createStatusHook: props.createStatusHook,
-        children: /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime73.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime73.jsxs)(
             Label5,
             {
               tile: props.tile,
@@ -71228,20 +71269,20 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 backgroundColor: color
               },
               children: [
-                !((_a5 = props.status) == null ? void 0 : _a5.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Icon_default, { name: "mic-off" }) : null,
+                !((_a4 = props.status) == null ? void 0 : _a4.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(Icon_default, { name: "mic-off" }) : null,
                 firstName(((_b2 = props.user) == null ? void 0 : _b2.name) || "")
               ]
             }
           ),
-          props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
-          props.videoParticipantId ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+          props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
+          props.videoParticipantId ? /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
             PictureInPictureVideo,
             {
               participantId: props.videoParticipantId,
               mirror: props.self
             }
           ) : null,
-          !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+          !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
             Avatar,
             {
               src: (_c = props.user) == null ? void 0 : _c.profile_photo_url,
@@ -71337,28 +71378,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserStatus/Label.tsx
-  var import_jsx_runtime73 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime74 = __toESM(require_jsx_runtime());
   function UserStatusLabel(props) {
-    var _a5, _b2;
+    var _a4, _b2;
     if (!props.isOnline) {
-      return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(import_jsx_runtime73.Fragment, { children: "'Offline'" });
+      return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(import_jsx_runtime74.Fragment, { children: "'Offline'" });
     }
     if (props.status && props.status.message && props.status.message.trim().length > 16) {
-      return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(import_jsx_runtime73.Fragment, { children: (_a5 = props.status) == null ? void 0 : _a5.message });
+      return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(import_jsx_runtime74.Fragment, { children: (_a4 = props.status) == null ? void 0 : _a4.message });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(import_jsx_runtime73.Fragment, { children: props.status ? (_b2 = findModeByStatus(props.status.status)) == null ? void 0 : _b2.label : "" });
+    return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(import_jsx_runtime74.Fragment, { children: props.status ? (_b2 = findModeByStatus(props.status.status)) == null ? void 0 : _b2.label : "" });
   }
 
   // ../assets/js/components/UserView/UserListView.tsx
-  var import_jsx_runtime74 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime75 = __toESM(require_jsx_runtime());
   function UserListView(props) {
-    var _a5, _b2, _c, _d, _e;
+    var _a4, _b2, _c, _d, _e;
     const localTime = (/* @__PURE__ */ new Date()).toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "numeric",
-      timeZone: (_a5 = props.status) == null ? void 0 : _a5.timezone
+      timeZone: (_a4 = props.status) == null ? void 0 : _a4.timezone
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
       UserContextMenuView,
       {
         userId: props.userId,
@@ -71368,25 +71409,25 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         existingHook: props.existingHook,
         isOnline: props.isOnline,
         createStatusHook: props.createStatusHook,
-        children: /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(Root7, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(Left2, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Root7, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Left2, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
               Avatar,
               {
                 src: (_b2 = props.user) == null ? void 0 : _b2.profile_photo_url,
                 fallback: ((_c = props.user) == null ? void 0 : _c.name) || "User " + props.userId
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(StatusIcon, { status: props.status, isOnline: props.isOnline, noEmoji: true })
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(StatusIcon, { status: props.status, isOnline: props.isOnline, noEmoji: true })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(Right3, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(Username, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Right3, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Username, { children: [
               (_d = props.user) == null ? void 0 : _d.name,
-              ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(Emoji, { id: props.status.emoji }) : null
+              ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(Emoji, { id: props.status.emoji }) : null
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(Status, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(LocalTime, { children: localTime }),
-              /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(UserStatusLabel, { status: props.status, isOnline: props.isOnline })
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Status, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(LocalTime, { children: localTime }),
+              /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(UserStatusLabel, { status: props.status, isOnline: props.isOnline })
             ] })
           ] })
         ] })
@@ -71463,17 +71504,17 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/ElectronTrayWindow/index.tsx
-  var import_jsx_runtime75 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime76 = __toESM(require_jsx_runtime());
   var log10 = logger("electron-tray-window");
   function ElectronTrayWindow(props) {
-    var _a5, _b2, _c, _d, _e, _f, _g, _h, _i, _j;
+    var _a4, _b2, _c, _d, _e, _f, _g, _h, _i, _j;
     const dockEl = (0, import_react9.useRef)(null);
     const containerEl = (0, import_react9.useRef)(null);
     const [trayState, setTrayState] = (0, import_react9.useState)({});
     const [dockFocus, setDockFocus] = (0, import_react9.useState)();
     const [isDropdownOpen, setIsDropdownOpen] = (0, import_react9.useState)(false);
     const [statusMessage, setStatusMessage] = (0, import_react9.useState)(
-      ((_a5 = trayState.localStatus) == null ? void 0 : _a5.message) || ""
+      ((_a4 = trayState.localStatus) == null ? void 0 : _a4.message) || ""
     );
     const [videoFrame, setVideoFrame] = (0, import_react9.useState)({});
     const emojiSearch = useEmojiSearch();
@@ -71481,13 +71522,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       messageMainWindow({ trayWindowCreated: true });
     }, []);
     (0, import_react9.useEffect)(() => {
-      var _a6;
+      var _a5;
       log10.info("Listen messages");
-      (_a6 = getIpcRenderer()) == null ? void 0 : _a6.on("message", onMessage);
+      (_a5 = getIpcRenderer()) == null ? void 0 : _a5.on("message", onMessage);
       messageMainWindow({ requestState: true });
       return () => {
-        var _a7;
-        (_a7 = getIpcRenderer()) == null ? void 0 : _a7.removeListener("message", onMessage);
+        var _a6;
+        (_a6 = getIpcRenderer()) == null ? void 0 : _a6.removeListener("message", onMessage);
       };
     }, []);
     (0, import_react9.useEffect)(() => {
@@ -71496,8 +71537,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       }
     }, [!trayState.localStatus]);
     (0, import_react9.useEffect)(() => {
-      var _a6, _b3, _c2, _d2;
-      if (((_a6 = trayState.localStatus) == null ? void 0 : _a6.message) && ((_b3 = trayState.localStatus) == null ? void 0 : _b3.message) !== statusMessage) {
+      var _a5, _b3, _c2, _d2;
+      if (((_a5 = trayState.localStatus) == null ? void 0 : _a5.message) && ((_b3 = trayState.localStatus) == null ? void 0 : _b3.message) !== statusMessage) {
         log10.info(
           "Local status message changed:",
           (_c2 = trayState.localStatus) == null ? void 0 : _c2.message,
@@ -71530,28 +71571,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     globalStyles();
     const active = ((_c = trayState.participants) == null ? void 0 : _c.filter((p2) => !p2.isSelf && p2.isActive)) || [];
     const inactive = ((_d = trayState.participants) == null ? void 0 : _d.filter((p2) => !p2.isSelf && !p2.isActive)) || [];
-    return /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Tooltip2.Provider, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(EmojiProvider, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Container4, { onClick: handleClick, ref: containerEl, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(RoomHeader, { onClick: showMainWindow, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(RoomStatusIcon, { mode: trayState.focusedRoomStatus }),
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(RoomName, { children: (_e = trayState.focusedRoom) == null ? void 0 : _e.name })
+    return /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Tooltip2.Provider, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(EmojiProvider, {}),
+      /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Container4, { onClick: handleClick, ref: containerEl, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(RoomHeader, { onClick: showMainWindow, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(RoomStatusIcon, { mode: trayState.focusedRoomStatus }),
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(RoomName, { children: (_e = trayState.focusedRoom) == null ? void 0 : _e.name })
         ] }),
-        active.length === 0 && inactive.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Empty, { onClick: showMainWindow, children: [
+        active.length === 0 && inactive.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Empty, { onClick: showMainWindow, children: [
           "It",
           "'",
           "s just you at the moment.",
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)("br", {}),
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)("br", {}),
           " Check out other rooms?"
         ] }) : null,
-        active.length ? /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(import_jsx_runtime75.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)("label", { children: [
+        active.length ? /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(import_jsx_runtime76.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)("label", { children: [
             "Call ",
             active.length > 1 ? `(${active.length})` : ""
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(Active, { children: active.map((p2) => {
-            var _a6;
-            return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Active, { children: active.map((p2) => {
+            var _a5;
+            return /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
               UserIconView,
               {
                 userId: p2.userId,
@@ -71561,18 +71602,18 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 tap,
                 isOnline: p2.isOnline,
                 createStatusHook,
-                videoFrame: ((_a6 = videoFrame[p2.userId]) == null ? void 0 : _a6.ts) >= Date.now() - 3e3 ? videoFrame[p2.userId].frame : void 0
+                videoFrame: ((_a5 = videoFrame[p2.userId]) == null ? void 0 : _a5.ts) >= Date.now() - 3e3 ? videoFrame[p2.userId].frame : void 0
               }
             );
           }) })
         ] }) : null,
-        inactive.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(import_jsx_runtime75.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)("label", { children: [
+        inactive.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(import_jsx_runtime76.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)("label", { children: [
             active.length ? "Others" : "Present",
             " ",
             inactive.length > 1 ? `(${inactive.length})` : ""
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(Inactive, { children: inactive.map((p2) => /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(UserRow, { children: /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Inactive, { children: inactive.map((p2) => /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(UserRow, { children: /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
             UserListView,
             {
               userId: p2.userId,
@@ -71585,8 +71626,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }
           ) })) })
         ] }) : null,
-        /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Dock, { dropdownOpen: isDropdownOpen, focus: dockFocus == null ? void 0 : dockFocus.region, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(StatusRoot, { ref: dockEl, children: /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Dock, { dropdownOpen: isDropdownOpen, focus: dockFocus == null ? void 0 : dockFocus.region, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(StatusRoot, { ref: dockEl, children: /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
             StatusControls,
             {
               localStatus: trayState.localStatus,
@@ -71594,8 +71635,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               message: statusMessage,
               setMessage: setStatusMessage,
               resetMessage: () => {
-                var _a6;
-                return setStatusMessage(((_a6 = trayState.localStatus) == null ? void 0 : _a6.message) || "");
+                var _a5;
+                return setStatusMessage(((_a5 = trayState.localStatus) == null ? void 0 : _a5.message) || "");
               },
               saveMessage: saveStatusMessage,
               emojiResults: emojiSearch.results.length > 0 ? emojiSearch.results : commonEmojis,
@@ -71620,7 +71661,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               tray: true
             }
           ) }),
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
             TrayCallControls,
             {
               isActive: ((_f = trayState.localStatus) == null ? void 0 : _f.camera_on) || ((_g = trayState.localStatus) == null ? void 0 : _g.mic_on),
@@ -71628,21 +71669,21 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               micOn: ((_i = trayState.localStatus) == null ? void 0 : _i.mic_on) || false,
               speakerOn: ((_j = trayState.localStatus) == null ? void 0 : _j.speaker_on) || false,
               toggleMic: () => {
-                var _a6;
-                return sendToggleCommand("setMicOn", !((_a6 = trayState.localStatus) == null ? void 0 : _a6.mic_on));
+                var _a5;
+                return sendToggleCommand("setMicOn", !((_a5 = trayState.localStatus) == null ? void 0 : _a5.mic_on));
               },
               toggleCamera: () => {
-                var _a6;
+                var _a5;
                 return sendToggleCommand(
                   "setCameraOn",
-                  !((_a6 = trayState.localStatus) == null ? void 0 : _a6.camera_on)
+                  !((_a5 = trayState.localStatus) == null ? void 0 : _a5.camera_on)
                 );
               },
               toggleSpeaker: () => {
-                var _a6;
+                var _a5;
                 return sendToggleCommand(
                   "setSpeakerOn",
-                  !((_a6 = trayState.localStatus) == null ? void 0 : _a6.speaker_on)
+                  !((_a5 = trayState.localStatus) == null ? void 0 : _a5.speaker_on)
                 );
               },
               joinCall: () => messageMainWindow({ joinCall: true }),
@@ -71653,21 +71694,21 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       ] })
     ] });
     function onMessage(event, parsed) {
-      var _a6;
+      var _a5;
       log10.info("Received", parsed);
       if (parsed.payload.provideState) {
         setTrayState(parsed.payload.provideState.state);
         return;
       }
       if (parsed.payload.sendVideoFrame) {
-        const userId = (_a6 = parsed.payload.sendVideoFrame) == null ? void 0 : _a6.userId;
+        const userId = (_a5 = parsed.payload.sendVideoFrame) == null ? void 0 : _a5.userId;
         if (!userId)
           return;
         return setVideoFrame((videoFrames) => {
-          var _a7;
+          var _a6;
           return __spreadProps(__spreadValues({}, videoFrames), {
             [userId]: {
-              frame: (_a7 = parsed.payload.sendVideoFrame) == null ? void 0 : _a7.base64Image,
+              frame: (_a6 = parsed.payload.sendVideoFrame) == null ? void 0 : _a6.base64Image,
               ts: Date.now()
             }
           });
@@ -71874,7 +71915,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       color: "rgba(245, 250, 255, 0.35)"
     }
   });
-  import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime75.jsx)(ElectronTrayWindow, {}), document.getElementById("root"));
+  import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime76.jsx)(ElectronTrayWindow, {}), document.getElementById("root"));
 })();
 /*! Bundled license information:
 

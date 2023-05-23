@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useScreenShare } from '@daily-co/daily-react-hooks'
 import { CommandType } from 'features/CommandPalette'
 import { useCommandRegistry } from 'features/CommandRegistry'
 import { Button } from 'features/Dock/Button'
@@ -7,15 +6,15 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { logger } from 'lib/log'
 import selectors from 'selectors'
 import { useSelector } from 'state'
+import { useScreenShare } from './use-screenshare'
 
-interface Props {}
+interface Props { }
 
 const log = logger('screenshare/provider')
 
 export function ScreenshareProvider(props: Props) {
   const { useRegister } = useCommandRegistry()
-  const { isSharingScreen, startScreenShare, stopScreenShare } =
-    useScreenShare()
+  const screenshare = useScreenShare()
 
   const [isActive] = useSelector((state) => [
     selectors.presence.isLocalUserActive(state),
@@ -23,62 +22,42 @@ export function ScreenshareProvider(props: Props) {
 
   useHotkeys(
     'meta+p',
-    toggle,
+    screenshare.toggle,
     {
       enableOnFormTags: true,
       preventDefault: true,
     },
-    [isSharingScreen]
+    [screenshare.isSharingScreen]
   )
 
   useEffect(() => {
-    if (!isActive && isSharingScreen) {
-      stop()
+    if (!isActive && screenshare.isSharingScreen) {
+      screenshare.stop()
     }
-  }, [isSharingScreen, isActive, stopScreenShare])
+  }, [screenshare.isSharingScreen, isActive, screenshare.stop])
 
   useRegister(
     (register) => {
-      register('Present your screen', start, {
+      register('Present your screen', screenshare.start, {
         icon: 'projector',
         keywords: ['share', 'start', 'screen'],
         shortcut: ['cmd', 'p'],
         type: CommandType.Misc,
-        when: !isSharingScreen && isActive,
+        when: !screenshare.isSharingScreen && isActive,
       })
 
-      register('Stop presenting screen', stop, {
+      register('Stop presenting screen', screenshare.stop, {
         icon: 'projector',
         keywords: ['share'],
         shortcut: ['cmd', 'p'],
         type: CommandType.Misc,
-        when: isSharingScreen,
+        when: screenshare.isSharingScreen,
       })
     },
-    [isActive, isSharingScreen, startScreenShare, stopScreenShare]
+    [isActive, screenshare.isSharingScreen]
   )
 
   return <></>
-
-  function start() {
-    if (!isActive) return
-
-    log.info('Start presenting screen')
-    startScreenShare()
-  }
-
-  function stop() {
-    log.info('Stop presenting')
-    stopScreenShare()
-  }
-
-  function toggle() {
-    if (isSharingScreen) {
-      stop()
-    } else {
-      start()
-    }
-  }
 }
 
 export function ScreenshareButton(props: {

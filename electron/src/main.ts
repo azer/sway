@@ -1,6 +1,6 @@
 import { createMainWindow, getMainWindow } from "./main-window";
 import { createTrayWindow, getTrayWindow, setTray } from "./tray";
-import { app, BrowserWindow, ipcMain, systemPreferences } from "electron";
+import { app, BrowserWindow, ipcMain, systemPreferences, contextBridge, desktopCapturer, shell } from "electron";
 import { checkForUpdates, setupAutoUpdater } from "./auto-updater";
 import log from "electron-log";
 import { isDev, loadExtensions, swayPath } from "./utils";
@@ -10,6 +10,23 @@ import { messageMainWindow } from "./messaging";
 
 log.initialize({ preload: true });
 setupAutoUpdater();
+
+ipcMain.handle('get-sources', () => {
+  log.info('Handle get-sources call')
+
+  const access = systemPreferences.getMediaAccessStatus('screen')
+  log.info('Access status:', access)
+
+  return new Promise((resolve, reject) => {
+    desktopCapturer
+      .getSources({ types: ['window', 'screen'], thumbnailSize: { width: 800, height: 600 } })
+      .then((sources) => resolve(sources.map(source => ({
+        ...source,
+        thumbnail: source.thumbnail.toDataURL()
+      }))))
+      .catch(reject)
+  })
+});
 
 app.on("ready", () => {
   log.info("Ready");
@@ -111,16 +128,16 @@ ipcMain.on(
       } catch (err) {
         console.error(
           "Can not direct message. Target: " +
-            parsed.target +
-            " Message:" +
-            message
+          parsed.target +
+          " Message:" +
+          message
         );
 
         log.error(
           "Can not direct message. Target: " +
-            parsed.target +
-            " Message:" +
-            message
+          parsed.target +
+          " Message:" +
+          message
         );
       }
     }
@@ -168,6 +185,11 @@ function handleMessages(message: ElectronMessage) {
     return;
   }
 
+  if (message.payload.requestScreenAccess) {
+    requestScreenAccess()
+    return
+  }
+
   if (message.payload.setTrayIcon) {
     setTray(
       message.payload.setTrayIcon.title,
@@ -198,4 +220,16 @@ function requestMicAccess() {
       messageMainWindow({ hasMicAccess });
     })
     .catch((err) => log.error("Error", err));
+}
+
+function requestScreenAccess() {
+  log.info('Request access for media access')
+  shell.openExternal('x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture')
+  /*systemPreferences
+    .askForMediaAccess("screen")
+    .then((hasScreenAccess) => {
+      log.info("Screen access?", hasScreenAccess);
+      messageMainWindow({ hasScreenAccess });
+    })
+    .catch((err) => log.error("Error", err));*/
 }

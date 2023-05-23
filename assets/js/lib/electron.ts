@@ -7,7 +7,7 @@ const log = logger('electron')
 
 const isNode = isRunningInElectron() && process?.type !== 'renderer'
 let ipcRenderer: IpcRenderer | null =
-  typeof window !== 'undefined' ? window.electron?.ipcRenderer : null
+  typeof window !== 'undefined' ? window.electronIpcRenderer : null
 
 interface IpcRenderer {
   send: (chan: string, payload: unknown) => void
@@ -94,8 +94,10 @@ export interface ElectronPayload {
   isMainWindowFocused?: boolean
   requestCameraAccess?: boolean
   requestMicAccess?: boolean
+  requestScreenAccess?: boolean
   hasCameraAccess?: boolean
   hasMicAccess?: boolean
+  hasScreenAccess?: boolean
 }
 
 export const messageMainWindow = createMessageFn(ElectronWindow.Main)

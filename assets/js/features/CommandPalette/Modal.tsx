@@ -337,6 +337,7 @@ const Command = styled('div', {
 const CommandIcon = styled('div', {
   width: '14px',
   height: '14px',
+  flexShrink: '0',
   marginRight: '12px',
   color: '$commandPaletteCommandIconFg',
   variants: {

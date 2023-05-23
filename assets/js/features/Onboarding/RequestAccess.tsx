@@ -37,7 +37,7 @@ interface Props {
 interface Access {
   audio: boolean
   video: boolean
-  screen?: boolean
+  screen: boolean
 }
 
 export function RequestAccess(props: Props) {
@@ -221,6 +221,11 @@ export function RequestAccess(props: Props) {
             enabled={accessStatus.audio}
             onClick={() => requestAudioAccess()}
           />
+          {isElectron ? <Device
+            label="Screen"
+            enabled={accessStatus.screen}
+            onClick={() => requestScreenAccess()}
+          /> : null}
           {error ? (
             <ErrorMessage>
               👾 Oops, something went wrong; {error.message}.<br />
@@ -285,6 +290,13 @@ export function RequestAccess(props: Props) {
     }
   }
 
+  async function requestScreenAccess() {
+    if (isElectron) {
+      messageWindowManager({ requestScreenAccess: true })
+      return
+    }
+  }
+
   function onMessage(event: Event, msg: ElectronMessage) {
     if (msg.payload.hasCameraAccess !== undefined) {
       setAccessStatus((accessStatus) => ({
@@ -297,6 +309,13 @@ export function RequestAccess(props: Props) {
       setAccessStatus((accessStatus) => ({
         ...accessStatus,
         audio: msg.payload.hasMicAccess || false,
+      }))
+    }
+
+    if (msg.payload.hasScreenAccess !== undefined) {
+      setAccessStatus((accessStatus) => ({
+        ...accessStatus,
+        screen: msg.payload.hasScreenAccess || false,
       }))
     }
   }
