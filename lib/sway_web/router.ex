@@ -129,6 +129,7 @@ defmodule SwayWeb.Router do
   scope "/api", SwayWeb do
     pipe_through [:api, :api_auth, :api_superuser]
     resources "/workspaces", WorkspaceController
+    resources "/workspace_members", WorkspaceMemberController
     resources "/invites", InviteController
   end
 

@@ -143,6 +143,10 @@ defmodule Sway.Workspaces do
     Repo.all(Membership)
   end
 
+  def list_memberships_by_workspace(workspace_id) do
+    Repo.all(Membership, workspace_id: workspace_id, is_active: true)
+  end
+
   @doc """
   Gets a single membership.
 
