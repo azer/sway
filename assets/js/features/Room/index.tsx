@@ -59,22 +59,22 @@ export function RoomPage(props: Props) {
 
     const minimizedParticipants =
       screensharing.length > 0
-        ? [...active, ...inactive]
+        ? [...active, ...inactive].filter(userId => !selectors.call.isUserScreensharing(state, userId))
         : active.length > 0
-        ? inactive
-        : undefined
+          ? inactive
+          : undefined
 
     const mainParticipants =
       screensharing.length > 0
         ? screensharing
         : active.length > 0
-        ? active
-        : inactive
+          ? active
+          : inactive
 
     const focusedUserId = screensharing ? screensharing[0] : undefined
     const focusedParticipantId = focusedUserId
       ? selectors.call.getParticipantStatusByUserId(state, focusedUserId)
-          ?.dailyUserId
+        ?.dailyUserId
       : undefined
 
     return [

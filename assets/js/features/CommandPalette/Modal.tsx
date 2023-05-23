@@ -76,7 +76,7 @@ export default function CommandPaletteModal(props: Props) {
             preview={!!props.preview}
             fullScreen={props.fullScreen}
           >
-            <Navigation>
+            <Navigation preview={!!props.preview}>
               <Commands ref={listEl} pin={props.commands.some((c) => c.pin)}>
                 {props.commands.map((cmd, ind) => (
                   <Command
@@ -412,6 +412,13 @@ const Navigation = styled('div', {
   position: 'relative',
   height: '100%',
   overflow: 'hidden',
+  variants: {
+    preview: {
+      true: {
+        height: 'calc(100% - 20px)',
+      }
+    }
+  }
 })
 
 const PreviewSeparator = styled('div', {

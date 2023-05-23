@@ -31,9 +31,10 @@ export function useScreenShare() {
   ])
 
   const commandPalette = useCommandPalette()
+  const isCommandPaletteOpen = commandPalette.isOpen === true && commandPalette.id === dialogId
 
   useEffect(() => {
-    if (!commandPalette.isOpen || commandPalette.id !== dialogId) return
+    if (!isCommandPaletteOpen) return
 
     log.info('Reset command palette commands', capturerSources)
 
@@ -53,11 +54,18 @@ export function useScreenShare() {
     commandPalette.setProps(modalProps())
   }, [commandPalette.isOpen, commandPalette.id, capturerSources])
 
+  useEffect(() => {
+    if (isCommandPaletteOpen && capturerSources.length === 0) {
+      loadDesktopCapturerSources()
+    }
+  }, [isCommandPaletteOpen])
+
   return {
     start,
     stop,
     toggle,
     isSharingScreen,
+    commandPalette: modalProps
   }
 
   function start() {
@@ -69,20 +77,7 @@ export function useScreenShare() {
     if (!isElectron) return startScreenShare()
 
     commandPalette.open([], modalProps())
-
-
-
-    //startScreenShare({})
-    // @ts-ignore
-    window.electronDesktopCapturer.getSources().then((sources) => {
-      // Here you can present the sources to the user and let them choose one.
-      // You can use their names and thumbnails for the user interface.
-      // For the sake of simplicity, let's assume the user picked the first source.
-
-      setCapturerSources(sources as ElectronDesktopCapturerSource[])
-
-      log.info('screenshare sources:', sources)
-    })
+    loadDesktopCapturerSources()
   }
 
   function stop() {
@@ -97,6 +92,16 @@ export function useScreenShare() {
     } else {
       start()
     }
+  }
+
+  function loadDesktopCapturerSources() {
+    log.info('Load desktop capturer sources')
+
+    // @ts-ignore
+    window.electronDesktopCapturer.getSources().then((sources) => {
+      setCapturerSources(sources as ElectronDesktopCapturerSource[])
+      log.info('screenshare sources:', sources)
+    })
   }
 
   function modalProps() {

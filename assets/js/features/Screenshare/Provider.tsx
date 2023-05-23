@@ -7,6 +7,7 @@ import { logger } from 'lib/log'
 import selectors from 'selectors'
 import { useSelector } from 'state'
 import { useScreenShare } from './use-screenshare'
+import { isElectron } from 'lib/electron'
 
 interface Props { }
 
@@ -44,6 +45,7 @@ export function ScreenshareProvider(props: Props) {
         shortcut: ['cmd', 'p'],
         type: CommandType.Misc,
         when: !screenshare.isSharingScreen && isActive,
+        palette: isElectron ? { commands: [], modal: screenshare.commandPalette } : undefined
       })
 
       register('Stop presenting screen', screenshare.stop, {
