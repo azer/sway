@@ -30,7 +30,7 @@ const log = logger('call/active-participant')
 
 export const ActiveParticipant = React.memo(
   UActiveParticipant,
-  function (prev: Props, next: Props) {
+  function(prev: Props, next: Props) {
     return (
       prev.muted === next.muted &&
       prev.participantId === next.participantId &&
@@ -158,7 +158,7 @@ export const ActiveParticipantRoot = styled('div', {
   center: true,
   [`& ${AvatarRoot}`]: {
     marginTop: '-10px',
-    fontSize: '18px',
+    fontSize: 'var(--avatar-font-size)',
     height: '50%',
     round: true,
   },
