@@ -132,7 +132,7 @@ export function Navigation(props: Props) {
             <ButtonIcon>
               <Icon name="book" />
             </ButtonIcon>
-            <ButtonLabel>User Handbook</ButtonLabel>
+            <ButtonLabel>User handbook</ButtonLabel>
           </Button>
           <Button onClick={mail}>
             <ButtonIcon>
