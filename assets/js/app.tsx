@@ -46,6 +46,7 @@ import { ChatProvider } from 'features/Chat/Provider'
 import { FocusProvider } from 'features/Focus/Provider'
 import { PersistGate } from 'reduxjs-toolkit-persist/integration/react'
 import { registerServiceWorker } from 'features/ServiceWorker'
+import { AutoUpdateProvider } from 'features/AutoUpdater'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -92,6 +93,7 @@ ReactDOM.render(
               <EmojiProvider />
               <TapProvider />
               <ChatProvider />
+              <AutoUpdateProvider />
               <Tooltip.Provider>
                 <Routing />
               </Tooltip.Provider>
