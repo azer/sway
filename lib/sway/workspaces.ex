@@ -52,6 +52,10 @@ defmodule Sway.Workspaces do
 
       if workspace do
 	membership = get_membership_by_workspace(user_id, workspace.id)
+
+	IO.puts "---"
+	IO.inspect(membership)
+
 	[workspace, membership]
       else
 	[nil, nil]

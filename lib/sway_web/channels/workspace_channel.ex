@@ -145,7 +145,7 @@ defmodule SwayWeb.WorkspaceChannel do
     memberships = Workspaces.list_memberships_by_workspace(Hashing.decode_workspace(workspace_id))
 
     {:reply,
-     {:ok, Enum.map(memberships, fn membership -> SwayWeb.MembershipView.encode(membership) end)},
+     {:ok, Enum.map(memberships, fn membership -> SwayWeb.WorkspaceMemberView.encode(membership) end)},
      socket}
   end
 

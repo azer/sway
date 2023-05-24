@@ -16,7 +16,7 @@ defmodule SwayWeb.AppController do
        |> render("app_home.html",
       jwt: jwt,
       user: SwayWeb.UserView.encode(conn.assigns.current_user),
-      membership: SwayWeb.MembershipView.encode(membership),
+      membership: SwayWeb.WorkspaceMemberView.encode(membership),
       workspace: SwayWeb.WorkspaceView.encode(workspace),
       status: SwayWeb.StatusView.encode(status),
       rooms: Enum.map(rooms, fn r-> SwayWeb.RoomView.encode(r) end),
@@ -49,7 +49,7 @@ defmodule SwayWeb.AppController do
     |> put_resp_header("Service-Worker-Allowed", "/")
     |> render("app_home.html",
       user: SwayWeb.UserView.encode(conn.assigns.current_user),
-      membership: SwayWeb.MembershipView.encode(membership),
+      membership: SwayWeb.WorkspaceMemberView.encode(membership),
       workspace: SwayWeb.WorkspaceView.encode(workspace),
       status: SwayWeb.StatusView.encode(status),
       rooms: Enum.map(rooms, fn r-> SwayWeb.RoomView.encode(r) end),
@@ -80,7 +80,7 @@ defmodule SwayWeb.AppController do
     |> put_resp_header("Service-Worker-Allowed", "/")
     |> render("app_home.html",
       user: SwayWeb.UserView.encode(conn.assigns.current_user),
-      membership: SwayWeb.MembershipView.encode(membership),
+      membership: SwayWeb.WorkspaceMemberView.encode(membership),
       workspace: SwayWeb.WorkspaceView.encode(workspace),
       status: SwayWeb.StatusView.encode(status),
       rooms: Enum.map(rooms, fn r-> SwayWeb.RoomView.encode(r) end),
