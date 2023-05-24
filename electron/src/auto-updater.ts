@@ -1,12 +1,13 @@
-import { dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
-import { getMainWindow } from "./main-window";
+import { messageMainWindow } from "./messaging";
+
+const frequency = 6001000;
 
 let downloadedUpdate: null | any = null;
 
 export function checkForUpdates() {
-  setInterval(() => autoUpdater.checkForUpdates(), 600000);
+  setInterval(() => autoUpdater.checkForUpdates(), frequency);
 }
 
 export function setupAutoUpdater() {
@@ -22,21 +23,23 @@ export function setupAutoUpdater() {
 
   autoUpdater.checkForUpdatesAndNotify();
 
-  // @ts-ignore
-  autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
-    if (!getMainWindow().isFocused()) return;
+  autoUpdater.on(
+    "update-downloaded",
+    // @ts-ignore
+    (_event: unknown, releaseNotes: string, releaseName: string) => {
+      log.info("Update downloaded", releaseName, releaseNotes);
 
-    const dialogOpts = {
-      type: "info",
-      buttons: ["Restart", "Later"],
-      title: "Application Update",
-      message: process.platform === "win32" ? releaseNotes : releaseName,
-      detail:
-        "A new version has been downloaded. Restart the application to apply the updates.",
-    };
+      messageMainWindow({
+        newReleaseDownloaded: {
+          name: releaseName,
+          notes: releaseNotes,
+        },
+      });
+    }
+  );
+}
 
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-      if (returnValue.response === 0) autoUpdater.quitAndInstall();
-    });
-  });
+export function quitAndInstallNewRelease() {
+  log.info("Quit and install new release");
+  autoUpdater.quitAndInstall();
 }

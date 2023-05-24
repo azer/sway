@@ -79,6 +79,11 @@ export interface ElectronPayload {
     userId: string
     track: MediaTrackState
   }
+  newReleaseDownloaded?: {
+    name: string
+    notes: string
+  }
+  quitAndInstallNewRelease?: true
   requestState?: true
   joinCall?: true
   leaveCall?: true

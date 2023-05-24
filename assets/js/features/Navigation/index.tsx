@@ -8,7 +8,7 @@ import { UserButton } from './UserButton'
 import { useRooms } from 'features/Room/use-rooms'
 import { RoomNavigationProvider } from 'features/Room/Provider'
 import { useInvitePeople } from 'features/Settings/InvitePeople'
-import { isElectron } from 'lib/electron'
+import { isElectron, messageWindowManager } from 'lib/electron'
 import { openUserSidebar } from 'features/Sidebar/slice'
 import { GET } from 'lib/api'
 import {
@@ -35,8 +35,8 @@ export function Navigation(props: Props) {
   const inviteModal = useInvitePeople()
   const presence = usePresence()
 
-  const [workspace, activeRoomIds, focusedRoom, people, prevRoom] = useSelector(
-    (state) => {
+  const [workspace, activeRoomIds, focusedRoom, people, prevRoom, newRelease] =
+    useSelector((state) => {
       const workspace = selectors.workspaces.getSelfWorkspace(state)
 
       return [
@@ -45,9 +45,9 @@ export function Navigation(props: Props) {
         selectors.rooms.getFocusedRoom(state),
         selectors.navigation.listPeople(state),
         selectors.rooms.getPrevRoom(state),
+        selectors.autoUpdater.getNewRelease(state),
       ]
-    }
-  )
+    })
 
   useEffect(() => {
     if (!workspace?.id) return
@@ -125,6 +125,14 @@ export function Navigation(props: Props) {
         </People>
         <Fill />
         <Bottom>
+          {newRelease ? (
+            <Button onClick={downloadUpdate} update>
+              <ButtonIcon>
+                <UpdateIcon />
+              </ButtonIcon>
+              <ButtonLabel>Install update</ButtonLabel>
+            </Button>
+          ) : null}
           <Button
             href={workspace?.handbook_url || DEFAULT_HANDBOOK_URL}
             target="_blank"
@@ -147,6 +155,12 @@ export function Navigation(props: Props) {
 
   function mail() {
     window.location.href = 'mailto:azer@sway.so'
+  }
+
+  function downloadUpdate() {
+    messageWindowManager({
+      quitAndInstallNewRelease: true,
+    })
   }
 }
 
@@ -265,9 +279,12 @@ const Title = styled('div', {
 })
 
 const Bottom = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
   width: 'calc(100% - 20px)',
   marginLeft: '20px',
   marginBottom: '12px',
+  gap: '4px',
 })
 
 const Button = styled('a', {
@@ -285,11 +302,31 @@ const Button = styled('a', {
     background: '$navigationFocusBg',
     color: '$navigationFocusFg',
   },
+  variants: {
+    update: {
+      true: {
+        color: 'rgba(255, 255, 255, 0.75)',
+        background: 'rgba(66, 33, 60, 0.45)',
+        '&:hover': {
+          background: 'rgba(66, 33, 60, 0.65)',
+          color: 'rgba(255, 255, 255, 0.95)',
+        },
+      },
+    },
+  },
 })
 
 const ButtonIcon = styled('div', {
   width: '12px',
   marginTop: '2px',
+  center: true,
+})
+
+const UpdateIcon = styled('div', {
+  width: '8px',
+  height: '8px',
+  round: true,
+  background: 'rgb(196, 83, 100, 1)',
 })
 
 const ButtonLabel = styled('div', {

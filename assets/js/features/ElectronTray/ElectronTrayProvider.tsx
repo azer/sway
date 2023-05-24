@@ -14,6 +14,7 @@ import {
 import { logger } from 'lib/log'
 import { usePresence } from 'features/Presence/use-presence'
 import { SocketContext } from 'features/UserSocket'
+import { setNewRelease } from 'features/AutoUpdater/slice'
 
 interface Props {}
 
@@ -203,6 +204,11 @@ export function ElectronTrayProvider(props: Props) {
 
     if (payload.savePresenceStatus) {
       presence.setMode(payload.savePresenceStatus.status)
+      return
+    }
+
+    if (payload.newReleaseDownloaded) {
+      dispatch(setNewRelease(payload.newReleaseDownloaded))
       return
     }
 

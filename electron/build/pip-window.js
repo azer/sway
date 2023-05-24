@@ -32154,10 +32154,10 @@
             }
           }
           var jsx73 = jsxWithValidationDynamic;
-          var jsxs31 = jsxWithValidationStatic;
+          var jsxs32 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
           exports.jsx = jsx73;
-          exports.jsxs = jsxs31;
+          exports.jsxs = jsxs32;
         })();
       }
     }
@@ -56007,7 +56007,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/components/Icon/Book.tsx
   var import_jsx_runtime54 = __toESM(require_jsx_runtime());
   function BookIcon(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(
       "svg",
       __spreadProps(__spreadValues({
         viewBox: "4 4 16 16",
@@ -56016,16 +56016,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         fill: "none",
         xmlns: "http://www.w3.org/2000/svg"
       }, props), {
-        children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
-          "path",
-          {
-            stroke: "currentColor",
-            strokeLinecap: "round",
-            strokeLinejoin: "round",
-            strokeWidth: 1.5,
-            d: "M19.25 5.75a1 1 0 0 0-1-1H14a2 2 0 0 0-2 2v12.5l.828-.828a4 4 0 0 1 2.829-1.172h2.593a1 1 0 0 0 1-1V5.75ZM4.75 5.75a1 1 0 0 1 1-1H10a2 2 0 0 1 2 2v12.5l-.828-.828a4 4 0 0 0-2.829-1.172H5.75a1 1 0 0 1-1-1V5.75Z"
-          }
-        )
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M19.25 15.25v-9.5a1 1 0 0 0-1-1H6.75a2 2 0 0 0-2 2v10"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M19.25 15.25H6.75a2 2 0 1 0 0 4h12.5v-4Z"
+            }
+          )
+        ]
       })
     );
   }

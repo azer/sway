@@ -14,6 +14,7 @@ import roomMembers from 'features/RoomMembers/slice'
 import chat from 'features/Chat/slice'
 import electronTray from 'features/ElectronTray/slice'
 import onboarding from 'features/Onboarding/slice'
+import autoUpdater from 'features/AutoUpdater/slice'
 
 export default {
   //undotree,
@@ -32,4 +33,5 @@ export default {
   chat,
   electronTray,
   onboarding,
+  autoUpdater,
 }

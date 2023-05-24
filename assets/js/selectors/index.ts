@@ -20,6 +20,7 @@ import * as chat from 'features/Chat/selectors'
 import * as pip from 'features/PictureInPicture/selectors'
 import * as onboarding from 'features/Onboarding/selectors'
 import * as usersocket from 'features/UserSocket/selectors'
+import * as autoUpdater from 'features/AutoUpdater/selectors'
 
 export default {
   session,
@@ -44,4 +45,5 @@ export default {
   pip,
   onboarding,
   usersocket,
+  autoUpdater,
 }

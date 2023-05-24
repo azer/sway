@@ -1,7 +1,20 @@
 import { createMainWindow, getMainWindow } from "./main-window";
 import { createTrayWindow, getTrayWindow, setTray } from "./tray";
-import { app, BrowserWindow, ipcMain, systemPreferences, contextBridge, desktopCapturer, shell } from "electron";
-import { checkForUpdates, setupAutoUpdater } from "./auto-updater";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  systemPreferences,
+  contextBridge,
+  desktopCapturer,
+  shell,
+} from "electron";
+import {
+  checkForUpdates,
+  quitAndInstall,
+  quitAndInstallNewRelease,
+  setupAutoUpdater,
+} from "./auto-updater";
 import log from "electron-log";
 import { isDev, loadExtensions, swayPath } from "./utils";
 import { ElectronMessage, ElectronWindow } from "../../assets/js/lib/electron";
@@ -11,21 +24,28 @@ import { messageMainWindow } from "./messaging";
 log.initialize({ preload: true });
 setupAutoUpdater();
 
-ipcMain.handle('get-sources', () => {
-  log.info('Handle get-sources call')
+ipcMain.handle("get-sources", () => {
+  log.info("Handle get-sources call");
 
-  const access = systemPreferences.getMediaAccessStatus('screen')
-  log.info('Access status:', access)
+  const access = systemPreferences.getMediaAccessStatus("screen");
+  log.info("Access status:", access);
 
   return new Promise((resolve, reject) => {
     desktopCapturer
-      .getSources({ types: ['window', 'screen'], thumbnailSize: { width: 800, height: 600 } })
-      .then((sources) => resolve(sources.map(source => ({
-        ...source,
-        thumbnail: source.thumbnail.toDataURL()
-      }))))
-      .catch(reject)
-  })
+      .getSources({
+        types: ["window", "screen"],
+        thumbnailSize: { width: 800, height: 600 },
+      })
+      .then((sources) =>
+        resolve(
+          sources.map((source) => ({
+            ...source,
+            thumbnail: source.thumbnail.toDataURL(),
+          }))
+        )
+      )
+      .catch(reject);
+  });
 });
 
 app.on("ready", () => {
@@ -128,16 +148,16 @@ ipcMain.on(
       } catch (err) {
         console.error(
           "Can not direct message. Target: " +
-          parsed.target +
-          " Message:" +
-          message
+            parsed.target +
+            " Message:" +
+            message
         );
 
         log.error(
           "Can not direct message. Target: " +
-          parsed.target +
-          " Message:" +
-          message
+            parsed.target +
+            " Message:" +
+            message
         );
       }
     }
@@ -186,8 +206,8 @@ function handleMessages(message: ElectronMessage) {
   }
 
   if (message.payload.requestScreenAccess) {
-    requestScreenAccess()
-    return
+    requestScreenAccess();
+    return;
   }
 
   if (message.payload.setTrayIcon) {
@@ -196,6 +216,11 @@ function handleMessages(message: ElectronMessage) {
       message.payload.setTrayIcon.tooltip,
       message.payload.setTrayIcon.image
     );
+    return;
+  }
+
+  if (message.payload.quitAndInstallNewRelease) {
+    quitAndInstallNewRelease();
     return;
   }
 
@@ -223,8 +248,10 @@ function requestMicAccess() {
 }
 
 function requestScreenAccess() {
-  log.info('Request access for media access')
-  shell.openExternal('x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture')
+  log.info("Request access for media access");
+  shell.openExternal(
+    "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"
+  );
   /*systemPreferences
     .askForMediaAccess("screen")
     .then((hasScreenAccess) => {
