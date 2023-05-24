@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import selectors from 'selectors'
 import DailyIframe, {
   DailyCall,
@@ -34,6 +34,7 @@ const dlog = logger('daily')
 export function CallProvider(props: Props) {
   const dispatch = useDispatch()
   const [callObject, setCallObject] = useState<DailyCall>()
+  const retryTimer = useRef<NodeJS.Timer | null>()
 
   const [workspace, localUser, shouldReconnect] = useSelector((state) => [
     selectors.workspaces.getSelfWorkspace(state),
@@ -42,11 +43,41 @@ export function CallProvider(props: Props) {
   ])
 
   useEffect(() => {
-    if (callObject && localUser && navigator.onLine && shouldReconnect) {
+    if (!callObject || !localUser || !workspace || !shouldReconnect) {
       log.info('Reconnecting')
-      joinDailyCall(callObject, localUser)
+      return
     }
-  }, [callObject, localUser, shouldReconnect, navigator.onLine])
+
+    let delay = 100
+
+    if (retryTimer.current !== null) {
+      clearTimeout(retryTimer.current)
+      retryTimer.current = null
+      delay = 3000
+    }
+
+    retryTimer.current = setTimeout(() => {
+      retryTimer.current = null
+
+      log.info('Retry...')
+
+      dispatch(
+        setDailyCallConnectionStatus({
+          userId: localUser.id,
+          state: ConnectionState.Retry,
+        })
+      )
+
+      joinDailyCall(callObject, localUser, workspace)
+    }, delay)
+
+    return () => {
+      if (retryTimer.current !== null) {
+        clearTimeout(retryTimer.current)
+        retryTimer.current = null
+      }
+    }
+  }, [callObject, !!localUser, !!workspace, shouldReconnect])
 
   useEffect(() => {
     if (!localUser) return
