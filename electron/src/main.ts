@@ -8,11 +8,7 @@ import {
   desktopCapturer,
   shell,
 } from "electron";
-import {
-  checkForUpdates,
-  quitAndInstallNewRelease,
-  setupAutoUpdater,
-} from "./auto-updater";
+import { checkForUpdates, quitAndInstallNewRelease } from "./auto-updater";
 import log from "electron-log";
 import { isDev, loadExtensions, swayPath } from "./utils";
 import { ElectronMessage, ElectronWindow } from "../../assets/js/lib/electron";
@@ -20,7 +16,6 @@ import { createPipWindow, getPipWindow, getPipWindowPosition } from "./pip";
 import { messageMainWindow } from "./messaging";
 
 log.initialize({ preload: true });
-setupAutoUpdater();
 
 ipcMain.handle("get-sources", () => {
   log.info("Handle get-sources call");

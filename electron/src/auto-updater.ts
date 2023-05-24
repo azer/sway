@@ -7,6 +7,7 @@ const HOUR = 60 * 60 * 1000;
 let downloadedUpdate: null | any = null;
 
 export function checkForUpdates() {
+  setupAutoUpdater();
   setInterval(() => autoUpdater.checkForUpdates(), HOUR);
 }
 
@@ -21,18 +22,28 @@ export function setupAutoUpdater() {
     url: "http://downloads.sway.so/releases/",
   });
 
-  autoUpdater.checkForUpdatesAndNotify();
+  // autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on("checking-for-update", () => {
+    log.info("Checking for updates...");
+    messageMainWindow({ checkingForUpdate: true });
+  });
+
+  autoUpdater.on("update-available", () => {
+    log.info("Checking for updates...");
+    messageMainWindow({ updateAvailable: true });
+  });
 
   autoUpdater.on(
     "update-downloaded",
     // @ts-ignore
-    (_event: unknown, releaseNotes: string, releaseName: string) => {
+    (event: unknown, releaseNotes: string, releaseName: string) => {
       log.info("Update downloaded", releaseName, releaseNotes);
 
       messageMainWindow({
         newReleaseDownloaded: {
-          name: releaseName,
-          notes: releaseNotes,
+          name: releaseName || "",
+          notes: releaseNotes || "",
         },
       });
     }

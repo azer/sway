@@ -103,6 +103,8 @@ export interface ElectronPayload {
   hasCameraAccess?: boolean
   hasMicAccess?: boolean
   hasScreenAccess?: boolean
+  checkingForUpdate?: boolean
+  updateAvailable?: boolean
 }
 
 export const messageMainWindow = createMessageFn(ElectronWindow.Main)
