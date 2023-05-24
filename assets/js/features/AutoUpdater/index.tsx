@@ -3,6 +3,7 @@ import selectors from 'selectors'
 import { useSelector } from 'state'
 import { ConnectionState } from 'features/Dock/slice'
 import { logger } from 'lib/log'
+import { isElectron } from 'lib/electron'
 
 interface Props {}
 
@@ -25,6 +26,7 @@ export function AutoUpdateProvider(props: Props) {
   )
 
   const shouldRefreshWindow =
+    isElectron &&
     !hasWindowFocus &&
     !isActive &&
     isOnline &&
