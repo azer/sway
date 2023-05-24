@@ -19,5 +19,6 @@ defmodule Sway.Workspaces.Membership do
     membership
     |> cast(attrs, [:is_admin, :workspace_id, :user_id, :is_active])
     |> validate_required([:is_admin, :workspace_id, :user_id])
+    |> unique_constraint(:user_workspace, name: :memberships_user_id_workspace_id_index)
   end
 end
