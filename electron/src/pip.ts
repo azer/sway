@@ -3,6 +3,7 @@ import log from "electron-log";
 import { getMainWindow } from "./main-window";
 import { messageMainWindow } from "./messaging";
 import { htmlPath, isDev } from "./utils";
+import { join as joinPath } from "path";
 
 const size = {
   width: 175,
@@ -35,8 +36,9 @@ export function createPipWindow(position: { x: number; y: number }) {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
+      preload: joinPath(__dirname, "preload.js"),
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
       // Prevents renderer process code from not running when window is
       // hidden
       backgroundThrottling: false,

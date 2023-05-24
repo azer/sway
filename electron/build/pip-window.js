@@ -1447,11 +1447,11 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useReducer(reducer, initialArg, init);
           }
-          function useRef4(initialValue) {
+          function useRef5(initialValue) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect6(create, deps) {
+          function useEffect7(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -2233,14 +2233,14 @@
           exports.useContext = useContext;
           exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect6;
+          exports.useEffect = useEffect7;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
           exports.useLayoutEffect = useLayoutEffect2;
           exports.useMemo = useMemo5;
           exports.useReducer = useReducer;
-          exports.useRef = useRef4;
+          exports.useRef = useRef5;
           exports.useState = useState5;
           exports.useSyncExternalStore = useSyncExternalStore;
           exports.useTransition = useTransition;
@@ -10150,9 +10150,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React7 = require_react();
+          var React8 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React7.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React8.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -10201,7 +10201,7 @@
           var HostPortal = 4;
           var HostComponent = 5;
           var HostText = 6;
-          var Fragment4 = 7;
+          var Fragment5 = 7;
           var Mode = 8;
           var ContextConsumer = 9;
           var ContextProvider = 10;
@@ -11357,7 +11357,7 @@
                 return "DehydratedFragment";
               case ForwardRef:
                 return getWrappedName$1(type, type.render, "ForwardRef");
-              case Fragment4:
+              case Fragment5:
                 return "Fragment";
               case HostComponent:
                 return type;
@@ -11757,7 +11757,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React7.Children.forEach(props.children, function(child) {
+                  React8.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -20204,7 +20204,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React7.Component().refs;
+          var emptyRefsObject = new React8.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -21028,7 +21028,7 @@
               }
             }
             function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-              if (current2 === null || current2.tag !== Fragment4) {
+              if (current2 === null || current2.tag !== Fragment5) {
                 var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
                 created.return = returnFiber;
                 return created;
@@ -21431,7 +21431,7 @@
                 if (child.key === key) {
                   var elementType = element.type;
                   if (elementType === REACT_FRAGMENT_TYPE) {
-                    if (child.tag === Fragment4) {
+                    if (child.tag === Fragment5) {
                       deleteRemainingChildren(returnFiber, child.sibling);
                       var existing = useFiber(child, element.props.children);
                       existing.return = returnFiber;
@@ -25606,7 +25606,7 @@
                 var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
                 return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
               }
-              case Fragment4:
+              case Fragment5:
                 return updateFragment(current2, workInProgress2, renderLanes2);
               case Mode:
                 return updateMode(current2, workInProgress2, renderLanes2);
@@ -25879,7 +25879,7 @@
               case SimpleMemoComponent:
               case FunctionComponent:
               case ForwardRef:
-              case Fragment4:
+              case Fragment5:
               case Mode:
               case Profiler:
               case ContextConsumer:
@@ -30138,7 +30138,7 @@
             return fiber;
           }
           function createFiberFromFragment(elements, mode2, lanes, key) {
-            var fiber = createFiber(Fragment4, elements, key, mode2);
+            var fiber = createFiber(Fragment5, elements, key, mode2);
             fiber.lanes = lanes;
             return fiber;
           }
@@ -31292,7 +31292,7 @@
       if (process.env.NODE_ENV !== "production") {
         (function() {
           "use strict";
-          var React7 = require_react();
+          var React8 = require_react();
           var REACT_ELEMENT_TYPE = Symbol.for("react.element");
           var REACT_PORTAL_TYPE = Symbol.for("react.portal");
           var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -31318,7 +31318,7 @@
             }
             return null;
           }
-          var ReactSharedInternals = React7.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React8.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -32153,11 +32153,11 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx69 = jsxWithValidationDynamic;
-          var jsxs30 = jsxWithValidationStatic;
+          var jsx73 = jsxWithValidationDynamic;
+          var jsxs31 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx69;
-          exports.jsxs = jsxs30;
+          exports.jsx = jsx73;
+          exports.jsxs = jsxs31;
         })();
       }
     }
@@ -32251,7 +32251,7 @@
       function $dec3cc0142d4f286$export$fd42f52fd3ae1109(rootComponentName, defaultContext) {
         const Context = /* @__PURE__ */ $4O1Ne$react.createContext(defaultContext);
         function Provider(props) {
-          const _a2 = props, { children } = _a2, context = __objRest(_a2, ["children"]);
+          const _a = props, { children } = _a, context = __objRest(_a, ["children"]);
           const value = $4O1Ne$react.useMemo(
             () => context,
             Object.values(context)
@@ -32284,7 +32284,7 @@
             defaultContext
           ];
           function Provider(props) {
-            const _a2 = props, { scope, children } = _a2, context = __objRest(_a2, ["scope", "children"]);
+            const _a = props, { scope, children } = _a, context = __objRest(_a, ["scope", "children"]);
             const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
             const value = $4O1Ne$react.useMemo(
               () => context,
@@ -32383,7 +32383,7 @@
       $parcel$export(module.exports, "Slottable", () => $82dc8d030dec7549$export$d9f1ccf0bdb05d45);
       $parcel$export(module.exports, "Root", () => $82dc8d030dec7549$export$be92b6f5f03c0fe9);
       var $82dc8d030dec7549$export$8c6ed5c666ac1360 = /* @__PURE__ */ $dAvBt$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { children } = _a2, slotProps = __objRest(_a2, ["children"]);
+        const _a = props, { children } = _a, slotProps = __objRest(_a, ["children"]);
         const childrenArray = $dAvBt$react.Children.toArray(children);
         const slottable = childrenArray.find($82dc8d030dec7549$var$isSlottable);
         if (slottable) {
@@ -32406,7 +32406,7 @@
       });
       $82dc8d030dec7549$export$8c6ed5c666ac1360.displayName = "Slot";
       var $82dc8d030dec7549$var$SlotClone = /* @__PURE__ */ $dAvBt$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { children } = _a2, slotProps = __objRest(_a2, ["children"]);
+        const _a = props, { children } = _a, slotProps = __objRest(_a, ["children"]);
         if (/* @__PURE__ */ $dAvBt$react.isValidElement(children))
           return /* @__PURE__ */ $dAvBt$react.cloneElement(children, __spreadProps(__spreadValues({}, $82dc8d030dec7549$var$mergeProps(slotProps, children.props)), {
             ref: $dAvBt$radixuireactcomposerefs.composeRefs(forwardedRef, children.ref)
@@ -32482,7 +32482,7 @@
       ];
       var $c3def6332c2749a6$export$250ffa63cdc0d034 = $c3def6332c2749a6$var$NODES.reduce((primitive, node) => {
         const Node = /* @__PURE__ */ $iMixA$react.forwardRef((props, forwardedRef) => {
-          const _a2 = props, { asChild } = _a2, primitiveProps = __objRest(_a2, ["asChild"]);
+          const _a = props, { asChild } = _a, primitiveProps = __objRest(_a, ["asChild"]);
           const Comp = asChild ? $iMixA$radixuireactslot.Slot : node;
           $iMixA$react.useEffect(() => {
             window[Symbol.for("radix-ui")] = true;
@@ -32587,7 +32587,7 @@
       });
       var $d715e0554b679f1f$export$177fb62ff3ec1f22 = /* @__PURE__ */ $g2vWm$react.forwardRef((props, forwardedRef) => {
         var _node$ownerDocument;
-        const _a2 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a2, layerProps = __objRest(_a2, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
+        const _a = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a, layerProps = __objRest(_a, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
         const context = $g2vWm$react.useContext($d715e0554b679f1f$var$DismissableLayerContext);
         const [node1, setNode] = $g2vWm$react.useState(null);
         const ownerDocument = (_node$ownerDocument = node1 === null || node1 === void 0 ? void 0 : node1.ownerDocument) !== null && _node$ownerDocument !== void 0 ? _node$ownerDocument : globalThis === null || globalThis === void 0 ? void 0 : globalThis.document;
@@ -33263,11 +33263,11 @@
                 platform: platform2,
                 elements
               } = middlewareArguments;
-              const _a3 = options, {
+              const _a2 = options, {
                 alignment = null,
                 allowedPlacements = allPlacements,
                 autoAlignment = true
-              } = _a3, detectOverflowOptions = __objRest(_a3, [
+              } = _a2, detectOverflowOptions = __objRest(_a2, [
                 "alignment",
                 "allowedPlacements",
                 "autoAlignment"
@@ -33351,13 +33351,13 @@
                 platform: platform2,
                 elements
               } = middlewareArguments;
-              const _a3 = options, {
+              const _a2 = options, {
                 mainAxis: checkMainAxis = true,
                 crossAxis: checkCrossAxis = true,
                 fallbackPlacements: specifiedFallbackPlacements,
                 fallbackStrategy = "bestFit",
                 flipAlignment = true
-              } = _a3, detectOverflowOptions = __objRest(_a3, [
+              } = _a2, detectOverflowOptions = __objRest(_a2, [
                 "mainAxis",
                 "crossAxis",
                 "fallbackPlacements",
@@ -33428,9 +33428,9 @@
         };
       };
       hide = function(_temp) {
-        let _a2 = _temp === void 0 ? {} : _temp, {
+        let _a = _temp === void 0 ? {} : _temp, {
           strategy = "referenceHidden"
-        } = _a2, detectOverflowOptions = __objRest(_a2, [
+        } = _a, detectOverflowOptions = __objRest(_a, [
           "strategy"
         ]);
         return {
@@ -33510,7 +33510,7 @@
                 y: y2,
                 placement
               } = middlewareArguments;
-              const _a3 = options, {
+              const _a2 = options, {
                 mainAxis: checkMainAxis = true,
                 crossAxis: checkCrossAxis = false,
                 limiter = {
@@ -33525,7 +33525,7 @@
                     };
                   }
                 }
-              } = _a3, detectOverflowOptions = __objRest(_a3, [
+              } = _a2, detectOverflowOptions = __objRest(_a2, [
                 "mainAxis",
                 "crossAxis",
                 "limiter"
@@ -33648,9 +33648,9 @@
                 platform: platform2,
                 elements
               } = middlewareArguments;
-              const _a3 = options, {
+              const _a2 = options, {
                 apply
-              } = _a3, detectOverflowOptions = __objRest(_a3, [
+              } = _a2, detectOverflowOptions = __objRest(_a2, [
                 "apply"
               ]);
               const overflow = yield detectOverflow(middlewareArguments, detectOverflowOptions);
@@ -34493,7 +34493,7 @@
       $parcel$export(module.exports, "Arrow", () => $09f4ad68a9251bc3$export$21b07c8f274aebd5);
       $parcel$export(module.exports, "Root", () => $09f4ad68a9251bc3$export$be92b6f5f03c0fe9);
       var $09f4ad68a9251bc3$export$21b07c8f274aebd5 = /* @__PURE__ */ $eQpDd$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { children, width = 10, height = 5 } = _a2, arrowProps = __objRest(_a2, ["children", "width", "height"]);
+        const _a = props, { children, width = 10, height = 5 } = _a, arrowProps = __objRest(_a, ["children", "width", "height"]);
         return /* @__PURE__ */ $eQpDd$react.createElement($eQpDd$radixuireactprimitive.Primitive.svg, $parcel$interopDefault($eQpDd$babelruntimehelpersextends)({}, arrowProps, {
           ref: forwardedRef,
           width,
@@ -34616,7 +34616,7 @@
       };
       var $34310caa050a8d63$var$ANCHOR_NAME = "PopperAnchor";
       var $34310caa050a8d63$export$ecd4e1ccab6ed6d = /* @__PURE__ */ $50Iv9$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopePopper, virtualRef } = _a2, anchorProps = __objRest(_a2, ["__scopePopper", "virtualRef"]);
+        const _a = props, { __scopePopper, virtualRef } = _a, anchorProps = __objRest(_a, ["__scopePopper", "virtualRef"]);
         const context = $34310caa050a8d63$var$usePopperContext($34310caa050a8d63$var$ANCHOR_NAME, __scopePopper);
         const ref = $50Iv9$react.useRef(null);
         const composedRefs = $50Iv9$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
@@ -34635,7 +34635,7 @@
       });
       var $34310caa050a8d63$export$bc4ae5855d3c4fc = /* @__PURE__ */ $50Iv9$react.forwardRef((props, forwardedRef) => {
         var _arrowSize$width, _arrowSize$height, _middlewareData$arrow, _middlewareData$arrow2, _middlewareData$arrow3, _middlewareData$hide, _middlewareData$trans, _middlewareData$trans2;
-        const _a2 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a2, contentProps = __objRest(_a2, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
+        const _a = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a, contentProps = __objRest(_a, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
         const context = $34310caa050a8d63$var$usePopperContext($34310caa050a8d63$var$CONTENT_NAME, __scopePopper);
         const [content, setContent] = $50Iv9$react.useState(null);
         const composedRefs = $50Iv9$radixuireactcomposerefs.useComposedRefs(
@@ -34800,7 +34800,7 @@
         left: "right"
       };
       var $34310caa050a8d63$export$79d62cd4e10a3fd0 = /* @__PURE__ */ $50Iv9$react.forwardRef(function $34310caa050a8d63$export$79d62cd4e10a3fd02(props, forwardedRef) {
-        const _a2 = props, { __scopePopper } = _a2, arrowProps = __objRest(_a2, ["__scopePopper"]);
+        const _a = props, { __scopePopper } = _a, arrowProps = __objRest(_a, ["__scopePopper"]);
         const contentContext = $34310caa050a8d63$var$useContentContext($34310caa050a8d63$var$ARROW_NAME, __scopePopper);
         const baseSide = $34310caa050a8d63$var$OPPOSITE_SIDE[contentContext.placedSide];
         return (
@@ -34925,7 +34925,7 @@
       $parcel$export(module.exports, "Root", () => $913a70b877676c16$export$be92b6f5f03c0fe9);
       var $913a70b877676c16$export$602eac185826482c = /* @__PURE__ */ $amzHf$react.forwardRef((props, forwardedRef) => {
         var _globalThis$document;
-        const _a2 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a2, portalProps = __objRest(_a2, ["container"]);
+        const _a = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a, portalProps = __objRest(_a, ["container"]);
         return container ? /* @__PURE__ */ $parcel$interopDefault($amzHf$reactdom).createPortal(/* @__PURE__ */ $amzHf$react.createElement($amzHf$radixuireactprimitive.Primitive.div, $parcel$interopDefault($amzHf$babelruntimehelpersextends)({}, portalProps, {
           ref: forwardedRef
         })), container) : null;
@@ -35317,7 +35317,7 @@
       };
       var $c34afbc43c90cc6f$var$TRIGGER_NAME = "TooltipTrigger";
       var $c34afbc43c90cc6f$export$8c610744efcf8a1d = /* @__PURE__ */ $iVrL9$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeTooltip } = _a2, triggerProps = __objRest(_a2, ["__scopeTooltip"]);
+        const _a = props, { __scopeTooltip } = _a, triggerProps = __objRest(_a, ["__scopeTooltip"]);
         const context = $c34afbc43c90cc6f$var$useTooltipContext($c34afbc43c90cc6f$var$TRIGGER_NAME, __scopeTooltip);
         const providerContext = $c34afbc43c90cc6f$var$useTooltipProviderContext($c34afbc43c90cc6f$var$TRIGGER_NAME, __scopeTooltip);
         const popperScope = $c34afbc43c90cc6f$var$usePopperScope(__scopeTooltip);
@@ -35389,7 +35389,7 @@
       var $c34afbc43c90cc6f$var$CONTENT_NAME = "TooltipContent";
       var $c34afbc43c90cc6f$export$e9003e2be37ec060 = /* @__PURE__ */ $iVrL9$react.forwardRef((props, forwardedRef) => {
         const portalContext = $c34afbc43c90cc6f$var$usePortalContext($c34afbc43c90cc6f$var$CONTENT_NAME, props.__scopeTooltip);
-        const _a2 = props, { forceMount = portalContext.forceMount, side = "top" } = _a2, contentProps = __objRest(_a2, ["forceMount", "side"]);
+        const _a = props, { forceMount = portalContext.forceMount, side = "top" } = _a, contentProps = __objRest(_a, ["forceMount", "side"]);
         const context = $c34afbc43c90cc6f$var$useTooltipContext($c34afbc43c90cc6f$var$CONTENT_NAME, props.__scopeTooltip);
         return /* @__PURE__ */ $iVrL9$react.createElement($iVrL9$radixuireactpresence.Presence, {
           present: forceMount || context.open
@@ -35501,7 +35501,7 @@
         isInside: false
       });
       var $c34afbc43c90cc6f$var$TooltipContentImpl = /* @__PURE__ */ $iVrL9$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeTooltip, children, "aria-label": ariaLabel, onEscapeKeyDown, onPointerDownOutside } = _a2, contentProps = __objRest(_a2, ["__scopeTooltip", "children", "aria-label", "onEscapeKeyDown", "onPointerDownOutside"]);
+        const _a = props, { __scopeTooltip, children, "aria-label": ariaLabel, onEscapeKeyDown, onPointerDownOutside } = _a, contentProps = __objRest(_a, ["__scopeTooltip", "children", "aria-label", "onEscapeKeyDown", "onPointerDownOutside"]);
         const context = $c34afbc43c90cc6f$var$useTooltipContext($c34afbc43c90cc6f$var$CONTENT_NAME, __scopeTooltip);
         const popperScope = $c34afbc43c90cc6f$var$usePopperScope(__scopeTooltip);
         const { onClose } = context;
@@ -35554,7 +35554,7 @@
       });
       var $c34afbc43c90cc6f$var$ARROW_NAME = "TooltipArrow";
       var $c34afbc43c90cc6f$export$c27ee0ad710f7559 = /* @__PURE__ */ $iVrL9$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeTooltip } = _a2, arrowProps = __objRest(_a2, ["__scopeTooltip"]);
+        const _a = props, { __scopeTooltip } = _a, arrowProps = __objRest(_a, ["__scopeTooltip"]);
         const popperScope = $c34afbc43c90cc6f$var$usePopperScope(__scopeTooltip);
         const visuallyHiddenContentContext = $c34afbc43c90cc6f$var$useVisuallyHiddenContentContext($c34afbc43c90cc6f$var$ARROW_NAME, __scopeTooltip);
         return visuallyHiddenContentContext.isInside ? null : /* @__PURE__ */ $iVrL9$react.createElement($iVrL9$radixuireactpopper.Arrow, $parcel$interopDefault($iVrL9$babelruntimehelpersextends)({}, popperScope, arrowProps, {
@@ -35701,7 +35701,7 @@
       var [$94437fed6c1d6d8a$var$createAvatarContext, $94437fed6c1d6d8a$export$90370d16b488820f] = $6FDFN$radixuireactcontext.createContextScope($94437fed6c1d6d8a$var$AVATAR_NAME);
       var [$94437fed6c1d6d8a$var$AvatarProvider, $94437fed6c1d6d8a$var$useAvatarContext] = $94437fed6c1d6d8a$var$createAvatarContext($94437fed6c1d6d8a$var$AVATAR_NAME);
       var $94437fed6c1d6d8a$export$e2255cf6045e8d47 = /* @__PURE__ */ $6FDFN$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeAvatar } = _a2, avatarProps = __objRest(_a2, ["__scopeAvatar"]);
+        const _a = props, { __scopeAvatar } = _a, avatarProps = __objRest(_a, ["__scopeAvatar"]);
         const [imageLoadingStatus, setImageLoadingStatus] = $6FDFN$react.useState("idle");
         return /* @__PURE__ */ $6FDFN$react.createElement($94437fed6c1d6d8a$var$AvatarProvider, {
           scope: __scopeAvatar,
@@ -35713,8 +35713,8 @@
       });
       var $94437fed6c1d6d8a$var$IMAGE_NAME = "AvatarImage";
       var $94437fed6c1d6d8a$export$2cd8ae1985206fe8 = /* @__PURE__ */ $6FDFN$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeAvatar, src, onLoadingStatusChange = () => {
-        } } = _a2, imageProps = __objRest(_a2, ["__scopeAvatar", "src", "onLoadingStatusChange"]);
+        const _a = props, { __scopeAvatar, src, onLoadingStatusChange = () => {
+        } } = _a, imageProps = __objRest(_a, ["__scopeAvatar", "src", "onLoadingStatusChange"]);
         const context = $94437fed6c1d6d8a$var$useAvatarContext($94437fed6c1d6d8a$var$IMAGE_NAME, __scopeAvatar);
         const imageLoadingStatus = $94437fed6c1d6d8a$var$useImageLoadingStatus(src);
         const handleLoadingStatusChange = $6FDFN$radixuireactusecallbackref.useCallbackRef((status) => {
@@ -35735,7 +35735,7 @@
       });
       var $94437fed6c1d6d8a$var$FALLBACK_NAME = "AvatarFallback";
       var $94437fed6c1d6d8a$export$69fffb6a9571fbfe = /* @__PURE__ */ $6FDFN$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeAvatar, delayMs } = _a2, fallbackProps = __objRest(_a2, ["__scopeAvatar", "delayMs"]);
+        const _a = props, { __scopeAvatar, delayMs } = _a, fallbackProps = __objRest(_a, ["__scopeAvatar", "delayMs"]);
         const context = $94437fed6c1d6d8a$var$useAvatarContext($94437fed6c1d6d8a$var$FALLBACK_NAME, __scopeAvatar);
         const [canRender, setCanRender] = $6FDFN$react.useState(delayMs === void 0);
         $6FDFN$react.useEffect(() => {
@@ -35821,7 +35821,7 @@
       ];
       var $c3def6332c2749a6$export$250ffa63cdc0d034 = $c3def6332c2749a6$var$NODES.reduce((primitive, node) => {
         const Node = /* @__PURE__ */ $iMixA$react.forwardRef((props, forwardedRef) => {
-          const _a2 = props, { asChild } = _a2, primitiveProps = __objRest(_a2, ["asChild"]);
+          const _a = props, { asChild } = _a, primitiveProps = __objRest(_a, ["asChild"]);
           const Comp = asChild ? $iMixA$radixuireactslot.Slot : node;
           $iMixA$react.useEffect(() => {
             window[Symbol.for("radix-ui")] = true;
@@ -35896,7 +35896,7 @@
         const ITEM_SLOT_NAME = name + "CollectionItemSlot";
         const ITEM_DATA_ATTR = "data-radix-collection-item";
         const CollectionItemSlot = /* @__PURE__ */ $parcel$interopDefault($hnlpS$react).forwardRef((props, forwardedRef) => {
-          const _a2 = props, { scope, children } = _a2, itemData = __objRest(_a2, ["scope", "children"]);
+          const _a = props, { scope, children } = _a, itemData = __objRest(_a, ["scope", "children"]);
           const ref = $parcel$interopDefault($hnlpS$react).useRef(null);
           const composedRefs = $hnlpS$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
           const context = useCollectionContext(ITEM_SLOT_NAME, scope);
@@ -36001,7 +36001,7 @@
       });
       var $d715e0554b679f1f$export$177fb62ff3ec1f22 = /* @__PURE__ */ $g2vWm$react.forwardRef((props, forwardedRef) => {
         var _node$ownerDocument;
-        const _a2 = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a2, layerProps = __objRest(_a2, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
+        const _a = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a, layerProps = __objRest(_a, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
         const context = $g2vWm$react.useContext($d715e0554b679f1f$var$DismissableLayerContext);
         const [node1, setNode] = $g2vWm$react.useState(null);
         const ownerDocument = (_node$ownerDocument = node1 === null || node1 === void 0 ? void 0 : node1.ownerDocument) !== null && _node$ownerDocument !== void 0 ? _node$ownerDocument : globalThis === null || globalThis === void 0 ? void 0 : globalThis.document;
@@ -36284,7 +36284,7 @@
         cancelable: true
       };
       var $2bc01e66e04aa9ed$export$20e40289641fbbb6 = /* @__PURE__ */ $buum9$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a2, scopeProps = __objRest(_a2, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
+        const _a = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a, scopeProps = __objRest(_a, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
         const [container1, setContainer] = $buum9$react.useState(null);
         const onMountAutoFocus = $buum9$radixuireactusecallbackref.useCallbackRef(onMountAutoFocusProp);
         const onUnmountAutoFocus = $buum9$radixuireactusecallbackref.useCallbackRef(onUnmountAutoFocusProp);
@@ -36532,7 +36532,7 @@
       $parcel$export(module.exports, "Arrow", () => $09f4ad68a9251bc3$export$21b07c8f274aebd5);
       $parcel$export(module.exports, "Root", () => $09f4ad68a9251bc3$export$be92b6f5f03c0fe9);
       var $09f4ad68a9251bc3$export$21b07c8f274aebd5 = /* @__PURE__ */ $eQpDd$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { children, width = 10, height = 5 } = _a2, arrowProps = __objRest(_a2, ["children", "width", "height"]);
+        const _a = props, { children, width = 10, height = 5 } = _a, arrowProps = __objRest(_a, ["children", "width", "height"]);
         return /* @__PURE__ */ $eQpDd$react.createElement($eQpDd$radixuireactprimitive.Primitive.svg, $parcel$interopDefault($eQpDd$babelruntimehelpersextends)({}, arrowProps, {
           ref: forwardedRef,
           width,
@@ -36602,7 +36602,7 @@
       };
       var $34310caa050a8d63$var$ANCHOR_NAME = "PopperAnchor";
       var $34310caa050a8d63$export$ecd4e1ccab6ed6d = /* @__PURE__ */ $50Iv9$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopePopper, virtualRef } = _a2, anchorProps = __objRest(_a2, ["__scopePopper", "virtualRef"]);
+        const _a = props, { __scopePopper, virtualRef } = _a, anchorProps = __objRest(_a, ["__scopePopper", "virtualRef"]);
         const context = $34310caa050a8d63$var$usePopperContext($34310caa050a8d63$var$ANCHOR_NAME, __scopePopper);
         const ref = $50Iv9$react.useRef(null);
         const composedRefs = $50Iv9$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
@@ -36621,7 +36621,7 @@
       });
       var $34310caa050a8d63$export$bc4ae5855d3c4fc = /* @__PURE__ */ $50Iv9$react.forwardRef((props, forwardedRef) => {
         var _arrowSize$width, _arrowSize$height, _middlewareData$arrow, _middlewareData$arrow2, _middlewareData$arrow3, _middlewareData$hide, _middlewareData$trans, _middlewareData$trans2;
-        const _a2 = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a2, contentProps = __objRest(_a2, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
+        const _a = props, { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, avoidCollisions = true, onPlaced } = _a, contentProps = __objRest(_a, ["__scopePopper", "side", "sideOffset", "align", "alignOffset", "arrowPadding", "collisionBoundary", "collisionPadding", "sticky", "hideWhenDetached", "avoidCollisions", "onPlaced"]);
         const context = $34310caa050a8d63$var$usePopperContext($34310caa050a8d63$var$CONTENT_NAME, __scopePopper);
         const [content, setContent] = $50Iv9$react.useState(null);
         const composedRefs = $50Iv9$radixuireactcomposerefs.useComposedRefs(
@@ -36786,7 +36786,7 @@
         left: "right"
       };
       var $34310caa050a8d63$export$79d62cd4e10a3fd0 = /* @__PURE__ */ $50Iv9$react.forwardRef(function $34310caa050a8d63$export$79d62cd4e10a3fd02(props, forwardedRef) {
-        const _a2 = props, { __scopePopper } = _a2, arrowProps = __objRest(_a2, ["__scopePopper"]);
+        const _a = props, { __scopePopper } = _a, arrowProps = __objRest(_a, ["__scopePopper"]);
         const contentContext = $34310caa050a8d63$var$useContentContext($34310caa050a8d63$var$ARROW_NAME, __scopePopper);
         const baseSide = $34310caa050a8d63$var$OPPOSITE_SIDE[contentContext.placedSide];
         return (
@@ -36911,7 +36911,7 @@
       $parcel$export(module.exports, "Root", () => $913a70b877676c16$export$be92b6f5f03c0fe9);
       var $913a70b877676c16$export$602eac185826482c = /* @__PURE__ */ $amzHf$react.forwardRef((props, forwardedRef) => {
         var _globalThis$document;
-        const _a2 = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a2, portalProps = __objRest(_a2, ["container"]);
+        const _a = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a, portalProps = __objRest(_a, ["container"]);
         return container ? /* @__PURE__ */ $parcel$interopDefault($amzHf$reactdom).createPortal(/* @__PURE__ */ $amzHf$react.createElement($amzHf$radixuireactprimitive.Primitive.div, $parcel$interopDefault($amzHf$babelruntimehelpersextends)({}, portalProps, {
           ref: forwardedRef
         })), container) : null;
@@ -36966,7 +36966,7 @@
         }))));
       });
       var $0063afae63b3fa70$var$RovingFocusGroupImpl = /* @__PURE__ */ $9QJ9Y$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a2, groupProps = __objRest(_a2, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
+        const _a = props, { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus } = _a, groupProps = __objRest(_a, ["__scopeRovingFocusGroup", "orientation", "loop", "dir", "currentTabStopId", "defaultCurrentTabStopId", "onCurrentTabStopIdChange", "onEntryFocus"]);
         const ref = $9QJ9Y$react.useRef(null);
         const composedRefs = $9QJ9Y$radixuireactcomposerefs.useComposedRefs(forwardedRef, ref);
         const direction = $9QJ9Y$radixuireactdirection.useDirection(dir);
@@ -37064,7 +37064,7 @@
       });
       var $0063afae63b3fa70$var$ITEM_NAME = "RovingFocusGroupItem";
       var $0063afae63b3fa70$export$ab9df7c53fe8454 = /* @__PURE__ */ $9QJ9Y$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a2, itemProps = __objRest(_a2, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
+        const _a = props, { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId } = _a, itemProps = __objRest(_a, ["__scopeRovingFocusGroup", "focusable", "active", "tabStopId"]);
         const autoId = $9QJ9Y$radixuireactid.useId();
         const id = tabStopId || autoId;
         const context = $0063afae63b3fa70$var$useRovingFocusContext($0063afae63b3fa70$var$ITEM_NAME, __scopeRovingFocusGroup);
@@ -38017,9 +38017,9 @@
       function useRealSidecar(importer, effect) {
         var options = effect && effect.options || NO_OPTIONS;
         var couldUseCache = env_1.env.forceCache || env_1.env.isNode && !!options.ssr || !options.async;
-        var _a2 = (0, react_1.useState)(couldUseCache ? function() {
+        var _a = (0, react_1.useState)(couldUseCache ? function() {
           return cache.get(importer);
-        } : void 0), Car = _a2[0], setCar = _a2[1];
+        } : void 0), Car = _a[0], setCar = _a[1];
         var _b = (0, react_1.useState)(null), error = _b[0], setError = _b[1];
         (0, react_1.useEffect)(function() {
           if (!Car) {
@@ -38062,18 +38062,18 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.sidecar = void 0;
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-      var React7 = tslib_1.__importStar(require_react());
+      var React8 = tslib_1.__importStar(require_react());
       var hook_1 = require_hook();
       function sidecar(importer, errorComponent) {
         var ErrorCase = function() {
           return errorComponent;
         };
         return function Sidecar(props) {
-          var _a2 = (0, hook_1.useSidecar)(importer, props.sideCar), Car = _a2[0], error = _a2[1];
+          var _a = (0, hook_1.useSidecar)(importer, props.sideCar), Car = _a[0], error = _a[1];
           if (error && errorComponent) {
             return ErrorCase;
           }
-          return Car ? React7.createElement(Car, tslib_1.__assign({}, props)) : null;
+          return Car ? React8.createElement(Car, tslib_1.__assign({}, props)) : null;
         };
       }
       exports.sidecar = sidecar;
@@ -38207,11 +38207,11 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.renderCar = void 0;
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-      var React7 = tslib_1.__importStar(require_react());
+      var React8 = tslib_1.__importStar(require_react());
       var react_1 = require_react();
       function renderCar(WrappedComponent, defaults) {
-        function State(_a2) {
-          var stateRef = _a2.stateRef, props = _a2.props;
+        function State(_a) {
+          var stateRef = _a.stateRef, props = _a.props;
           var renderTarget = (0, react_1.useCallback)(function SideTarget() {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -38222,10 +38222,10 @@
             });
             return null;
           }, []);
-          return React7.createElement(WrappedComponent, tslib_1.__assign({}, props, { children: renderTarget }));
+          return React8.createElement(WrappedComponent, tslib_1.__assign({}, props, { children: renderTarget }));
         }
-        var Children = React7.memo(function(_a2) {
-          var stateRef = _a2.stateRef, defaultState = _a2.defaultState, children = _a2.children;
+        var Children = React8.memo(function(_a) {
+          var stateRef = _a.stateRef, defaultState = _a.defaultState, children = _a.children;
           var _b = (0, react_1.useState)(defaultState.current), state = _b[0], setState = _b[1];
           (0, react_1.useEffect)(function() {
             stateRef.current = setState;
@@ -38235,15 +38235,15 @@
           return true;
         });
         return function Combiner(props) {
-          var defaultState = React7.useRef(defaults(props));
-          var ref = React7.useRef(function(state) {
+          var defaultState = React8.useRef(defaults(props));
+          var ref = React8.useRef(function(state) {
             return defaultState.current = state;
           });
-          return React7.createElement(
-            React7.Fragment,
+          return React8.createElement(
+            React8.Fragment,
             null,
-            React7.createElement(State, { stateRef: ref, props }),
-            React7.createElement(Children, { stateRef: ref, defaultState, children: props.children })
+            React8.createElement(State, { stateRef: ref, props }),
+            React8.createElement(Children, { stateRef: ref, defaultState, children: props.children })
           );
         };
       }
@@ -38258,9 +38258,9 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.exportSidecar = void 0;
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-      var React7 = tslib_1.__importStar(require_react());
-      var SideCar = function(_a2) {
-        var sideCar = _a2.sideCar, rest = tslib_1.__rest(_a2, ["sideCar"]);
+      var React8 = tslib_1.__importStar(require_react());
+      var SideCar = function(_a) {
+        var sideCar = _a.sideCar, rest = tslib_1.__rest(_a, ["sideCar"]);
         if (!sideCar) {
           throw new Error("Sidecar: please provide `sideCar` property to import the right car");
         }
@@ -38268,7 +38268,7 @@
         if (!Target) {
           throw new Error("Sidecar medium not found");
         }
-        return React7.createElement(Target, tslib_1.__assign({}, rest));
+        return React8.createElement(Target, tslib_1.__assign({}, rest));
       };
       SideCar.isSideCarExport = true;
       function exportSidecar(medium, exported) {
@@ -38333,29 +38333,29 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.RemoveScroll = void 0;
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-      var React7 = tslib_1.__importStar(require_react());
+      var React8 = tslib_1.__importStar(require_react());
       var constants_1 = require_constants();
       var use_callback_ref_1 = require_es52();
       var medium_1 = require_medium2();
       var nothing = function() {
         return;
       };
-      var RemoveScroll = React7.forwardRef(function(props, parentRef) {
-        var ref = React7.useRef(null);
-        var _a2 = React7.useState({
+      var RemoveScroll = React8.forwardRef(function(props, parentRef) {
+        var ref = React8.useRef(null);
+        var _a = React8.useState({
           onScrollCapture: nothing,
           onWheelCapture: nothing,
           onTouchMoveCapture: nothing
-        }), callbacks = _a2[0], setCallbacks = _a2[1];
-        var forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b = props.as, Container3 = _b === void 0 ? "div" : _b, rest = tslib_1.__rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noIsolation", "inert", "allowPinchZoom", "as"]);
+        }), callbacks = _a[0], setCallbacks = _a[1];
+        var forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b = props.as, Container4 = _b === void 0 ? "div" : _b, rest = tslib_1.__rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noIsolation", "inert", "allowPinchZoom", "as"]);
         var SideCar = sideCar;
         var containerRef = (0, use_callback_ref_1.useMergeRefs)([ref, parentRef]);
         var containerProps = tslib_1.__assign(tslib_1.__assign({}, rest), callbacks);
-        return React7.createElement(
-          React7.Fragment,
+        return React8.createElement(
+          React8.Fragment,
           null,
-          enabled && React7.createElement(SideCar, { sideCar: medium_1.effectCar, removeScrollBar, shards, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref }),
-          forwardProps ? React7.cloneElement(React7.Children.only(children), tslib_1.__assign(tslib_1.__assign({}, containerProps), { ref: containerRef })) : React7.createElement(Container3, tslib_1.__assign({}, containerProps, { className, ref: containerRef }), children)
+          enabled && React8.createElement(SideCar, { sideCar: medium_1.effectCar, removeScrollBar, shards, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref }),
+          forwardProps ? React8.cloneElement(React8.Children.only(children), tslib_1.__assign(tslib_1.__assign({}, containerProps), { ref: containerRef })) : React8.createElement(Container4, tslib_1.__assign({}, containerProps, { className, ref: containerRef }), children)
         );
       });
       exports.RemoveScroll = RemoveScroll;
@@ -38454,12 +38454,12 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.styleHookSingleton = void 0;
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-      var React7 = tslib_1.__importStar(require_react());
+      var React8 = tslib_1.__importStar(require_react());
       var singleton_1 = require_singleton();
       var styleHookSingleton = function() {
         var sheet = (0, singleton_1.stylesheetSingleton)();
         return function(styles, isDynamic) {
-          React7.useEffect(function() {
+          React8.useEffect(function() {
             sheet.add(styles);
             return function() {
               sheet.remove();
@@ -38480,8 +38480,8 @@
       var hook_1 = require_hook2();
       var styleSingleton = function() {
         var useStyle = (0, hook_1.styleHookSingleton)();
-        var Sheet = function(_a2) {
-          var styles = _a2.styles, dynamic = _a2.dynamic;
+        var Sheet = function(_a) {
+          var styles = _a.styles, dynamic = _a.dynamic;
           useStyle(styles, dynamic);
           return null;
         };
@@ -38562,13 +38562,13 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.RemoveScrollBar = void 0;
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-      var React7 = tslib_1.__importStar(require_react());
+      var React8 = tslib_1.__importStar(require_react());
       var react_style_singleton_1 = require_es55();
       var constants_1 = require_constants();
       var utils_1 = require_utils();
       var Style = (0, react_style_singleton_1.styleSingleton)();
-      var getStyles = function(_a2, allowRelative, gapMode, important) {
-        var left = _a2.left, top = _a2.top, right = _a2.right, gap = _a2.gap;
+      var getStyles = function(_a, allowRelative, gapMode, important) {
+        var left = _a.left, top = _a.top, right = _a.right, gap = _a.gap;
         if (gapMode === void 0) {
           gapMode = "margin";
         }
@@ -38579,11 +38579,11 @@
         ].filter(Boolean).join(""), "\n  }\n  \n  .").concat(constants_1.zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(constants_1.fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(constants_1.zeroRightClassName, " .").concat(constants_1.zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(constants_1.fullWidthClassName, " .").concat(constants_1.fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body {\n    ").concat(constants_1.removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
       };
       var RemoveScrollBar = function(props) {
-        var noRelative = props.noRelative, noImportant = props.noImportant, _a2 = props.gapMode, gapMode = _a2 === void 0 ? "margin" : _a2;
-        var gap = React7.useMemo(function() {
+        var noRelative = props.noRelative, noImportant = props.noImportant, _a = props.gapMode, gapMode = _a === void 0 ? "margin" : _a;
+        var gap = React8.useMemo(function() {
           return (0, utils_1.getGapWidth)(gapMode);
         }, [gapMode]);
-        return React7.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? "!important" : "") });
+        return React8.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? "!important" : "") });
       };
       exports.RemoveScrollBar = RemoveScrollBar;
     }
@@ -38676,7 +38676,7 @@
           }
           var isScrollable = elementCouldBeScrolled(axis, current);
           if (isScrollable) {
-            var _a2 = getScrollVariables(axis, current), s2 = _a2[1], d2 = _a2[2];
+            var _a = getScrollVariables(axis, current), s2 = _a[1], d2 = _a[2];
             if (s2 > d2) {
               return true;
             }
@@ -38686,16 +38686,16 @@
         return false;
       };
       exports.locationCouldBeScrolled = locationCouldBeScrolled;
-      var getVScrollVariables = function(_a2) {
-        var scrollTop = _a2.scrollTop, scrollHeight = _a2.scrollHeight, clientHeight = _a2.clientHeight;
+      var getVScrollVariables = function(_a) {
+        var scrollTop = _a.scrollTop, scrollHeight = _a.scrollHeight, clientHeight = _a.clientHeight;
         return [
           scrollTop,
           scrollHeight,
           clientHeight
         ];
       };
-      var getHScrollVariables = function(_a2) {
-        var scrollLeft = _a2.scrollLeft, scrollWidth = _a2.scrollWidth, clientWidth = _a2.clientWidth;
+      var getHScrollVariables = function(_a) {
+        var scrollLeft = _a.scrollLeft, scrollWidth = _a.scrollWidth, clientWidth = _a.clientWidth;
         return [
           scrollLeft,
           scrollWidth,
@@ -38721,7 +38721,7 @@
         var availableScroll = 0;
         var availableScrollTop = 0;
         do {
-          var _a2 = getScrollVariables(axis, target), position = _a2[0], scroll_1 = _a2[1], capacity = _a2[2];
+          var _a = getScrollVariables(axis, target), position = _a[0], scroll_1 = _a[1], capacity = _a[2];
           var elementScroll = scroll_1 - capacity - directionFactor * position;
           if (position || elementScroll) {
             if (elementCouldBeScrolled(axis, target)) {
@@ -38753,7 +38753,7 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.RemoveScrollSideCar = exports.getDeltaXY = exports.getTouchXY = void 0;
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-      var React7 = tslib_1.__importStar(require_react());
+      var React8 = tslib_1.__importStar(require_react());
       var react_remove_scroll_bar_1 = require_es56();
       var react_style_singleton_1 = require_es55();
       var aggresiveCapture_1 = require_aggresiveCapture();
@@ -38778,18 +38778,18 @@
       var idCounter = 0;
       var lockStack = [];
       function RemoveScrollSideCar(props) {
-        var shouldPreventQueue = React7.useRef([]);
-        var touchStartRef = React7.useRef([0, 0]);
-        var activeAxis = React7.useRef();
-        var id = React7.useState(idCounter++)[0];
-        var Style = React7.useState(function() {
+        var shouldPreventQueue = React8.useRef([]);
+        var touchStartRef = React8.useRef([0, 0]);
+        var activeAxis = React8.useRef();
+        var id = React8.useState(idCounter++)[0];
+        var Style = React8.useState(function() {
           return (0, react_style_singleton_1.styleSingleton)();
         })[0];
-        var lastProps = React7.useRef(props);
-        React7.useEffect(function() {
+        var lastProps = React8.useRef(props);
+        React8.useEffect(function() {
           lastProps.current = props;
         }, [props]);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           if (props.inert) {
             document.body.classList.add("block-interactivity-".concat(id));
             var allow_1 = tslib_1.__spreadArray([props.lockRef.current], (props.shards || []).map(extractRef), true).filter(Boolean);
@@ -38805,7 +38805,7 @@
           }
           return;
         }, [props.inert, props.lockRef.current, props.shards]);
-        var shouldCancelEvent = React7.useCallback(function(event, parent) {
+        var shouldCancelEvent = React8.useCallback(function(event, parent) {
           if ("touches" in event && event.touches.length === 2) {
             return !lastProps.current.allowPinchZoom;
           }
@@ -38841,7 +38841,7 @@
           var cancelingAxis = activeAxis.current || currentAxis;
           return (0, handleScroll_1.handleScroll)(cancelingAxis, parent, event, cancelingAxis === "h" ? deltaX : deltaY, true);
         }, []);
-        var shouldPrevent = React7.useCallback(function(_event) {
+        var shouldPrevent = React8.useCallback(function(_event) {
           var event = _event;
           if (!lockStack.length || lockStack[lockStack.length - 1] !== Style) {
             return;
@@ -38868,7 +38868,7 @@
             }
           }
         }, []);
-        var shouldCancel = React7.useCallback(function(name, delta, target, should) {
+        var shouldCancel = React8.useCallback(function(name, delta, target, should) {
           var event = { name, delta, target, should };
           shouldPreventQueue.current.push(event);
           setTimeout(function() {
@@ -38877,17 +38877,17 @@
             });
           }, 1);
         }, []);
-        var scrollTouchStart = React7.useCallback(function(event) {
+        var scrollTouchStart = React8.useCallback(function(event) {
           touchStartRef.current = (0, exports.getTouchXY)(event);
           activeAxis.current = void 0;
         }, []);
-        var scrollWheel = React7.useCallback(function(event) {
+        var scrollWheel = React8.useCallback(function(event) {
           shouldCancel(event.type, (0, exports.getDeltaXY)(event), event.target, shouldCancelEvent(event, props.lockRef.current));
         }, []);
-        var scrollTouchMove = React7.useCallback(function(event) {
+        var scrollTouchMove = React8.useCallback(function(event) {
           shouldCancel(event.type, (0, exports.getTouchXY)(event), event.target, shouldCancelEvent(event, props.lockRef.current));
         }, []);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           lockStack.push(Style);
           props.setCallbacks({
             onScrollCapture: scrollWheel,
@@ -38907,11 +38907,11 @@
           };
         }, []);
         var removeScrollBar = props.removeScrollBar, inert = props.inert;
-        return React7.createElement(
-          React7.Fragment,
+        return React8.createElement(
+          React8.Fragment,
           null,
-          inert ? React7.createElement(Style, { styles: generateStyle(id) }) : null,
-          removeScrollBar ? React7.createElement(react_remove_scroll_bar_1.RemoveScrollBar, { gapMode: "margin" }) : null
+          inert ? React8.createElement(Style, { styles: generateStyle(id) }) : null,
+          removeScrollBar ? React8.createElement(react_remove_scroll_bar_1.RemoveScrollBar, { gapMode: "margin" }) : null
         );
       }
       exports.RemoveScrollSideCar = RemoveScrollSideCar;
@@ -38936,11 +38936,11 @@
       "use strict";
       Object.defineProperty(exports, "__esModule", { value: true });
       var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-      var React7 = tslib_1.__importStar(require_react());
+      var React8 = tslib_1.__importStar(require_react());
       var UI_1 = require_UI();
       var sidecar_1 = tslib_1.__importDefault(require_sidecar());
-      var ReactRemoveScroll = React7.forwardRef(function(props, ref) {
-        return React7.createElement(UI_1.RemoveScroll, tslib_1.__assign({}, props, { ref, sideCar: sidecar_1.default }));
+      var ReactRemoveScroll = React8.forwardRef(function(props, ref) {
+        return React8.createElement(UI_1.RemoveScroll, tslib_1.__assign({}, props, { ref, sideCar: sidecar_1.default }));
       });
       ReactRemoveScroll.classNames = UI_1.RemoveScroll.classNames;
       exports.default = ReactRemoveScroll;
@@ -39123,7 +39123,7 @@
         }, children)));
       };
       var $213e4d2df823067d$export$9fa5ebd18bee4d43 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeMenu } = _a2, anchorProps = __objRest(_a2, ["__scopeMenu"]);
+        const _a = props, { __scopeMenu } = _a, anchorProps = __objRest(_a, ["__scopeMenu"]);
         const popperScope = $213e4d2df823067d$var$usePopperScope(__scopeMenu);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactpopper.Anchor, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({}, popperScope, anchorProps, {
           ref: forwardedRef
@@ -39150,7 +39150,7 @@
       var [$213e4d2df823067d$var$MenuContentProvider, $213e4d2df823067d$var$useMenuContentContext] = $213e4d2df823067d$var$createMenuContext($213e4d2df823067d$var$CONTENT_NAME);
       var $213e4d2df823067d$export$479f0f2f71193efe = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
         const portalContext = $213e4d2df823067d$var$usePortalContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
-        const _a2 = props, { forceMount = portalContext.forceMount } = _a2, contentProps = __objRest(_a2, ["forceMount"]);
+        const _a = props, { forceMount = portalContext.forceMount } = _a, contentProps = __objRest(_a, ["forceMount"]);
         const context = $213e4d2df823067d$var$useMenuContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
         const rootContext = $213e4d2df823067d$var$useMenuRootContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
         return /* @__PURE__ */ $cnSS2$react.createElement($213e4d2df823067d$var$Collection.Provider, {
@@ -39200,7 +39200,7 @@
         }));
       });
       var $213e4d2df823067d$var$MenuContentImpl = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll } = _a2, contentProps = __objRest(_a2, ["__scopeMenu", "loop", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEntryFocus", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss", "disableOutsideScroll"]);
+        const _a = props, { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll } = _a, contentProps = __objRest(_a, ["__scopeMenu", "loop", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus", "disableOutsidePointerEvents", "onEntryFocus", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss", "disableOutsideScroll"]);
         const context = $213e4d2df823067d$var$useMenuContext($213e4d2df823067d$var$CONTENT_NAME, __scopeMenu);
         const rootContext = $213e4d2df823067d$var$useMenuRootContext($213e4d2df823067d$var$CONTENT_NAME, __scopeMenu);
         const popperScope = $213e4d2df823067d$var$usePopperScope(__scopeMenu);
@@ -39373,7 +39373,7 @@
         })))))));
       });
       var $213e4d2df823067d$export$22a631d1f72787bb = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeMenu } = _a2, groupProps = __objRest(_a2, ["__scopeMenu"]);
+        const _a = props, { __scopeMenu } = _a, groupProps = __objRest(_a, ["__scopeMenu"]);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactprimitive.Primitive.div, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({
           role: "group"
         }, groupProps, {
@@ -39381,7 +39381,7 @@
         }));
       });
       var $213e4d2df823067d$export$dd37bec0e8a99143 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeMenu } = _a2, labelProps = __objRest(_a2, ["__scopeMenu"]);
+        const _a = props, { __scopeMenu } = _a, labelProps = __objRest(_a, ["__scopeMenu"]);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactprimitive.Primitive.div, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({}, labelProps, {
           ref: forwardedRef
         }));
@@ -39389,7 +39389,7 @@
       var $213e4d2df823067d$var$ITEM_NAME = "MenuItem";
       var $213e4d2df823067d$var$ITEM_SELECT = "menu.itemSelect";
       var $213e4d2df823067d$export$2ce376c2cc3355c8 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { disabled = false, onSelect } = _a2, itemProps = __objRest(_a2, ["disabled", "onSelect"]);
+        const _a = props, { disabled = false, onSelect } = _a, itemProps = __objRest(_a, ["disabled", "onSelect"]);
         const ref = $cnSS2$react.useRef(null);
         const rootContext = $213e4d2df823067d$var$useMenuRootContext($213e4d2df823067d$var$ITEM_NAME, props.__scopeMenu);
         const contentContext = $213e4d2df823067d$var$useMenuContentContext($213e4d2df823067d$var$ITEM_NAME, props.__scopeMenu);
@@ -39442,7 +39442,7 @@
         }));
       });
       var $213e4d2df823067d$var$MenuItemImpl = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeMenu, disabled = false, textValue } = _a2, itemProps = __objRest(_a2, ["__scopeMenu", "disabled", "textValue"]);
+        const _a = props, { __scopeMenu, disabled = false, textValue } = _a, itemProps = __objRest(_a, ["__scopeMenu", "disabled", "textValue"]);
         const contentContext = $213e4d2df823067d$var$useMenuContentContext($213e4d2df823067d$var$ITEM_NAME, __scopeMenu);
         const rovingFocusGroupScope = $213e4d2df823067d$var$useRovingFocusGroupScope(__scopeMenu);
         const ref = $cnSS2$react.useRef(null);
@@ -39498,7 +39498,7 @@
         }))));
       });
       var $213e4d2df823067d$export$f6f243521332502d = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { checked = false, onCheckedChange } = _a2, checkboxItemProps = __objRest(_a2, ["checked", "onCheckedChange"]);
+        const _a = props, { checked = false, onCheckedChange } = _a, checkboxItemProps = __objRest(_a, ["checked", "onCheckedChange"]);
         return /* @__PURE__ */ $cnSS2$react.createElement($213e4d2df823067d$var$ItemIndicatorProvider, {
           scope: props.__scopeMenu,
           checked
@@ -39524,7 +39524,7 @@
         }
       });
       var $213e4d2df823067d$export$ea2200c9eee416b3 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { value, onValueChange } = _a2, groupProps = __objRest(_a2, ["value", "onValueChange"]);
+        const _a = props, { value, onValueChange } = _a, groupProps = __objRest(_a, ["value", "onValueChange"]);
         const handleValueChange = $cnSS2$radixuireactusecallbackref.useCallbackRef(onValueChange);
         return /* @__PURE__ */ $cnSS2$react.createElement($213e4d2df823067d$var$RadioGroupProvider, {
           scope: props.__scopeMenu,
@@ -39536,7 +39536,7 @@
       });
       var $213e4d2df823067d$var$RADIO_ITEM_NAME = "MenuRadioItem";
       var $213e4d2df823067d$export$69bd225e9817f6d0 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { value } = _a2, radioItemProps = __objRest(_a2, ["value"]);
+        const _a = props, { value } = _a, radioItemProps = __objRest(_a, ["value"]);
         const context = $213e4d2df823067d$var$useRadioGroupContext($213e4d2df823067d$var$RADIO_ITEM_NAME, props.__scopeMenu);
         const checked = value === context.value;
         return /* @__PURE__ */ $cnSS2$react.createElement($213e4d2df823067d$var$ItemIndicatorProvider, {
@@ -39561,7 +39561,7 @@
         checked: false
       });
       var $213e4d2df823067d$export$a2593e23056970a3 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeMenu, forceMount } = _a2, itemIndicatorProps = __objRest(_a2, ["__scopeMenu", "forceMount"]);
+        const _a = props, { __scopeMenu, forceMount } = _a, itemIndicatorProps = __objRest(_a, ["__scopeMenu", "forceMount"]);
         const indicatorContext = $213e4d2df823067d$var$useItemIndicatorContext($213e4d2df823067d$var$ITEM_INDICATOR_NAME, __scopeMenu);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactpresence.Presence, {
           present: forceMount || $213e4d2df823067d$var$isIndeterminate(indicatorContext.checked) || indicatorContext.checked === true
@@ -39571,7 +39571,7 @@
         })));
       });
       var $213e4d2df823067d$export$1cec7dcdd713e220 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeMenu } = _a2, separatorProps = __objRest(_a2, ["__scopeMenu"]);
+        const _a = props, { __scopeMenu } = _a, separatorProps = __objRest(_a, ["__scopeMenu"]);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactprimitive.Primitive.div, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({
           role: "separator",
           "aria-orientation": "horizontal"
@@ -39580,7 +39580,7 @@
         }));
       });
       var $213e4d2df823067d$export$bcdda4773debf5fa = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeMenu } = _a2, arrowProps = __objRest(_a2, ["__scopeMenu"]);
+        const _a = props, { __scopeMenu } = _a, arrowProps = __objRest(_a, ["__scopeMenu"]);
         const popperScope = $213e4d2df823067d$var$usePopperScope(__scopeMenu);
         return /* @__PURE__ */ $cnSS2$react.createElement($cnSS2$radixuireactpopper.Arrow, $parcel$interopDefault($cnSS2$babelruntimehelpersextends)({}, popperScope, arrowProps, {
           ref: forwardedRef
@@ -39745,7 +39745,7 @@
       var $213e4d2df823067d$var$SUB_CONTENT_NAME = "MenuSubContent";
       var $213e4d2df823067d$export$e7142ab31822bde6 = /* @__PURE__ */ $cnSS2$react.forwardRef((props, forwardedRef) => {
         const portalContext = $213e4d2df823067d$var$usePortalContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
-        const _a2 = props, { forceMount = portalContext.forceMount } = _a2, subContentProps = __objRest(_a2, ["forceMount"]);
+        const _a = props, { forceMount = portalContext.forceMount } = _a, subContentProps = __objRest(_a, ["forceMount"]);
         const context = $213e4d2df823067d$var$useMenuContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
         const rootContext = $213e4d2df823067d$var$useMenuRootContext($213e4d2df823067d$var$CONTENT_NAME, props.__scopeMenu);
         const subContext = $213e4d2df823067d$var$useMenuSubContext($213e4d2df823067d$var$SUB_CONTENT_NAME, props.__scopeMenu);
@@ -39961,7 +39961,7 @@
       };
       var $5de197f6cd80e8e9$var$TRIGGER_NAME = "ContextMenuTrigger";
       var $5de197f6cd80e8e9$export$be6fc7b1d5b0beb9 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu, disabled = false } = _a2, triggerProps = __objRest(_a2, ["__scopeContextMenu", "disabled"]);
+        const _a = props, { __scopeContextMenu, disabled = false } = _a, triggerProps = __objRest(_a, ["__scopeContextMenu", "disabled"]);
         const context = $5de197f6cd80e8e9$var$useContextMenuContext($5de197f6cd80e8e9$var$TRIGGER_NAME, __scopeContextMenu);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         const pointRef = $l8XVT$react.useRef({
@@ -40027,13 +40027,13 @@
         })));
       });
       var $5de197f6cd80e8e9$export$14afd0be83e45060 = (props) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, portalProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, portalProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Portal, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, portalProps));
       };
       var $5de197f6cd80e8e9$var$CONTENT_NAME = "ContextMenuContent";
       var $5de197f6cd80e8e9$export$572205900c9369e = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, contentProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, contentProps = __objRest(_a, ["__scopeContextMenu"]);
         const context = $5de197f6cd80e8e9$var$useContextMenuContext($5de197f6cd80e8e9$var$CONTENT_NAME, __scopeContextMenu);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         const hasInteractedOutsideRef = $l8XVT$react.useRef(false);
@@ -40065,63 +40065,63 @@
         }));
       });
       var $5de197f6cd80e8e9$export$9860523b0fcdd664 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, groupProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, groupProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Group, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, groupProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$d4b9d3b609a10742 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, labelProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, labelProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Label, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, labelProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$16a26dc176a49100 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, itemProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, itemProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Item, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, itemProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$b6adbe51d5d8b7ec = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, checkboxItemProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, checkboxItemProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.CheckboxItem, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, checkboxItemProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$db5c89af5ed9aa07 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, radioGroupProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, radioGroupProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.RadioGroup, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, radioGroupProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$8a727d09a7d9bfc2 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, radioItemProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, radioItemProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.RadioItem, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, radioItemProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$9ed8194dee42d94b = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, itemIndicatorProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, itemIndicatorProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.ItemIndicator, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, itemIndicatorProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$8d6b009fadfe1207 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, separatorProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, separatorProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Separator, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, separatorProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$f47d0a58228a61e2 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, arrowProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, arrowProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.Arrow, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, arrowProps, {
           ref: forwardedRef
@@ -40141,14 +40141,14 @@
         }), children);
       };
       var $5de197f6cd80e8e9$export$30b2b5c64556d316 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, triggerItemProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, triggerItemProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.SubTrigger, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, triggerItemProps, {
           ref: forwardedRef
         }));
       });
       var $5de197f6cd80e8e9$export$2c967063bd2dc512 = /* @__PURE__ */ $l8XVT$react.forwardRef((props, forwardedRef) => {
-        const _a2 = props, { __scopeContextMenu } = _a2, subContentProps = __objRest(_a2, ["__scopeContextMenu"]);
+        const _a = props, { __scopeContextMenu } = _a, subContentProps = __objRest(_a, ["__scopeContextMenu"]);
         const menuScope = $5de197f6cd80e8e9$var$useMenuScope(__scopeContextMenu);
         return /* @__PURE__ */ $l8XVT$react.createElement($l8XVT$radixuireactmenu.SubContent, $parcel$interopDefault($l8XVT$babelruntimehelpersextends)({}, menuScope, subContentProps, {
           ref: forwardedRef,
@@ -47316,10 +47316,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       }
       var Recoil_unionSets = unionSets;
       var {
-        useRef: useRef4
+        useRef: useRef5
       } = react;
       function useRefInitOnce(initialValue) {
-        const ref = useRef4(initialValue);
+        const ref = useRef5(initialValue);
         if (ref.current === initialValue && typeof initialValue === "function") {
           ref.current = initialValue();
         }
@@ -47362,7 +47362,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       var {
         useCallback: useCallback2,
         useContext,
-        useEffect: useEffect6,
+        useEffect: useEffect7,
         useMemo: useMemo5,
         useRef: useRef$1,
         useState: useState5
@@ -47483,14 +47483,14 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         const storeRef = useStoreRef();
         const [, setState] = useState5([]);
         setNotifyBatcherOfChange(() => setState({}));
-        useEffect6(() => {
+        useEffect7(() => {
           setNotifyBatcherOfChange(() => setState({}));
           return () => {
             setNotifyBatcherOfChange(() => {
             });
           };
         }, [setNotifyBatcherOfChange]);
-        useEffect6(() => {
+        useEffect7(() => {
           Recoil_Queue.enqueueExecution("Batcher", () => {
             endBatch(storeRef.current);
           });
@@ -47635,7 +47635,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         }
         storeStateRef = Recoil_useRefInitOnce(() => initializeState_DEPRECATED != null ? initialStoreState_DEPRECATED(storeRef.current, initializeState_DEPRECATED) : initializeState != null ? initialStoreState(initializeState) : makeEmptyStoreState$2());
         const mutableSource = useMemo5(() => createMutableSource$1 === null || createMutableSource$1 === void 0 ? void 0 : createMutableSource$1(storeStateRef, () => storeStateRef.current.currentTree.version), [storeStateRef]);
-        useEffect6(() => {
+        useEffect7(() => {
           const store2 = storeRef.current;
           for (const atomKey of new Set(store2.getState().knownAtoms)) {
             initializeNode$2(store2, atomKey, "get");
@@ -47655,9 +47655,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         }), children));
       }
       function RecoilRoot(props) {
-        const _a2 = props, {
+        const _a = props, {
           override
-        } = _a2, propsExceptOverride = __objRest(_a2, [
+        } = _a, propsExceptOverride = __objRest(_a, [
           "override"
         ]);
         const ancestorStoreRef = useStoreRef();
@@ -50167,9 +50167,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           if (cachedAtom != null) {
             return cachedAtom;
           }
-          const _a2 = options, {
+          const _a = options, {
             cachePolicyForParams_UNSTABLE
-          } = _a2, atomOptions = __objRest(_a2, [
+          } = _a, atomOptions = __objRest(_a, [
             "cachePolicyForParams_UNSTABLE"
           ]);
           const optionsDefault = "default" in options ? (
@@ -51713,8 +51713,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
       }
       var DailyIframe2 = _interopDefault(require_daily_iframe());
-      var React7 = require_react();
-      var React__default = _interopDefault(React7);
+      var React8 = require_react();
+      var React__default = _interopDefault(React8);
       var recoil = require_cjs();
       var throttle = _interopDefault(require_lodash());
       function asyncGeneratorStep(gen, resolve, reject2, _next, _throw, key, arg) {
@@ -51815,17 +51815,17 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         }
         throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
       }
-      var DailyContext = /* @__PURE__ */ React7.createContext(null);
-      var DailyDevicesContext = /* @__PURE__ */ React7.createContext({
+      var DailyContext = /* @__PURE__ */ React8.createContext(null);
+      var DailyDevicesContext = /* @__PURE__ */ React8.createContext({
         refreshDevices: function refreshDevices() {
           return Promise.resolve();
         }
       });
       var useDaily = function useDaily2() {
-        var daily = React7.useContext(DailyContext);
+        var daily = React8.useContext(DailyContext);
         return daily;
       };
-      var DailyEventContext = /* @__PURE__ */ React7.createContext({
+      var DailyEventContext = /* @__PURE__ */ React8.createContext({
         on: function on() {
         },
         off: function off() {
@@ -51836,13 +51836,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         return uniqueCounter++;
       };
       var useDailyEvent = function useDailyEvent2(ev, callback) {
-        var _useContext = React7.useContext(DailyEventContext), off = _useContext.off, on = _useContext.on;
-        var _useState = React7.useState(false), isBlocked = _useState[0], setIsBlocked = _useState[1];
-        var reassignCount = React7.useRef(0);
-        var eventId = React7.useMemo(function() {
+        var _useContext = React8.useContext(DailyEventContext), off = _useContext.off, on = _useContext.on;
+        var _useState = React8.useState(false), isBlocked = _useState[0], setIsBlocked = _useState[1];
+        var reassignCount = React8.useRef(0);
+        var eventId = React8.useMemo(function() {
           return getUnique();
         }, []);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           if (!ev || isBlocked)
             return;
           if (reassignCount.current > 1e5) {
@@ -52030,7 +52030,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             refreshDevices();
           });
         }, [daily, refreshDevices]);
-        useDailyEvent("participant-updated", React7.useCallback(function(ev) {
+        useDailyEvent("participant-updated", React8.useCallback(function(ev) {
           if (!ev.participant.local)
             return;
           updateDeviceStates();
@@ -52118,12 +52118,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         if (throttleTimeout === void 0) {
           throttleTimeout = 100;
         }
-        var _useContext = React7.useContext(DailyEventContext), off = _useContext.off, on = _useContext.on;
-        var eventId = React7.useMemo(function() {
+        var _useContext = React8.useContext(DailyEventContext), off = _useContext.off, on = _useContext.on;
+        var eventId = React8.useMemo(function() {
           return getUnique();
         }, []);
-        var throttledEvents = React7.useRef([]);
-        var emitEvents = React7.useMemo(function() {
+        var throttledEvents = React8.useRef([]);
+        var emitEvents = React8.useMemo(function() {
           return throttle(function() {
             if (throttledEvents.current.length === 0)
               return;
@@ -52133,7 +52133,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             trailing: true
           });
         }, [callback, throttleTimeout]);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           if (!ev)
             return;
           var addEvent = function addEvent2(ev2) {
@@ -52233,7 +52233,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             };
           }();
         }, []);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           if (!daily)
             return;
           var interval = setInterval(function() {
@@ -52247,7 +52247,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             clearInterval(interval);
           };
         }, [daily, initParticipants]);
-        var handleInitEvent = React7.useCallback(function() {
+        var handleInitEvent = React8.useCallback(function() {
           if (!daily)
             return;
           var participants = daily == null ? void 0 : daily.participants();
@@ -52258,7 +52258,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         useDailyEvent("started-camera", handleInitEvent);
         useDailyEvent("access-state-updated", handleInitEvent);
         useDailyEvent("joining-meeting", handleInitEvent);
-        useDailyEvent("joined-meeting", React7.useCallback(function(ev) {
+        useDailyEvent("joined-meeting", React8.useCallback(function(ev) {
           initParticipants(ev.participants);
         }, [initParticipants]));
         useThrottledDailyEvent("participant-joined", recoil.useRecoilCallback(function(_ref9) {
@@ -52344,9 +52344,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       };
       var DailyProvider2 = function DailyProvider3(_ref) {
         var children = _ref.children, props = _objectWithoutPropertiesLoose(_ref, ["children"]);
-        var _useState = React7.useState("callObject" in props ? props.callObject : null), callObject = _useState[0], setCallObject = _useState[1];
-        var eventsMap = React7.useRef({});
-        React7.useEffect(function() {
+        var _useState = React8.useState("callObject" in props ? props.callObject : null), callObject = _useState[0], setCallObject = _useState[1];
+        var eventsMap = React8.useRef({});
+        React8.useEffect(function() {
           var _props$callObject;
           if (!("callObject" in props))
             return;
@@ -52363,7 +52363,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             setCallObject(props.callObject);
           }
         }, [callObject, props]);
-        var handleEvent = React7.useCallback(function(ev) {
+        var handleEvent = React8.useCallback(function(ev) {
           if (!("action" in ev))
             return;
           var event = ev.action;
@@ -52373,14 +52373,14 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             cb(ev);
           }
         }, []);
-        var initEventHandlers = React7.useCallback(function(daily) {
+        var initEventHandlers = React8.useCallback(function(daily) {
           if (!daily)
             return;
           Object.keys(eventsMap.current).forEach(function(event) {
             daily.off(event, handleEvent).on(event, handleEvent);
           });
         }, [handleEvent]);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           if (callObject)
             return;
           if ("callObject" in props) {
@@ -52392,7 +52392,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           setCallObject(co);
           initEventHandlers(co);
         }, [callObject, initEventHandlers, props]);
-        var on = React7.useCallback(function(ev, cb, key) {
+        var on = React8.useCallback(function(ev, cb, key) {
           var _eventsMap$current$ev3;
           if (!eventsMap.current[ev]) {
             eventsMap.current[ev] = /* @__PURE__ */ new Map();
@@ -52405,7 +52405,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             (_eventsMap$current$ev4 = eventsMap.current[ev]) == null ? void 0 : _eventsMap$current$ev4.set(key, cb);
           }
         }, [callObject, handleEvent]);
-        var off = React7.useCallback(function(ev, key) {
+        var off = React8.useCallback(function(ev, key) {
           var _eventsMap$current$ev5, _eventsMap$current$ev6;
           (_eventsMap$current$ev5 = eventsMap.current[ev]) == null ? void 0 : _eventsMap$current$ev5["delete"](key);
           if (((_eventsMap$current$ev6 = eventsMap.current[ev]) == null ? void 0 : _eventsMap$current$ev6.size) === 0) {
@@ -52425,7 +52425,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       var useParticipant = function useParticipant2(sessionId, _temp) {
         var _ref = _temp === void 0 ? {} : _temp, onParticipantLeft = _ref.onParticipantLeft, onParticipantUpdated = _ref.onParticipantUpdated;
         var participant = recoil.useRecoilValue(participantState(sessionId));
-        useThrottledDailyEvent("participant-updated", React7.useCallback(function(evts) {
+        useThrottledDailyEvent("participant-updated", React8.useCallback(function(evts) {
           var filteredEvts = evts.filter(function(ev) {
             return ev.participant.session_id === sessionId;
           });
@@ -52437,7 +52437,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }, 0);
           });
         }, [onParticipantUpdated, sessionId]));
-        useThrottledDailyEvent("participant-left", React7.useCallback(function(evts) {
+        useThrottledDailyEvent("participant-left", React8.useCallback(function(evts) {
           var filteredEvts = evts.filter(function(ev2) {
             return ev2.participant.session_id === sessionId;
           });
@@ -52458,9 +52458,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         var _ref = _temp === void 0 ? {} : _temp, _ref$ignoreLocal = _ref.ignoreLocal, ignoreLocal = _ref$ignoreLocal === void 0 ? false : _ref$ignoreLocal, onActiveSpeakerChange = _ref.onActiveSpeakerChange;
         var daily = useDaily();
         var recentActiveId = recoil.useRecoilValue(activeIdState);
-        var _useState = React7.useState(""), activeId = _useState[0], setActiveId = _useState[1];
+        var _useState = React8.useState(""), activeId = _useState[0], setActiveId = _useState[1];
         var activeParticipant = useParticipant(activeId);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           var _daily$participants;
           if (!daily)
             return;
@@ -52483,7 +52483,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       var useAppMessage = function useAppMessage2(_temp) {
         var _ref = _temp === void 0 ? {} : _temp, onAppMessage = _ref.onAppMessage;
         var daily = useDaily();
-        var sendAppMessage = React7.useCallback(function(data, to) {
+        var sendAppMessage = React8.useCallback(function(data, to) {
           if (to === void 0) {
             to = "*";
           }
@@ -52491,7 +52491,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             return;
           daily.sendAppMessage(data, to);
         }, [daily]);
-        var handleAppMessage = React7.useCallback(function(ev) {
+        var handleAppMessage = React8.useCallback(function(ev) {
           onAppMessage == null ? void 0 : onAppMessage(ev, sendAppMessage);
         }, [onAppMessage, sendAppMessage]);
         useDailyEvent("app-message", handleAppMessage);
@@ -52504,7 +52504,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         }));
         return Array.isArray(propertyPaths) ? participantProperties : participantProperties[0];
       };
-      var useMediaTrack2 = function useMediaTrack3(participantId, type) {
+      var useMediaTrack3 = function useMediaTrack4(participantId, type) {
         if (type === void 0) {
           type = "video";
         }
@@ -52521,7 +52521,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         });
       };
       var useAudioTrack = function useAudioTrack2(participantId) {
-        return useMediaTrack2(participantId, "audio");
+        return useMediaTrack3(participantId, "audio");
       };
       var useDevices = function useDevices2() {
         var daily = useDaily();
@@ -52530,8 +52530,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         var camDevices = recoil.useRecoilValue(cameraDevicesState);
         var micDevices = recoil.useRecoilValue(microphoneDevicesState);
         var speakerDevices = recoil.useRecoilValue(speakerDevicesState);
-        var _useContext = React7.useContext(DailyDevicesContext), refreshDevices = _useContext.refreshDevices;
-        var setCamera = React7.useCallback(/* @__PURE__ */ function() {
+        var _useContext = React8.useContext(DailyDevicesContext), refreshDevices = _useContext.refreshDevices;
+        var setCamera = React8.useCallback(/* @__PURE__ */ function() {
           var _ref = _asyncToGenerator(function* (deviceId) {
             yield daily == null ? void 0 : daily.setInputDevicesAsync({
               audioDeviceId: null,
@@ -52542,7 +52542,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             return _ref.apply(this, arguments);
           };
         }(), [daily]);
-        var setMicrophone = React7.useCallback(/* @__PURE__ */ function() {
+        var setMicrophone = React8.useCallback(/* @__PURE__ */ function() {
           var _ref2 = _asyncToGenerator(function* (deviceId) {
             yield daily == null ? void 0 : daily.setInputDevicesAsync({
               audioDeviceId: deviceId,
@@ -52553,7 +52553,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             return _ref2.apply(this, arguments);
           };
         }(), [daily]);
-        var setSpeaker = React7.useCallback(/* @__PURE__ */ function() {
+        var setSpeaker = React8.useCallback(/* @__PURE__ */ function() {
           var _ref3 = _asyncToGenerator(function* (deviceId) {
             yield daily == null ? void 0 : daily.setOutputDeviceAsync({
               outputDeviceId: deviceId
@@ -52629,12 +52629,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             set(inputSettingsState, inputSettings2);
           };
         }, []);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           if (!daily)
             return;
           daily.getInputSettings().then(updateInputSettingsState);
         }, [daily, updateInputSettingsState]);
-        useDailyEvent("input-settings-updated", React7.useCallback(function(ev) {
+        useDailyEvent("input-settings-updated", React8.useCallback(function(ev) {
           updateInputSettingsState(ev.inputSettings);
           setTimeout(function() {
             return onInputSettingsUpdated == null ? void 0 : onInputSettingsUpdated(ev);
@@ -52651,7 +52651,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }, 0);
           };
         }, [onError]));
-        var updateInputSettings = React7.useCallback(function(inputSettings2) {
+        var updateInputSettings = React8.useCallback(function(inputSettings2) {
           daily == null ? void 0 : daily.updateInputSettings(inputSettings2);
         }, [daily]);
         return {
@@ -52711,17 +52711,17 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }, 0);
           };
         }, [onLiveStreamingError]));
-        var startLiveStreaming = React7.useCallback(function(options) {
+        var startLiveStreaming = React8.useCallback(function(options) {
           if (!daily)
             return;
           daily.startLiveStreaming(options);
         }, [daily]);
-        var stopLiveStreaming = React7.useCallback(function() {
+        var stopLiveStreaming = React8.useCallback(function() {
           if (!daily)
             return;
           daily.stopLiveStreaming();
         }, [daily]);
-        var updateLiveStreaming = React7.useCallback(function(_ref5) {
+        var updateLiveStreaming = React8.useCallback(function(_ref5) {
           var layout = _ref5.layout;
           if (!daily)
             return;
@@ -52810,12 +52810,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         useDailyEvent("joined-meeting", initTopology);
         useDailyEvent("network-connection", handleNetworkConnection);
         useDailyEvent("network-quality-change", handleNetworkQualityChange);
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           if (!daily || topology)
             return;
           initTopology();
         }, [daily, initTopology, topology]);
-        var getStats = React7.useCallback(/* @__PURE__ */ _asyncToGenerator(function* () {
+        var getStats = React8.useCallback(/* @__PURE__ */ _asyncToGenerator(function* () {
           var newStats = yield daily == null ? void 0 : daily.getNetworkStats();
           return newStats == null ? void 0 : newStats.stats;
         }), [daily]);
@@ -52836,7 +52836,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           sort: defaultSort
         } : _temp, _ref$filter = _ref.filter, filter = _ref$filter === void 0 ? defaultFilter : _ref$filter, onActiveSpeakerChange = _ref.onActiveSpeakerChange, onParticipantJoined = _ref.onParticipantJoined, onParticipantLeft = _ref.onParticipantLeft, onParticipantUpdated = _ref.onParticipantUpdated, _ref$sort = _ref.sort, sort = _ref$sort === void 0 ? defaultSort : _ref$sort;
         var allParticipants = recoil.useRecoilValue(participantsState);
-        var sortedIds = React7.useMemo(function() {
+        var sortedIds = React8.useMemo(function() {
           var filterFn = defaultFilter;
           switch (filter) {
             case "local":
@@ -52897,7 +52897,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             return p2.session_id;
           }).filter(Boolean);
         }, [allParticipants, filter, sort]);
-        useThrottledDailyEvent("participant-joined", React7.useCallback(function(evts) {
+        useThrottledDailyEvent("participant-joined", React8.useCallback(function(evts) {
           if (!evts.length)
             return;
           evts.forEach(function(ev) {
@@ -52906,7 +52906,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }, 0);
           });
         }, [onParticipantJoined]));
-        useThrottledDailyEvent("participant-updated", React7.useCallback(function(evts) {
+        useThrottledDailyEvent("participant-updated", React8.useCallback(function(evts) {
           if (!evts.length)
             return;
           evts.forEach(function(ev) {
@@ -52915,7 +52915,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }, 0);
           });
         }, [onParticipantUpdated]));
-        useThrottledDailyEvent("active-speaker-change", React7.useCallback(/* @__PURE__ */ function() {
+        useThrottledDailyEvent("active-speaker-change", React8.useCallback(/* @__PURE__ */ function() {
           var _ref2 = _asyncToGenerator(function* (evts) {
             if (!evts.length)
               return;
@@ -52929,7 +52929,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             return _ref2.apply(this, arguments);
           };
         }(), [onActiveSpeakerChange]));
-        useThrottledDailyEvent("participant-left", React7.useCallback(function(evts) {
+        useThrottledDailyEvent("participant-left", React8.useCallback(function(evts) {
           if (!evts.length)
             return;
           evts.forEach(function(ev) {
@@ -52968,7 +52968,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }, 0);
           };
         }, [id, onReceiveSettingsUpdated]));
-        var updateReceiveSettings = React7.useCallback(function(receiveSettings2) {
+        var updateReceiveSettings = React8.useCallback(function(receiveSettings2) {
           if (!(daily && daily.meetingState() === "joined-meeting")) {
             return;
           }
@@ -52995,7 +52995,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         var recordingParticipantIds = useParticipantIds({
           filter: "record"
         });
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           var hasRecordingParticipants = recordingParticipantIds.length > 0;
           var isLocalParticipantRecording = recordingParticipantIds.includes(localSessionId != null ? localSessionId : "local");
           setState(function(s2) {
@@ -53071,20 +53071,20 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }, 0);
           };
         }, [onRecordingError]));
-        useDailyEvent("recording-data", React7.useCallback(function(ev) {
+        useDailyEvent("recording-data", React8.useCallback(function(ev) {
           onRecordingData == null ? void 0 : onRecordingData(ev);
         }, [onRecordingData]));
-        var startRecording = React7.useCallback(function(options) {
+        var startRecording = React8.useCallback(function(options) {
           if (!daily)
             return;
           daily.startRecording(options);
         }, [daily]);
-        var stopRecording = React7.useCallback(function() {
+        var stopRecording = React8.useCallback(function() {
           if (!daily)
             return;
           daily.stopRecording();
         }, [daily]);
-        var updateRecording = React7.useCallback(function(options) {
+        var updateRecording = React8.useCallback(function(options) {
           if (!daily)
             return;
           daily.updateRecording(options);
@@ -53100,27 +53100,27 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         return room;
       };
       var useScreenAudioTrack = function useScreenAudioTrack2(participantId) {
-        return useMediaTrack2(participantId, "screenAudio");
+        return useMediaTrack3(participantId, "screenAudio");
       };
       var useScreenShare = function useScreenShare2(_temp) {
         var _ref = _temp === void 0 ? {} : _temp, onLocalScreenShareStarted = _ref.onLocalScreenShareStarted, onLocalScreenShareStopped = _ref.onLocalScreenShareStopped;
         var daily = useDaily();
-        var startScreenShare = React7.useCallback(function(captureOptions) {
+        var startScreenShare = React8.useCallback(function(captureOptions) {
           daily == null ? void 0 : daily.startScreenShare(captureOptions);
         }, [daily]);
-        var stopScreenShare = React7.useCallback(function() {
+        var stopScreenShare = React8.useCallback(function() {
           daily == null ? void 0 : daily.stopScreenShare();
         }, [daily]);
-        useDailyEvent("local-screen-share-started", React7.useCallback(function() {
+        useDailyEvent("local-screen-share-started", React8.useCallback(function() {
           return onLocalScreenShareStarted == null ? void 0 : onLocalScreenShareStarted();
         }, [onLocalScreenShareStarted]));
-        useDailyEvent("local-screen-share-stopped", React7.useCallback(function() {
+        useDailyEvent("local-screen-share-stopped", React8.useCallback(function() {
           return onLocalScreenShareStopped == null ? void 0 : onLocalScreenShareStopped();
         }, [onLocalScreenShareStopped]));
         var screenIds = useParticipantIds({
           filter: "screen"
         });
-        var screens = React7.useMemo(function() {
+        var screens = React8.useMemo(function() {
           return screenIds.map(function(id) {
             var _daily$participants;
             var participants = Object.values((_daily$participants = daily == null ? void 0 : daily.participants == null ? void 0 : daily.participants()) != null ? _daily$participants : {});
@@ -53150,7 +53150,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         };
       };
       var useScreenVideoTrack = function useScreenVideoTrack2(participantId) {
-        return useMediaTrack2(participantId, "screenVideo");
+        return useMediaTrack3(participantId, "screenVideo");
       };
       var transcriptionState = /* @__PURE__ */ recoil.atom({
         key: "transcription",
@@ -53169,7 +53169,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         var state = recoil.useRecoilValue(transcriptionState);
         var setState = recoil.useSetRecoilState(transcriptionState);
         var room = useRoom();
-        React7.useEffect(function() {
+        React8.useEffect(function() {
           var _room$domainConfig;
           if (!(room == null ? void 0 : (_room$domainConfig = room.domainConfig) == null ? void 0 : _room$domainConfig.enable_transcription))
             return;
@@ -53245,12 +53245,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }
           };
         }, [onTranscriptionAppData]));
-        var startTranscription = React7.useCallback(function(options) {
+        var startTranscription = React8.useCallback(function(options) {
           if (!daily)
             return;
           daily.startTranscription(options);
         }, [daily]);
-        var stopTranscription = React7.useCallback(function() {
+        var stopTranscription = React8.useCallback(function() {
           if (!daily)
             return;
           daily.stopTranscription();
@@ -53261,7 +53261,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         });
       };
       var useVideoTrack2 = function useVideoTrack3(participantId) {
-        return useMediaTrack2(participantId, "video");
+        return useMediaTrack3(participantId, "video");
       };
       var waitingParticipantsState = /* @__PURE__ */ recoil.atom({
         key: "waiting-participants",
@@ -53338,7 +53338,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         useDailyEvent("waiting-participant-added", handleAdded);
         useDailyEvent("waiting-participant-removed", handleRemoved);
         useDailyEvent("waiting-participant-updated", handleUpdated);
-        var updateWaitingParticipantAccess = React7.useCallback(function(id, grantRequestedAccess) {
+        var updateWaitingParticipantAccess = React8.useCallback(function(id, grantRequestedAccess) {
           if (id === "*") {
             daily == null ? void 0 : daily.updateWaitingParticipants({
               "*": {
@@ -53351,10 +53351,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             grantRequestedAccess
           });
         }, [daily]);
-        var grantAccess = React7.useCallback(function(id) {
+        var grantAccess = React8.useCallback(function(id) {
           updateWaitingParticipantAccess(id, true);
         }, [updateWaitingParticipantAccess]);
-        var denyAccess = React7.useCallback(function(id) {
+        var denyAccess = React8.useCallback(function(id) {
           updateWaitingParticipantAccess(id, false);
         }, [updateWaitingParticipantAccess]);
         return {
@@ -53374,7 +53374,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       exports.useLiveStreaming = useLiveStreaming;
       exports.useLocalParticipant = useLocalParticipant;
       exports.useLocalSessionId = useLocalSessionId;
-      exports.useMediaTrack = useMediaTrack2;
+      exports.useMediaTrack = useMediaTrack3;
       exports.useNetwork = useNetwork;
       exports.useParticipant = useParticipant;
       exports.useParticipantIds = useParticipantIds;
@@ -53594,8 +53594,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           t3.constructor !== Object || t3.$$typeof ? null == n2.type && (n2.type = t3) : n2.composers.add(C(t3, e2));
     return null == n2.type && (n2.type = "span"), n2.composers.size || n2.composers.add(["PJLV", {}, [], [], {}, []]), P(e2, n2, t2);
   });
-  var C = (_a2, i2) => {
-    var _b = _a2, { variants: e2, compoundVariants: t2, defaultVariants: r2 } = _b, n2 = __objRest(_b, ["variants", "compoundVariants", "defaultVariants"]);
+  var C = (_a, i2) => {
+    var _b = _a, { variants: e2, compoundVariants: t2, defaultVariants: r2 } = _b, n2 = __objRest(_b, ["variants", "compoundVariants", "defaultVariants"]);
     const o2 = `${S(i2.prefix)}c-${z(n2)}`, l2 = [], s2 = [], d2 = /* @__PURE__ */ Object.create(null), g2 = [];
     for (const e3 in r2)
       d2[e3] = String(r2[e3]);
@@ -53613,7 +53613,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     var p2, u2;
     if ("object" == typeof t2 && t2)
       for (const e3 of t2) {
-        let _a3 = e3, { css: t3 } = _a3, r3 = __objRest(_a3, ["css"]);
+        let _a2 = e3, { css: t3 } = _a2, r3 = __objRest(_a2, ["css"]);
         t3 = "object" == typeof t3 && t3 || {};
         for (const e4 in r3)
           r3[e4] = String(r3[e4]);
@@ -53634,7 +53634,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       return t3[T] = [], t3.rules = {}, W.forEach((e4) => t3.rules[e4] = { apply: (r3) => t3[T].push([e4, r3]) }), t3;
     })(r2) : null, d2 = (c3 || r2).rules, g2 = `.${n2}${i2.length > 1 ? `:where(.${i2.slice(1).join(".")})` : ""}`, p2 = (l2) => {
       l2 = "object" == typeof l2 && l2 || A;
-      const _a2 = l2, { css: s2 } = _a2, p3 = __objRest(_a2, ["css"]), u2 = {};
+      const _a = l2, { css: s2 } = _a, p3 = __objRest(_a, ["css"]), u2 = {};
       for (const e3 in o2)
         if (delete p3[e3], e3 in l2) {
           let t3 = l2[e3];
@@ -53895,7 +53895,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     statusIconActiveBg: "$green",
     statusIconFocusBg: "$yellow",
     statusIconZenBg: "$purple",
-    statusIconOfflineBg: "rgb(50, 54, 61, 1)",
+    statusIconOfflineBg: "rgb(60, 64, 71, 1)",
     presenceModelineFocusFg: "rgba(242, 201, 76, 0.9)",
     presenceModelineFocusBlur: "rgba(242, 201, 76, 0.2)",
     presenceModelineSoloFg: "rgba(255, 93, 224, 0.9)",
@@ -54307,7 +54307,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/ElectronPipWindow/index.tsx
-  var import_react8 = __toESM(require_react());
+  var import_react9 = __toESM(require_react());
   var import_react_dom = __toESM(require_react_dom());
 
   // ../assets/js/features/ElectronPipWindow/Handle.tsx
@@ -54627,22 +54627,25 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/components/Icon/Monitor.tsx
   var import_jsx_runtime11 = __toESM(require_jsx_runtime());
   function MonitorIcon(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
       "svg",
       __spreadProps(__spreadValues({
-        viewBox: "0 0 24 24",
+        viewBox: "4 4 16 16",
         width: "100%",
         height: "100%",
-        stroke: "currentColor",
-        strokeWidth: 2,
         fill: "none",
-        strokeLinecap: "round",
-        strokeLinejoin: "round"
+        xmlns: "http://www.w3.org/2000/svg"
       }, props), {
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("rect", { x: 2, y: 3, width: 20, height: 14, rx: 2, ry: 2 }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("path", { d: "M8 21h8M12 17v4" })
-        ]
+        children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M4.75 6.75a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H6.75a2 2 0 0 1-2-2v-7.5ZM15.25 19.25l-3.25-2-3.25 2"
+          }
+        )
       })
     );
   }
@@ -55963,8 +55966,72 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     );
   }
 
-  // ../assets/js/components/Icon/index.tsx
+  // ../assets/js/components/Icon/PictureInPicture.tsx
   var import_jsx_runtime53 = __toESM(require_jsx_runtime());
+  function PictureInPictureIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime53.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M7.25 17.25h-.5a2 2 0 0 1-2-2v-8.5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v2.5"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M10.75 13.75a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v4.5a1 1 0 0 1-1 1h-6.5a1 1 0 0 1-1-1v-4.5Z"
+            }
+          )
+        ]
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/Book.tsx
+  var import_jsx_runtime54 = __toESM(require_jsx_runtime());
+  function BookIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M19.25 5.75a1 1 0 0 0-1-1H14a2 2 0 0 0-2 2v12.5l.828-.828a4 4 0 0 1 2.829-1.172h2.593a1 1 0 0 0 1-1V5.75ZM4.75 5.75a1 1 0 0 1 1-1H10a2 2 0 0 1 2 2v12.5l-.828-.828a4 4 0 0 0-2.829-1.172H5.75a1 1 0 0 1-1-1V5.75Z"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/index.tsx
+  var import_jsx_runtime55 = __toESM(require_jsx_runtime());
   var icons = {
     headphones: HeadphonesIcon,
     coffee: CoffeeIcon,
@@ -56017,21 +56084,23 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     arrowRight: ArrowRight,
     arrowLeft: ArrowLeft,
     close: CloseIcon,
-    chevronDown: ChevronDownIcon
+    chevronDown: ChevronDownIcon,
+    pictureInPicture: PictureInPictureIcon,
+    book: BookIcon
   };
   var log = logger("icons");
   function Icon(props) {
     if (!props.name)
-      return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(import_jsx_runtime53.Fragment, {});
+      return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(import_jsx_runtime55.Fragment, {});
     const IconComponent = icons[props.name] || icons[props.name.replace(/-([a-z])/g, function(g2) {
       return g2[1].toUpperCase();
     })];
     if (IconComponent) {
-      return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(IconComponent, __spreadValues({}, props));
+      return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(IconComponent, __spreadValues({}, props));
     } else {
       log.error("Can not find icon", props.name, Object.keys(icons));
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(import_jsx_runtime53.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(import_jsx_runtime55.Fragment, {});
   }
   var Icon_default = Icon;
 
@@ -56054,11 +56123,11 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/components/Kbd/index.tsx
-  var import_jsx_runtime54 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
   function Kbd(props) {
-    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Keys, { children: props.keys.map((s2, ind) => /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(import_jsx_runtime54.Fragment, { children: [
-      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Sep, { children: "+" }, "step" + ind) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Key, { children: keySymbol(s2) }, ind)
+    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Keys, { children: props.keys.map((s2, ind) => /* @__PURE__ */ (0, import_jsx_runtime56.jsxs)(import_jsx_runtime56.Fragment, { children: [
+      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Sep, { children: "+" }, "step" + ind) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Key, { children: keySymbol(s2) }, ind)
     ] })) }) : null;
   }
   var Keys = styled("div", {
@@ -56083,13 +56152,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/Tooltip/index.tsx
-  var import_jsx_runtime55 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
   function Tooltip(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(import_react_tooltip.Root, { delayDuration: 400, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(import_react_tooltip.Trigger, { asChild: true, children: props.children }),
-      /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(import_react_tooltip.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(StyledContent, { sideOffset: 10, hideWhenDetached: true, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)(import_react_tooltip.Root, { delayDuration: 400, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(import_react_tooltip.Trigger, { asChild: true, children: props.children }),
+      /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(import_react_tooltip.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)(StyledContent, { sideOffset: 10, hideWhenDetached: true, children: [
         props.content,
-        props.shortcut ? /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(Kbd, { keys: props.shortcut }) : null
+        props.shortcut ? /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Kbd, { keys: props.shortcut }) : null
       ] }) })
     ] });
   }
@@ -56118,8 +56187,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/lib/electron.ts
   var log2 = logger("electron");
   var isNode2 = isRunningInElectron() && (process == null ? void 0 : process.type) !== "renderer";
-  var _a;
-  var ipcRenderer = typeof window !== "undefined" ? (_a = window.electron) == null ? void 0 : _a.ipcRenderer : null;
+  var ipcRenderer = typeof window !== "undefined" ? window.electronIpcRenderer : null;
   var isElectron = !isNode2 && /electron/i.test(window.navigator.userAgent);
   var messageMainWindow = createMessageFn("main-window" /* Main */);
   var messageTrayWindow = createMessageFn("tray-window" /* Tray */);
@@ -56133,7 +56201,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     if (!isElectron)
       return;
     if (!ipcRenderer) {
-      log2.error("ipcRenderer undefined");
+      log2.error("ipcRenderer is not available to renderer process.");
       return;
     }
     log2.info("Sending message", chan, message);
@@ -56169,12 +56237,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/components/Avatar/index.tsx
-  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
   function Avatar(props) {
     const css2 = { fontSize: props.fontSize || "$small" };
-    return /* @__PURE__ */ (0, import_jsx_runtime56.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(StyledImage, { src: props.src, alt: props.alt }),
-      /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(StyledFallback, { children: initials(props.fallback) })
+    return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(StyledImage, { src: props.src, alt: props.alt }),
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(StyledFallback, { children: initials(props.fallback) })
     ] });
   }
   var AvatarRoot = styled(import_react_avatar.Root, {
@@ -56208,15 +56276,15 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_react_context_menu = __toESM(require_dist31());
 
   // ../assets/js/components/Emoji/index.tsx
-  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
   function Emoji(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("em-emoji", { id: props.id, size: props.size });
+    return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("em-emoji", { id: props.id, size: props.size });
   }
 
   // ../assets/js/components/ContextMenu/index.tsx
-  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
   function LocalContent(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(import_react_context_menu.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(StyledContent2, { children: props.children }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(import_react_context_menu.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(StyledContent2, { children: props.children }) });
   }
   var StyledContent2 = styled(import_react_context_menu.Content, {
     minWidth: "220px",
@@ -56232,13 +56300,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     zIndex: "$aboveContent"
   });
   function LocalItem(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(StyledItem, { onClick: props.onClick, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(LeftSlot, { children: [
-        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Icon_default, { name: props.icon }) : null,
-        props.emoji ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Emoji, { id: props.emoji }) : null
+    return /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(StyledItem, { onClick: props.onClick, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime60.jsxs)(LeftSlot, { children: [
+        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Icon_default, { name: props.icon }) : null,
+        props.emoji ? /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Emoji, { id: props.emoji }) : null
       ] }),
       props.label,
-      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(RightSlot, { children: props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Kbd, { keys: props.kbd }) : null })
+      /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(RightSlot, { children: props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Kbd, { keys: props.kbd }) : null })
     ] });
   }
   var RightSlot = styled("div", {
@@ -56294,10 +56362,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   };
 
   // ../assets/js/components/Timestamp/index.tsx
-  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime61 = __toESM(require_jsx_runtime());
 
   // ../assets/js/components/StatusUpdate/index.tsx
-  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime62 = __toESM(require_jsx_runtime());
   var StyledStatusUpdate = styled("div", {
     display: "flex",
     gap: "8px"
@@ -56373,10 +56441,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/features/Dock/StatusIcon.tsx
-  var import_jsx_runtime61 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime63 = __toESM(require_jsx_runtime());
   function StatusIcon(props) {
-    var _a2, _b, _c;
-    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StyledStatusIcon, { children: ((_a2 = props.status) == null ? void 0 : _a2.emoji) && !props.noEmoji && props.isOnline !== false ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Emoji, { id: (_b = props.status) == null ? void 0 : _b.emoji, size: "1.35em" }) : /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+    var _a, _b, _c;
+    return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(StyledStatusIcon, { children: ((_a = props.status) == null ? void 0 : _a.emoji) && !props.noEmoji && props.isOnline !== false ? /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(Emoji, { id: (_b = props.status) == null ? void 0 : _b.emoji, size: "1.35em" }) : /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
       StatusCircle,
       {
         presence: (_c = props.status) == null ? void 0 : _c.status,
@@ -56418,25 +56486,25 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserHeader/index.tsx
-  var import_jsx_runtime62 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
   function UserHeader(props) {
-    var _a2, _b, _c, _d, _e, _f, _g;
-    return /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(Container, { children: [
-      props.status ? /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(StatusIcon, { status: props.status, noEmoji: true, isOnline: props.online }) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
+    var _a, _b, _c, _d, _e, _f, _g;
+    return /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(Container, { children: [
+      props.status ? /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(StatusIcon, { status: props.status, noEmoji: true, isOnline: props.online }) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
         Avatar,
         {
-          src: (_a2 = props.user) == null ? void 0 : _a2.profile_photo_url,
+          src: (_a = props.user) == null ? void 0 : _a.profile_photo_url,
           alt: (_b = props.user) == null ? void 0 : _b.name,
           fallback: ((_c = props.user) == null ? void 0 : _c.name) || "User"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(Right, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(StatusHeader, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(Right, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(StatusHeader, { children: [
           firstName(((_d = props.user) == null ? void 0 : _d.name) || ""),
-          ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Emoji, { id: props.status.emoji }) : null
+          ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Emoji, { id: props.status.emoji }) : null
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
       ] })
     ] });
   }
@@ -56458,12 +56526,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserContextMenu/UserContextMenuView.tsx
-  var import_jsx_runtime63 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
   function UserContextMenuView(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime63.jsxs)(ContextMenu.Root, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(ContextMenu.Trigger, { asChild: true, children: props.children }),
-      /* @__PURE__ */ (0, import_jsx_runtime63.jsxs)(ContextMenu.Content, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(ContextMenu.Root, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(ContextMenu.Trigger, { asChild: true, children: props.children }),
+      /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(ContextMenu.Content, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
           UserHeader,
           {
             user: props.user,
@@ -56471,8 +56539,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             online: props.isOnline
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(ContextMenu.Separator, {}),
-        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(ContextMenu.Separator, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
           ContextMenu.Item,
           {
             emoji: "wave",
@@ -56480,7 +56548,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             onClick: () => props.tap(props.userId)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
           ContextMenu.Item,
           {
             icon: props.existingHook ? "checkmark" : "bell",
@@ -56488,8 +56556,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             onClick: () => props.createStatusHook(props.userId)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(ContextMenu.Item, { icon: "users", label: "Go to 1:1 room" }),
-        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(ContextMenu.Item, { icon: "mail", label: "Send message" })
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(ContextMenu.Item, { icon: "users", label: "Go to 1:1 room" }),
+        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(ContextMenu.Item, { icon: "mail", label: "Send message" })
       ] })
     ] });
   }
@@ -56543,10 +56611,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/features/PictureInPicture/Video.tsx
   var import_react4 = __toESM(require_react());
   var import_daily_react_hooks = __toESM(require_dist32());
-  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
   var log3 = logger("picture-in-picture/video");
   function PictureInPictureVideo(props) {
-    var _a2;
+    var _a;
     const track2 = (0, import_daily_react_hooks.useVideoTrack)(props.participantId, "video");
     const el = (0, import_react4.useRef)(null);
     (0, import_react4.useEffect)(() => {
@@ -56555,10 +56623,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         return;
       log3.info("Set track", track2.persistentTrack);
       playerEl.srcObject = new MediaStream([track2 == null ? void 0 : track2.persistentTrack]);
-    }, [(_a2 = track2 == null ? void 0 : track2.persistentTrack) == null ? void 0 : _a2.id]);
+    }, [(_a = track2 == null ? void 0 : track2.persistentTrack) == null ? void 0 : _a.id]);
     const videoEl = (0, import_react4.useMemo)(() => {
       log3.info("Re-render element");
-      return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Player, { autoPlay: true, muted: true, playsInline: true, ref: el });
+      return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Player, { autoPlay: true, muted: true, playsInline: true, ref: el });
     }, [track2.persistentTrack]);
     return videoEl;
   }
@@ -56577,14 +56645,14 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserView/index.tsx
-  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
   function UserIconView(props) {
-    var _a2, _b, _c, _d;
+    var _a, _b, _c, _d;
     const color = (0, import_react5.useMemo)(() => {
-      var _a3;
-      return stringToRGB(((_a3 = props.user) == null ? void 0 : _a3.name) || props.userId, participantLabelBg);
+      var _a2;
+      return stringToRGB(((_a2 = props.user) == null ? void 0 : _a2.name) || props.userId, participantLabelBg);
     }, [props.userId]);
-    return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
       UserContextMenuView,
       {
         userId: props.userId,
@@ -56594,8 +56662,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         existingHook: props.existingHook,
         isOnline: props.isOnline,
         createStatusHook: props.createStatusHook,
-        children: /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(
             Label2,
             {
               tile: props.tile,
@@ -56603,20 +56671,20 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 backgroundColor: color
               },
               children: [
-                !((_a2 = props.status) == null ? void 0 : _a2.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Icon_default, { name: "mic-off" }) : null,
+                !((_a = props.status) == null ? void 0 : _a.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Icon_default, { name: "mic-off" }) : null,
                 firstName(((_b = props.user) == null ? void 0 : _b.name) || "")
               ]
             }
           ),
-          props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
-          props.videoParticipantId ? /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+          props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
+          props.videoParticipantId ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
             PictureInPictureVideo,
             {
               participantId: props.videoParticipantId,
               mirror: props.self
             }
           ) : null,
-          !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+          !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
             Avatar,
             {
               src: (_c = props.user) == null ? void 0 : _c.profile_photo_url,
@@ -56696,6 +56764,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     round: "small",
     label: true,
     display: "flex",
+    ellipsis: true,
     gap: "4px",
     variants: {
       tile: {
@@ -56713,7 +56782,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
 
   // ../assets/js/components/BoxTile/index.tsx
   var import_react6 = __toESM(require_react());
-  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
   var log4 = logger("boxtile");
   var RESIZE_DEBOUNCE_MS = 200;
   var TILE_GAP = 8;
@@ -56758,10 +56827,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       onResize(-300);
       setTimeout(onResize, 250);
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(StyledTile, { ref: containerRef, css: tileSizeVars, children: props.children });
+    return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(StyledTile, { ref: containerRef, css: tileSizeVars, children: props.children });
     function onResize(add) {
-      var _a2, _b;
-      const width = (((_a2 = containerRef.current) == null ? void 0 : _a2.clientWidth) || 0) + (add || 0);
+      var _a, _b;
+      const width = (((_a = containerRef.current) == null ? void 0 : _a.clientWidth) || 0) + (add || 0);
       const height = (_b = containerRef.current) == null ? void 0 : _b.clientHeight;
       width && height && setDimensions({ width, height });
       log4.info("resized", width, height);
@@ -56798,7 +56867,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_react7 = __toESM(require_react());
   var import_daily_js = __toESM(require_daily_iframe());
   var import_daily_react_hooks2 = __toESM(require_dist32());
-  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime69 = __toESM(require_jsx_runtime());
   var log5 = logger("pip/pip-call-provider");
   function PipCallProvider(props) {
     const [callObject, setCallObject] = (0, import_react7.useState)();
@@ -56810,7 +56879,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         joinDailyCall(callObj);
       }
     }, [props.userId, props.roomUrl]);
-    return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(import_daily_react_hooks2.DailyProvider, { callObject, children: props.children });
+    return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(import_daily_react_hooks2.DailyProvider, { callObject, children: props.children });
     function createCallObject() {
       log5.info("Creating call object");
       return import_daily_js.default.createCallObject({
@@ -56856,34 +56925,107 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     log5.info("Action: %s", e2.action, e2);
   }
 
+  // ../assets/js/features/Screenshare/Video.tsx
+  var import_react8 = __toESM(require_react());
+  var import_daily_react_hooks3 = __toESM(require_dist32());
+  var import_jsx_runtime70 = __toESM(require_jsx_runtime());
+  function ScreenshareVideo(props) {
+    const videoTrack = (0, import_daily_react_hooks3.useMediaTrack)(props.sessionId, "screenVideo");
+    const videoElement = (0, import_react8.useRef)(null);
+    (0, import_react8.useEffect)(() => {
+      const video = videoElement.current;
+      if (!video || !(videoTrack == null ? void 0 : videoTrack.persistentTrack))
+        return;
+      video.srcObject = new MediaStream([videoTrack == null ? void 0 : videoTrack.persistentTrack]);
+    }, [videoTrack == null ? void 0 : videoTrack.persistentTrack]);
+    return /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+      ScreenshareVideoRoot,
+      {
+        autoPlay: true,
+        muted: true,
+        playsInline: true,
+        ref: videoElement
+      }
+    );
+  }
+  var ScreenshareVideoRoot = styled("video", {
+    width: "100%",
+    height: "100%",
+    "object-fit": "contain"
+  });
+
+  // ../assets/js/features/ElectronPipWindow/Screen.tsx
+  var import_jsx_runtime71 = __toESM(require_jsx_runtime());
+  function Screen(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(Container2, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ScreenshareVideo, { sessionId: props.sessionId }),
+      /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Label2, { css: { backgroundColor: props.labelColor }, children: props.label })
+    ] });
+  }
+  var Container2 = styled("div", {
+    width: "var(--tile-box-width)",
+    height: "var(--tile-box-height)",
+    maxWidth: "100%",
+    maxHeight: "100%",
+    position: "relative",
+    center: true,
+    aspectRatio: "1",
+    zIndex: "$base",
+    video: {
+      round: "large",
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100%",
+      height: "100%",
+      zIndex: "$base",
+      objectFit: "cover"
+    },
+    [`& ${Label2}`]: {
+      maxWidth: "90%"
+    }
+  });
+
   // ../assets/js/features/ElectronPipWindow/index.tsx
-  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime72 = __toESM(require_jsx_runtime());
   var log6 = logger("electron-pip-window");
   function ElectronPipWindow(props) {
-    var _a2, _b, _c, _d, _e, _f, _g, _h, _i, _j;
-    const [pipState, setPipState] = (0, import_react8.useState)({});
-    const [videoFrame, setVideoFrame] = (0, import_react8.useState)({});
-    (0, import_react8.useEffect)(() => {
-      var _a3;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o;
+    const [pipState, setPipState] = (0, import_react9.useState)({});
+    const [videoFrame, setVideoFrame] = (0, import_react9.useState)({});
+    (0, import_react9.useEffect)(() => {
+      var _a2;
       log6.info("Listen messages");
-      (_a3 = getIpcRenderer()) == null ? void 0 : _a3.on("message", onMessage);
+      (_a2 = getIpcRenderer()) == null ? void 0 : _a2.on("message", onMessage);
       messageMainWindow({ requestState: true });
       return () => {
-        var _a4;
-        (_a4 = getIpcRenderer()) == null ? void 0 : _a4.removeListener("message", onMessage);
+        var _a3;
+        (_a3 = getIpcRenderer()) == null ? void 0 : _a3.removeListener("message", onMessage);
       };
     }, []);
-    const self2 = (_a2 = pipState.participants) == null ? void 0 : _a2.find((p2) => p2.isSelf);
+    const self2 = (_a = pipState.participants) == null ? void 0 : _a.find((p2) => p2.isSelf);
     const active = ((_b = pipState.participants) == null ? void 0 : _b.filter((p2) => p2.isActive && !p2.isSelf)) || [];
-    return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(import_react_tooltip2.TooltipProvider, { children: pipState.workspace ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+    const total = active.length + (self2 ? 1 : 0) + (((_c = pipState.participants) == null ? void 0 : _c.filter((p2) => {
+      var _a2;
+      return !!((_a2 = p2.participant) == null ? void 0 : _a2.screenOn);
+    }).length) || 0);
+    return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(import_react_tooltip2.TooltipProvider, { children: pipState.workspace ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
       PipCallProvider,
       {
-        userId: (_c = pipState.localUser) == null ? void 0 : _c.id,
-        roomUrl: (_d = pipState.workspace) == null ? void 0 : _d.daily_room_url,
-        children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(Container2, { onDoubleClick: showMainWindow, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Handle, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(HandleButton, {}) }),
-          /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Call, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(BoxTile, { numBoxes: active.length + (self2 ? 1 : 0), children: [
-            self2 ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+        userId: (_d = pipState.localUser) == null ? void 0 : _d.id,
+        roomUrl: (_e = pipState.workspace) == null ? void 0 : _e.daily_room_url,
+        children: /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(Container3, { onDoubleClick: showMainWindow, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Handle, { children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(HandleButton, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Call, { children: /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(BoxTile, { numBoxes: total, children: [
+            ((_f = self2 == null ? void 0 : self2.participant) == null ? void 0 : _f.screenOn) && ((_g = self2.participant) == null ? void 0 : _g.sessionId) ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+              Screen,
+              {
+                sessionId: self2.participant.sessionId,
+                label: "Your screen",
+                labelColor: ((_h = self2.user) == null ? void 0 : _h.name) ? stringToRGB((_i = self2.user) == null ? void 0 : _i.name, participantLabelBg) : ""
+              }
+            ) : null,
+            self2 ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
               UserIconView,
               {
                 userId: self2.userId,
@@ -56893,77 +57035,89 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 tap,
                 isOnline: self2.isOnline,
                 createStatusHook,
-                videoParticipantId: ((_e = self2.participant) == null ? void 0 : _e.cameraOn) ? (_f = self2.participant) == null ? void 0 : _f.dailyUserId : void 0,
+                videoParticipantId: ((_j = self2.participant) == null ? void 0 : _j.cameraOn) ? (_k = self2.participant) == null ? void 0 : _k.dailyUserId : void 0,
                 self: true,
                 tile: true
-              }
+              },
+              self2.userId
             ) : null,
             active.map((p2) => {
-              var _a3, _b2;
-              return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
-                UserIconView,
-                {
-                  userId: p2.userId,
-                  user: p2.user,
-                  status: p2.status,
-                  small: active.length > 0,
-                  tap,
-                  isOnline: p2.isOnline,
-                  createStatusHook,
-                  videoParticipantId: ((_a3 = p2.participant) == null ? void 0 : _a3.cameraOn) ? (_b2 = p2.participant) == null ? void 0 : _b2.dailyUserId : void 0,
-                  tile: true
-                }
-              );
+              var _a2, _b2, _c2, _d2, _e2, _f2, _g2;
+              return /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(import_jsx_runtime72.Fragment, { children: [
+                ((_a2 = p2 == null ? void 0 : p2.participant) == null ? void 0 : _a2.screenOn) && ((_b2 = p2.participant) == null ? void 0 : _b2.sessionId) ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+                  Screen,
+                  {
+                    sessionId: p2.participant.sessionId,
+                    label: `${(_c2 = p2.user) == null ? void 0 : _c2.name}'s Screen`,
+                    labelColor: ((_d2 = p2.user) == null ? void 0 : _d2.name) ? stringToRGB((_e2 = p2.user) == null ? void 0 : _e2.name, participantLabelBg) : ""
+                  }
+                ) : null,
+                /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+                  UserIconView,
+                  {
+                    userId: p2.userId,
+                    user: p2.user,
+                    status: p2.status,
+                    small: active.length > 0,
+                    tap,
+                    isOnline: p2.isOnline,
+                    createStatusHook,
+                    videoParticipantId: ((_f2 = p2.participant) == null ? void 0 : _f2.cameraOn) ? (_g2 = p2.participant) == null ? void 0 : _g2.dailyUserId : void 0,
+                    tile: true
+                  },
+                  p2.userId
+                )
+              ] });
             })
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(Buttonset, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Tooltip, { content: "Turn off video", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(Buttonset, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Tooltip, { content: "Turn off video", children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
               Button,
               {
                 onClick: toggleCamera,
-                on: ((_g = pipState.localStatus) == null ? void 0 : _g.camera_on) || false,
-                children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+                on: ((_l = pipState.localStatus) == null ? void 0 : _l.camera_on) || false,
+                children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
                   Icon,
                   {
-                    name: ((_h = pipState.localStatus) == null ? void 0 : _h.camera_on) ? "video" : "videoOff"
+                    name: ((_m = pipState.localStatus) == null ? void 0 : _m.camera_on) ? "video" : "videoOff"
                   }
                 )
               }
             ) }),
-            /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Tooltip, { content: "Turn off microphone", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Tooltip, { content: "Turn off microphone", children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
               Button,
               {
                 onClick: toggleMic,
-                on: ((_i = pipState.localStatus) == null ? void 0 : _i.mic_on) || false,
-                children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+                on: ((_n = pipState.localStatus) == null ? void 0 : _n.mic_on) || false,
+                children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
                   Icon,
                   {
-                    name: ((_j = pipState.localStatus) == null ? void 0 : _j.mic_on) ? "mic" : "micOff"
+                    name: ((_o = pipState.localStatus) == null ? void 0 : _o.mic_on) ? "mic" : "micOff"
                   }
                 )
               }
             ) }),
-            /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Tooltip, { content: "Hang up call", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(HangUpButton, { onClick: leaveCall, children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Icon, { name: "phoneHangUp" }) }) })
+            /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Tooltip, { content: "Hang up call", children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(HangUpButton, { onClick: leaveCall, children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Icon, { name: "phoneHangUp" }) }) })
           ] })
         ] })
       }
     ) : null });
     function onMessage(event, msg) {
-      var _a3;
+      var _a2;
       log6.info("Received message", msg);
       if (msg.payload.provideState) {
         setPipState(msg.payload.provideState.state);
         return;
       }
       if (msg.payload.sendVideoFrame) {
-        const userId = (_a3 = msg.payload.sendVideoFrame) == null ? void 0 : _a3.userId;
+        const userId = (_a2 = msg.payload.sendVideoFrame) == null ? void 0 : _a2.userId;
         if (!userId)
           return;
         setVideoFrame((videoFrames) => {
-          var _a4;
+          var _a3;
           return __spreadProps(__spreadValues({}, videoFrames), {
             [userId]: {
-              frame: (_a4 = msg.payload.sendVideoFrame) == null ? void 0 : _a4.base64Image,
+              frame: (_a3 = msg.payload.sendVideoFrame) == null ? void 0 : _a3.base64Image,
               ts: Date.now()
             }
           });
@@ -56989,12 +57143,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       });
     }
     function toggleCamera() {
-      var _a3;
-      sendToggleCommand("setCameraOn", !((_a3 = pipState.localStatus) == null ? void 0 : _a3.camera_on));
+      var _a2;
+      sendToggleCommand("setCameraOn", !((_a2 = pipState.localStatus) == null ? void 0 : _a2.camera_on));
     }
     function toggleMic() {
-      var _a3;
-      sendToggleCommand("setMicOn", !((_a3 = pipState.localStatus) == null ? void 0 : _a3.mic_on));
+      var _a2;
+      sendToggleCommand("setMicOn", !((_a2 = pipState.localStatus) == null ? void 0 : _a2.mic_on));
     }
     function leaveCall() {
       messageMainWindow({ leaveCall: true });
@@ -57011,7 +57165,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       messageWindowManager({ showMainWindow: true });
     }
   }
-  var Container2 = styled("div", {
+  var Container3 = styled("div", {
     display: "flex",
     flexDirection: "column",
     width: "100vw",
@@ -57075,7 +57229,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       color: "$electronPipHangUpButtonFg"
     }
   });
-  import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime68.jsx)(ElectronPipWindow, {}), document.getElementById("root"));
+  import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime72.jsx)(ElectronPipWindow, {}), document.getElementById("root"));
 })();
 /*! Bundled license information:
 

@@ -198,7 +198,7 @@ function sendMessage(chan, message) {
   if (!isElectron)
     return;
   if (!ipcRenderer) {
-    log3.error("ipcRenderer undefined");
+    log3.error("ipcRenderer is not available to renderer process.");
     return;
   }
   log3.info("Sending message", chan, message);
@@ -237,6 +237,7 @@ function createMessageFn2(windowFn, target) {
 }
 
 // src/tray.ts
+var import_path2 = require("path");
 var trayWindow = null;
 var trayButton = null;
 function getTrayWindow() {
@@ -256,10 +257,9 @@ function createTrayWindow() {
     frame: false,
     transparent: true,
     webPreferences: {
+      preload: (0, import_path2.join)(__dirname, "preload.js"),
       nodeIntegration: true,
-      contextIsolation: false,
-      // Prevents renderer process code from not running when window is
-      // hidden
+      contextIsolation: true,
       backgroundThrottling: false
     }
   });
@@ -272,6 +272,9 @@ function createTrayWindow() {
       isTrayWindowVisible: false
     });
   });
+  if (isDev) {
+    trayWindow.webContents.openDevTools();
+  }
 }
 function createTrayButton() {
   trayButton = new import_electron4.Tray(assetPath("tray_icon_emptyTemplate.png"));
@@ -358,6 +361,7 @@ var import_electron_log7 = __toESM(require("electron-log"));
 // src/pip.ts
 var import_electron6 = require("electron");
 var import_electron_log6 = __toESM(require("electron-log"));
+var import_path3 = require("path");
 var size = {
   width: 175,
   height: 350
@@ -384,8 +388,9 @@ function createPipWindow(position) {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
+      preload: (0, import_path3.join)(__dirname, "preload.js"),
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
       // Prevents renderer process code from not running when window is
       // hidden
       backgroundThrottling: false,

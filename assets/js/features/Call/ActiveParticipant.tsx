@@ -30,7 +30,7 @@ const log = logger('call/active-participant')
 
 export const ActiveParticipant = React.memo(
   UActiveParticipant,
-  function(prev: Props, next: Props) {
+  function (prev: Props, next: Props) {
     return (
       prev.muted === next.muted &&
       prev.participantId === next.participantId &&
@@ -188,7 +188,7 @@ export const ActiveParticipantRoot = styled('div', {
           height: '25%',
           right: '20px',
           bottom: '20px',
-          borderRadius: '30%',
+          borderRadius: '100%',
           aspectRatio: '1',
           boxShadow: '0px 0px 5px rgb(0 0 0 / 10%)',
         },

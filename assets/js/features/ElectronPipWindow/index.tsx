@@ -16,6 +16,9 @@ import {
 import { UserIconView } from 'components/UserView'
 import { BoxTile } from 'components/BoxTile'
 import { PipCallProvider } from './PipCallProvider'
+import { Screen } from './Screen'
+import { stringToRGB } from 'lib/colors'
+import { participantLabelBg } from 'themes/colors'
 // import selectors from 'selectors'
 // import { useSelector, useDispatch } from 'state'
 
@@ -44,6 +47,12 @@ export function ElectronPipWindow(props: Props) {
   const active =
     pipState.participants?.filter((p) => p.isActive && !p.isSelf) || []
 
+  const total =
+    active.length +
+    (self ? 1 : 0) +
+    (pipState.participants?.filter((p) => !!p.participant?.screenOn).length ||
+      0)
+
   return (
     <TooltipProvider>
       {pipState.workspace ? (
@@ -56,9 +65,21 @@ export function ElectronPipWindow(props: Props) {
               <HandleButton />
             </Handle>
             <Call>
-              <BoxTile numBoxes={active.length + (self ? 1 : 0)}>
+              <BoxTile numBoxes={total}>
+                {self?.participant?.screenOn && self.participant?.sessionId ? (
+                  <Screen
+                    sessionId={self.participant.sessionId}
+                    label="Your screen"
+                    labelColor={
+                      self.user?.name
+                        ? stringToRGB(self.user?.name, participantLabelBg)
+                        : ''
+                    }
+                  />
+                ) : null}
                 {self ? (
                   <UserIconView
+                    key={self.userId}
                     userId={self.userId}
                     user={self.user}
                     status={self.status}
@@ -76,21 +97,35 @@ export function ElectronPipWindow(props: Props) {
                   />
                 ) : null}
                 {active.map((p) => (
-                  <UserIconView
-                    userId={p.userId}
-                    user={p.user}
-                    status={p.status}
-                    small={active.length > 0}
-                    tap={tap}
-                    isOnline={p.isOnline}
-                    createStatusHook={createStatusHook}
-                    videoParticipantId={
-                      p.participant?.cameraOn
-                        ? p.participant?.dailyUserId
-                        : undefined
-                    }
-                    tile
-                  />
+                  <>
+                    {p?.participant?.screenOn && p.participant?.sessionId ? (
+                      <Screen
+                        sessionId={p.participant.sessionId}
+                        label={`${p.user?.name}'s Screen`}
+                        labelColor={
+                          p.user?.name
+                            ? stringToRGB(p.user?.name, participantLabelBg)
+                            : ''
+                        }
+                      />
+                    ) : null}
+                    <UserIconView
+                      key={p.userId}
+                      userId={p.userId}
+                      user={p.user}
+                      status={p.status}
+                      small={active.length > 0}
+                      tap={tap}
+                      isOnline={p.isOnline}
+                      createStatusHook={createStatusHook}
+                      videoParticipantId={
+                        p.participant?.cameraOn
+                          ? p.participant?.dailyUserId
+                          : undefined
+                      }
+                      tile
+                    />
+                  </>
                 ))}
               </BoxTile>
             </Call>

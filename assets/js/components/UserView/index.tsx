@@ -141,6 +141,7 @@ export const Label = styled('div', {
   round: 'small',
   label: true,
   display: 'flex',
+  ellipsis: true,
   gap: '4px',
   variants: {
     tile: {

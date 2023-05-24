@@ -12,15 +12,13 @@ import {
   setBackgroundBlur,
   setVideoInputDeviceId,
 } from 'features/Settings/slice'
-import {
-  useLocalParticipant,
-} from '@daily-co/daily-react-hooks'
+import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import { setParticipantStatus } from 'features/Call/slice'
 import { logger } from 'lib/log'
 import { ConnectionStatus } from 'features/Dock/ConnectionStatus'
 import { useScreenShare } from 'features/Screenshare/use-screenshare'
 
-interface Props { }
+interface Props {}
 
 const log = logger('call-dock')
 
@@ -34,7 +32,11 @@ export function CallDock(props: Props) {
   useEffect(() => {
     if (!localParticipant || !localUser) return
 
-    log.info('Sync local participant props', localParticipant, screenshare.isSharingScreen)
+    log.info(
+      'Sync local participant props',
+      localParticipant,
+      screenshare.isSharingScreen
+    )
 
     dispatch(
       setParticipantStatus({

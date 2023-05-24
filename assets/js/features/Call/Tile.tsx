@@ -66,6 +66,8 @@ export function CallTile(props: Props) {
       '--tile-width': size.width + 'px',
       '--tile-height': size.height + 'px',
       '--avatar-font-size': Math.floor(size.height / 8) + 'px',
+      '--screenshare-avatar-size':
+        Math.max(Math.floor(size.height / 4), 200) + 'px',
     }
   }, [props.ids.length, dimensions])
 

@@ -38482,10 +38482,10 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx77 = jsxWithValidationDynamic;
+          var jsx78 = jsxWithValidationDynamic;
           var jsxs35 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx77;
+          exports.jsx = jsx78;
           exports.jsxs = jsxs35;
         })();
       }
@@ -67681,7 +67681,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     if (!isElectron)
       return;
     if (!ipcRenderer) {
-      log.error("ipcRenderer undefined");
+      log.error("ipcRenderer is not available to renderer process.");
       return;
     }
     log.info("Sending message", chan, message);
@@ -69731,8 +69731,34 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     );
   }
 
-  // ../assets/js/components/Icon/index.tsx
+  // ../assets/js/components/Icon/Book.tsx
   var import_jsx_runtime54 = __toESM(require_jsx_runtime());
+  function BookIcon(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+      "svg",
+      __spreadProps(__spreadValues({
+        viewBox: "4 4 16 16",
+        width: "100%",
+        height: "100%",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+          "path",
+          {
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            d: "M19.25 5.75a1 1 0 0 0-1-1H14a2 2 0 0 0-2 2v12.5l.828-.828a4 4 0 0 1 2.829-1.172h2.593a1 1 0 0 0 1-1V5.75ZM4.75 5.75a1 1 0 0 1 1-1H10a2 2 0 0 1 2 2v12.5l-.828-.828a4 4 0 0 0-2.829-1.172H5.75a1 1 0 0 1-1-1V5.75Z"
+          }
+        )
+      })
+    );
+  }
+
+  // ../assets/js/components/Icon/index.tsx
+  var import_jsx_runtime55 = __toESM(require_jsx_runtime());
   var icons = {
     headphones: HeadphonesIcon,
     coffee: CoffeeIcon,
@@ -69786,29 +69812,30 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     arrowLeft: ArrowLeft,
     close: CloseIcon,
     chevronDown: ChevronDownIcon,
-    pictureInPicture: PictureInPictureIcon
+    pictureInPicture: PictureInPictureIcon,
+    book: BookIcon
   };
   var log7 = logger("icons");
   function Icon(props) {
     if (!props.name)
-      return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(import_jsx_runtime54.Fragment, {});
+      return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(import_jsx_runtime55.Fragment, {});
     const IconComponent = icons[props.name] || icons[props.name.replace(/-([a-z])/g, function(g2) {
       return g2[1].toUpperCase();
     })];
     if (IconComponent) {
-      return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(IconComponent, __spreadValues({}, props));
+      return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(IconComponent, __spreadValues({}, props));
     } else {
       log7.error("Can not find icon", props.name, Object.keys(icons));
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(import_jsx_runtime54.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(import_jsx_runtime55.Fragment, {});
   }
   var Icon_default = Icon;
 
   // ../assets/js/components/ToggleGroup/index.tsx
   var import_react_toggle_group = __toESM(require_dist17());
-  var import_jsx_runtime55 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
   function ToggleRoot(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
       StyledRoot,
       {
         type: "single",
@@ -69822,10 +69849,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   function ToggleItem(props) {
     return (
       // @ts-ignore
-      /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(StyledItem, { value: props.value, ref: props.itemRef, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime56.jsxs)(StyledItem, { value: props.value, ref: props.itemRef, children: [
         props.children ? props.children : null,
-        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(Icon_default, { name: props.icon }) : null,
-        props.label ? /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(Label, { children: props.label }) : null
+        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Icon_default, { name: props.icon }) : null,
+        props.label ? /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Label, { children: props.label }) : null
       ] })
     );
   }
@@ -69880,9 +69907,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   };
 
   // ../assets/js/components/FocusRegion/index.tsx
-  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
   function FocusRegion(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(
       StyledFocusRegion,
       {
         "data-region-id": props.regionId,
@@ -69922,11 +69949,11 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/components/Kbd/index.tsx
-  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
   function Kbd(props) {
-    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Keys, { children: props.keys.map((s2, ind) => /* @__PURE__ */ (0, import_jsx_runtime57.jsxs)(import_jsx_runtime57.Fragment, { children: [
-      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Sep, { children: "+" }, "step" + ind) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Key, { children: keySymbol(s2) }, ind)
+    return props.keys.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Keys, { children: props.keys.map((s2, ind) => /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(import_jsx_runtime58.Fragment, { children: [
+      props.sep && ind !== 0 ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Sep, { children: "+" }, "step" + ind) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Key, { children: keySymbol(s2) }, ind)
     ] })) }) : null;
   }
   var Keys = styled("div", {
@@ -69951,13 +69978,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/Tooltip/index.tsx
-  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
   function Tooltip(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(import_react_tooltip.Root, { delayDuration: 400, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(import_react_tooltip.Trigger, { asChild: true, children: props.children }),
-      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(import_react_tooltip.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(StyledContent, { sideOffset: 10, hideWhenDetached: true, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)(import_react_tooltip.Root, { delayDuration: 400, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(import_react_tooltip.Trigger, { asChild: true, children: props.children }),
+      /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(import_react_tooltip.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)(StyledContent, { sideOffset: 10, hideWhenDetached: true, children: [
         props.content,
-        props.shortcut ? /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Kbd, { keys: props.shortcut }) : null
+        props.shortcut ? /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(Kbd, { keys: props.shortcut }) : null
       ] }) })
     ] });
   }
@@ -69985,16 +70012,16 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_react_hotkeys_hook = __toESM(require_dist3());
 
   // ../assets/js/components/Emoji/index.tsx
-  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
   function Emoji(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("em-emoji", { id: props.id, size: props.size });
+    return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)("em-emoji", { id: props.id, size: props.size });
   }
 
   // ../assets/js/features/Dock/StatusIcon.tsx
-  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime61 = __toESM(require_jsx_runtime());
   function StatusIcon(props) {
     var _a4, _b2, _c;
-    return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(StyledStatusIcon, { children: ((_a4 = props.status) == null ? void 0 : _a4.emoji) && !props.noEmoji && props.isOnline !== false ? /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(Emoji, { id: (_b2 = props.status) == null ? void 0 : _b2.emoji, size: "1.35em" }) : /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StyledStatusIcon, { children: ((_a4 = props.status) == null ? void 0 : _a4.emoji) && !props.noEmoji && props.isOnline !== false ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Emoji, { id: (_b2 = props.status) == null ? void 0 : _b2.emoji, size: "1.35em" }) : /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
       StatusCircle,
       {
         presence: (_c = props.status) == null ? void 0 : _c.status,
@@ -70059,7 +70086,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/Dock/StatusControls.tsx
-  var import_jsx_runtime61 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime62 = __toESM(require_jsx_runtime());
   var log8 = logger("dock/status-controls");
   function StatusControls(props) {
     var _a4, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p;
@@ -70183,13 +70210,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       },
       [props.isDropdownOpen]
     );
-    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StatusControlsRoot, { children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(StatusControlsRoot, { children: /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
       Popover.Root,
       {
         open: props.isDropdownOpen,
         onOpenChange: props.setDropdownOpen,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
             FocusRegion,
             {
               regionId: "message" /* Message */,
@@ -70202,15 +70229,15 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 }
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StyledAnchor, { reverse: props.reverseOrder }),
-                /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(StyledAnchor, { reverse: props.reverseOrder }),
+                /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
                   MessageSection,
                   {
                     tray: props.tray,
                     focused: props.tray && ((_j = props.focus) == null ? void 0 : _j.region) === "message" /* Message */,
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Tooltip, { content: "Set emoji & flow", children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Popover.Trigger, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(CurrentStatusIcon, { children: ((_k = props.localStatus) == null ? void 0 : _k.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(StatusIcon, { status: props.localStatus }) : /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Icon_default, { name: "emoji" }) }) }) }),
-                      /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+                      /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Tooltip, { content: "Set emoji & flow", children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Popover.Trigger, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(CurrentStatusIcon, { children: ((_k = props.localStatus) == null ? void 0 : _k.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(StatusIcon, { status: props.localStatus }) : /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Icon_default, { name: "emoji" }) }) }) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
                         MessageInput,
                         {
                           type: "text",
@@ -70228,28 +70255,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Popover.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Popover.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
             Popover.Content,
             {
               onFocusOutside: handleFocusOutside,
               onPointerDownOutside: handlePointerDownOutside,
               side: props.reverseOrder ? "top" : "bottom",
               asChild: true,
-              children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(ControlMenu, { tray: props.tray, reverse: props.reverseOrder, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+              children: /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(ControlMenu, { tray: props.tray, reverse: props.reverseOrder, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
                   FocusRegion,
                   {
                     regionId: "emoji" /* EmojiSearch */,
                     focusSwitcher: props.setFocusRegion,
-                    children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
+                    children: /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
                       DockSection,
                       {
                         focused: ((_m = props.focus) == null ? void 0 : _m.region) === "emoji" /* EmojiSearch */,
                         nolabel: true,
                         children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(SearchField, { children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(Icon_default, { name: "search" }),
-                            /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(SearchField, { children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(Icon_default, { name: "search" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
                               EmojiSearchInput,
                               {
                                 value: props.emojiQuery,
@@ -70259,7 +70286,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                               }
                             )
                           ] }),
-                          /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(EmojiPicker, { children: props.emojiResults.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(NoEmoji, { children: "No emojis found" }) : props.emojiResults.slice(0, 10).map((e2, ind) => /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(EmojiPicker, { children: props.emojiResults.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(NoEmoji, { children: "No emojis found" }) : props.emojiResults.slice(0, 10).map((e2, ind) => /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
                             Emoji2,
                             {
                               role: "img",
@@ -70275,38 +70302,38 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                     )
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
                   FocusRegion,
                   {
                     regionId: "status" /* Status */,
                     focusSwitcher: props.setFocusRegion,
-                    children: /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
+                    children: /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
                       DockSection,
                       {
                         focused: ((_n = props.focus) == null ? void 0 : _n.region) === "status" /* Status */,
                         children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
                             Label2,
                             {
                               focused: ((_o = props.focus) == null ? void 0 : _o.region) === "status" /* Status */,
                               children: "Set your flow"
                             }
                           ),
-                          /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+                          /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
                             ToggleGroup.Root,
                             {
                               value: props.localPresence,
                               onValueChange: (presence) => props.setPresence(presence),
                               rovingFocus: ((_p = props.focus) == null ? void 0 : _p.region) === "status" /* Status */,
-                              children: PresenceModes.map((m2) => /* @__PURE__ */ (0, import_jsx_runtime61.jsxs)(
+                              children: PresenceModes.map((m2) => /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
                                 ToggleGroup.Item,
                                 {
                                   "data-mode": m2.status,
                                   value: m2.status,
                                   itemRef: m2.status === "online" /* Online */ ? statusItemRef : void 0,
                                   children: [
-                                    /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(ModeIcon, { presence: m2.status }),
-                                    /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(ToggleGroup.Label, { children: titleCase(m2.status) })
+                                    /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(ModeIcon, { presence: m2.status }),
+                                    /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(ToggleGroup.Label, { children: titleCase(m2.status) })
                                   ]
                                 },
                                 m2.status
@@ -70580,7 +70607,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
 
   // ../assets/js/components/Switch/index.tsx
   var import_react_switch = __toESM(require_dist31());
-  var import_jsx_runtime62 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime63 = __toESM(require_jsx_runtime());
   var StyledSwitch = styled("div", {
     display: "flex",
     vcenter: true,
@@ -70623,21 +70650,21 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var Label3 = styled("label", {});
 
   // ../assets/js/features/Dock/Button.tsx
-  var import_jsx_runtime63 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
   function Button(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
       Tooltip,
       {
         content: props.tooltipLabel || "",
         shortcut: props.tooltipShortcut,
-        children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(Container, { onClick: props.onClick, naked: props.naked, children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Container, { onClick: props.onClick, naked: props.naked, children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
           StyledButton,
           {
             onClick: props.onClick,
             off: props.off,
             on: props.on,
             naked: props.naked,
-            children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(Icon_default, { name: props.icon })
+            children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Icon_default, { name: props.icon })
           }
         ) })
       }
@@ -70712,28 +70739,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/CallDock/CallSwitch.tsx
-  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
   function CallSwitch(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(import_jsx_runtime64.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(import_jsx_runtime65.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
       Tooltip,
       {
         content: props.isActive ? "Leave call" : "Join call",
         shortcut: ["Space"],
-        children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
           Button2,
           {
             onClick: () => handleClick(void 0),
             on: props.isActive,
             off: !props.isActive,
             naked: props.naked,
-            children: /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(StyledSwitch, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(Icon_default, { name: "headphones" }),
-              /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+            children: /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(StyledSwitch, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Icon_default, { name: "headphones" }),
+              /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
                 CustomStyledRoot,
                 {
                   checked: props.isActive,
                   onCheckedChange: handleClick,
-                  children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(CustomStyledThumb, {})
+                  children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(CustomStyledThumb, {})
                 }
               )
             ] })
@@ -70813,10 +70840,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/ElectronTrayWindow/TrayCallControls.tsx
-  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
   function TrayCallControls(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(Container2, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(Left, { children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(Container2, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Left, { children: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
         CallSwitch,
         {
           isActive: props.isActive,
@@ -70826,8 +70853,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           tray: true
         }
       ) }),
-      /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(Right, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(Right, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
           Button,
           {
             label: "Camera",
@@ -70838,7 +70865,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             naked: true
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
           Button,
           {
             label: "Microphone",
@@ -70849,7 +70876,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             naked: true
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
           Button,
           {
             label: "Speaker",
@@ -70921,12 +70948,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
 
   // ../assets/js/components/Avatar/index.tsx
   var import_react_avatar = __toESM(require_dist32());
-  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
   function Avatar(props) {
     const css2 = { fontSize: props.fontSize || "$small" };
-    return /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(StyledImage, { src: props.src, alt: props.alt }),
-      /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(StyledFallback, { children: initials(props.fallback) })
+    return /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(AvatarRoot, { css: css2, onClick: props.onClick, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(StyledImage, { src: props.src, alt: props.alt }),
+      /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(StyledFallback, { children: initials(props.fallback) })
     ] });
   }
   var AvatarRoot = styled(import_react_avatar.Root, {
@@ -70958,9 +70985,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
 
   // ../assets/js/components/ContextMenu/index.tsx
   var import_react_context_menu = __toESM(require_dist42());
-  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
   function LocalContent(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(import_react_context_menu.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(StyledContent2, { children: props.children }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(import_react_context_menu.Portal, { children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(StyledContent2, { children: props.children }) });
   }
   var StyledContent2 = styled(import_react_context_menu.Content, {
     minWidth: "220px",
@@ -70976,13 +71003,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     zIndex: "$aboveContent"
   });
   function LocalItem(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(StyledItem2, { onClick: props.onClick, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(LeftSlot, { children: [
-        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Icon_default, { name: props.icon }) : null,
-        props.emoji ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Emoji, { id: props.emoji }) : null
+    return /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(StyledItem2, { onClick: props.onClick, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(LeftSlot, { children: [
+        props.icon ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Icon_default, { name: props.icon }) : null,
+        props.emoji ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Emoji, { id: props.emoji }) : null
       ] }),
       props.label,
-      /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(RightSlot, { children: props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(Kbd, { keys: props.kbd }) : null })
+      /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(RightSlot, { children: props.kbd ? /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(Kbd, { keys: props.kbd }) : null })
     ] });
   }
   var RightSlot = styled("div", {
@@ -71038,10 +71065,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   };
 
   // ../assets/js/components/Timestamp/index.tsx
-  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime69 = __toESM(require_jsx_runtime());
 
   // ../assets/js/components/StatusUpdate/index.tsx
-  var import_jsx_runtime69 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime70 = __toESM(require_jsx_runtime());
   var StyledStatusUpdate = styled("div", {
     display: "flex",
     gap: "8px"
@@ -71084,12 +71111,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserHeader/index.tsx
-  var import_jsx_runtime70 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime71 = __toESM(require_jsx_runtime());
   function UserHeader(props) {
     var _a4, _b2, _c, _d, _e, _f, _g;
-    return /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(Container3, { children: [
-      props.status ? /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(StatusIcon, { status: props.status, noEmoji: true, isOnline: props.online }) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(Container3, { children: [
+      props.status ? /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(StatusIcon, { status: props.status, noEmoji: true, isOnline: props.online }) : null,
+      /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
         Avatar,
         {
           src: (_a4 = props.user) == null ? void 0 : _a4.profile_photo_url,
@@ -71097,12 +71124,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           fallback: ((_c = props.user) == null ? void 0 : _c.name) || "User"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(Right2, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(StatusHeader, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(Right2, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(StatusHeader, { children: [
           firstName(((_d = props.user) == null ? void 0 : _d.name) || ""),
-          ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(Emoji, { id: props.status.emoji }) : null
+          ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Emoji, { id: props.status.emoji }) : null
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
       ] })
     ] });
   }
@@ -71124,12 +71151,12 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserContextMenu/UserContextMenuView.tsx
-  var import_jsx_runtime71 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime72 = __toESM(require_jsx_runtime());
   function UserContextMenuView(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(ContextMenu.Root, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ContextMenu.Trigger, { asChild: true, children: props.children }),
-      /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(ContextMenu.Content, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(ContextMenu.Root, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(ContextMenu.Trigger, { asChild: true, children: props.children }),
+      /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(ContextMenu.Content, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
           UserHeader,
           {
             user: props.user,
@@ -71137,8 +71164,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             online: props.isOnline
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ContextMenu.Separator, {}),
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(ContextMenu.Separator, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
           ContextMenu.Item,
           {
             emoji: "wave",
@@ -71146,7 +71173,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             onClick: () => props.tap(props.userId)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
           ContextMenu.Item,
           {
             icon: props.existingHook ? "checkmark" : "bell",
@@ -71154,8 +71181,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             onClick: () => props.createStatusHook(props.userId)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ContextMenu.Item, { icon: "users", label: "Go to 1:1 room" }),
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(ContextMenu.Item, { icon: "mail", label: "Send message" })
+        /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(ContextMenu.Item, { icon: "users", label: "Go to 1:1 room" }),
+        /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(ContextMenu.Item, { icon: "mail", label: "Send message" })
       ] })
     ] });
   }
@@ -71209,7 +71236,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/features/PictureInPicture/Video.tsx
   var import_react7 = __toESM(require_react());
   var import_daily_react_hooks = __toESM(require_dist43());
-  var import_jsx_runtime72 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime73 = __toESM(require_jsx_runtime());
   var log9 = logger("picture-in-picture/video");
   function PictureInPictureVideo(props) {
     var _a4;
@@ -71224,7 +71251,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     }, [(_a4 = track2 == null ? void 0 : track2.persistentTrack) == null ? void 0 : _a4.id]);
     const videoEl = (0, import_react7.useMemo)(() => {
       log9.info("Re-render element");
-      return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Player, { autoPlay: true, muted: true, playsInline: true, ref: el });
+      return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(Player, { autoPlay: true, muted: true, playsInline: true, ref: el });
     }, [track2.persistentTrack]);
     return videoEl;
   }
@@ -71243,14 +71270,14 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserView/index.tsx
-  var import_jsx_runtime73 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime74 = __toESM(require_jsx_runtime());
   function UserIconView(props) {
     var _a4, _b2, _c, _d;
     const color = (0, import_react8.useMemo)(() => {
       var _a5;
       return stringToRGB(((_a5 = props.user) == null ? void 0 : _a5.name) || props.userId, participantLabelBg);
     }, [props.userId]);
-    return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
       UserContextMenuView,
       {
         userId: props.userId,
@@ -71260,8 +71287,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         existingHook: props.existingHook,
         isOnline: props.isOnline,
         createStatusHook: props.createStatusHook,
-        children: /* @__PURE__ */ (0, import_jsx_runtime73.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime73.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(StyledUserIconView, { small: props.small, tile: props.tile, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(
             Label5,
             {
               tile: props.tile,
@@ -71269,20 +71296,20 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                 backgroundColor: color
               },
               children: [
-                !((_a4 = props.status) == null ? void 0 : _a4.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(Icon_default, { name: "mic-off" }) : null,
+                !((_a4 = props.status) == null ? void 0 : _a4.mic_on) ? /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(Icon_default, { name: "mic-off" }) : null,
                 firstName(((_b2 = props.user) == null ? void 0 : _b2.name) || "")
               ]
             }
           ),
-          props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
-          props.videoParticipantId ? /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
+          props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(VideoFrame, { src: props.videoFrame, mirror: props.self }) : null,
+          props.videoParticipantId ? /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
             PictureInPictureVideo,
             {
               participantId: props.videoParticipantId,
               mirror: props.self
             }
           ) : null,
-          !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
+          !props.videoFrame ? /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
             Avatar,
             {
               src: (_c = props.user) == null ? void 0 : _c.profile_photo_url,
@@ -71378,20 +71405,20 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/components/UserStatus/Label.tsx
-  var import_jsx_runtime74 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime75 = __toESM(require_jsx_runtime());
   function UserStatusLabel(props) {
     var _a4, _b2;
     if (!props.isOnline) {
-      return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(import_jsx_runtime74.Fragment, { children: "'Offline'" });
+      return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(import_jsx_runtime75.Fragment, { children: "'Offline'" });
     }
     if (props.status && props.status.message && props.status.message.trim().length > 16) {
-      return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(import_jsx_runtime74.Fragment, { children: (_a4 = props.status) == null ? void 0 : _a4.message });
+      return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(import_jsx_runtime75.Fragment, { children: (_a4 = props.status) == null ? void 0 : _a4.message });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(import_jsx_runtime74.Fragment, { children: props.status ? (_b2 = findModeByStatus(props.status.status)) == null ? void 0 : _b2.label : "" });
+    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(import_jsx_runtime75.Fragment, { children: props.status ? (_b2 = findModeByStatus(props.status.status)) == null ? void 0 : _b2.label : "" });
   }
 
   // ../assets/js/components/UserView/UserListView.tsx
-  var import_jsx_runtime75 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime76 = __toESM(require_jsx_runtime());
   function UserListView(props) {
     var _a4, _b2, _c, _d, _e;
     const localTime = (/* @__PURE__ */ new Date()).toLocaleTimeString("en-US", {
@@ -71399,7 +71426,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       minute: "numeric",
       timeZone: (_a4 = props.status) == null ? void 0 : _a4.timezone
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
       UserContextMenuView,
       {
         userId: props.userId,
@@ -71409,25 +71436,25 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         existingHook: props.existingHook,
         isOnline: props.isOnline,
         createStatusHook: props.createStatusHook,
-        children: /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Root7, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Left2, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Root7, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Left2, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
               Avatar,
               {
                 src: (_b2 = props.user) == null ? void 0 : _b2.profile_photo_url,
                 fallback: ((_c = props.user) == null ? void 0 : _c.name) || "User " + props.userId
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(StatusIcon, { status: props.status, isOnline: props.isOnline, noEmoji: true })
+            /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(StatusIcon, { status: props.status, isOnline: props.isOnline, noEmoji: true })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Right3, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Username, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Right3, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Username, { children: [
               (_d = props.user) == null ? void 0 : _d.name,
-              ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(Emoji, { id: props.status.emoji }) : null
+              ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Emoji, { id: props.status.emoji }) : null
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Status, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(LocalTime, { children: localTime }),
-              /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(UserStatusLabel, { status: props.status, isOnline: props.isOnline })
+            /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Status, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(LocalTime, { children: localTime }),
+              /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(UserStatusLabel, { status: props.status, isOnline: props.isOnline })
             ] })
           ] })
         ] })
@@ -71504,7 +71531,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   });
 
   // ../assets/js/features/ElectronTrayWindow/index.tsx
-  var import_jsx_runtime76 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime77 = __toESM(require_jsx_runtime());
   var log10 = logger("electron-tray-window");
   function ElectronTrayWindow(props) {
     var _a4, _b2, _c, _d, _e, _f, _g, _h, _i, _j;
@@ -71571,28 +71598,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     globalStyles();
     const active = ((_c = trayState.participants) == null ? void 0 : _c.filter((p2) => !p2.isSelf && p2.isActive)) || [];
     const inactive = ((_d = trayState.participants) == null ? void 0 : _d.filter((p2) => !p2.isSelf && !p2.isActive)) || [];
-    return /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Tooltip2.Provider, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(EmojiProvider, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Container4, { onClick: handleClick, ref: containerEl, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(RoomHeader, { onClick: showMainWindow, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(RoomStatusIcon, { mode: trayState.focusedRoomStatus }),
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(RoomName, { children: (_e = trayState.focusedRoom) == null ? void 0 : _e.name })
+    return /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(Tooltip2.Provider, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(EmojiProvider, {}),
+      /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(Container4, { onClick: handleClick, ref: containerEl, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(RoomHeader, { onClick: showMainWindow, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(RoomStatusIcon, { mode: trayState.focusedRoomStatus }),
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(RoomName, { children: (_e = trayState.focusedRoom) == null ? void 0 : _e.name })
         ] }),
-        active.length === 0 && inactive.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Empty, { onClick: showMainWindow, children: [
+        active.length === 0 && inactive.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(Empty, { onClick: showMainWindow, children: [
           "It",
           "'",
           "s just you at the moment.",
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)("br", {}),
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)("br", {}),
           " Check out other rooms?"
         ] }) : null,
-        active.length ? /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(import_jsx_runtime76.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)("label", { children: [
+        active.length ? /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(import_jsx_runtime77.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)("label", { children: [
             "Call ",
             active.length > 1 ? `(${active.length})` : ""
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Active, { children: active.map((p2) => {
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(Active, { children: active.map((p2) => {
             var _a5;
-            return /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+            return /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
               UserIconView,
               {
                 userId: p2.userId,
@@ -71607,13 +71634,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             );
           }) })
         ] }) : null,
-        inactive.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(import_jsx_runtime76.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)("label", { children: [
+        inactive.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(import_jsx_runtime77.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(Title, { children: /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)("label", { children: [
             active.length ? "Others" : "Present",
             " ",
             inactive.length > 1 ? `(${inactive.length})` : ""
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(Inactive, { children: inactive.map((p2) => /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(UserRow, { children: /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(Inactive, { children: inactive.map((p2) => /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(UserRow, { children: /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
             UserListView,
             {
               userId: p2.userId,
@@ -71626,8 +71653,8 @@ This is currently a DEV-only warning but will become a thrown exception in the n
             }
           ) })) })
         ] }) : null,
-        /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(Dock, { dropdownOpen: isDropdownOpen, focus: dockFocus == null ? void 0 : dockFocus.region, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(StatusRoot, { ref: dockEl, children: /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(Dock, { dropdownOpen: isDropdownOpen, focus: dockFocus == null ? void 0 : dockFocus.region, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(StatusRoot, { ref: dockEl, children: /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
             StatusControls,
             {
               localStatus: trayState.localStatus,
@@ -71661,7 +71688,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               tray: true
             }
           ) }),
-          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
             TrayCallControls,
             {
               isActive: ((_f = trayState.localStatus) == null ? void 0 : _f.camera_on) || ((_g = trayState.localStatus) == null ? void 0 : _g.mic_on),
@@ -71915,7 +71942,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       color: "rgba(245, 250, 255, 0.35)"
     }
   });
-  import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime76.jsx)(ElectronTrayWindow, {}), document.getElementById("root"));
+  import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime77.jsx)(ElectronTrayWindow, {}), document.getElementById("root"));
 })();
 /*! Bundled license information:
 

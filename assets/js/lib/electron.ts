@@ -11,7 +11,7 @@ let ipcRenderer: IpcRenderer | null =
 
 interface IpcRenderer {
   send: (chan: string, payload: unknown) => void
-  on: (chan: string, cb: (event: Event, msg: string) => void) => void
+  on: (chan: string, cb: (event: Event, msg: ElectronMessage) => void) => void
   removeListener: (
     chan: string,
     cb: (event: Event, msg: string) => void
@@ -111,7 +111,7 @@ export function sendMessage(chan: string, message: ElectronMessage) {
   if (isNode) throw Error('Not implemented for Node')
   if (!isElectron) return
   if (!ipcRenderer) {
-    log.error('ipcRenderer undefined')
+    log.error('ipcRenderer is not available to renderer process.')
     return
   }
 

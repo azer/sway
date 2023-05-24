@@ -2,6 +2,7 @@ import { app, BrowserWindow, Tray } from "electron";
 import log from "electron-log";
 import { isDev, assetPath, htmlPath } from "./utils";
 import { messageMainWindow } from "./messaging";
+import { join as joinPath } from "path";
 
 export let trayWindow: BrowserWindow | null = null;
 export let trayButton: Tray | null = null;
@@ -26,10 +27,9 @@ export function createTrayWindow() {
     frame: false,
     transparent: true,
     webPreferences: {
+      preload: joinPath(__dirname, "preload.js"),
       nodeIntegration: true,
-      contextIsolation: false,
-      // Prevents renderer process code from not running when window is
-      // hidden
+      contextIsolation: true,
       backgroundThrottling: false,
     },
   });
@@ -50,9 +50,9 @@ export function createTrayWindow() {
     //}
   });
 
-  /*if (isDev) {
+  if (isDev) {
     trayWindow.webContents.openDevTools();
-  }*/
+  }
 }
 
 export function createTrayButton() {
