@@ -11,8 +11,13 @@ defmodule SwayWeb.WorkspaceMemberController do
     render(conn, "index.json", workspace_members: memberships)
   end
 
-  def create(conn, %{"workspace_member" => membership_params}) do
-    case Workspaces.create_membership(membership_params) do
+  def create(conn, %{"workspace_member" => params}) do
+    attrs = %{
+      workspace_id: SwayWeb.Hashing.decode_workspace(params["workspace_id"]),
+      user_id: SwayWeb.Hashing.decode_user(params["user_id"]),
+    }
+
+    case Workspaces.create_membership(attrs) do
       {:ok, membership} ->
         conn
         |> put_status(:created)

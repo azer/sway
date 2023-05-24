@@ -60,7 +60,7 @@ defmodule SwayWeb.APIView do
         resp.view.links(resp, row)
       end)
     else
-      %{}
+      %{link_map: %{}}
     end
   end
 

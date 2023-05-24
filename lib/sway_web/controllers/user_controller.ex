@@ -6,7 +6,8 @@ defmodule SwayWeb.UserController do
 
   action_fallback SwayWeb.FallbackController
 
-  def list_by_workspace(conn, %{ "workspace_id" => %{ "eq" => workspace_id } }) do
+  def list_by_workspace(conn, %{ "workspace_id" => %{ "eq" => raw_workspace_id } }) do
+    workspace_id = SwayWeb.Hashing.decode_workspace(raw_workspace_id)
     users = Sway.Workspaces.list_users_by_workspace(workspace_id)
     render(conn, "index.json", users: users)
   end
