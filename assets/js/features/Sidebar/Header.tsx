@@ -20,6 +20,16 @@ export function SidebarHeader(props: Props) {
     ]
   )
 
+  /*
+     <StatusButton
+          unread={false}
+          onClick={toggleStatusUpdates}
+          isOpen={isOpen && content === SidebarContent.StatusUpdates}
+        >
+          <Icon name="activity" />
+          </StatusButton>
+          */
+
   return (
     <Container>
       <Buttons>
@@ -30,13 +40,6 @@ export function SidebarHeader(props: Props) {
         >
           <Icon name="chat" />
         </ChatButton>
-        <StatusButton
-          unread={false}
-          onClick={toggleStatusUpdates}
-          isOpen={isOpen && content === SidebarContent.StatusUpdates}
-        >
-          <Icon name="activity" />
-        </StatusButton>
         {hasContent ? (
           <ToggleButton onClick={toggle} isOpen={isOpen}>
             <Icon name="sidebar" />
@@ -51,7 +54,11 @@ export function SidebarHeader(props: Props) {
   }
 
   function toggleChat() {
-    dispatch(openChatSidebar())
+    if (content === SidebarContent.Chat && isOpen) {
+      dispatch(setSidebarOpen(false))
+    } else {
+      dispatch(openChatSidebar())
+    }
   }
 
   function toggleStatusUpdates() {
