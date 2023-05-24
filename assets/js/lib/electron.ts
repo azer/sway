@@ -82,6 +82,12 @@ export interface ElectronPayload {
   newReleaseDownloaded?: {
     name: string
     notes: string
+    version: string
+  }
+  updateAvailable?: {
+    name: string
+    notes: string
+    version: string
   }
   quitAndInstallNewRelease?: true
   requestState?: true
@@ -104,7 +110,6 @@ export interface ElectronPayload {
   hasMicAccess?: boolean
   hasScreenAccess?: boolean
   checkingForUpdate?: boolean
-  updateAvailable?: boolean
 }
 
 export const messageMainWindow = createMessageFn(ElectronWindow.Main)

@@ -19,7 +19,7 @@ export function setupAutoUpdater() {
 
   autoUpdater.setFeedURL({
     provider: "generic",
-    url: "http://downloads.sway.so/releases/",
+    url: "https://downloads.sway.so/releases/",
   });
 
   // autoUpdater.checkForUpdatesAndNotify();
@@ -29,8 +29,8 @@ export function setupAutoUpdater() {
     messageMainWindow({ checkingForUpdate: true });
   });
 
-  autoUpdater.on("update-available", () => {
-    log.info("Checking for updates...");
+  autoUpdater.on("update-available", (info) => {
+    log.info("Update available...", info);
     messageMainWindow({ updateAvailable: true });
   });
 

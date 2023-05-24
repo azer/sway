@@ -3,18 +3,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export const name = 'auto-updater'
 
 export interface Release {
+  version: string
   name: string
   notes: string
 }
 
 interface State {
   newRelease: Release | null
-  lastRefreshedAt: number
 }
 
 export const initialState: State = {
   newRelease: null,
-  lastRefreshedAt: 0,
 }
 
 export const slice = createSlice({
@@ -24,11 +23,8 @@ export const slice = createSlice({
     setNewRelease: (state, action: PayloadAction<Release>) => {
       state.newRelease = action.payload
     },
-    setLastRefreshedAt: (state, action: PayloadAction<number>) => {
-      state.lastRefreshedAt = action.payload
-    },
   },
 })
 
-export const { setNewRelease, setLastRefreshedAt } = slice.actions
+export const { setNewRelease } = slice.actions
 export default slice.reducer

@@ -6,7 +6,3 @@ import { Release } from './slice'
 export function getNewRelease(state: RootState): Release | null {
   return state.autoUpdater.newRelease
 }
-
-export function lastRefreshedAt(state: RootState): number {
-  return state.autoUpdater.lastRefreshedAt
-}

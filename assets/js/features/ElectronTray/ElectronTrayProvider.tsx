@@ -212,6 +212,11 @@ export function ElectronTrayProvider(props: Props) {
       return
     }
 
+    if (payload.updateAvailable) {
+      dispatch(setNewRelease(payload.updateAvailable))
+      return
+    }
+
     log.error('No matching action', parsed)
   }
 }
