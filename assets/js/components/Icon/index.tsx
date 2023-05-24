@@ -52,7 +52,7 @@ import { ArrowLeft } from './ArrowLeft'
 import { CloseIcon } from './Close'
 import { ChevronDownIcon } from './ChevronDown'
 import { PictureInPictureIcon } from './PictureInPicture'
-
+import { BookIcon } from './Book'
 
 const icons: {
   [k: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
@@ -109,7 +109,8 @@ const icons: {
   arrowLeft: ArrowLeft,
   close: CloseIcon,
   chevronDown: ChevronDownIcon,
-  pictureInPicture: PictureInPictureIcon
+  pictureInPicture: PictureInPictureIcon,
+  book: BookIcon,
 }
 
 interface Props extends React.SVGProps<SVGSVGElement> {
@@ -124,9 +125,9 @@ export function Icon(props: Props) {
   const IconComponent =
     icons[props.name] ||
     icons[
-    props.name.replace(/-([a-z])/g, function(g) {
-      return g[1].toUpperCase()
-    })
+      props.name.replace(/-([a-z])/g, function (g) {
+        return g[1].toUpperCase()
+      })
     ]
   if (IconComponent) {
     return <IconComponent {...props} />

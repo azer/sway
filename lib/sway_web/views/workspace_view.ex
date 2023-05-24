@@ -23,6 +23,7 @@ defmodule SwayWeb.WorkspaceView do
       is_active: workspace.is_active,
       logo_url: workspace.logo_url,
       daily_room_url: workspace.daily_room_url,
+      handbook_url: workspace.handbook_url,
       inserted_at: workspace.inserted_at
     }
   end

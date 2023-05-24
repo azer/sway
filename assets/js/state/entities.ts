@@ -39,6 +39,7 @@ export interface User {
   email: string
   name: string
   profile_photo_url: string | null
+  is_active: boolean
   inserted_at: string
 }
 
@@ -48,6 +49,7 @@ export interface Membership {
   user_id: string
   workspace_id: string
   is_admin: boolean
+  is_active: boolean
   inserted_at: string
 }
 
@@ -59,6 +61,7 @@ export interface Workspace {
   logoUrl: string
   slug: string
   daily_room_url: string
+  is_active: boolean
 }
 
 export const Rooms = 'rooms'
@@ -78,6 +81,7 @@ export interface RoomMember {
   id: string
   user_id: string
   room_id: string
+  is_active: boolean
   inserted_at: string
 }
 

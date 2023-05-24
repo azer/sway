@@ -9,6 +9,7 @@ defmodule Sway.Workspaces.Workspace do
     field :slug, :string
     field :is_active, :boolean
     field :daily_room_url, :string
+    field :handbook_url, :string
 
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule Sway.Workspaces.Workspace do
   @doc false
   def changeset(workspace, attrs) do
     workspace
-    |> cast(attrs, [:name, :domain, :slug, :logo_url, :daily_room_url])
+    |> cast(attrs, [:name, :domain, :slug, :logo_url, :handbook_url, :daily_room_url])
     |> validate_required([:name, :domain, :slug])
     |> unique_constraint(:domain, name: :workspaces_domain_is_active_index)
     |> unique_constraint(:slug, name: :workspaces_slug_index)

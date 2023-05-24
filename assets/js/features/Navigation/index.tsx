@@ -27,6 +27,8 @@ import { usePresence } from 'features/Presence/use-presence'
 interface Props {}
 
 const log = logger('navigation')
+const DEFAULT_HANDBOOK_URL =
+  'https://docs.google.com/document/d/1eM2STn3LeTLxTWEzwTeRXH2X6YXGn3U2CcVa1By5go8/edit?usp=sharing'
 
 export function Navigation(props: Props) {
   const dispatch = useDispatch()
@@ -123,11 +125,14 @@ export function Navigation(props: Props) {
         </People>
         <Fill />
         <Bottom>
-          <Button onClick={inviteModal.open}>
+          <Button
+            href={workspace?.handbook_url || DEFAULT_HANDBOOK_URL}
+            target="_blank"
+          >
             <ButtonIcon>
-              <Icon name="user-plus" />
+              <Icon name="book" />
             </ButtonIcon>
-            <ButtonLabel>Invite members</ButtonLabel>
+            <ButtonLabel>User Handbook</ButtonLabel>
           </Button>
           <Button onClick={mail}>
             <ButtonIcon>
@@ -265,7 +270,9 @@ const Bottom = styled('div', {
   marginBottom: '12px',
 })
 
-const Button = styled('div', {
+const Button = styled('a', {
+  display: 'block',
+  textDecoration: 'none',
   width: '100%',
   unitHeight: 8,
   vcenter: true,
@@ -273,6 +280,7 @@ const Button = styled('div', {
   cursor: 'default',
   space: { inner: [2, 3], outer: [0, -3] },
   round: 'small',
+  color: '$navigationFg',
   '&:hover': {
     background: '$navigationFocusBg',
     color: '$navigationFocusFg',
