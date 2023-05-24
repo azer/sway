@@ -5,13 +5,11 @@ import {
   BrowserWindow,
   ipcMain,
   systemPreferences,
-  contextBridge,
   desktopCapturer,
   shell,
 } from "electron";
 import {
   checkForUpdates,
-  quitAndInstall,
   quitAndInstallNewRelease,
   setupAutoUpdater,
 } from "./auto-updater";

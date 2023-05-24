@@ -1,7 +1,7 @@
 import { logger } from 'lib/log'
 
 const CACHE_NAME = 'sway_web'
-const CACHE_VERSION = 'v0.0.18'
+const CACHE_VERSION = 'v0.0.19'
 const CACHE_STORE_KEY = CACHE_NAME + '-' + CACHE_VERSION
 
 let isCachingDisabled = false
@@ -17,7 +17,7 @@ const nonCachedUrls = [
 ]
 const validOrigins = ['https://sway.so', 'http://localhost:4000']
 
-const log = logger('service-worker')
+const log = logger('service-worker-' + CACHE_VERSION)
 
 // Listening to messages from the main thread
 self.addEventListener('message', (event) => {

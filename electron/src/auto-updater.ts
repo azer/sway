@@ -2,12 +2,12 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import { messageMainWindow } from "./messaging";
 
-const frequency = 6001000;
+const HOUR = 60 * 60 * 1000;
 
 let downloadedUpdate: null | any = null;
 
 export function checkForUpdates() {
-  setInterval(() => autoUpdater.checkForUpdates(), frequency);
+  setInterval(() => autoUpdater.checkForUpdates(), HOUR);
 }
 
 export function setupAutoUpdater() {
