@@ -1,6 +1,8 @@
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import { messageMainWindow } from "./messaging";
+import { setQutting } from "./main-window";
+import { Notification } from "electron";
 
 const HOUR = 60 * 60 * 1000;
 
@@ -31,7 +33,14 @@ export function setupAutoUpdater() {
 
   autoUpdater.on("update-available", (info) => {
     log.info("Update available...", info);
-    messageMainWindow({ updateAvailable: true });
+
+    messageMainWindow({
+      updateAvailable: {
+        name: info.releaseDate,
+        version: info.version,
+        notes: "",
+      },
+    });
   });
 
   autoUpdater.on(
@@ -50,9 +59,21 @@ export function setupAutoUpdater() {
   );
 
   autoUpdater.checkForUpdates();
+
+  new Notification({
+    title: "Installing updates",
+    body: "Sway will restart momentarily to apply updates.",
+  }).show();
 }
 
 export function quitAndInstallNewRelease() {
   log.info("Quit and install new release");
+  setQutting(true);
+
+  new Notification({
+    title: "Installing updates",
+    body: "Sway will restart momentarily to apply updates.",
+  }).show();
+
   autoUpdater.quitAndInstall();
 }

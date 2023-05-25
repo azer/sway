@@ -1,9 +1,8 @@
 import { app, BrowserWindow, shell } from "electron";
 import log from "electron-log";
-import { join as joinPath } from 'path'
+import { join as joinPath } from "path";
 import { isDev, swayPath } from "./utils";
 import { staticFilePath } from "./utils";
-
 
 let mainWindow: BrowserWindow | null = null;
 let quitting = false;
@@ -28,7 +27,7 @@ export function createMainWindow() {
     backgroundColor: "#00000022",
     icon: staticFilePath("images/logo.ico"),
     webPreferences: {
-      preload: joinPath(__dirname, 'preload.js'),
+      preload: joinPath(__dirname, "preload.js"),
       nodeIntegration: true,
       contextIsolation: true,
       autoplayPolicy: "no-user-gesture-required",
@@ -82,4 +81,8 @@ export function createMainWindow() {
 
     //win.webContents.openDevTools()
   }*/
+}
+
+export function setQutting(isQuitting: boolean) {
+  quitting = isQuitting;
 }
