@@ -1,6 +1,6 @@
 {
   "name": "Sway",
-  "version": "v0.0.17",
+  "version": "v0.0.20",
   "main": "build/index.js",
   "scripts": {
     "electron": "electron build/index.js",
@@ -58,7 +58,7 @@
     },
     "publish": {
       "provider": "generic",
-      "url": "http://downloads.sway.so/releases/",
+      "url": "https://downloads.sway.so/releases/",
       "channel": "latest",
       "publishAutoUpdate": true
     }

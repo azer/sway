@@ -22,8 +22,6 @@ export function setupAutoUpdater() {
     url: "https://downloads.sway.so/releases/",
   });
 
-  // autoUpdater.checkForUpdatesAndNotify();
-
   autoUpdater.on("checking-for-update", () => {
     log.info("Checking for updates...");
     messageMainWindow({ checkingForUpdate: true });
@@ -48,6 +46,8 @@ export function setupAutoUpdater() {
       });
     }
   );
+
+  autoUpdater.checkForUpdates();
 }
 
 export function quitAndInstallNewRelease() {

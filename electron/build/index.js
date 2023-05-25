@@ -326,27 +326,35 @@ var import_electron6 = require("electron");
 // src/auto-updater.ts
 var import_electron_updater = require("electron-updater");
 var import_electron_log5 = __toESM(require("electron-log"));
-var frequency = 6001e3;
+var HOUR = 60 * 60 * 1e3;
 function checkForUpdates() {
-  setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), frequency);
+  setupAutoUpdater();
+  setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), HOUR);
 }
 function setupAutoUpdater() {
   import_electron_updater.autoUpdater.logger = import_electron_log5.default;
   import_electron_updater.autoUpdater.logger.transports.file.level = "debug";
   import_electron_updater.autoUpdater.setFeedURL({
     provider: "generic",
-    url: "http://downloads.sway.so/releases/"
+    url: "https://downloads.sway.so/releases/"
   });
-  import_electron_updater.autoUpdater.checkForUpdatesAndNotify();
+  import_electron_updater.autoUpdater.on("checking-for-update", () => {
+    import_electron_log5.default.info("Checking for updates...");
+    messageMainWindow2({ checkingForUpdate: true });
+  });
+  import_electron_updater.autoUpdater.on("update-available", (info) => {
+    import_electron_log5.default.info("Update available...", info);
+    messageMainWindow2({ updateAvailable: true });
+  });
   import_electron_updater.autoUpdater.on(
     "update-downloaded",
     // @ts-ignore
-    (_event, releaseNotes, releaseName) => {
+    (event, releaseNotes, releaseName) => {
       import_electron_log5.default.info("Update downloaded", releaseName, releaseNotes);
       messageMainWindow2({
         newReleaseDownloaded: {
-          name: releaseName,
-          notes: releaseNotes
+          name: releaseName || "",
+          notes: releaseNotes || ""
         }
       });
     }
@@ -422,7 +430,6 @@ function getPipWindowPosition(mainWindow2) {
 
 // src/main.ts
 import_electron_log7.default.initialize({ preload: true });
-setupAutoUpdater();
 import_electron6.ipcMain.handle("get-sources", () => {
   import_electron_log7.default.info("Handle get-sources call");
   const access = import_electron6.systemPreferences.getMediaAccessStatus("screen");
