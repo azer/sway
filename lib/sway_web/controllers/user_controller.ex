@@ -22,12 +22,14 @@ defmodule SwayWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
+    user = Accounts.get_user!(SwayWeb.Hashing.decode_user(id))
     render(conn, "show.json", user: user)
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Accounts.get_user!(id)
+    user = Accounts.get_user!(SwayWeb.Hashing.decode_user(id))
+
+    IO.inspect(user_params, label: "Updating user " <> id)
 
     with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
       render(conn, "show.json", user: user)

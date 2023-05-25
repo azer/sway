@@ -133,6 +133,12 @@ defmodule Sway.Accounts do
     |> Ecto.Changeset.apply_action(:update)
   end
 
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.update_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Updates the user email using the given token.
 
