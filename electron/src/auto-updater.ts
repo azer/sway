@@ -75,5 +75,7 @@ export function quitAndInstallNewRelease() {
     body: "Sway will restart momentarily to apply updates.",
   }).show();
 
-  autoUpdater.quitAndInstall();
+  setTimeout(() => {
+    autoUpdater.quitAndInstall();
+  }, 1000);
 }

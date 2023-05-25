@@ -383,7 +383,9 @@ function quitAndInstallNewRelease() {
     title: "Installing updates",
     body: "Sway will restart momentarily to apply updates."
   }).show();
-  import_electron_updater.autoUpdater.quitAndInstall();
+  setTimeout(() => {
+    import_electron_updater.autoUpdater.quitAndInstall();
+  }, 1e3);
 }
 
 // src/main.ts
