@@ -160,12 +160,12 @@ function logger(name) {
     error
   };
   function info(msg, ...props) {
-    log9(console.info, msg, props);
+    log10(console.info, msg, props);
   }
   function error(msg, ...props) {
-    log9(console.error, msg, props);
+    log10(console.error, msg, props);
   }
-  function log9(fn, msg, props) {
+  function log10(fn, msg, props) {
     const args = [
       `%c<${name}>%c ${msg}`,
       `color: ${color};font-weight: bold;`,
@@ -321,7 +321,7 @@ function setTray(title, tooltip, image) {
 }
 
 // src/main.ts
-var import_electron6 = require("electron");
+var import_electron7 = require("electron");
 
 // src/auto-updater.ts
 var import_electron_updater = require("electron-updater");
@@ -332,6 +332,7 @@ function checkForUpdates() {
   setInterval(() => import_electron_updater.autoUpdater.checkForUpdates(), HOUR);
 }
 function setupAutoUpdater() {
+  import_electron_log5.default.info("Setting up auto updater");
   import_electron_updater.autoUpdater.logger = import_electron_log5.default;
   import_electron_updater.autoUpdater.logger.transports.file.level = "debug";
   import_electron_updater.autoUpdater.setFeedURL({
@@ -359,6 +360,7 @@ function setupAutoUpdater() {
       });
     }
   );
+  import_electron_updater.autoUpdater.checkForUpdates();
 }
 function quitAndInstallNewRelease() {
   import_electron_log5.default.info("Quit and install new release");
@@ -366,7 +368,7 @@ function quitAndInstallNewRelease() {
 }
 
 // src/main.ts
-var import_electron_log7 = __toESM(require("electron-log"));
+var import_electron_log8 = __toESM(require("electron-log"));
 
 // src/pip.ts
 var import_electron5 = require("electron");
@@ -428,14 +430,30 @@ function getPipWindowPosition(mainWindow2) {
   };
 }
 
+// src/menu.ts
+var import_electron6 = require("electron");
+var import_electron_updater2 = require("electron-updater");
+var import_electron_log7 = __toESM(require("electron-log"));
+function setupMenu() {
+  const menu = import_electron6.Menu.getApplicationMenu();
+  const menuItem = new import_electron6.MenuItem({
+    label: "Check for Updates",
+    click: () => {
+      import_electron_updater2.autoUpdater.checkForUpdatesAndNotify().catch((err) => import_electron_log7.default.error(err));
+    }
+  });
+  menu.items[0].submenu.insert(1, menuItem);
+  import_electron6.Menu.setApplicationMenu(menu);
+}
+
 // src/main.ts
-import_electron_log7.default.initialize({ preload: true });
-import_electron6.ipcMain.handle("get-sources", () => {
-  import_electron_log7.default.info("Handle get-sources call");
-  const access = import_electron6.systemPreferences.getMediaAccessStatus("screen");
-  import_electron_log7.default.info("Access status:", access);
+import_electron_log8.default.initialize({ preload: true });
+import_electron7.ipcMain.handle("get-sources", () => {
+  import_electron_log8.default.info("Handle get-sources call");
+  const access = import_electron7.systemPreferences.getMediaAccessStatus("screen");
+  import_electron_log8.default.info("Access status:", access);
   return new Promise((resolve, reject) => {
-    import_electron6.desktopCapturer.getSources({
+    import_electron7.desktopCapturer.getSources({
       types: ["window", "screen"],
       thumbnailSize: { width: 800, height: 600 }
     }).then(
@@ -447,56 +465,57 @@ import_electron6.ipcMain.handle("get-sources", () => {
     ).catch(reject);
   });
 });
-import_electron6.app.on("ready", () => {
-  import_electron_log7.default.info("Ready");
+import_electron7.app.on("ready", () => {
+  import_electron_log8.default.info("Ready");
   createMainWindow();
   createTrayWindow();
   createPipWindow(getPipWindowPosition(getMainWindow()));
+  setupMenu();
   getMainWindow().on("blur", () => {
-    import_electron_log7.default.info("Blur, show pip window");
+    import_electron_log8.default.info("Blur, show pip window");
     messageMainWindow2({ isMainWindowFocused: false });
   });
   getMainWindow().on("show", () => {
-    import_electron_log7.default.info("Show main window, hide pip window");
+    import_electron_log8.default.info("Show main window, hide pip window");
     messageMainWindow2({ isMainWindowFocused: true });
   });
   getMainWindow().on("focus", () => {
-    import_electron_log7.default.info("Focus main window, hide pip window");
+    import_electron_log8.default.info("Focus main window, hide pip window");
     messageMainWindow2({ isMainWindowFocused: true });
   });
-  const setProtocol = import_electron6.app.setAsDefaultProtocolClient("sway");
-  import_electron_log7.default.info("Set as default protocol client", setProtocol);
+  const setProtocol = import_electron7.app.setAsDefaultProtocolClient("sway");
+  import_electron_log8.default.info("Set as default protocol client", setProtocol);
 });
-import_electron6.app.on("window-all-closed", () => {
+import_electron7.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
-    import_electron_log7.default.info("Quit");
-    import_electron6.app.quit();
+    import_electron_log8.default.info("Quit");
+    import_electron7.app.quit();
   }
 });
-import_electron6.app.on("activate", () => {
+import_electron7.app.on("activate", () => {
   getMainWindow().show();
 });
-import_electron6.app.whenReady().then(() => __async(exports, null, function* () {
+import_electron7.app.whenReady().then(() => __async(exports, null, function* () {
   if (isDev) {
-    import_electron_log7.default.info("Load extensions");
+    import_electron_log8.default.info("Load extensions");
     loadExtensions();
   }
   checkForUpdates();
 }));
-import_electron6.app.on("open-url", (event, url) => {
+import_electron7.app.on("open-url", (event, url) => {
   const u = new URL(url);
   if (u.protocol === "sway:") {
     event.preventDefault();
-    import_electron_log7.default.info("Opening url", url);
+    import_electron_log8.default.info("Opening url", url);
     getMainWindow().loadURL(
       swayPath(`desktop/auth/start?key=${u.searchParams.get("key")}`)
     );
   }
 });
-import_electron6.ipcMain.on(
+import_electron7.ipcMain.on(
   "message",
   (event, parsed) => {
-    import_electron_log7.default.info("Receive message");
+    import_electron_log8.default.info("Receive message");
     const message = parsed;
     let window2 = null;
     switch (parsed.target) {
@@ -520,7 +539,7 @@ import_electron6.ipcMain.on(
         console.error(
           "Can not direct message. Target: " + parsed.target + " Message:" + message
         );
-        import_electron_log7.default.error(
+        import_electron_log8.default.error(
           "Can not direct message. Target: " + parsed.target + " Message:" + message
         );
       }
@@ -576,23 +595,23 @@ function handleMessages(message) {
     quitAndInstallNewRelease();
     return;
   }
-  import_electron_log7.default.error("Unhandled message", JSON.stringify(message));
+  import_electron_log8.default.error("Unhandled message", JSON.stringify(message));
 }
 function requestCameraAccess() {
-  import_electron6.systemPreferences.askForMediaAccess("camera").then((hasCameraAccess) => {
-    import_electron_log7.default.info("Camera access?", hasCameraAccess);
+  import_electron7.systemPreferences.askForMediaAccess("camera").then((hasCameraAccess) => {
+    import_electron_log8.default.info("Camera access?", hasCameraAccess);
     messageMainWindow2({ hasCameraAccess });
-  }).catch((err) => import_electron_log7.default.error("Error", err));
+  }).catch((err) => import_electron_log8.default.error("Error", err));
 }
 function requestMicAccess() {
-  import_electron6.systemPreferences.askForMediaAccess("microphone").then((hasMicAccess) => {
-    import_electron_log7.default.info("Mic access?", hasMicAccess);
+  import_electron7.systemPreferences.askForMediaAccess("microphone").then((hasMicAccess) => {
+    import_electron_log8.default.info("Mic access?", hasMicAccess);
     messageMainWindow2({ hasMicAccess });
-  }).catch((err) => import_electron_log7.default.error("Error", err));
+  }).catch((err) => import_electron_log8.default.error("Error", err));
 }
 function requestScreenAccess() {
-  import_electron_log7.default.info("Request access for media access");
-  import_electron6.shell.openExternal(
+  import_electron_log8.default.info("Request access for media access");
+  import_electron7.shell.openExternal(
     "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"
   );
 }

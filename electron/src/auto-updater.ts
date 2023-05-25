@@ -12,6 +12,8 @@ export function checkForUpdates() {
 }
 
 export function setupAutoUpdater() {
+  log.info("Setting up auto updater");
+
   autoUpdater.logger = log;
 
   // @ts-ignore

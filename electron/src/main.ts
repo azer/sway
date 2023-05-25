@@ -14,6 +14,7 @@ import { isDev, loadExtensions, swayPath } from "./utils";
 import { ElectronMessage, ElectronWindow } from "../../assets/js/lib/electron";
 import { createPipWindow, getPipWindow, getPipWindowPosition } from "./pip";
 import { messageMainWindow } from "./messaging";
+import { setupMenu } from "./menu";
 
 log.initialize({ preload: true });
 
@@ -47,6 +48,7 @@ app.on("ready", () => {
   createMainWindow();
   createTrayWindow();
   createPipWindow(getPipWindowPosition(getMainWindow()));
+  setupMenu();
 
   getMainWindow().on("blur", () => {
     log.info("Blur, show pip window");
