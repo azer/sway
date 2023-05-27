@@ -37,7 +37,8 @@ const Container = styled('div', {
     width: '100%',
     height: '100%',
     zIndex: '$base',
-    objectFit: 'cover',
+    objectFit: 'contain',
+    background: '$gray1',
   },
   [`& ${Label}`]: {
     maxWidth: '90%',
