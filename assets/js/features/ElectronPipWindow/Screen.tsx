@@ -1,7 +1,6 @@
 import { styled } from 'themes'
 import React from 'react'
 import { ScreenshareVideo } from 'features/Screenshare/Video'
-import selectors from 'selectors'
 import { Label } from 'components/UserView'
 // import { useSelector, useDispatch } from 'state'
 

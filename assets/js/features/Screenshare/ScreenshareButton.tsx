@@ -1,4 +1,3 @@
-import { styled } from 'themes'
 import React from 'react'
 import selectors from 'selectors'
 import { Button } from 'features/Dock/Button'
