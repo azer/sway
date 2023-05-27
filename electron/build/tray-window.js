@@ -38483,10 +38483,10 @@
             }
           }
           var jsx78 = jsxWithValidationDynamic;
-          var jsxs35 = jsxWithValidationStatic;
+          var jsxs36 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
           exports.jsx = jsx78;
-          exports.jsxs = jsxs35;
+          exports.jsxs = jsxs36;
         })();
       }
     }
@@ -69734,7 +69734,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/components/Icon/Book.tsx
   var import_jsx_runtime54 = __toESM(require_jsx_runtime());
   function BookIcon(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsxs)(
       "svg",
       __spreadProps(__spreadValues({
         viewBox: "4 4 16 16",
@@ -69743,16 +69743,28 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         fill: "none",
         xmlns: "http://www.w3.org/2000/svg"
       }, props), {
-        children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
-          "path",
-          {
-            stroke: "currentColor",
-            strokeLinecap: "round",
-            strokeLinejoin: "round",
-            strokeWidth: 1.5,
-            d: "M19.25 5.75a1 1 0 0 0-1-1H14a2 2 0 0 0-2 2v12.5l.828-.828a4 4 0 0 1 2.829-1.172h2.593a1 1 0 0 0 1-1V5.75ZM4.75 5.75a1 1 0 0 1 1-1H10a2 2 0 0 1 2 2v12.5l-.828-.828a4 4 0 0 0-2.829-1.172H5.75a1 1 0 0 1-1-1V5.75Z"
-          }
-        )
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M19.25 15.25v-9.5a1 1 0 0 0-1-1H6.75a2 2 0 0 0-2 2v10"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+            "path",
+            {
+              stroke: "currentColor",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              strokeWidth: 1.5,
+              d: "M19.25 15.25H6.75a2 2 0 1 0 0 4h12.5v-4Z"
+            }
+          )
+        ]
       })
     );
   }
@@ -71389,6 +71401,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     round: "small",
     label: true,
     display: "flex",
+    ellipsis: true,
     gap: "4px",
     variants: {
       tile: {
@@ -71596,7 +71609,13 @@ This is currently a DEV-only warning but will become a thrown exception in the n
       [dockFocus]
     );
     globalStyles();
-    const active = ((_c = trayState.participants) == null ? void 0 : _c.filter((p2) => !p2.isSelf && p2.isActive)) || [];
+    const active = ((_c = trayState.participants) == null ? void 0 : _c.filter((p2) => p2.isActive).sort((a2, b2) => {
+      if (a2.isSelf)
+        return -1;
+      if (b2.isSelf)
+        return 1;
+      return 0;
+    })) || [];
     const inactive = ((_d = trayState.participants) == null ? void 0 : _d.filter((p2) => !p2.isSelf && !p2.isActive)) || [];
     return /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(Tooltip2.Provider, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(EmojiProvider, {}),
@@ -71905,14 +71924,14 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var Active = styled("div", {
     display: "grid",
     gridTemplateColumns: "1fr 1fr 1fr",
-    gap: "4px",
-    margin: "0 18px 0 18px"
+    gap: "8px",
+    margin: "0 14px 0 14px"
   });
   var Inactive = styled("div", {
     display: "flex",
     flexDirection: "column",
     gap: "6px",
-    margin: "0 18px"
+    margin: "0 14px"
   });
   var UserRow = styled("div", {
     height: "48px"
@@ -71936,10 +71955,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     label: true,
     vcenter: true,
     "& label": {
-      borderRadius: "$small",
-      padding: "4px 6px",
-      background: "rgba(40, 44, 51, 0.3)",
-      color: "rgba(245, 250, 255, 0.35)"
+      color: "rgba(245, 250, 255, 0.25)"
     }
   });
   import_react_dom.default.render(/* @__PURE__ */ (0, import_jsx_runtime77.jsx)(ElectronTrayWindow, {}), document.getElementById("root"));

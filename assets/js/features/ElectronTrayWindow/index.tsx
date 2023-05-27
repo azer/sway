@@ -113,7 +113,13 @@ export function ElectronTrayWindow(props: Props) {
   globalStyles()
 
   const active =
-    trayState.participants?.filter((p) => !p.isSelf && p.isActive) || []
+    trayState.participants
+      ?.filter((p) => p.isActive)
+      .sort((a, b) => {
+        if (a.isSelf) return -1
+        if (b.isSelf) return 1
+        return 0
+      }) || []
   const inactive =
     trayState.participants?.filter((p) => !p.isSelf && !p.isActive) || []
 
@@ -131,6 +137,7 @@ export function ElectronTrayWindow(props: Props) {
             <br /> Check out other rooms?
           </Empty>
         ) : null}
+
         {active.length ? (
           <>
             <Title>
@@ -466,15 +473,15 @@ const Dock = styled('div', {
 export const Active = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr 1fr 1fr',
-  gap: '4px',
-  margin: '0 18px 0 18px',
+  gap: '8px',
+  margin: '0 14px 0 14px',
 })
 
 const Inactive = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '6px',
-  margin: '0 18px',
+  margin: '0 14px',
 })
 
 const UserRow = styled('div', {
@@ -501,10 +508,7 @@ const Title = styled('div', {
   label: true,
   vcenter: true,
   '& label': {
-    borderRadius: '$small',
-    padding: '4px 6px',
-    background: 'rgba(40, 44, 51, 0.3)',
-    color: 'rgba(245, 250, 255, 0.35)',
+    color: 'rgba(245, 250, 255, 0.25)',
   },
 })
 
