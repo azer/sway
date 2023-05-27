@@ -54,6 +54,7 @@ function UActiveParticipant(props: Props) {
     isScreenOn,
     isLocalSpeakerOn,
     isSelf,
+    shouldHideVideo,
   ] = useSelector((state) => {
     const swayParticipant = selectors.call.getParticipantStatusByUserId(
       state,
@@ -68,6 +69,7 @@ function UActiveParticipant(props: Props) {
       swayParticipant?.screenOn,
       selectors.statuses.getLocalStatus(state).speaker_on,
       selectors.users.getSelf(state)?.id === dailyParticipant?.userData?.id,
+      selectors.call.shouldHideVideo(state),
     ]
   })
 
@@ -118,18 +120,16 @@ function UActiveParticipant(props: Props) {
           <ScreenshareVideo sessionId={dailyParticipant?.session_id} />
         ) : null}
 
-        {isVideoOn ? (
+        {isVideoOn && !shouldHideVideo ? (
           <Video
             participantId={props.participantId}
             userId={props.userId}
             mirror={isSelf}
           />
-        ) : (
-          <Avatar
-            src={user?.profile_photo_url}
-            fallback={user?.name || 'User'}
-          />
-        )}
+        ) : null}
+
+        <Avatar src={user?.profile_photo_url} fallback={user?.name || 'User'} />
+
         {audioTrack && !isSelf && (
           <audio
             autoPlay
@@ -165,6 +165,13 @@ export const ActiveParticipantRoot = styled('div', {
   [`& ${ParticipantLabelRoot}`]: {
     background: 'var(--participant-bg)',
   },
+  video: {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    width: '100%',
+    height: '100%',
+  },
   variants: {
     small: {
       true: {
@@ -185,7 +192,7 @@ export const ActiveParticipantRoot = styled('div', {
         [`& ${CallVideoRoot}`]: {
           position: 'absolute',
           width: 'auto',
-          height: '25%',
+          height: 'var(--screenshare-avatar-size)',
           right: '20px',
           bottom: '20px',
           borderRadius: '100%',

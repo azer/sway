@@ -36,3 +36,11 @@ export function filterScreensharingUsers(
     return isUserScreensharing(state, userId)
   }
 }
+
+export function shouldHideVideo(state: RootState): boolean {
+  if (selectors.electronTray.isPipWindowOpen(state)) return true
+
+  if (!selectors.focus.isWindowVisible(state)) return true
+
+  return false
+}

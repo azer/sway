@@ -30,7 +30,6 @@ export function ScreenshareButton(props: Props) {
       tooltipLabel={
         isScreenSharing ? 'Stop presenting screen' : 'Present your screen'
       }
-      //tooltipShortcut={['alt', 'p']}
     />
   )
 }
