@@ -9,7 +9,9 @@ defmodule SwayWeb.AppController do
 
     if workspace do
       [rooms, status, privateRooms] = fetchRoomData(workspace.id, user_id)
-       {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
+      {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
+
+      IO.inspect(status)
 
        conn
        |> put_resp_header("Service-Worker-Allowed", "/")

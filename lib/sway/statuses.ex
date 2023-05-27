@@ -38,28 +38,39 @@ defmodule Sway.Statuses do
   def get_status!(id), do: Repo.get!(Status, id)
 
   def get_latest_status(user_id, workspace_id) do
-    status = from(s in Status,
-      where: s.user_id == ^user_id,
-      order_by: [desc: s.inserted_at],
-      limit: 1) |> Repo.one
+    status =
+      from(s in Status,
+        where: s.user_id == ^user_id and s.workspace_id == ^workspace_id,
+        order_by: [desc: s.inserted_at],
+        limit: 1
+      )
+      |> Repo.one()
 
     case status do
       %Status{} ->
-	status
+        status
+
       _ ->
-	user = Sway.Accounts.get_user!(user_id)
-	room = Sway.Rooms.get_default_room(workspace_id)
-	with {:ok, %Status{} = status} <- create_status(%{ user_id: user_id, room_id: room.id, status: :focus, workspace_id: workspace_id, speaker_on: true }) do
-	  status
-      end
+        room = Sway.Rooms.get_default_room(workspace_id)
+
+        with {:ok, %Status{} = status} <-
+               create_status(%{
+                 user_id: user_id,
+                 room_id: room.id,
+                 status: :focus,
+                 workspace_id: workspace_id,
+                 speaker_on: true
+               }) do
+          status
+        end
     end
   end
 
   def get_updates_by_user(user_id) do
     query =
       from s in Status,
-          where: s.user_id == ^user_id and (s.message != "" or s.emoji != ""),
-          order_by: [desc: s.inserted_at]
+        where: s.user_id == ^user_id and (s.message != "" or s.emoji != ""),
+        order_by: [desc: s.inserted_at]
 
     Repo.all(query)
   end
@@ -67,8 +78,8 @@ defmodule Sway.Statuses do
   def get_updates_by_room(room_id) do
     query =
       from s in Status,
-          where: s.room_id == ^room_id and (s.message != "" or s.emoji != ""),
-          order_by: [desc: s.inserted_at]
+        where: s.room_id == ^room_id and (s.message != "" or s.emoji != ""),
+        order_by: [desc: s.inserted_at]
 
     Repo.all(query)
   end
@@ -137,5 +148,4 @@ defmodule Sway.Statuses do
   def change_status(%Status{} = status, attrs \\ %{}) do
     Status.changeset(status, attrs)
   end
-
 end
