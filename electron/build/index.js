@@ -371,10 +371,6 @@ function setupAutoUpdater() {
     }
   );
   import_electron_updater.autoUpdater.checkForUpdates();
-  new import_electron5.Notification({
-    title: "Installing updates",
-    body: "Sway will restart momentarily to apply updates."
-  }).show();
 }
 function quitAndInstallNewRelease() {
   import_electron_log5.default.info("Quit and install new release");

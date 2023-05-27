@@ -59,11 +59,6 @@ export function setupAutoUpdater() {
   );
 
   autoUpdater.checkForUpdates();
-
-  new Notification({
-    title: "Installing updates",
-    body: "Sway will restart momentarily to apply updates.",
-  }).show();
 }
 
 export function quitAndInstallNewRelease() {
