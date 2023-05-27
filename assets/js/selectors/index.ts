@@ -21,6 +21,7 @@ import * as pip from 'features/PictureInPicture/selectors'
 import * as onboarding from 'features/Onboarding/selectors'
 import * as usersocket from 'features/UserSocket/selectors'
 import * as autoUpdater from 'features/AutoUpdater/selectors'
+import * as screenshare from 'features/Screenshare/selectors'
 
 export default {
   session,
@@ -46,4 +47,5 @@ export default {
   onboarding,
   usersocket,
   autoUpdater,
+  screenshare,
 }

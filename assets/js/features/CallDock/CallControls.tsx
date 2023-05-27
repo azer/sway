@@ -1,14 +1,9 @@
 import { styled } from 'themes'
 import React from 'react'
 import { Dropdown } from 'components/DropdownMenu'
-import { DeviceInfo } from 'features/Settings/slice'
+import { DeviceInfo } from 'lib/devices'
 import { Button, StyledButton } from '../Dock/Button'
-import { useSettings } from 'features/Settings'
-import { useVideoSettings } from 'features/Settings/VideoSettings'
-import { useMicSettings } from 'features/Settings/MicSettings'
-import { useSpeakerSettings } from 'features/Settings/SpeakerSettings'
-import { ScreenshareButton } from 'features/Screenshare/Provider'
-import { useBackgroundBlurSettings } from 'features/Settings/BackgroundBlur'
+import { ScreenshareButton } from 'features/Screenshare/ScreenshareButton'
 import { DockFocus, DockFocusRegion } from '../Dock/focus'
 import { CallSwitch } from './CallSwitch'
 
@@ -17,7 +12,6 @@ interface Props {
   cameraOn: boolean
   micOn: boolean
   speakerOn: boolean
-  screenOn: boolean
   isOnAirpods: boolean
   cameras: DeviceInfo[]
   mics: DeviceInfo[]
@@ -35,8 +29,6 @@ interface Props {
   selectMic: (deviceId: string) => void
   selectSpeaker: (deviceId: string) => void
   setFocusRegion: (r: DockFocusRegion) => void
-  startPresentingScreen: () => void
-  stopPresentingScreen: () => void
   joinCall: () => void
   leaveCall: () => void
 }
@@ -180,11 +172,7 @@ export function CallControls(props: Props) {
           />
         </Dropdown.Content>
       </Dropdown.Menu>
-      <ScreenshareButton
-        isSharingScreen={props.screenOn}
-        startScreenShare={props.startPresentingScreen}
-        stopScreenShare={props.stopPresentingScreen}
-      />
+      <ScreenshareButton />
 
       {props.isActive ? (
         <PhoneCallButton>

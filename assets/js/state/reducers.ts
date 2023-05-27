@@ -15,6 +15,7 @@ import chat from 'features/Chat/slice'
 import electronTray from 'features/ElectronTray/slice'
 import onboarding from 'features/Onboarding/slice'
 import autoUpdater from 'features/AutoUpdater/slice'
+import screenshare from 'features/Screenshare/slice'
 
 export default {
   //undotree,
@@ -34,4 +35,5 @@ export default {
   electronTray,
   onboarding,
   autoUpdater,
+  screenshare,
 }
