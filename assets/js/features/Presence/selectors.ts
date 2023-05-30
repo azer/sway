@@ -29,9 +29,10 @@ export function getOnlineUsersInWorkspace(state: RootState): string[] {
 }
 
 export function sortUsersByPresence(
-  state: RootState
+  state: RootState,
+  workspaceId: string
 ): (userA: string, userB: string) => number {
-  const onlineMap = createOnlineUsersMap(state)
+  const onlineMap = createOnlineUsersMap(state, workspaceId)
 
   return function (a: string, b: string): number {
     if (onlineMap[a] && !onlineMap[b]) return -1
@@ -40,9 +41,14 @@ export function sortUsersByPresence(
   }
 }
 
-function createOnlineUsersMap(state: RootState): Record<string, boolean> {
+function createOnlineUsersMap(
+  state: RootState,
+  workspaceId: string
+): Record<string, boolean> {
+  const onlineUsers = getOnlineUsersInWorkspace(state)
   const onlineMap: Record<string, boolean> = {}
-  for (const id of state.userSocket.onlineUsers) {
+
+  for (const id of onlineUsers) {
     onlineMap[id] = true
   }
 

@@ -143,15 +143,6 @@ export function UserSocketProvider(props: Props) {
       )
     })
 
-    socket.onMessage((msg) => {
-      log.info('received msg:', msg)
-
-      if (msg.event === 'phx:pong') {
-        const latency = Date.now() - msg.payload.sent_at
-        log.info('latency:', latency)
-      }
-    })
-
     dispatch(
       setSwaySocketConnectionStatus({
         userId,
@@ -196,34 +187,6 @@ export function UserSocketProvider(props: Props) {
 
     const presence = new Presence(channel)
     setPresence(presence)
-
-    presence.onLeave((id) => {
-      log.info(`User ${id} left`)
-    })
-
-    presence.onSync(() => {
-      const all: { id: string; onlineAt: string }[] = []
-      const rooms: { [id: string]: string[] } = {}
-
-      presence.list((id, props) => {
-        const last = props.metas[props.metas.length - 1]
-
-        all.push({
-          id: String(last.user_id),
-          onlineAt: last.online_at,
-        })
-
-        if (last.room_id != undefined) {
-          rooms[last.room_id] = (rooms[last.room_id] || []).concat([
-            String(last.user_id),
-          ])
-        }
-      })
-
-      // dispatch(setAllRoomUserIds(rooms))
-      dispatch(syncOnline(all))
-      // dispatch(setWorkspaceRoomIds({ workspaceId, roomIds: rooms }))
-    })
   }, [workspaceId, userId])
 
   return (

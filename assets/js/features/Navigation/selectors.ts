@@ -10,11 +10,10 @@ export function listPeople(state: RootState): string[] {
   const localUserId = selectors.session.getUserId(state)
   if (!localUserId) return []
 
-  const workspace = selectors.workspaces.getSelfWorkspace(state)
-  if (!workspace) return []
+  const workspaceId = selectors.workspaces.getFocusedWorkspaceId(state)
 
   const usersWithPrivateRooms = selectors.rooms
-    .listAllPrivateRooms(state, workspace.id)
+    .listAllPrivateRooms(state, workspaceId)
     .map(
       (roomId) =>
         selectors.roomMembers
@@ -23,7 +22,7 @@ export function listPeople(state: RootState): string[] {
     )
 
   const onlineMembers = selectors.memberships
-    .listByWorkspaceId(state, workspace.id)
+    .listByWorkspaceId(state, workspaceId)
     .map((m) => m.user_id)
     .filter(
       (userId) =>
@@ -31,7 +30,7 @@ export function listPeople(state: RootState): string[] {
     )
 
   const offlineMembers = selectors.memberships
-    .listByWorkspaceId(state, workspace.id)
+    .listByWorkspaceId(state, workspaceId)
     .map((m) => m.user_id)
     .filter(
       (userId) =>
@@ -42,7 +41,7 @@ export function listPeople(state: RootState): string[] {
   const all = [...onlineMembers, ...usersWithPrivateRooms, ...offlineMembers]
 
   return uniqueItems(all)
-    .sort(selectors.presence.sortUsersByPresence(state))
+    .sort(selectors.presence.sortUsersByPresence(state, workspaceId))
     .slice(0, 10)
 }
 
