@@ -38,7 +38,7 @@ export function ScreenshareProvider(props: Props) {
   const { start, stop, toggle } = useScreenShare()
 
   const [isActive, isScreenSharing] = useSelector((state) => [
-    selectors.presence.isLocalUserActive(state),
+    selectors.status.isLocalUserActive(state),
     selectors.screenshare.isScreenSharing(state),
   ])
 

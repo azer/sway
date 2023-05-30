@@ -136,7 +136,7 @@ export function getPrevRoom(state: RootState): Room | undefined {
 }*/
 
 export function getUsersInRoom(state: RootState, roomId: string): string[] {
-  return state.rooms.userIdsByRoom[roomId] || []
+  return state.presence.onlineUsersByRoomId[roomId] || []
 }
 
 export function getOtherUsersInRoom(
@@ -215,7 +215,7 @@ export function getRoomStatus(
   roomId: string
 ): RoomStatus | undefined {
   const statuses = getUsersInRoom(state, roomId).map((userId: string) =>
-    selectors.presence.isUserActive(state, userId)
+    selectors.status.isUserActive(state, userId)
   )
 
   if (statuses.length === 0) {

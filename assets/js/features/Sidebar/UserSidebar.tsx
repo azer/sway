@@ -5,14 +5,14 @@ import { useSelector, useDispatch } from 'state'
 import { Avatar, AvatarRoot } from 'components/Avatar'
 import { Emoji } from 'components/Emoji'
 import { getLocalTime, relativeDate } from 'lib/datetime'
-import { PresenceStatus } from 'state/presence'
+import { StatusModeKey } from 'state/status'
 import { StatusIcon } from 'features/Dock/StatusIcon'
 import Icon from 'components/Icon'
 import { logger } from 'lib/log'
 import { GET } from 'lib/api'
-import { setStatusUpdates } from 'features/Presence/slice'
+import { setStatusUpdatesByUserId } from 'features/Status/slice'
 import { addBatch, Room, Row, Status } from 'state/entities'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 import { setStatusHook } from 'features/Tap/slice'
 import { useNavigate } from 'react-router-dom'
 import { useRooms } from 'features/Room/use-rooms'
@@ -30,7 +30,7 @@ const log = logger('sidebar/user-sidebar')
 
 export function UserSidebar(props: Props) {
   const dispatch = useDispatch()
-  const presence = usePresence()
+  const presence = useStatus()
   const rooms = useRooms()
   const navigate = useNavigate()
 
@@ -50,13 +50,13 @@ export function UserSidebar(props: Props) {
     const userId = selectors.sidebar.getFocusedUserId(state)
     if (!userId) return [undefined, []]
 
-    const status = selectors.statuses.getByUserId(state, userId)
+    const status = selectors.status.getStatusByUserId(state, userId)
 
     return [
       selectors.users.getById(state, userId),
-      selectors.presence.getUserUpdatesByUserId(state, userId),
+      selectors.status.getStatusUpdatesByUserId(state, userId),
       status,
-      selectors.presence.getPresenceLabelByUserId(state, userId),
+      selectors.status.getStatusLabelByUserId(state, userId),
       selectors.presence.isUserOnline(state, userId),
       selectors.rooms.getRoomById(state, status.room_id),
       selectors.taps.getStatusHookByUserId(state, userId),
@@ -68,7 +68,7 @@ export function UserSidebar(props: Props) {
   })
 
   useEffect(() => {
-    if (!user) return
+    if (!user || !workspaceId) return
 
     GET(`/api/users/${user.id}/updates`)
       .then((response) => {
@@ -77,9 +77,10 @@ export function UserSidebar(props: Props) {
         dispatch(addBatch(response.list as Row<Status>[]))
 
         dispatch(
-          setStatusUpdates({
+          setStatusUpdatesByUserId({
             userId: user.id,
-            updates: response.list.map((d) => d.id),
+            workspaceId: workspaceId,
+            statusIds: response.list.map((d) => d.id),
           })
         )
       })
@@ -147,15 +148,13 @@ export function UserSidebar(props: Props) {
     </Container>
   )
 
-  function createStatusHook(userId: string, status: PresenceStatus) {
+  function createStatusHook(userId: string, status: StatusModeKey) {
     dispatch(
       setStatusHook({
         userId,
         whenPresentAs:
-          status !== PresenceStatus?.Online
-            ? PresenceStatus?.Online
-            : undefined,
-        whenActive: status === PresenceStatus?.Online,
+          status !== StatusModeKey?.Online ? StatusModeKey?.Online : undefined,
+        whenActive: status === StatusModeKey?.Online,
       })
     )
   }

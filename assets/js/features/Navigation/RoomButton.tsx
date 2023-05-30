@@ -36,7 +36,7 @@ export function RoomButton(props: Props) {
     selectors.chat.hasUnreadMessage(state, props.id),
     selectors.rooms.getFocusedRoomId(state),
     selectors.sidebar.getRoomIdOnSidebar(state),
-    selectors.presence.isLocalUserActive(state),
+    selectors.status.isLocalUserActive(state),
   ])
 
   const selected = focusedRoomId === props.id

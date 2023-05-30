@@ -22,7 +22,7 @@ import {
 import { addRoomMembers } from 'features/RoomMembers/slice'
 import Icon from 'components/Icon'
 import { setWorkspaceRoomIds } from 'features/Room/slice'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 
 interface Props {}
 
@@ -33,7 +33,7 @@ const DEFAULT_HANDBOOK_URL =
 export function Navigation(props: Props) {
   const dispatch = useDispatch()
   const inviteModal = useInvitePeople()
-  const presence = usePresence()
+  const presence = useStatus()
 
   const [workspace, activeRoomIds, focusedRoom, people, prevRoom, newRelease] =
     useSelector((state) => {

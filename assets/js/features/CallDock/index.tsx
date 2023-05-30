@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import selectors from 'selectors'
 import { CallControls } from './CallControls'
 import { useSelector, useDispatch } from 'state'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 import { DockFocusRegion } from 'features/Dock/focus'
 import { setFocusRegion } from 'features/Dock/slice'
 import {
@@ -16,6 +16,7 @@ import { useLocalParticipant } from '@daily-co/daily-react-hooks'
 import { setParticipantStatus } from 'features/Call/slice'
 import { logger } from 'lib/log'
 import { ConnectionStatus } from 'features/Dock/ConnectionStatus'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 interface Props {}
 
@@ -23,14 +24,53 @@ const log = logger('call-dock')
 
 export function CallDock(props: Props) {
   const dispatch = useDispatch()
-  const presence = usePresence()
+  const presence = useStatus()
 
   const localParticipant = useLocalParticipant()
   //const screenshare = useScreenShare()
 
-  const [isSharingScreen] = useSelector((state) => [
+  const [
+    localUser,
+    localStatus,
+    isOnAirpods,
+    allVideoInputDevices,
+    selectedVideoInputDeviceId,
+    allAudioInputDevices,
+    selectedAudioInputDeviceId,
+    allAudioOutputDevices,
+    selectedAudioOutputDeviceId,
+    blurValue,
+    focus,
+    isActive,
+    isSharingScreen,
+    spaceKbdEnabled,
+  ] = useSelector((state) => [
+    selectors.users.getSelf(state),
+    selectors.status.getLocalStatus(state),
+    selectors.settings.isOnAirpods(state),
+    selectors.settings.allVideoInputDevices(state),
+    selectors.settings.getVideoInputDeviceId(state),
+    selectors.settings.allAudioInputDevices(state),
+    selectors.settings.getAudioInputDeviceId(state),
+    selectors.settings.allAudioOutputDevices(state),
+    selectors.settings.getAudioOutputDeviceId(state),
+    selectors.settings.getBackgroundBlurValue(state),
+    selectors.dock.getFocus(state),
+    selectors.status.isLocalUserActive(state),
     selectors.screenshare.isScreenSharing(state),
+    selectors.dock.isSpaceKbdEnabled(state),
   ])
+
+  useHotkeys(
+    'space',
+    toggleCall,
+    {
+      enabled: spaceKbdEnabled,
+      preventDefault: true,
+      keyup: true,
+    },
+    [spaceKbdEnabled, isActive]
+  )
 
   useEffect(() => {
     if (!localParticipant || !localUser) return
@@ -57,34 +97,6 @@ export function CallDock(props: Props) {
     localParticipant?.screen,
     localParticipant?.session_id,
     localParticipant?.user_id,
-  ])
-
-  const [
-    localUser,
-    localStatus,
-    isOnAirpods,
-    allVideoInputDevices,
-    selectedVideoInputDeviceId,
-    allAudioInputDevices,
-    selectedAudioInputDeviceId,
-    allAudioOutputDevices,
-    selectedAudioOutputDeviceId,
-    blurValue,
-    focus,
-    isActive,
-  ] = useSelector((state) => [
-    selectors.users.getSelf(state),
-    selectors.statuses.getLocalStatus(state),
-    selectors.settings.isOnAirpods(state),
-    selectors.settings.allVideoInputDevices(state),
-    selectors.settings.getVideoInputDeviceId(state),
-    selectors.settings.allAudioInputDevices(state),
-    selectors.settings.getAudioInputDeviceId(state),
-    selectors.settings.allAudioOutputDevices(state),
-    selectors.settings.getAudioOutputDeviceId(state),
-    selectors.settings.getBackgroundBlurValue(state),
-    selectors.dock.getFocus(state),
-    selectors.presence.isLocalUserActive(state),
   ])
 
   return (
@@ -134,6 +146,17 @@ export function CallDock(props: Props) {
 
   function toggleBlurValue(checked: boolean) {
     dispatch(setBackgroundBlur(checked ? 50 : 0))
+  }
+
+  function toggleCall() {
+    log.info('User pressed space to toggle camera/mic')
+
+    const turnOn = !isActive
+
+    presence.setMedia({
+      camera: turnOn,
+      mic: turnOn,
+    })
   }
 }
 

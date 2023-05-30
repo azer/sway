@@ -1,11 +1,11 @@
-export enum PresenceStatus {
+export enum StatusModeKey {
   Online = 'online',
   Focus = 'focus',
   Zen = 'zen',
 }
 
-export interface PresenceMode {
-  status: PresenceStatus
+export interface StatusMode {
+  mode: StatusModeKey
   icon?: string
   color: string
   label: string
@@ -15,8 +15,8 @@ export interface PresenceMode {
   shortcut?: string[]
 }
 
-export const Online: PresenceMode = {
-  status: PresenceStatus.Online,
+export const Online: StatusMode = {
+  mode: StatusModeKey.Online,
   icon: 'headphones',
   color: '$online',
   label: 'Online',
@@ -25,8 +25,8 @@ export const Online: PresenceMode = {
   notifications: true,
 }
 
-export const Focus: PresenceMode = {
-  status: PresenceStatus.Focus,
+export const Focus: StatusMode = {
+  mode: StatusModeKey.Focus,
   icon: 'headphones',
   color: '$focus',
   label: 'Focus',
@@ -35,8 +35,8 @@ export const Focus: PresenceMode = {
   notifications: true,
 }
 
-export const Zen: PresenceMode = {
-  status: PresenceStatus.Zen,
+export const Zen: StatusMode = {
+  mode: StatusModeKey.Zen,
   icon: 'sunrise',
   color: '$zen',
   label: 'Zen',
@@ -45,10 +45,10 @@ export const Zen: PresenceMode = {
   notifications: false,
 }
 
-export const PresenceModes = [Online, Focus, Zen]
+export const StatusModes = [Online, Focus, Zen]
 
-export function findModeByStatus(
-  status: PresenceStatus
-): PresenceMode | undefined {
-  return PresenceModes.find((m) => m.status === status)
+export function findStatusModeByKey(
+  key: StatusModeKey
+): StatusMode | undefined {
+  return StatusModes.find((m) => m.mode === key)
 }

@@ -1,7 +1,7 @@
 import { Emoji } from 'components/Emoji'
 import React from 'react'
 import { Status } from 'state/entities'
-import { PresenceStatus } from 'state/presence'
+import { StatusModeKey } from 'state/status'
 import { styled } from 'themes'
 
 interface Props {
@@ -37,13 +37,13 @@ export const StatusCircle = styled('div', {
   round: true,
   variants: {
     presence: {
-      [PresenceStatus.Focus]: {
+      [StatusModeKey.Focus]: {
         background: '$statusIconFocusBg',
       },
-      [PresenceStatus.Online]: {
+      [StatusModeKey.Online]: {
         background: '$statusIconOnlineBg',
       },
-      [PresenceStatus.Zen]: {
+      [StatusModeKey.Zen]: {
         background: '$statusIconZenBg',
       },
     },

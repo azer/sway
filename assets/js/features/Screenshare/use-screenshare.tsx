@@ -18,7 +18,7 @@ export function useScreenShare() {
   const commandPalette = useCommandPalette()
 
   const [isActive, isScreenSharing] = useSelector((state) => [
-    selectors.presence.isLocalUserActive(state),
+    selectors.status.isLocalUserActive(state),
     selectors.screenshare.isScreenSharing(state),
   ])
 

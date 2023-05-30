@@ -1,6 +1,6 @@
 import { MediaTrackState } from '@daily-co/daily-react-hooks/dist/hooks/useMediaTrack'
 import { TrayWindowState } from 'features/ElectronTray'
-import { PresenceStatus } from 'state/presence'
+import { StatusModeKey } from 'state/status'
 import { logger } from './log'
 
 const log = logger('electron')
@@ -46,8 +46,8 @@ export interface ElectronPayload {
   setSpeakerOn?: {
     on: boolean
   }
-  savePresenceStatus?: {
-    status: PresenceStatus
+  saveStatusModeKey?: {
+    status: StatusModeKey
   }
   saveStatusEmoji?: {
     emoji: string | undefined

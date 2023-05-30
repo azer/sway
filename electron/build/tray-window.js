@@ -67776,12 +67776,6 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     return result;
   }
 
-  // ../assets/js/features/Dock/slice.ts
-  var import_toolkit3 = __toESM(require_dist2());
-
-  // ../assets/js/features/Focus/slice.ts
-  var import_toolkit2 = __toESM(require_dist2());
-
   // ../assets/js/features/Room/focus.ts
   var _a;
   var initialRoomFocus = {
@@ -67805,7 +67799,11 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     sidebar: initialSidebarFocus
   };
 
+  // ../assets/js/features/Dock/slice.ts
+  var import_toolkit3 = __toESM(require_dist2());
+
   // ../assets/js/features/Focus/slice.ts
+  var import_toolkit2 = __toESM(require_dist2());
   var name = "focus";
   var log2 = logger("focus/slice");
   var initialState2 = {

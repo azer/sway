@@ -14,10 +14,10 @@ interface Props {
 export function StatusUpdate(props: Props) {
   // const dispatch = useDispatch()
   const [status, username] = useSelector((state) => [
-    selectors.statuses.getById(state, props.id),
+    selectors.status.getById(state, props.id),
     selectors.users.getById(
       state,
-      selectors.statuses.getById(state, props.id)?.user_id || ''
+      selectors.status.getById(state, props.id)?.user_id || ''
     )?.name,
   ])
 

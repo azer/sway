@@ -37,7 +37,7 @@ import { LiveSocket } from 'phoenix_live_view'
 import topbar from '../vendor/topbar'
 import { CommandPaletteProvider } from 'features/CommandPalette'
 import { SettingsProvider } from 'features/Settings'
-import PresenceProvider from 'features/Presence/Provider'
+import { PresenceProvider } from 'features/Presence/PresenceProvider'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { ElectronTrayProvider } from 'features/ElectronTray/ElectronTrayProvider'
 import { EmojiProvider } from 'features/Emoji/Provider'
@@ -47,6 +47,7 @@ import { FocusProvider } from 'features/Focus/Provider'
 import { PersistGate } from 'reduxjs-toolkit-persist/integration/react'
 import { registerServiceWorker } from 'features/ServiceWorker'
 import { AutoUpdateProvider } from 'features/AutoUpdater'
+import { StatusProvider } from 'features/Status/StatusProvider'
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -89,6 +90,7 @@ ReactDOM.render(
               <FocusProvider />
               <SettingsProvider />
               <PresenceProvider />
+              <StatusProvider />
               <ElectronTrayProvider />
               <EmojiProvider />
               <TapProvider />

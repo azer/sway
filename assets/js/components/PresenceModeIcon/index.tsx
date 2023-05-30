@@ -1,11 +1,11 @@
 import { styled } from 'themes'
 import React from 'react'
 import Icon from 'components/Icon'
-import { PresenceStatus } from 'state/presence'
-import { findModeByStatus } from 'state/presence'
+import { StatusModeKey } from 'state/status'
+import { findStatusModeByKey } from 'state/status'
 
 interface Props {
-  mode: PresenceStatus
+  mode: StatusModeKey
   active?: boolean
   onClick?: () => void
 }
@@ -24,11 +24,11 @@ export function PresenceModeIcon(props: Props) {
 }
 
 export function getIcon(
-  status: PresenceStatus,
+  status: StatusModeKey,
   active: boolean
 ): string | undefined {
   if (active) return 'phoneCall'
-  return findModeByStatus(status)?.icon
+  return findStatusModeByKey(status)?.icon
 }
 
 export const Container = styled('div', {

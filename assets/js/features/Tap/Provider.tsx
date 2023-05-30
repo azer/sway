@@ -5,7 +5,7 @@ import { firstName } from 'lib/string'
 import React, { useEffect, useState } from 'react'
 import selectors from 'selectors'
 import { useSelector, useDispatch, entities } from 'state'
-import { PresenceStatus } from 'state/presence'
+import { StatusModeKey } from 'state/status'
 
 interface Props {}
 
@@ -21,7 +21,7 @@ export function TapProvider(props: Props) {
     lastTappingUserId
       ? selectors.users.getById(state, lastTappingUserId)
       : undefined,
-    selectors.statuses.getLocalStatus(state),
+    selectors.status.getLocalStatus(state),
   ])
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function TapProvider(props: Props) {
 
     log.info('Show notification for tap', lastTappingUserId)
 
-    if (localStatus.status === PresenceStatus.Zen) {
+    if (localStatus.status === StatusModeKey.Zen) {
       log.info('Silenced tap notification on zen mode')
       setLastTappingUserId(undefined)
       return

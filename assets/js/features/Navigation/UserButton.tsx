@@ -44,7 +44,7 @@ export function UserButton(props: Props) {
 
     return [
       selectors.users.getById(state, props.id),
-      selectors.statuses.getByUserId(state, props.id),
+      selectors.status.getStatusByUserId(state, props.id),
       selectors.presence.isUserOnline(state, props.id),
       selectors.navigation.isUserIn1v1Room(state, props.id),
       selectors.sidebar.getFocusedUserId(state),
@@ -52,8 +52,8 @@ export function UserButton(props: Props) {
       selectors.workspaces.getSelfWorkspace(state),
       selectors.session.getUserId(state),
       selectors.rooms.getFocusedRoomId(state),
-      selectors.presence.isLocalUserActive(state),
-      selectors.presence.isUserActive(state, props.id),
+      selectors.status.isLocalUserActive(state),
+      selectors.status.isUserActive(state, props.id),
     ]
   })
 

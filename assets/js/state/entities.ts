@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { APIResponse, APIResponseRow } from 'lib/api'
-import { PresenceStatus } from './presence'
+import { StatusModeKey } from './presence'
 import { AppDispatch, RootState } from './store'
 
 export type Entity =
@@ -104,7 +104,7 @@ export interface Status {
   user_id: string
   room_id: string
   workspace_id: string
-  status: PresenceStatus
+  status: StatusModeKey
   camera_on: boolean
   speaker_on: boolean
   mic_on: boolean

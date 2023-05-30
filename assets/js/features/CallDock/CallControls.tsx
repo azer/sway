@@ -173,8 +173,12 @@ export function CallControls(props: Props) {
         </Dropdown.Content>
       </Dropdown.Menu>
       <ScreenshareButton />
+    </Container>
+  )
 
-      {props.isActive ? (
+  /*
+
+    {props.isActive ? (
         <PhoneCallButton>
           <Button
             icon="phoneHangUp"
@@ -185,10 +189,6 @@ export function CallControls(props: Props) {
           ></Button>
         </PhoneCallButton>
       ) : null}
-    </Container>
-  )
-
-  /*
 
     <Button
         icon="sliders"

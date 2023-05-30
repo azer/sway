@@ -253,5 +253,8 @@ export function useUserSocket() {
         log.info('Fetching entity done', id, schema, row)
         dispatch(add(row as Update))
       })
+      .receive('error', (error) => {
+        log.error('Failed to fetch entity')
+      })
   }
 }

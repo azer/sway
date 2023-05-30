@@ -30,22 +30,22 @@ export function useStatus() {
   useEffect(() => {
     if (!statusChange || !channel) return
 
-    log.info('Pushing status change to backend.', statusChange)
-
     const change = statusChange
     setStatusChange(undefined)
 
-    const settings = {
+    const newStatus = {
       mode: change.mode || localStatus.status,
       camera_on: or<boolean>(change.camera, localStatus.camera_on),
       mic_on: or<boolean>(change.mic, localStatus.mic_on),
       speaker_on: or<boolean>(change.speaker, localStatus.speaker_on),
     }
 
+    log.info('Pushing status change to backend.', newStatus)
+
     channel.push('user:status', {
       workspace_id: workspaceId,
       room_id: roomId,
-      ...settings,
+      ...newStatus,
     })
   }, [channel, statusChange])
 
@@ -66,6 +66,7 @@ export function useStatus() {
     mic?: boolean
     speaker?: boolean
   }) {
+    log.info('Changing status', change)
     setStatusChange(change)
   }
 

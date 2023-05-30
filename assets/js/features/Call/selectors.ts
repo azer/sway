@@ -22,7 +22,7 @@ export function getActiveUsersInCurrentCall(state: RootState): string[] {
   const roomId = selectors.rooms.getFocusedRoomId(state)
   return selectors.rooms
     .getUsersInRoom(state, roomId)
-    .filter((uid) => selectors.presence.isUserActive(state, uid))
+    .filter((uid) => selectors.status.isUserActive(state, uid))
 }
 
 export function isUserScreensharing(state: RootState, userId: string): boolean {

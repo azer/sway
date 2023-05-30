@@ -26,7 +26,7 @@ export function Shell(props: Props) {
   const commandPalette = useCommandPalette()
 
   const [localStatus] = useSelector((state) => [
-    selectors.statuses.getLocalStatus(state),
+    selectors.status.getLocalStatus(state),
   ])
 
   useEffect(() => {

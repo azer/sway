@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { PresenceStatus } from 'state/presence'
+import { StatusModeKey } from 'state/status'
 
 export const name = 'taps'
 
 export interface StatusHook {
   userId: string
   whenActive?: boolean
-  whenPresentAs?: PresenceStatus
+  whenPresentAs?: StatusModeKey
 }
 
 export interface Tap {

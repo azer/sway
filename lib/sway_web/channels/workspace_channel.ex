@@ -12,7 +12,9 @@ defmodule SwayWeb.WorkspaceChannel do
 
   @impl true
   def join("workspace:" <> workspace_id, _payload, socket) do
+    IO.puts "New socket connection. user: #{socket.assigns.user} workspace: #{workspace_id}"
     if authorized?(socket.assigns.user, Hashing.decode_workspace(workspace_id)) do
+      socket = assign(socket, :workspace_id, Hashing.decode_workspace(workspace_id))
       send(self(), :after_join)
       {:ok, socket}
     else
@@ -21,13 +23,17 @@ defmodule SwayWeb.WorkspaceChannel do
   end
 
   def handle_info(:after_join, socket) do
-    user = Accounts.get_user!(socket.assigns[:user])
-    id = Hashing.encode_user(user.id)
+    user = Accounts.get_user!(socket.assigns.user)
+    encoded_id = Hashing.encode_user(user.id)
+    status = Sway.Statuses.get_latest_status(user.id, socket.assigns.workspace_id)
 
     {:ok, _} =
-      UserPresence.track(socket, "users:#{id}", %{
-        user_id: id,
-        online_at: inspect(System.system_time(:second))
+      UserPresence.track(socket, "users:#{encoded_id}", %{
+        user_id: encoded_id,
+        online_at: inspect(System.system_time(:second)),
+	room_id: Hashing.encode_room(status.room_id),
+	status_id: Hashing.encode_status(status.id),
+	workspace_id: Hashing.encode_workspace(socket.assigns.workspace_id)
       })
 
     push(socket, "presence_state", UserPresence.list(socket))
@@ -39,6 +45,11 @@ defmodule SwayWeb.WorkspaceChannel do
   # by sending replies to requests from the client
   def handle_in("ping", payload, socket) do
     {:reply, {:ok, payload}, socket}
+  end
+
+  def handle_in("presence:list", %{ "workspace_id" => workspace_id }, socket) do
+    list = UserPresence.list(socket)
+    {:reply, {:ok, list}, socket}
   end
 
   def handle_in("entities:fetch", %{"id" => encoded_id, "schema" => schema_name}, socket) do

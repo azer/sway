@@ -2,58 +2,6 @@ import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 import selectors from 'selectors'
 import { RootState } from 'state'
 import { Status } from 'state/entities'
-import { findModeByStatus } from 'state/presence'
-
-export function isUserActive(state: RootState, userId: string): boolean {
-  const status = selectors.statuses.getByUserId(state, userId)
-  return status.mic_on || status.camera_on
-}
-
-export function isLocalUserActive(state: RootState): boolean {
-  return isUserActive(state, selectors.users.getSelf(state)?.id || '')
-}
-
-export function getPresenceLabelByUserId(
-  state: RootState,
-  userId: string
-): string {
-  const status = selectors.statuses.getByUserId(state, userId)
-  const isOnline = isUserOnline(state, userId)
-  if (!isOnline) {
-    return 'Offline'
-  }
-
-  return findModeByStatus(status.status)?.label || ''
-}
-
-export function getPresenceIconByUserId(
-  state: RootState,
-  userId: string
-): string {
-  const isActive = selectors.presence.isUserActive(state, userId)
-  if (isActive) {
-    return 'phoneCall'
-  }
-
-  return (
-    findModeByStatus(selectors.statuses.getByUserId(state, userId).status)
-      ?.icon || ''
-  )
-}
-
-export function getUserUpdatesByUserId(
-  state: RootState,
-  userId: string
-): string[] {
-  return state.presence.statusUpdates[userId] || []
-}
-
-export function getStatusUpdatesByRoomId(
-  state: RootState,
-  roomId: string
-): string[] {
-  return state.presence.roomStatuses[roomId] || []
-}
 
 export function isSpaceButtonEnabled(state: RootState): boolean {
   return (
@@ -63,13 +11,21 @@ export function isSpaceButtonEnabled(state: RootState): boolean {
 }
 
 export function isUserOnline(state: RootState, userId: string): boolean {
-  return state.userSocket.onlineUsers.indexOf(userId) > -1
+  const workspaceId = selectors.workspaces.getFocusedWorkspaceId(state)
+  return (
+    state.presence.onlineUsersByWorkspaceId[workspaceId]?.includes(userId) ||
+    false
+  )
 }
 
-export function getUsersInRoom(state: RootState, roomId: string): string[] {
-  const users: string[] = []
+export function getOnlineUsersInFocusedRoom(state: RootState): string[] {
+  const roomId = selectors.rooms.getFocusedRoomId(state)
+  return state.presence.onlineUsersByRoomId[roomId]
+}
 
-  return users
+export function getOnlineUsersInWorkspace(state: RootState): string[] {
+  const workspaceId = selectors.workspaces.getFocusedWorkspaceId(state)
+  return state.presence.onlineUsersByWorkspaceId[workspaceId] || []
 }
 
 export function sortUsersByPresence(
@@ -81,15 +37,6 @@ export function sortUsersByPresence(
     if (onlineMap[a] && !onlineMap[b]) return -1
     if (!onlineMap[a] && onlineMap[b]) return 1
     return 0
-  }
-}
-
-export function filterActiveUsers(
-  state: RootState,
-  active: boolean
-): (userId: string) => boolean {
-  return function (userId: string) {
-    return isUserActive(state, userId) === active
   }
 }
 

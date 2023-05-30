@@ -27,7 +27,7 @@ import { TrayCallControls } from './TrayCallControls'
 import { Button } from 'features/Dock/Button'
 import { UserIconView } from 'components/UserView'
 import { UserListView } from 'components/UserView/UserListView'
-import { PresenceStatus } from 'state/presence'
+import { StatusModeKey } from 'state/status'
 // import { useSelector, useDispatch } from 'state'
 
 const log = logger('electron-tray-window')
@@ -311,9 +311,9 @@ export function ElectronTrayWindow(props: Props) {
     })
   }
 
-  function savePresenceMode(presenceStatus: PresenceStatus) {
+  function savePresenceMode(presenceStatus: StatusModeKey) {
     messageMainWindow({
-      savePresenceStatus: {
+      saveStatusModeKey: {
         status: presenceStatus,
       },
     })

@@ -9,6 +9,10 @@ export function getById(
   return state.entities.workspaces[id]
 }
 
+export function getFocusedWorkspaceId(state: RootState): string {
+  return state.focus.workspace?.workspaceId
+}
+
 export function getSelfWorkspace(
   state: RootState
 ): entities.Workspace | undefined {

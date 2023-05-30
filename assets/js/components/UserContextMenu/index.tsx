@@ -4,7 +4,7 @@ import { ContextMenu } from 'components/ContextMenu'
 import { UserHeader } from 'components/UserHeader'
 import { useSelector, useDispatch } from 'state'
 import { setStatusHook } from 'features/Tap/slice'
-import { PresenceStatus } from 'state/presence'
+import { StatusModeKey } from 'state/status'
 import selectors from 'selectors'
 
 interface Props {
@@ -51,10 +51,10 @@ export function UserContextMenu(props: Props) {
       setStatusHook({
         userId: props?.user?.id,
         whenPresentAs:
-          props.status?.status !== PresenceStatus?.Online
-            ? PresenceStatus?.Online
+          props.status?.status !== StatusModeKey?.Online
+            ? StatusModeKey?.Online
             : undefined,
-        whenActive: props.status?.status === PresenceStatus?.Online,
+        whenActive: props.status?.status === StatusModeKey?.Online,
       })
     )
   }

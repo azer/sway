@@ -12,7 +12,7 @@ import { setVideoInputDeviceId } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { VideoSettingsPreview } from './VideoSettingsPreview'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 
 const log = logger('settings/video')
 const dialogId = 'camera-settings'
@@ -20,14 +20,14 @@ const dialogId = 'camera-settings'
 export function useVideoSettings() {
   const dispatch = useDispatch()
   const [isOn, selectedDeviceId, allDevices] = useSelector((state) => [
-    selectors.statuses.getLocalStatus(state).camera_on,
+    selectors.status.getLocalStatus(state).camera_on,
     selectors.settings.getVideoInputDeviceId(state),
     selectors.settings.allVideoInputDevices(state),
   ])
 
   const commandPalette = useCommandPalette()
   const { useRegister } = useCommandRegistry()
-  const presence = usePresence()
+  const presence = useStatus()
 
   useHotkeys(
     'meta+e',

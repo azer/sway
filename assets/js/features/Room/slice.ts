@@ -19,6 +19,7 @@ export const initialState: State = {
   roomIdsByWorkspace: window.initialState.room.roomIdsByWorkspace || [],
   // @ts-ignore
   privateRoomIdsByWorkspace: window.initialState.room.privateRoomIdsByWorkspace,
+  roomMembers: {},
 }
 
 export const slice = createSlice({

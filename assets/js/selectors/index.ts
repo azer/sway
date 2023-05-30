@@ -7,7 +7,7 @@ import * as focus from 'features/Focus/selectors'
 import * as dock from 'features/Dock/selectors'
 import * as call from 'features/Call/selectors'
 import * as settings from 'features/Settings/selectors'
-import * as statuses from './status'
+import * as status from 'features/Status/selectors'
 import * as chatMessages from './chat-messages'
 import * as presence from 'features/Presence/selectors'
 import * as electronTray from 'features/ElectronTray/selectors'
@@ -33,7 +33,7 @@ export default {
   dock,
   call,
   settings,
-  statuses,
+  status,
   presence,
   electronTray,
   commandPalette,

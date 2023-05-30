@@ -1,6 +1,6 @@
 import React from 'react'
 import { Status } from 'state/entities'
-import { findModeByStatus } from 'state/presence'
+import { findStatusModeByKey } from 'state/status'
 
 interface Props {
   status: Status | undefined
@@ -20,5 +20,5 @@ export function UserStatusLabel(props: Props) {
     return <>{props.status?.message}</>
   }
 
-  return <>{props.status ? findModeByStatus(props.status.status)?.label : ''}</>
+  return <>{props.status ? findStatusModeByKey(props.status.status)?.label : ''}</>
 }

@@ -37,7 +37,7 @@ export function CallSettingsPreview(props: Props) {
     blurLabel,
     blurValue,
   ] = useSelector((state) => [
-    selectors.presence.isLocalUserActive(state),
+    selectors.status.isLocalUserActive(state),
     selectors.settings.isVideoInputOff(state),
     selectors.settings.getVideoInputDeviceId(state),
     selectors.settings.getVideoInputDeviceLabelById(

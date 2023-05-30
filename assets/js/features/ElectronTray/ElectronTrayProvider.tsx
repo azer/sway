@@ -12,7 +12,7 @@ import {
   setTray,
 } from 'lib/electron'
 import { logger } from 'lib/log'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 import { SocketContext } from 'features/UserSocket'
 import { setNewRelease } from 'features/AutoUpdater/slice'
 
@@ -20,7 +20,14 @@ interface Props {}
 
 const log = logger('electron-tray-provider')
 
-export function ElectronTrayProvider(props: Props) {
+export const ElectronTrayProvider = React.memo(
+  UElectronTrayProvider,
+  (prev, next) => {
+    return true
+  }
+)
+
+function UElectronTrayProvider(props: Props) {
   if (!isElectron) {
     log.info('Not running on Electron, return early')
     return null
@@ -29,7 +36,7 @@ export function ElectronTrayProvider(props: Props) {
   log.info('Initializing')
 
   const dispatch = useDispatch()
-  const presence = usePresence()
+  const presence = useStatus()
   const ctx = useContext(SocketContext)
 
   const [trayStateRequested, setTrayStateRequested] = useState(false)
@@ -40,7 +47,7 @@ export function ElectronTrayProvider(props: Props) {
 
   const [isActive, users, trayWindowState, isTrayWindowOpen, isPipWindowOpen] =
     useSelector((state) => [
-      selectors.presence.isLocalUserActive(state),
+      selectors.status.isLocalUserActive(state),
       selectors.rooms.getOtherUsersInSameRoom(state),
       selectors.electronTray.trayWindowState(state),
       selectors.electronTray.isTrayWindowOpen(state),
@@ -202,8 +209,8 @@ export function ElectronTrayProvider(props: Props) {
       return
     }
 
-    if (payload.savePresenceStatus) {
-      presence.setMode(payload.savePresenceStatus.status)
+    if (payload.saveStatusModeKey) {
+      presence.setMode(payload.saveStatusModeKey.status)
       return
     }
 

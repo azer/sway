@@ -20,11 +20,11 @@ export function ParticipantGrid(props: Props) {
     const localUserId = selectors.users.getSelf(state)?.id
 
     const activeUsers = users
-      .filter((uid) => selectors.presence.isUserActive(state, uid))
+      .filter((uid) => selectors.status.isUserActive(state, uid))
       .filter((userId) => isSharingScreen || userId !== localUserId)
 
     const inactiveUsers = users
-      .filter((uid) => !selectors.presence.isUserActive(state, uid))
+      .filter((uid) => !selectors.status.isUserActive(state, uid))
       .filter((userId) => isSharingScreen || userId !== localUserId)
 
     return [activeUsers, inactiveUsers]

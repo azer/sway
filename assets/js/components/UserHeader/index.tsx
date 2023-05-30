@@ -5,7 +5,7 @@ import { StatusIcon, StyledStatusIcon } from 'features/Dock/StatusIcon'
 import { firstName } from 'lib/string'
 import React from 'react'
 import { Status, User } from 'state/entities'
-import { findModeByStatus } from 'state/presence'
+import { findStatusModeByKey } from 'state/status'
 import { styled } from 'themes'
 
 interface Props {
@@ -33,7 +33,7 @@ export function UserHeader(props: Props) {
         <StyledStatus>
           {props.status
             ? props.status?.message ||
-              findModeByStatus(props.status.status)?.label
+              findStatusModeByKey(props.status.status)?.label
             : ''}
         </StyledStatus>
       </Right>

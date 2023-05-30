@@ -79,13 +79,13 @@ export function getBackgroundBlurLabel(state: RootState): string {
 }
 
 export function isVideoInputOff(state: RootState): boolean {
-  return !selectors.statuses.getLocalStatus(state)?.camera_on
+  return !selectors.status.getLocalStatus(state)?.camera_on
 }
 
 export function isAudioInputOff(state: RootState): boolean {
-  return !selectors.statuses.getLocalStatus(state)?.camera_on
+  return !selectors.status.getLocalStatus(state)?.camera_on
 }
 
 export function isAudioOutputOff(state: RootState): boolean {
-  return !selectors.statuses.getLocalStatus(state)?.camera_on
+  return !selectors.status.getLocalStatus(state)?.camera_on
 }

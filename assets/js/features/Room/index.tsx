@@ -15,7 +15,7 @@ import {
 } from 'features/Call/ActiveParticipant'
 import { AvatarRoot } from 'components/Avatar'
 import { CallTile } from 'features/Call/Tile'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 import { moveUserToRoom, setFocusedRoomById } from './slice'
 import { setWorkspaceFocusRegion } from 'features/Workspace/slice'
 import { WorkspaceFocusRegion } from 'features/Workspace/focus'
@@ -29,7 +29,7 @@ const log = logger('room')
 
 export function RoomPage(props: Props) {
   const dispatch = useDispatch()
-  const presence = usePresence()
+  const presence = useStatus()
 
   const [
     localUserId,
@@ -47,15 +47,15 @@ export function RoomPage(props: Props) {
     )
 
     const active = online.filter(
-      selectors.presence.filterActiveUsers(state, true)
+      selectors.status.filterActiveUsers(state, true)
     )
     const inactive = online.filter(
-      selectors.presence.filterActiveUsers(state, false)
+      selectors.status.filterActiveUsers(state, false)
     )
 
     const screensharing = selectors.rooms
       .getUsersInRoom(state, props.id)
-      .filter(selectors.presence.filterActiveUsers(state, true))
+      .filter(selectors.status.filterActiveUsers(state, true))
       .filter(selectors.call.filterScreensharingUsers(state))
 
     const minimizedParticipants =
@@ -82,7 +82,7 @@ export function RoomPage(props: Props) {
 
     return [
       selectors.session.getUserId(state),
-      selectors.presence.isLocalUserActive(state),
+      selectors.status.isLocalUserActive(state),
       focusedUserId,
       focusedParticipantId,
       mainParticipants,
@@ -122,12 +122,14 @@ export function RoomPage(props: Props) {
         }
       >
         {focusedUserId && focusedParticipantId ? (
-          <ActiveParticipant
-            userId={focusedUserId}
-            participantId={focusedParticipantId}
-            tap={presence.tap}
-            showScreen
-          />
+          <CallTile tap={tap} ids={[]} numBoxes={1}>
+            <ActiveParticipant
+              userId={focusedUserId}
+              participantId={focusedParticipantId}
+              tap={presence.tap}
+              showScreen
+            />
+          </CallTile>
         ) : !focusedUserId && mainParticipants.length ? (
           <CallTile ids={mainParticipants} tap={tap} />
         ) : (
@@ -231,3 +233,5 @@ const Bottom = styled('div', {
   justifyContent: 'center',
   marginBottom: '12px',
 })
+
+//

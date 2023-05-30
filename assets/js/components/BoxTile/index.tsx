@@ -9,6 +9,7 @@ const TILE_GAP = 8
 interface Props {
   children: React.ReactNode
   numBoxes: number
+  rect?: boolean
 }
 
 export function BoxTile(props: Props) {
@@ -21,7 +22,7 @@ export function BoxTile(props: Props) {
   })
 
   const tileSizeVars = useMemo(() => {
-    const size = getMaxBoxSize(
+    const size = getMaxSquareSize(
       dimensions.width,
       dimensions.height,
       props.numBoxes,
@@ -90,48 +91,7 @@ const StyledTile = styled('div', {
   gap: TILE_GAP,
 })
 
-export function calcTileSize(
-  numBoxes: number,
-  containerWidth: number,
-  containerHeight: number
-): { width: number; height: number } {
-  // Aspect ratio of each video
-  const aspectRatio = 1.25
-
-  // Determine the width and height of the available space
-  let availableWidth = containerWidth
-  let availableHeight = containerHeight
-
-  // Calculate the number of columns and rows based on the number of boxes
-  let columns = Math.ceil(Math.sqrt(numBoxes))
-  let rows = Math.ceil(numBoxes / columns)
-
-  if (
-    containerWidth < containerHeight &&
-    containerWidth / containerHeight < 0.75
-  ) {
-    columns = 1
-    rows = numBoxes
-  }
-
-  // Determine the maximum width and height of each box
-  let maxWidth = availableWidth / columns
-  let maxHeight = availableHeight / rows
-
-  // If the calculated height exceeds the aspect ratio, adjust the height and width
-  if (maxHeight > maxWidth / aspectRatio) {
-    maxHeight = maxWidth / aspectRatio
-  } else {
-    maxWidth = maxHeight * aspectRatio
-  }
-
-  return {
-    width: maxWidth - (columns - 1) * 8,
-    height: maxHeight - (rows - 1) * 8,
-  }
-}
-
-function getMaxBoxSize(
+function getMaxSquareSize(
   containerWidth: number,
   containerHeight: number,
   numBoxes: number,
@@ -147,12 +107,56 @@ function getMaxBoxSize(
     const boxHeight = availHeight / numRows
     const boxSize = Math.min(boxWidth, boxHeight)
 
-    log.info('max box size => current: %d, boxSize:', maxBoxSize, boxSize)
-
     if (boxSize > maxBoxSize) {
       maxBoxSize = boxSize
     }
   }
 
   return maxBoxSize
+}
+
+export function getMaxRectSize(
+  numParticipants: number,
+  containerWidth: number,
+  containerHeight: number
+): { width: number; height: number } {
+  // Aspect ratio of each video
+  const aspectRatio = 1.25
+
+  // Determine the width and height of the available space
+  let availableWidth = containerWidth
+  let availableHeight = containerHeight
+
+  // Calculate the number of columns and rows based on the number of participants
+  let columns = Math.ceil(Math.sqrt(numParticipants))
+  let rows = Math.ceil(numParticipants / columns)
+
+  if (
+    containerWidth < containerHeight &&
+    containerWidth / containerHeight < 0.75
+  ) {
+    columns = 1
+    rows = numParticipants
+  }
+
+  // Determine the maximum width and height of each video
+  let maxWidth = availableWidth / columns
+  let maxHeight = availableHeight / rows
+
+  // If the calculated height exceeds the aspect ratio, adjust the height and width
+  if (maxHeight > maxWidth / aspectRatio) {
+    maxHeight = maxWidth / aspectRatio
+  } else {
+    maxWidth = maxHeight * aspectRatio
+  }
+
+  log.info('Tile result:', maxWidth, maxHeight, columns, rows, {
+    width: maxWidth - (columns - 1) * 8,
+    height: maxHeight - (rows - 1) * 8,
+  })
+
+  return {
+    width: maxWidth - (columns - 1) * 8,
+    height: maxHeight - (rows - 1) * 8,
+  }
 }

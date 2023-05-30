@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Icon from 'components/Icon'
 import { firstName, titleCase } from 'lib/string'
 import { ToggleGroup } from 'components/ToggleGroup'
-import { PresenceModes, PresenceStatus } from 'state/presence'
+import { StatusModes, StatusModeKey } from 'state/status'
 import { DockFocus, DockFocusRegion } from './focus'
 import { EmojiObject } from 'features/Emoji/use-emoji-search'
 import { Status, User } from 'state/entities'
@@ -30,7 +30,7 @@ interface Props {
   setFocusRegion: (r: DockFocusRegion) => void
   setFocusedEmojiId: (id: string | undefined) => void
   handleBlur: (e: Event) => void
-  setPresence: (p: PresenceStatus) => void
+  setStatusMode: (p: StatusModeKey) => void
   isDropdownOpen: boolean
   setDropdownOpen: (o: boolean) => void
   setFocusAway: () => void
@@ -289,27 +289,25 @@ export function StatusControls(props: Props) {
                     Set your flow
                   </Label>
                   <ToggleGroup.Root
-                    value={props.localPresence}
-                    onValueChange={(presence: PresenceStatus) =>
-                      props.setPresence(presence)
+                    value={props.localStatus?.status}
+                    onValueChange={(presence: StatusModeKey) =>
+                      props.setStatusMode(presence)
                     }
                     rovingFocus={props.focus?.region === DockFocusRegion.Status}
                   >
-                    {PresenceModes.map((m) => (
+                    {StatusModes.map((m) => (
                       <ToggleGroup.Item
-                        data-mode={m.status}
-                        value={m.status}
-                        key={m.status}
+                        data-mode={m.mode}
+                        value={m.mode}
+                        key={m.mode}
                         itemRef={
-                          m.status === PresenceStatus.Online
+                          m.mode === StatusModeKey.Online
                             ? statusItemRef
                             : undefined
                         }
                       >
-                        <ModeIcon presence={m.status} />
-                        <ToggleGroup.Label>
-                          {titleCase(m.status)}
-                        </ToggleGroup.Label>
+                        <ModeIcon presence={m.mode} />
+                        <ToggleGroup.Label>{m.label}</ToggleGroup.Label>
                       </ToggleGroup.Item>
                     ))}
                   </ToggleGroup.Root>

@@ -15,7 +15,7 @@ export function BrowserPictureInPictureProvider(props: Props) {
 
   const [localStatus, visibleParticipant, windowHasFocus] = useSelector(
     (state) => [
-      selectors.statuses.getLocalStatus(state),
+      selectors.status.getLocalStatus(state),
       selectors.pip.getVisibleParticipant(state),
       selectors.focus.hasWindowFocus(state),
     ]

@@ -50,7 +50,7 @@ export function isUserIn1v1Room(state: RootState, userId: string): boolean {
   const roomId = selectors.rooms.get1v1RoomIdByUserId(state, userId)
   if (!roomId) return false
 
-  const status = selectors.statuses.getByUserId(state, userId)
+  const status = selectors.status.getStatusByUserId(state, userId)
 
   return status.room_id === roomId
 }

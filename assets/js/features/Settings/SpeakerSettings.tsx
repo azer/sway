@@ -7,7 +7,7 @@ import { setAudioOutputDeviceId } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { SpeakerSettingsPreview } from './SpeakerSettingsPreview'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 
 const log = logger('settings/speaker')
 const dialogId = 'speaker-settings'
@@ -17,11 +17,11 @@ export function useSpeakerSettings() {
   const [selectedDeviceId, allDevices, isOn] = useSelector((state) => [
     selectors.settings.getAudioOutputDeviceId(state),
     selectors.settings.allAudioOutputDevices(state),
-    selectors.statuses.getLocalStatus(state).speaker_on,
+    selectors.status.getLocalStatus(state).speaker_on,
   ])
 
   const commandPalette = useCommandPalette()
-  const presence = usePresence()
+  const presence = useStatus()
 
   useEffect(() => {
     if (!commandPalette.isOpen || commandPalette.id !== dialogId) return

@@ -325,7 +325,7 @@ function SubscribeToDeviceSettings(props: { callObject: DailyCall }) {
 
   const [localPresence, videoInputId, audioInputId, audioOutputId] =
     useSelector((state) => [
-      selectors.statuses.getLocalStatus(state),
+      selectors.status.getLocalStatus(state),
       selectors.settings.getVideoInputDeviceId(state),
       selectors.settings.getAudioInputDeviceId(state),
       selectors.settings.getAudioOutputDeviceId(state),

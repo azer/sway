@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'state'
 import { AvatarRoot } from 'components/Avatar'
 import { addBatch } from 'state/entities'
 import { GET } from 'lib/api'
-import { setRoomStatusUpdates } from 'features/Presence/slice'
+import { setStatusUpdatesByRoomId } from 'features/Status/slice'
 import { logger } from 'lib/log'
 
 interface Props {
@@ -27,15 +27,15 @@ export function StatusSidebar(props: Props) {
   const dispatch = useDispatch()
   const [room, updates] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.roomId),
-    selectors.presence
+    selectors.status
       .getStatusUpdatesByRoomId(state, props.roomId)
       .map((id: string) => {
         return {
           id,
-          status: selectors.statuses.getById(state, id),
+          status: selectors.status.getById(state, id),
           user: selectors.users.getById(
             state,
-            selectors.statuses.getById(state, id)?.user_id || ''
+            selectors.status.getById(state, id)?.user_id || ''
           ),
         }
       }),
@@ -49,9 +49,9 @@ export function StatusSidebar(props: Props) {
         dispatch(addBatch(response.list.concat(response.links) as Update[]))
 
         dispatch(
-          setRoomStatusUpdates({
+          setStatusUpdatesByRoomId({
             roomId: props.roomId,
-            updates: response.list.map((d) => d.id),
+            statusIds: response.list.map((d) => d.id),
           })
         )
       })

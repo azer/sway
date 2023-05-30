@@ -13,7 +13,7 @@ export function EmptyRoom(props: Props) {
   const [user, room, isActive] = useSelector((state) => [
     selectors.users.getSelf(state),
     selectors.rooms.getRoomById(state, props.id),
-    selectors.presence.isLocalUserActive(state),
+    selectors.status.isLocalUserActive(state),
   ])
 
   return (

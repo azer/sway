@@ -12,7 +12,7 @@ import { setAudioInputDeviceId } from './slice'
 import { useSelector, useDispatch } from 'state'
 import { MicSettingsPreview } from './MicSettingsPreview'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 
 const log = logger('settings/mic')
 const dialogId = 'mic-settings'
@@ -21,13 +21,13 @@ export function useMicSettings() {
   const { useRegister } = useCommandRegistry()
   const dispatch = useDispatch()
   const [isOn, selectedDeviceId, allDevices] = useSelector((state) => [
-    selectors.statuses.getLocalStatus(state).mic_on,
+    selectors.status.getLocalStatus(state).mic_on,
     selectors.settings.getAudioInputDeviceId(state),
     selectors.settings.allAudioInputDevices(state),
   ])
 
   const commandPalette = useCommandPalette()
-  const presence = usePresence()
+  const presence = useStatus()
 
   useHotkeys(
     'meta+d',

@@ -1,3 +1,4 @@
+import { WorkspaceFocusRegion } from 'features/Workspace/focus'
 import { logger } from 'lib/log'
 import selectors from 'selectors'
 import { RootState } from 'state'
@@ -39,6 +40,13 @@ export function isSwaySocketConnected(state: RootState): boolean {
   return (
     getSwaySocketConnectionStatus(state, state.session.id) ===
     ConnectionState.Connected
+  )
+}
+
+export function isSpaceKbdEnabled(state: RootState) {
+  return (
+    state.focus.workspace.region === WorkspaceFocusRegion.Room &&
+    !state.focus.workspace.room.dock
   )
 }
 

@@ -28,8 +28,8 @@ export function RoomParticipant(props: Props) {
     (state) => [
       selectors.users.getById(state, props.userId),
       selectors.call.getParticipantStatusByUserId(state, props.userId),
-      selectors.statuses.getByUserId(state, props.userId),
-      selectors.presence.isUserActive(state, props.userId),
+      selectors.status.getStatusByUserId(state, props.userId),
+      selectors.status.isUserActive(state, props.userId),
       selectors.presence.isUserOnline(state, props.userId),
     ]
   )

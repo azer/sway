@@ -12,7 +12,7 @@ import { Icon } from 'components/Icon'
 import { RoomParticipant } from 'features/Room/RoomParticipant'
 import { logger } from 'lib/log'
 import { Empty, StatusSidebar } from './StatusSidebar'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 
 interface Props {
   roomId: string
@@ -22,21 +22,21 @@ const log = logger('sidebar/room-sidebar')
 
 export function RoomSidebar(props: Props) {
   const dispatch = useDispatch()
-  const presence = usePresence()
+  const presence = useStatus()
 
   const [room, roomStatus, usersInRoom, updates] = useSelector((state) => [
     selectors.rooms.getRoomById(state, props.roomId),
     selectors.rooms.getRoomStatus(state, props.roomId),
     selectors.rooms.getUsersInRoom(state, props.roomId),
-    selectors.presence
+    selectors.status
       .getStatusUpdatesByRoomId(state, props.roomId)
       .map((id: string) => {
         return {
           id,
-          status: selectors.statuses.getById(state, id),
+          status: selectors.status.getById(state, id),
           user: selectors.users.getById(
             state,
-            selectors.statuses.getById(state, id)?.user_id || ''
+            selectors.status.getById(state, id)?.user_id || ''
           ),
         }
       }),

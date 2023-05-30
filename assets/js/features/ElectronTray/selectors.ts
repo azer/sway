@@ -19,7 +19,7 @@ export function trayWindowState(state: RootState): TrayWindowState {
 
   const workspace = selectors.workspaces.getSelfWorkspace(state)
   const localUser = selectors.users.getSelf(state)
-  const localStatus = selectors.statuses.getLocalStatus(state)
+  const localStatus = selectors.status.getLocalStatus(state)
   const participants = selectors.rooms
     .getUsersInRoom(state, focusedRoom?.id || '')
     .map((userId) => {
@@ -27,9 +27,9 @@ export function trayWindowState(state: RootState): TrayWindowState {
         userId: userId,
         user: selectors.users.getById(state, userId),
         participant: selectors.call.getParticipantStatusByUserId(state, userId),
-        status: selectors.statuses.getByUserId(state, userId),
+        status: selectors.status.getStatusByUserId(state, userId),
         isOnline: selectors.presence.isUserOnline(state, userId),
-        isActive: selectors.presence.isUserActive(state, userId),
+        isActive: selectors.status.isUserActive(state, userId),
         isSelf: userId === localUser?.id,
       }
     })

@@ -19,7 +19,7 @@ export function AutoUpdateProvider(props: Props) {
     (state) => [
       selectors.focus.hasWindowFocus(state),
       selectors.focus.isWindowVisible(state),
-      selectors.presence.isLocalUserActive(state),
+      selectors.status.isLocalUserActive(state),
       selectors.dock.getSelfConnectionStatus(state)?.internet ===
         ConnectionState.Connected,
     ]

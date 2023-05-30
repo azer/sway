@@ -52,16 +52,16 @@ const StyledItem = styled(Item, {
   padding: '0 8px',
   background: 'rgba(115, 120, 125, 0.2)',
   borderLeft: '1px solid rgba(115, 120, 125, 0.2)',
-  color: 'rgba(255, 255, 255, 0.6)',
+  color: 'rgba(255, 255, 255, 0.5)',
   flexGrow: '1',
   outline: 'none',
   '&:focus': {
     background: 'rgba(255, 255, 255, 0.1)',
-    color: '$white',
+    //color: '$white',
   },
   '&:hover': {
     background: 'rgba(255, 255, 255, 0.1)',
-    color: '$white',
+    //color: '$white',
   },
   "&[data-state='on']": {
     background: 'rgba(115, 120, 125, 0.4)',

@@ -16,6 +16,7 @@ import electronTray from 'features/ElectronTray/slice'
 import onboarding from 'features/Onboarding/slice'
 import autoUpdater from 'features/AutoUpdater/slice'
 import screenshare from 'features/Screenshare/slice'
+import status from 'features/Status/slice'
 
 export default {
   //undotree,
@@ -36,4 +37,5 @@ export default {
   onboarding,
   autoUpdater,
   screenshare,
+  status,
 }

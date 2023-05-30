@@ -17,7 +17,7 @@ import {
   Status,
   Statuses,
 } from 'state/entities'
-import { setStatusIdBatch } from 'features/Presence/slice'
+// import { setStatusIdBatch } from 'features/Status/slice'
 
 const log = logger('room/provider')
 
@@ -42,12 +42,15 @@ export function RoomNavigationProvider(props: Props) {
   useEffect(() => {
     if (!channel || !workspace || !navigator.onLine) return
 
-    channel
+    /*channel
       .push('workspace:list_online_users', { workspace_id: workspace?.id })
-      .receive('ok', syncOnlineUserStatuses)
+      .receive('ok', (resp) => {
+        log.info('listed online users:', resp)
+        syncOnlineUserStatuses(resp)
+      })
       .receive('error', (error) => {
         log.error('Can not list online users', error)
-      })
+      })*/
 
     log.info('list workspace memberships')
 
@@ -77,22 +80,16 @@ export function RoomNavigationProvider(props: Props) {
     channel.on('rooms:join', handleJoiningNewRoom)
   }, [channel])
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!channel) return
     log.info('Listen for status changes')
     channel.on('workspace:sync_online_user_statuses', syncOnlineUserStatuses)
-  }, [channel])
+  }, [channel])*/
 
   useEffect(() => {
     if (!focusedRoom || !channel || !localUser) return
 
     log.info('Sync new focus room to backend', focusedRoom.id, focusedRoom.slug)
-
-    /*if (focusedRoom.is_private) {
-      navigate(`/${workspace?.slug}/room/${focusedRoom.id}/${focusedRoom.slug}`)
-    } else {
-      navigate(`/${workspace?.slug}/room/${focusedRoom.slug}`)
-    }*/
 
     channel.push('rooms:join', {
       id: focusedRoom?.id,
@@ -127,7 +124,7 @@ export function RoomNavigationProvider(props: Props) {
     }
   }
 
-  function syncOnlineUserStatuses(resp: { statuses: Status[] }) {
+  /*function syncOnlineUserStatuses(resp: { statuses: Status[] }) {
     const list = resp.statuses
 
     log.info('Sync online user statuses', list)
@@ -157,5 +154,6 @@ export function RoomNavigationProvider(props: Props) {
 
     dispatch(setAllRoomUserIds(userRoomMap))
     dispatch(setStatusIdBatch(userStatusMap))
-  }
+  }*/
 }
+//

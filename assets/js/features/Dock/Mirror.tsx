@@ -16,9 +16,9 @@ export function Mirror(props: Props) {
   const [user, localStatus, connectionStatus, isActive] = useSelector(
     (state) => [
       selectors.users.getSelf(state),
-      selectors.statuses.getLocalStatus(state),
+      selectors.status.getLocalStatus(state),
       selectors.dock.getStatusMessage(state),
-      selectors.presence.isLocalUserActive(state),
+      selectors.status.isLocalUserActive(state),
     ]
   )
 

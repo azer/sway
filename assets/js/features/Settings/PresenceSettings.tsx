@@ -7,11 +7,11 @@ import {
 } from 'features/CommandPalette'
 import { performSearch, useCommandRegistry } from 'features/CommandRegistry'
 import {
-  findModeByStatus,
+  findStatusModeByKey,
   PresenceMode,
-  PresenceModes,
-  PresenceStatus,
-} from 'state/presence'
+  StatusModes,
+  StatusModeKey,
+} from 'state/status'
 import selectors from 'selectors'
 import React, { useEffect } from 'react'
 import { Desc, Title } from './PushToTalkSettings'
@@ -20,22 +20,22 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { Prop, Table, Value } from './CallSettingsPreview'
 import { useUserSocket } from 'features/UserSocket'
 import { useDispatch, useSelector } from 'state'
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 import { PresenceModeIcon } from 'components/PresenceModeIcon'
 
 const dialogId = 'presence-settings'
 
-export function usePresenceSettings() {
+export function useStatusSettings() {
   const dispatch = useDispatch()
   // const [] = useSelector((state) => [  ])
 
   const { useRegister } = useCommandRegistry()
   const commandPalette = useCommandPalette()
   const { channel } = useUserSocket()
-  const presence = usePresence()
+  const presence = useStatus()
 
   const [presenceMode] = useSelector((state) => [
-    selectors.statuses.getLocalStatus(state).status,
+    selectors.status.getLocalStatus(state).status,
   ])
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export function usePresenceSettings() {
         },
       })
 
-      for (const p of PresenceModes) {
+      for (const p of StatusModes) {
         register(p.label, () => presence.setMode(p.status), {
           prefix: 'Set your status as:',
           icon: p.icon,
@@ -96,8 +96,8 @@ export function usePresenceSettings() {
       placeholder: 'Choose your flow.',
       selectedId: presenceMode,
       preview: (props: { selectedValue?: unknown }) => {
-        const status = props.selectedValue as PresenceStatus
-        const mode = findModeByStatus(status) as PresenceMode
+        const status = props.selectedValue as StatusModeKey
+        const mode = findStatusModeByKey(status) as PresenceMode
         const label = mode?.label
         const desc = mode?.desc
 
@@ -106,7 +106,7 @@ export function usePresenceSettings() {
         return (
           <Preview>
             <IconWrapper>
-              <PresenceModeIcon mode={props.selectedValue as PresenceStatus} />
+              <PresenceModeIcon mode={props.selectedValue as StatusModeKey} />
             </IconWrapper>
             <Title>{label} Mode</Title>
             <Desc>{desc}</Desc>
@@ -137,7 +137,7 @@ export function usePresenceSettings() {
       },
     ]
 
-    for (const p of PresenceModes) {
+    for (const p of StatusModes) {
       commands.push({
         id: p.status,
         value: p.status,

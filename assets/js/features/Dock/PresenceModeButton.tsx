@@ -4,7 +4,7 @@ import { logger } from 'lib/log'
 import { useSelector, useDispatch } from 'state'
 import { PresenceModeIcon } from 'components/PresenceModeIcon'
 import { styled } from 'themes'
-import { usePresenceSettings } from 'features/Settings/PresenceSettings'
+import { useStatusSettings } from 'features/Settings/PresenceSettings'
 import { Tooltip } from 'components/Tooltip'
 
 interface Props {}
@@ -12,11 +12,11 @@ interface Props {}
 const log = logger('status/presence')
 
 export function PresenceModeButton(props: Props) {
-  const presenceSettings = usePresenceSettings()
+  const presenceSettings = useStatusSettings()
 
   const [localStatus, isActive] = useSelector((state) => [
-    selectors.statuses.getLocalStatus(state),
-    selectors.presence.isLocalUserActive(state),
+    selectors.status.getLocalStatus(state),
+    selectors.status.isLocalUserActive(state),
   ])
 
   return (

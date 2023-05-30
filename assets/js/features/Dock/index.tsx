@@ -12,14 +12,14 @@ import {
   setInternetConnectionStatus,
 } from './slice'
 
-import { usePresence } from 'features/Presence/use-presence'
+import { useStatus } from 'features/Status/use-status'
 import { MessageSection, DockSection, StatusControls } from './StatusControls'
 import { useEmojiSearch } from 'features/Emoji/use-emoji-search'
 import { DockFocusRegion } from './focus'
 import { commonEmojis } from 'features/ElectronTrayWindow/selectors'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Mirror, MirrorRoot } from './Mirror'
-import { findModeByStatus } from 'state/presence'
+import { findStatusModeByKey } from 'state/status'
 
 interface Props {
   roomId: string
@@ -30,7 +30,7 @@ const log = logger('dock')
 export function Dock(props: Props) {
   const dispatch = useDispatch()
 
-  const presence = usePresence()
+  const status = useStatus()
   const emojiSearch = useEmojiSearch()
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -38,9 +38,9 @@ export function Dock(props: Props) {
 
   const [localUser, localStatus, focus, isActive] = useSelector((state) => [
     selectors.users.getSelf(state),
-    selectors.statuses.getLocalStatus(state),
+    selectors.status.getLocalStatus(state),
     selectors.dock.getFocus(state),
-    selectors.presence.isLocalUserActive(state),
+    selectors.status.isLocalUserActive(state),
   ])
 
   const [message, setMessage] = useState(localStatus?.message || '')
@@ -131,7 +131,7 @@ export function Dock(props: Props) {
                 message={message}
                 setMessage={setMessage}
                 resetMessage={() => setMessage(localStatus.message)}
-                saveMessage={() => presence.setMessage(message)}
+                saveMessage={() => status.setMessage(message)}
                 emojiResults={
                   emojiSearch.results.length > 0
                     ? emojiSearch.results
@@ -139,13 +139,13 @@ export function Dock(props: Props) {
                 }
                 emojiQuery={emojiSearch.query}
                 setEmojiQuery={emojiSearch.setQuery}
-                selectEmoji={presence.setEmoji}
+                selectEmoji={status.setEmoji}
                 focus={focus}
                 handleBlur={handleBlur}
                 setFocusRegion={(region: DockFocusRegion) =>
                   dispatch(setFocusRegion(region))
                 }
-                setPresence={(p) => presence.setMode(p)}
+                setStatusMode={(p) => status.setMode(p)}
                 isDropdownOpen={isDropdownOpen}
                 setDropdownOpen={setIsDropdownOpen}
                 setFocusedEmojiId={(id: string | undefined) =>
@@ -153,9 +153,9 @@ export function Dock(props: Props) {
                 }
                 setFocusAway={() => dispatch(setFocusAway())}
               />
-              <PresenceStatus onClick={() => setIsDropdownOpen(true)}>
-                {findModeByStatus(localStatus?.status)?.label}
-              </PresenceStatus>
+              <StatusModeKey onClick={() => setIsDropdownOpen(true)}>
+                {findStatusModeByKey(localStatus?.status)?.label}
+              </StatusModeKey>
             </Right>
           )}
         </MainDockRow>
@@ -294,7 +294,7 @@ const Right = styled('div', {
   height: '40px',
 })
 
-const PresenceStatus = styled('div', {
+const StatusModeKey = styled('div', {
   color: '$dockPresenceFg',
   fontSize: '$small',
   marginLeft: '26px',

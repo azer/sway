@@ -4,7 +4,7 @@ import { StatusHook } from './slice'
 
 export function getTriggeredStatusHooks(state: RootState): StatusHook[] {
   return Object.values(state.taps.statusHooks).filter((hook) => {
-    const status = selectors.statuses.getByUserId(state, hook?.userId)
+    const status = selectors.status.getStatusByUserId(state, hook?.userId)
     if (hook.whenActive) {
       return status.camera_on || status.mic_on
     }
