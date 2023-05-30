@@ -7,16 +7,7 @@ defmodule SwayWeb.UserSessionController do
   plug Ueberauth
 
   def new(conn, _params) do
-    user_agent = get_req_header(conn, "user-agent") |> List.first()
-    is_electron = user_agent && String.contains?(user_agent, "Electron")
-
-    oauth_login_url = if is_electron do
-      "/desktop/auth/oauth_login"
-    else
-      Routes.user_oauth_path(conn, :request, "google")
-    end
-
-    render(conn, "new.html", oauth_login_url: oauth_login_url, is_electron: is_electron, hide_waitlist: is_electron, error_message: nil)
+    render(conn, "new.html", oauth_login_url: oauth_login_url(conn), is_electron: is_electron(conn), error_message: nil)
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -29,11 +20,7 @@ defmodule SwayWeb.UserSessionController do
       |> put_session(:user_return_to, "/#{workspace.slug}")
       |> UserAuth.log_in_user(user, user_params)
     else
-      # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
-      user_agent = get_req_header(conn, "user-agent") |> List.first()
-      is_electron = user_agent && String.contains?(user_agent, "Electron")
-
-      render(conn, "new.html", error_message: "Invalid email or password", is_electron: is_electron)
+      render(conn, "new.html", oauth_login_url: oauth_login_url(conn), error_message: "Invalid email or password", is_electron: is_electron(conn))
     end
   end
 
@@ -42,5 +29,18 @@ defmodule SwayWeb.UserSessionController do
     |> put_flash(:info, "Logged out successfully.")
     |> clear_session()
     |> UserAuth.log_out_user()
+  end
+
+  defp oauth_login_url(conn) do
+    if is_electron(conn) do
+      "/desktop/auth/oauth_login"
+    else
+      Routes.user_oauth_path(conn, :request, "google")
+    end
+  end
+
+  defp is_electron(conn) do
+    user_agent = get_req_header(conn, "user-agent") |> List.first()
+    user_agent && String.contains?(user_agent, "Electron")
   end
 end
