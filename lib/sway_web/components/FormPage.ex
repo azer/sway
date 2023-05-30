@@ -8,11 +8,6 @@ defmodule SwayWeb.FormPageComponent do
     <div class="form">
     <%= render_slot(@inner_block) %>
     </div>
-    <%= if !assigns[:hide_waitlist] do %>
-    <div class="waitlist">
-      <a href="https://swayapp.typeform.com/to/ZfgqmarJ">Join Waitlist</a>
-      </div>
-      <% end %>
     </div>
     """
   end

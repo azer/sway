@@ -4,6 +4,8 @@
   <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
     <input type="hidden" name="invite_token" value={@invite_token}>
 
+
+
       <a href={Routes.user_oauth_path(@conn, :request, "google")} class="oauth-button">
 	<div class="logo">
 	  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" width="100%" height="100%" style="display:inline-flex; align-items:center;">
@@ -15,7 +17,7 @@
 	</div>
 	<label>Continue with Google</label>
       </a>
-
+<%= if @invite do %>
       <div class="separator">
 	or
       </div>
@@ -25,6 +27,8 @@
 	<p>Oops, something went wrong! Please check the errors below.</p>
       </div>
       <% end %>
+
+
 
       <div class="fieldset">
 	<%= text_input f, :name, required: true, placeholder: "Your name", value: @invite.name %>
@@ -39,7 +43,10 @@
 	<div>
 	  <%= submit "Create account" %>
 	</div>
+
+
       </div>
+	<% end %>
     </.form>
 
     <footer>
