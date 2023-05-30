@@ -31,7 +31,9 @@ export function UserHeader(props: Props) {
           {props.status?.emoji ? <Emoji id={props.status.emoji} /> : null}
         </StatusHeader>
         <StyledStatus>
-          {props.status
+          {!props.online
+            ? 'Offline'
+            : props.status
             ? props.status?.message ||
               findStatusModeByKey(props.status.status)?.label
             : ''}
