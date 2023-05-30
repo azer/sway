@@ -59,7 +59,7 @@ defmodule Sway.Workspaces do
       end
     else
       query = from(m in Membership, where: m.user_id == ^user_id and m.is_active == true, order_by: [desc: :inserted_at])
-      membership = Repo.one(query)
+      membership = hd Repo.all(query)
       workspace = get_workspace!(membership.workspace_id)
       [workspace, membership]
     end
