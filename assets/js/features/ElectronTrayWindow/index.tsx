@@ -214,7 +214,7 @@ export function ElectronTrayWindow(props: Props) {
               setFocusRegion={(region: DockFocusRegion) =>
                 setDockFocus({ ...dockFocus, region })
               }
-              setPresence={savePresenceMode}
+              setStatusMode={saveStatusMode}
               isDropdownOpen={isDropdownOpen}
               setDropdownOpen={setIsDropdownOpen}
               setFocusedEmojiId={(id: string | undefined) => {
@@ -311,10 +311,10 @@ export function ElectronTrayWindow(props: Props) {
     })
   }
 
-  function savePresenceMode(presenceStatus: StatusModeKey) {
+  function saveStatusMode(statusMode: StatusModeKey) {
     messageMainWindow({
-      saveStatusModeKey: {
-        status: presenceStatus,
+      saveStatusMode: {
+        status: statusMode,
       },
     })
   }

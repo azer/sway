@@ -67703,9 +67703,6 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   }
 
   // ../assets/js/lib/string.ts
-  function titleCase(text) {
-    return text.slice(0, 1).toUpperCase() + text.replace(/-/g, " ").slice(1);
-  }
   function firstName(fullName) {
     return fullName.split(" ")[0];
   }
@@ -67889,9 +67886,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   // ../assets/js/features/Dock/selectors.ts
   var log4 = logger("dock/selectors");
 
-  // ../assets/js/state/presence.ts
+  // ../assets/js/state/status.ts
   var Online = {
-    status: "online" /* Online */,
+    mode: "online" /* Online */,
     icon: "headphones",
     color: "$online",
     label: "Online",
@@ -67900,7 +67897,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     notifications: true
   };
   var Focus = {
-    status: "focus" /* Focus */,
+    mode: "focus" /* Focus */,
     icon: "headphones",
     color: "$focus",
     label: "Focus",
@@ -67909,7 +67906,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     notifications: true
   };
   var Zen = {
-    status: "zen" /* Zen */,
+    mode: "zen" /* Zen */,
     icon: "sunrise",
     color: "$zen",
     label: "Zen",
@@ -67917,9 +67914,9 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     keywords: ["mindful", "meditation", "dnd", "do not disturb"],
     notifications: false
   };
-  var PresenceModes = [Online, Focus, Zen];
-  function findModeByStatus(status) {
-    return PresenceModes.find((m2) => m2.status === status);
+  var StatusModes = [Online, Focus, Zen];
+  function findStatusModeByKey(key) {
+    return StatusModes.find((m2) => m2.mode === key);
   }
 
   // ../assets/js/components/RoomStatusIcon/index.tsx
@@ -69874,16 +69871,16 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     padding: "0 8px",
     background: "rgba(115, 120, 125, 0.2)",
     borderLeft: "1px solid rgba(115, 120, 125, 0.2)",
-    color: "rgba(255, 255, 255, 0.6)",
+    color: "rgba(255, 255, 255, 0.5)",
     flexGrow: "1",
     outline: "none",
     "&:focus": {
-      background: "rgba(255, 255, 255, 0.1)",
-      color: "$white"
+      background: "rgba(255, 255, 255, 0.1)"
+      //color: '$white',
     },
     "&:hover": {
-      background: "rgba(255, 255, 255, 0.1)",
-      color: "$white"
+      background: "rgba(255, 255, 255, 0.1)"
+      //color: '$white',
     },
     "&[data-state='on']": {
       background: "rgba(115, 120, 125, 0.4)",
@@ -70099,7 +70096,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
   var import_jsx_runtime62 = __toESM(require_jsx_runtime());
   var log8 = logger("dock/status-controls");
   function StatusControls(props) {
-    var _a4, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p;
+    var _a4, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const messageInputRef = (0, import_react6.useRef)(null);
     const emojiInputRef = (0, import_react6.useRef)(null);
     const triggerRef = (0, import_react6.useRef)(null);
@@ -70332,21 +70329,21 @@ This is currently a DEV-only warning but will become a thrown exception in the n
                           /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
                             ToggleGroup.Root,
                             {
-                              value: props.localPresence,
-                              onValueChange: (presence) => props.setPresence(presence),
-                              rovingFocus: ((_p = props.focus) == null ? void 0 : _p.region) === "status" /* Status */,
-                              children: PresenceModes.map((m2) => /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
+                              value: (_p = props.localStatus) == null ? void 0 : _p.status,
+                              onValueChange: (presence) => props.setStatusMode(presence),
+                              rovingFocus: ((_q = props.focus) == null ? void 0 : _q.region) === "status" /* Status */,
+                              children: StatusModes.map((m2) => /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(
                                 ToggleGroup.Item,
                                 {
-                                  "data-mode": m2.status,
-                                  value: m2.status,
-                                  itemRef: m2.status === "online" /* Online */ ? statusItemRef : void 0,
+                                  "data-mode": m2.mode,
+                                  value: m2.mode,
+                                  itemRef: m2.mode === "online" /* Online */ ? statusItemRef : void 0,
                                   children: [
-                                    /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(ModeIcon, { presence: m2.status }),
-                                    /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(ToggleGroup.Label, { children: titleCase(m2.status) })
+                                    /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(ModeIcon, { presence: m2.mode }),
+                                    /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(ToggleGroup.Label, { children: m2.label })
                                   ]
                                 },
-                                m2.status
+                                m2.mode
                               ))
                             }
                           )
@@ -71139,7 +71136,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
           firstName(((_d = props.user) == null ? void 0 : _d.name) || ""),
           ((_e = props.status) == null ? void 0 : _e.emoji) ? /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Emoji, { id: props.status.emoji }) : null
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(StyledStatus, { children: props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findModeByStatus(props.status.status)) == null ? void 0 : _g.label) : "" })
+        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(StyledStatus, { children: !props.online ? "Offline" : props.status ? ((_f = props.status) == null ? void 0 : _f.message) || ((_g = findStatusModeByKey(props.status.status)) == null ? void 0 : _g.label) : "" })
       ] })
     ] });
   }
@@ -71425,7 +71422,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
     if (props.status && props.status.message && props.status.message.trim().length > 16) {
       return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(import_jsx_runtime75.Fragment, { children: (_a4 = props.status) == null ? void 0 : _a4.message });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(import_jsx_runtime75.Fragment, { children: props.status ? (_b2 = findModeByStatus(props.status.status)) == null ? void 0 : _b2.label : "" });
+    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(import_jsx_runtime75.Fragment, { children: props.status ? (_b2 = findStatusModeByKey(props.status.status)) == null ? void 0 : _b2.label : "" });
   }
 
   // ../assets/js/components/UserView/UserListView.tsx
@@ -71690,7 +71687,7 @@ This is currently a DEV-only warning but will become a thrown exception in the n
               focus: dockFocus,
               handleBlur: () => setDockFocus(void 0),
               setFocusRegion: (region) => setDockFocus(__spreadProps(__spreadValues({}, dockFocus), { region })),
-              setPresence: savePresenceMode,
+              setStatusMode: saveStatusMode,
               isDropdownOpen,
               setDropdownOpen: setIsDropdownOpen,
               setFocusedEmojiId: (id) => {
@@ -71780,10 +71777,10 @@ This is currently a DEV-only warning but will become a thrown exception in the n
         }
       });
     }
-    function savePresenceMode(presenceStatus) {
+    function saveStatusMode(statusMode) {
       messageMainWindow({
-        savePresenceStatus: {
-          status: presenceStatus
+        saveStatusMode: {
+          status: statusMode
         }
       });
     }

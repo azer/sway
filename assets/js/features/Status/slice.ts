@@ -159,6 +159,13 @@ function setNewStatusForUser(
   workspaceId: string,
   statusId: string
 ) {
+  if (!statusId) {
+    log.error('No status specified:', userId, workspaceId, statusId)
+    return
+  }
+
+  log.info('Setting new status for user:', userId, workspaceId, statusId)
+
   // set the latest status id for the user
   state.latestStatusByUserId[userId] = {
     ...state.latestStatusByUserId[userId],

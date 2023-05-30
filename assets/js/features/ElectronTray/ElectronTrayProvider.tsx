@@ -209,8 +209,13 @@ function UElectronTrayProvider(props: Props) {
       return
     }
 
-    if (payload.saveStatusModeKey) {
-      presence.setMode(payload.saveStatusModeKey.status)
+    if (payload.saveStatusMode) {
+      presence.setMode(payload.saveStatusMode.status)
+      return
+    }
+
+    if (payload.savePresenceStatus) {
+      presence.setMode(payload.savePresenceStatus.status)
       return
     }
 

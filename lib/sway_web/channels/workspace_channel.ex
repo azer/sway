@@ -183,20 +183,10 @@ defmodule SwayWeb.WorkspaceChannel do
 
     case Statuses.update_status(status, %{room_id: room_id}) do
       {:ok, status} ->
-        # broadcast(socket, "user:status", SwayWeb.StatusView.encode(status))
-        broadcast(
-          socket,
-          "workspace:sync_online_user_statuses",
-          %{
-            statuses:
-              Enum.map(list_online_users_by_rooms(socket, workspace_id), fn status ->
-                SwayWeb.StatusView.encode(status)
-              end)
-          }
-        )
+        broadcast(socket, "user:status", SwayWeb.StatusView.encode(status))
+        broadcast(socket, "workspace:online_users", UserPresence.list(socket))
 
         {:noreply, socket}
-
       {:error, reason} ->
         {:error, %{reason: reason}}
     end

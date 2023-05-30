@@ -32,6 +32,12 @@ export function PresenceProvider(props: Props) {
       log.info('Reconnected, fetch online users.')
       fetchOnlineUsers(channel, workspaceId)
     }
+
+    channel.on('workspace:online_users', (online) => {
+      log.info('online users:', online)
+      dispatch(syncOnlineUsers(online))
+      dispatch(syncOnlineUserStatuses(online))
+    })
   }, [channel && workspaceId && initialized, isConnected])
 
   useEffect(() => {

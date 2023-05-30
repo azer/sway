@@ -46,7 +46,10 @@ export interface ElectronPayload {
   setSpeakerOn?: {
     on: boolean
   }
-  saveStatusModeKey?: {
+  savePresenceStatus?: {
+    status: StatusModeKey
+  }
+  saveStatusMode?: {
     status: StatusModeKey
   }
   saveStatusEmoji?: {

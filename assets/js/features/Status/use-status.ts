@@ -40,6 +40,14 @@ export function useStatus() {
       speaker_on: or<boolean>(change.speaker, localStatus.speaker_on),
     }
 
+    if (
+      newStatus.mic_on ||
+      newStatus.camera_on ||
+      newStatus.mode === StatusModeKey.Online
+    ) {
+      newStatus.speaker_on = true
+    }
+
     log.info('Pushing status change to backend.', newStatus)
 
     channel.push('user:status', {
