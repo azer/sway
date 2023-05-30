@@ -36,7 +36,7 @@ function UElectronTrayProvider(props: Props) {
   log.info('Initializing')
 
   const dispatch = useDispatch()
-  const presence = useStatus()
+  const status = useStatus()
   const ctx = useContext(SocketContext)
 
   const [trayStateRequested, setTrayStateRequested] = useState(false)
@@ -59,7 +59,7 @@ function UElectronTrayProvider(props: Props) {
     return () => {
       getIpcRenderer()?.removeListener('message', onMessage)
     }
-  }, [presence.channel, presence.localStatus])
+  }, [status.channel, status.localStatus])
 
   useEffect(() => {
     if (!isActive) {
@@ -175,47 +175,47 @@ function UElectronTrayProvider(props: Props) {
     }
 
     if (payload.setCameraOn) {
-      presence.setMedia({ camera: payload.setCameraOn.on })
+      status.setMedia({ camera: payload.setCameraOn.on })
       return
     }
 
     if (payload.setMicOn) {
-      presence.setMedia({ mic: payload.setMicOn.on })
+      status.setMedia({ mic: payload.setMicOn.on })
       return
     }
 
     if (payload.setSpeakerOn) {
-      presence.setMedia({ speaker: payload.setSpeakerOn.on })
+      status.setMedia({ speaker: payload.setSpeakerOn.on })
       return
     }
 
     if (payload.joinCall) {
-      presence.setMedia({ camera: true, mic: true })
+      status.join()
       return
     }
 
     if (payload.leaveCall) {
-      presence.setMedia({ camera: false, mic: false })
+      status.leave()
       return
     }
 
     if (payload.saveStatusEmoji) {
-      presence.setEmoji(payload.saveStatusEmoji.emoji)
+      status.setEmoji(payload.saveStatusEmoji.emoji)
       return
     }
 
     if (payload.saveStatusMessage) {
-      presence.setMessage(payload.saveStatusMessage.message)
+      status.setMessage(payload.saveStatusMessage.message)
       return
     }
 
     if (payload.saveStatusMode) {
-      presence.setMode(payload.saveStatusMode.status)
+      status.setMode(payload.saveStatusMode.status)
       return
     }
 
     if (payload.savePresenceStatus) {
-      presence.setMode(payload.savePresenceStatus.status)
+      status.setMode(payload.savePresenceStatus.status)
       return
     }
 

@@ -5,7 +5,7 @@ import { useSelector } from 'state'
 import { logger } from 'lib/log'
 import { useEffect, useState } from 'react'
 
-const log = logger('presence/use-presence')
+const log = logger('presence/use-status')
 
 interface StatusChange {
   mode?: StatusModeKey
@@ -58,6 +58,8 @@ export function useStatus() {
   }, [channel, statusChange])
 
   return {
+    join,
+    leave,
     setMode,
     setActive,
     setMedia,
@@ -66,6 +68,14 @@ export function useStatus() {
     tap,
     channel,
     localStatus,
+  }
+
+  function join() {
+    setMedia({ mic: true })
+  }
+
+  function leave() {
+    setMedia({ mic: false, camera: false })
   }
 
   function setMedia(change: {

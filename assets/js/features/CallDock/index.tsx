@@ -120,8 +120,8 @@ export function CallDock(props: Props) {
         blurValue={blurValue}
         toggleBlur={toggleBlurValue}
         isActive={isActive}
-        joinCall={() => presence.setMedia({ camera: true, mic: true })}
-        leaveCall={() => presence.setMedia({ camera: false, mic: false })}
+        joinCall={() => presence.join()}
+        leaveCall={() => presence.leave()}
         setCameraOn={(camera: boolean) => presence.setMedia({ camera })}
         setMicOn={(mic: boolean) => presence.setMedia({ mic })}
         setSpeakerOn={(speaker: boolean) => presence.setMedia({ speaker })}
@@ -154,7 +154,7 @@ export function CallDock(props: Props) {
     const turnOn = !isActive
 
     presence.setMedia({
-      camera: turnOn,
+      camera: false,
       mic: turnOn,
     })
   }

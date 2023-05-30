@@ -1,4 +1,4 @@
-import { useUserSocket } from 'features/UserSocket'
+/*import { useUserSocket } from 'features/UserSocket'
 import selectors from 'selectors'
 import { StatusModeKey } from 'state/status'
 import { useSelector } from 'state'
@@ -50,6 +50,8 @@ export function useStatus() {
   }, [channel, statusChange])
 
   return {
+    join,
+    leave,
     setMode,
     setActive,
     setMedia,
@@ -59,6 +61,8 @@ export function useStatus() {
     channel,
     localStatus,
   }
+
+
 
   function setMedia(change: {
     mode?: StatusModeKey
@@ -118,3 +122,4 @@ export function useStatus() {
 function or<T>(a: T | undefined, b: T | undefined): T {
   return (a !== undefined ? a : b) as T
 }
+*/
