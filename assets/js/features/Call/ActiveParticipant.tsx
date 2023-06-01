@@ -89,7 +89,12 @@ function UActiveParticipant(props: Props) {
   const showScreen = isScreenOn && props.showScreen
 
   return (
-    <UserContextMenu user={user} status={status} tap={props.tap}>
+    <UserContextMenu
+      userId={props.userId}
+      user={user}
+      status={status}
+      tap={props.tap}
+    >
       <ActiveParticipantRoot
         data-participant-id={props.participantId}
         screenOn={showScreen}

@@ -75,7 +75,7 @@ export function useStatus() {
 
     setMedia({
       mode: newMode,
-      speaker: newMode !== StatusModeKey.Zen,
+      speaker: newMode === StatusModeKey.Online,
       mic: false,
       camera: false,
     })

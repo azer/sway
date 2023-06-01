@@ -6,8 +6,11 @@ import { useSelector, useDispatch } from 'state'
 import { setStatusHook } from 'features/Tap/slice'
 import { StatusModeKey } from 'state/status'
 import selectors from 'selectors'
+import { goto1v1 } from 'features/Room/slice'
+import { useRooms } from 'features/Room/use-rooms'
 
 interface Props {
+  userId: string
   children: React.ReactNode
   user?: entities.User
   status?: entities.Status
@@ -16,11 +19,16 @@ interface Props {
 
 export function UserContextMenu(props: Props) {
   const dispatch = useDispatch()
+  const rooms = useRooms()
 
-  const [existingHook, isOnline] = useSelector((state) => [
-    selectors.taps.getStatusHookByUserId(state, props.user?.id || ''),
-    selectors.presence.isUserOnline(state, props.user?.id || ''),
-  ])
+  const [existingHook, isOnline, privateRoomId, privateRoomSlug] = useSelector(
+    (state) => [
+      selectors.taps.getStatusHookByUserId(state, props.userId),
+      selectors.presence.isUserOnline(state, props.userId),
+      selectors.rooms.get1v1RoomIdByUserId(state, props.userId),
+      selectors.rooms.get1v1RoomByUserId(state, props.userId)?.slug,
+    ]
+  )
 
   return (
     <ContextMenu.Root>
@@ -38,8 +46,29 @@ export function UserContextMenu(props: Props) {
           label="Notify when available"
           onClick={createStatusHook}
         />
-        <ContextMenu.Item icon="users" label="Go to 1:1 room" />
-        <ContextMenu.Item icon="mail" label="Send message" />
+        <ContextMenu.Item
+          icon="users"
+          label="Go to 1:1 room"
+          onClick={() =>
+            rooms.createOrEnterPrivateRoom(
+              props.userId,
+              privateRoomId,
+              privateRoomSlug
+            )
+          }
+        />
+        <ContextMenu.Item
+          icon="mail"
+          label="Send message"
+          onClick={() =>
+            rooms.createOrEnterPrivateRoom(
+              props.userId,
+              privateRoomId,
+              privateRoomSlug,
+              true
+            )
+          }
+        />
       </ContextMenu.Content>
     </ContextMenu.Root>
   )

@@ -6,6 +6,19 @@ import { RoomFocus } from './focus'
 
 export function getRoomById(state: RootState, id: string): Room {
   const room = state.entities[Rooms][id]
+  if (!room && id.startsWith('1v1_')) {
+    return {
+      id,
+      workspace_id: selectors.workspaces.getFocusedWorkspaceId(state),
+      user_id: selectors.users.getSelf(state)?.id || '',
+      name: 'temporary room',
+      slug: id,
+      is_private: true,
+      is_active: true,
+      is_default: false,
+    }
+  }
+
   if (!room?.is_private) return room
 
   const localUser = selectors.users.getSelf(state)
@@ -198,6 +211,14 @@ export function get1v1RoomIdByUserId(
       const members = selectors.roomMembers.getMembersByRoomId(state, roomId)
       return members.includes(userId) && members.length == 2
     })[0]
+}
+
+export function get1v1RoomByUserId(
+  state: RootState,
+  userId: string
+): Room | undefined {
+  const id = get1v1RoomIdByUserId(state, userId)
+  return id ? getRoomById(state, id) : undefined
 }
 
 export function isFocusOnRoom(state: RootState): boolean {

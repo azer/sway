@@ -27,6 +27,10 @@ export default function Routing(): JSX.Element {
         <Route path="/" element={<DefaultWorkspace />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/:workspace" element={<DefaultRoom />} />
+        <Route
+          path="/:workspace/1v1/:user_id"
+          element={<InitialPrivateRoomRoute />}
+        />
         <Route path="/:workspace/room/:room_slug" element={<RoomRoute />} />
         <Route
           path="/:workspace/room/:room_id/:room_slug"
@@ -99,7 +103,7 @@ function RoomRoute() {
       ? selectors.rooms.getRoomBySlug(state, params.room_slug)
       : undefined
 
-    return [room?.id, selectors.onboarding.isDone(state),]
+    return [room?.id, selectors.onboarding.isDone(state)]
   })
 
   if (isOnboardingDone === false) {
@@ -107,4 +111,17 @@ function RoomRoute() {
   }
 
   return <Shell>{roomId ? <RoomPage id={roomId} /> : null}</Shell>
+}
+
+function InitialPrivateRoomRoute() {
+  // const dispatch = useDispatch()
+  // const [] = useSelector((state) => [])
+
+  const { workspace, user_id } = useParams()
+
+  return (
+    <Shell>
+      please wait {workspace} {user_id}
+    </Shell>
+  )
 }

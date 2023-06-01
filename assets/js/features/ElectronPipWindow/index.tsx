@@ -130,7 +130,13 @@ export function ElectronPipWindow(props: Props) {
               </BoxTile>
             </Call>
             <Buttonset>
-              <Tooltip content={'Turn off video'}>
+              <Tooltip
+                content={
+                  pipState.localStatus?.camera_on
+                    ? 'Turn off video'
+                    : 'Turn on video'
+                }
+              >
                 <Button
                   onClick={toggleCamera}
                   on={pipState.localStatus?.camera_on || false}
@@ -142,7 +148,13 @@ export function ElectronPipWindow(props: Props) {
                   />
                 </Button>
               </Tooltip>
-              <Tooltip content={'Turn off microphone'}>
+              <Tooltip
+                content={
+                  pipState.localStatus?.mic_on
+                    ? 'Turn off microphone'
+                    : 'Turn on microphone'
+                }
+              >
                 <Button
                   onClick={toggleMic}
                   on={pipState.localStatus?.mic_on || false}

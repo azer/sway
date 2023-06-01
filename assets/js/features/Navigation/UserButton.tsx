@@ -66,7 +66,12 @@ export function UserButton(props: Props) {
   const selected = focused === privateRoomId
 
   return (
-    <UserContextMenu user={user} status={status} tap={props.tap}>
+    <UserContextMenu
+      userId={props.id}
+      user={user}
+      status={status}
+      tap={props.tap}
+    >
       <StyledUserButton
         onClick={handleClick}
         selected={selected || userIdOnSidebar === props.id}

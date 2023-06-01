@@ -91,11 +91,12 @@ export function getStatusLabelByUserId(
 
 export function getStatusUpdatesByUserId(
   state: RootState,
-  userId: string,
-  workspaceId: string
+  userId: string
 ): string[] {
   const updates = state.status.statusUpdatesByUserId[userId]
   if (!updates) return []
+
+  const workspaceId = selectors.workspaces.getFocusedWorkspaceId(state)
 
   return updates[workspaceId] || []
 }

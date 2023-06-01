@@ -24,6 +24,10 @@ import {
 } from 'state/entities'
 import { APIResponse, POST } from 'lib/api'
 import { addRoomMembers } from 'features/RoomMembers/slice'
+import { setWorkspaceFocusRegion } from 'features/Workspace/slice'
+import { WorkspaceFocusRegion } from 'features/Workspace/focus'
+import { openChatSidebar } from 'features/Sidebar/slice'
+import { setFocusOnInput } from 'features/Chat/slice'
 
 const log = logger('rooms/use-rooms')
 
@@ -31,16 +35,20 @@ export function useRooms() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const [localUser, workspace, roomIdMap] = useSelector((state) => [
-    selectors.users.getSelf(state),
-    selectors.workspaces.getSelfWorkspace(state),
-    state.entities[Rooms],
-  ])
+  const [localUser, workspace, focusedRoomId, roomIdMap] = useSelector(
+    (state) => [
+      selectors.users.getSelf(state),
+      selectors.workspaces.getSelfWorkspace(state),
+      selectors.rooms.getFocusedRoomId(state),
+      state.entities[Rooms],
+    ]
+  )
 
   return {
     enterById,
     enterBySlug,
     createPrivateRoom,
+    createOrEnterPrivateRoom,
   }
 
   function enterById(id: string) {
@@ -68,6 +76,40 @@ export function useRooms() {
     )
 
     dispatch(setFocusedRoomBySlug(slug))
+  }
+
+  function createOrEnterPrivateRoom(
+    userId: string,
+    privateRoomId: string | undefined,
+    privateRoomSlug: string | undefined,
+    focusOnMessageInput?: boolean
+  ) {
+    if (!workspace || !localUser)
+      return log.error('Workspace / localuser undefined')
+    if (privateRoomId === focusedRoomId) return
+
+    if (focusOnMessageInput) {
+      dispatch(openChatSidebar())
+      // fixme
+      setTimeout(() => {
+        log.info('set focus on input')
+        dispatch(setFocusOnInput())
+      }, 500)
+    }
+
+    if (privateRoomId) {
+      navigate(`/${workspace?.slug}/room/${privateRoomId}/${privateRoomSlug}`)
+      return
+    }
+
+    createPrivateRoom(workspace?.id, [userId, localUser.id])
+      .then((resp) => {
+        const created = resp.result as Row<Room>
+        navigate(`/${workspace?.slug}/room/${created.id}/${created.data.slug}`)
+      })
+      .catch((error) => {
+        log.error('Failed to create private room', error)
+      })
   }
 
   function createPrivateRoom(
