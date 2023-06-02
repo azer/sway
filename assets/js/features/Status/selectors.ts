@@ -46,7 +46,7 @@ export function getStatusByUserId(
     status: StatusModeKey.Online,
     camera_on: false,
     mic_on: false,
-    speaker_on: false,
+    speaker_on: true,
     message: '',
     // @ts-ignore
     inserted_at: undefined,
