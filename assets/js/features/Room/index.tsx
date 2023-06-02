@@ -133,7 +133,7 @@ export function RoomPage(props: Props) {
         ) : !focusedUserId && mainParticipants.length ? (
           <CallTile ids={mainParticipants} tap={tap} />
         ) : (
-          <EmptyRoom id={props.id} />
+          <EmptyRoom tap={tap} id={props.id} />
         )}
       </Middle>
       <Bottom>

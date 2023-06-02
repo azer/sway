@@ -4,30 +4,70 @@ import selectors from 'selectors'
 import { useSelector } from 'state'
 import { Kbd } from 'components/Kbd'
 import { firstName } from 'lib/string'
+import { Avatar, AvatarRoot } from 'components/Avatar'
+import { Emoji } from 'components/Emoji'
 
 interface Props {
   id: string
+  tap: (userId: string) => void
 }
 
 export function EmptyRoom(props: Props) {
-  const [user, room, isActive] = useSelector((state) => [
+  const [localUser, room, isActive, roomMembers] = useSelector((state) => [
     selectors.users.getSelf(state),
     selectors.rooms.getRoomById(state, props.id),
     selectors.status.isLocalUserActive(state),
+    selectors.roomMembers
+      .getMembersByRoomId(state, props.id)
+      .map((userId) => selectors.users.getById(state, userId)),
   ])
+
+  const otherUsers = roomMembers.filter((u) => localUser?.id !== u?.id)
+
+  if (room.is_private) {
+    return (
+      <Root>
+        <Container>
+          <Avatars>
+            {roomMembers.map((user) => (
+              <Avatar
+                src={user?.profile_photo_url}
+                fallback={user?.name || 'User'}
+              />
+            ))}
+          </Avatars>
+          <Title>
+            <label>{otherUsers.map((u) => u?.name)}</label>
+            &nbsp; is not here yet.
+          </Title>
+          <div>Ready to start a conversation? Send a wave!</div>
+          <Button onClick={wave}>
+            <Emoji id="wave" size="1.2rem" /> Wave to{' '}
+            {otherUsers.map((u) => firstName(u?.name || ''))}
+          </Button>
+        </Container>
+      </Root>
+    )
+  }
 
   return (
     <Root>
       <Container>
-        <Emoji>{isActive ? '😴' : '🎧'}</Emoji>
+        <RoomStatusEmoji>{isActive ? '😴' : '🎧'}</RoomStatusEmoji>
         <Title>
-          <label>{firstName(user?.name || '')}</label>, welcome to{' '}
+          <label>{firstName(localUser?.name || '')}</label>, welcome to{' '}
           <label>{room.name}</label> room.
         </Title>
         {isActive ? <EmptyRoomTips /> : <ActivateTip />}
       </Container>
     </Root>
   )
+
+  function wave() {
+    if (otherUsers[0]) {
+      props.tap(otherUsers[0].id)
+    }
+  }
 }
 
 function EmptyRoomTips() {
@@ -81,7 +121,7 @@ const Container = styled('div', {
   },
 })
 
-const Emoji = styled('span', {
+const RoomStatusEmoji = styled('span', {
   fontSize: '32px',
   color: '$white',
 })
@@ -94,6 +134,39 @@ const Title = styled('h1', {
   padding: '0',
   '& label': {
     fontWeight: '$semibold',
-    textTransform: 'capitalize',
+    //textTransform: 'capitalize',
+  },
+})
+
+const Avatars = styled('div', {
+  display: 'flex',
+  gap: '8px',
+  height: '40px',
+  [`${AvatarRoot}`]: {
+    height: '100%',
+    round: 'medium',
+    fontSize: '$medium',
+  },
+})
+
+const Button = styled('div', {
+  display: 'inline-flex',
+  border: '1px solid rgba(255, 255, 255, 0.06)',
+  background: 'rgba(255, 255, 255, 0.05)',
+  padding: '10px 16px 10px 36px',
+  marginTop: '12px',
+  round: 'small',
+  color: 'rgba(255, 255, 255, 0.85)',
+  cursor: 'pointer',
+  position: 'relative',
+  'em-emoji': {
+    marginRight: '10px',
+    position: 'absolute',
+    left: '8px',
+    top: '8px',
+  },
+  '&:hover': {
+    background: 'rgba(255, 255, 255, 0.07)',
+    color: '$white',
   },
 })
