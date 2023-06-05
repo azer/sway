@@ -16,6 +16,7 @@ import onboarding from 'features/Onboarding/slice'
 import autoUpdater from 'features/AutoUpdater/slice'
 import screenshare from 'features/Screenshare/slice'
 import status from 'features/Status/slice'
+import userManagement from 'features/UserManagement/slice'
 
 export default {
   //undotree,
@@ -36,4 +37,5 @@ export default {
   autoUpdater,
   screenshare,
   status,
+  userManagement,
 }

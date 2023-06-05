@@ -22,6 +22,7 @@ import * as onboarding from 'features/Onboarding/selectors'
 import * as usersocket from 'features/UserSocket/selectors'
 import * as autoUpdater from 'features/AutoUpdater/selectors'
 import * as screenshare from 'features/Screenshare/selectors'
+import * as userManagement from 'features/UserManagement/selectors'
 
 export default {
   session,
@@ -48,4 +49,5 @@ export default {
   usersocket,
   autoUpdater,
   screenshare,
+  userManagement,
 }

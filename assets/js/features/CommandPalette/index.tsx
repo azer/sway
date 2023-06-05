@@ -19,6 +19,7 @@ export enum CommandType {
   AlterMode = 'alter-mode',
   AlterSession = 'alter-session',
   Misc = 'misc',
+  Interaction = 'interaction',
 }
 
 export interface Palette {
