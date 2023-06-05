@@ -5,6 +5,7 @@ import { Command } from 'features/CommandPalette'
 import Icon from 'components/Icon'
 import { logger } from 'lib/log'
 import { keySymbol } from 'lib/shortcuts'
+import { Emoji } from 'components/Emoji'
 // import { useSelector, useDispatch } from 'state'
 
 export interface Props {
@@ -97,6 +98,13 @@ export default function CommandPaletteModal(props: Props) {
                       }
                     >
                       {cmd.icon ? <Icon name={cmd.icon} /> : null}
+                      {!cmd.icon &&
+                      cmd.emoji &&
+                      ((props.commands[ind - 1]?.emoji !== cmd.emoji &&
+                        props.commands[ind + 1]?.emoji !== cmd.emoji) ||
+                        props.selectedId === cmd.id) ? (
+                        <Emoji id={cmd.emoji} />
+                      ) : null}
                     </CommandIcon>
                     <Name>
                       {cmd.prefix ? <Prefix>{cmd.prefix}</Prefix> : null}
@@ -416,9 +424,9 @@ const Navigation = styled('div', {
     preview: {
       true: {
         height: 'calc(100% - 20px)',
-      }
-    }
-  }
+      },
+    },
+  },
 })
 
 const PreviewSeparator = styled('div', {

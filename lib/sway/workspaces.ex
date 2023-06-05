@@ -51,15 +51,20 @@ defmodule Sway.Workspaces do
       workspace = get_workspace_by_slug(slug)
 
       if workspace do
-	membership = get_membership_by_workspace(user_id, workspace.id)
+        membership = get_membership_by_workspace(user_id, workspace.id)
 
-	[workspace, membership]
+        [workspace, membership]
       else
-	[nil, nil]
+        [nil, nil]
       end
     else
-      query = from(m in Membership, where: m.user_id == ^user_id and m.is_active == true, order_by: [desc: :inserted_at])
-      membership = hd Repo.all(query)
+      query =
+        from(m in Membership,
+          where: m.user_id == ^user_id and m.is_active == true,
+          order_by: [desc: :inserted_at]
+        )
+
+      membership = hd(Repo.all(query))
       workspace = get_workspace!(membership.workspace_id)
       [workspace, membership]
     end
@@ -249,5 +254,23 @@ defmodule Sway.Workspaces do
       where: m.workspace_id == ^workspace_id
     )
     |> Sway.Repo.all()
+  end
+
+  def has_workspace_access?(user_id, workspace_id) do
+    case Sway.Accounts.get_user!(user_id) do
+      nil ->
+        {:error, "User not found."}
+
+      user ->
+        if user.is_superuser do
+          {:ok, true}
+        else
+          case get_membership_by_workspace(user_id, workspace_id) do
+            %Membership{} = membership -> {:ok, true}
+            nil -> {:ok, false}
+            {:error, reason} -> {:error, reason}
+          end
+        end
+    end
   end
 end

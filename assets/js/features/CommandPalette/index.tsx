@@ -31,9 +31,10 @@ export interface Palette {
 }
 
 export interface Command {
-  icon?: string
   id: string
   name: string
+  emoji?: string
+  icon?: string
   value?: unknown
   hint?: string
   error?: string

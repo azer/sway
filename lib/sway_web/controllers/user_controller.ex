@@ -6,10 +6,24 @@ defmodule SwayWeb.UserController do
 
   action_fallback SwayWeb.FallbackController
 
-  def list_by_workspace(conn, %{ "workspace_id" => %{ "eq" => raw_workspace_id } }) do
+  def list_by_workspace(conn, %{"workspace_id" => %{"eq" => raw_workspace_id}}) do
     workspace_id = SwayWeb.Hashing.decode_workspace(raw_workspace_id)
-    users = Sway.Workspaces.list_users_by_workspace(workspace_id)
-    render(conn, "index.json", users: users)
+    user = Guardian.Plug.current_resource(conn)
+
+    with {:ok, true} <- Sway.Workspaces.has_workspace_access?(user.id, workspace_id) do
+      users = Sway.Workspaces.list_users_by_workspace(workspace_id)
+      render(conn, "index.json", users: users)
+    else
+      {:ok, false} ->
+        conn
+        |> put_status(:forbidden)
+        |> json(%{error: "User does not have access to this workspace"})
+
+      {:error, error} ->
+        conn
+        |> put_status(:internal_)
+        |> json(%{error: error})
+    end
   end
 
   def create(conn, %{"user" => user_params}) do
