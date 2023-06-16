@@ -47,6 +47,18 @@ defmodule SwayWeb.WorkspaceChannel do
     {:reply, {:ok, payload}, socket}
   end
 
+  def handle_in("presence:update_tracks", %{ "tracks" => tracks }, socket) do
+    user_id = socket.assigns.user
+    encoded_user_id = Hashing.encode_user(user_id)
+
+    current_presence = UserPresence.fetch(socket, "users:#{encoded_user_id}")
+    new_data = Map.put(current_presence.metas |> List.first, :tracks, tracks)
+    {:ok, _} = UserPresence.update(socket, "users:#{encoded_user_id}", new_data)
+
+    IO.inspect(new_data)
+    {:noreply, socket}
+  end
+
   def handle_in("presence:list", %{ "workspace_id" => workspace_id }, socket) do
     list = UserPresence.list(socket)
     {:reply, {:ok, list}, socket}
