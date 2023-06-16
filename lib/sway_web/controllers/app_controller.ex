@@ -5,76 +5,52 @@ defmodule SwayWeb.AppController do
   def index(conn, params) do
     user_id = conn.assigns.current_user.id
 
-    [workspace, membership] = Sway.Workspaces.get_membership_and_workspace(user_id, params["workspace"])
+    [workspace, membership] =
+      Sway.Workspaces.get_membership_and_workspace(user_id, params["workspace"])
 
-    if workspace do
-      [rooms, status, privateRooms] = fetchRoomData(workspace.id, user_id)
-      {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
+    cond do
+      workspace && membership ->
+        [rooms, status, privateRooms] = fetchRoomData(workspace.id, user_id)
+        {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
 
-      IO.inspect(status)
+        conn
+        |> put_resp_header("Service-Worker-Allowed", "/")
+        |> render("app_home.html",
+          jwt: jwt,
+          user: SwayWeb.UserView.encode(conn.assigns.current_user),
+          membership: SwayWeb.WorkspaceMemberView.encode(membership),
+          workspace: SwayWeb.WorkspaceView.encode(workspace),
+          status: SwayWeb.StatusView.encode(status),
+          rooms: Enum.map(rooms, fn r -> SwayWeb.RoomView.encode(r) end),
+          private_rooms: Enum.map(privateRooms, fn r -> SwayWeb.RoomView.encode(r) end),
+          focused_room_id: SwayWeb.Hashing.encode_room(status.room_id),
+          body_class: "app"
+        )
 
-       conn
-       |> put_resp_header("Service-Worker-Allowed", "/")
-       |> render("app_home.html",
-      jwt: jwt,
-      user: SwayWeb.UserView.encode(conn.assigns.current_user),
-      membership: SwayWeb.WorkspaceMemberView.encode(membership),
-      workspace: SwayWeb.WorkspaceView.encode(workspace),
-      status: SwayWeb.StatusView.encode(status),
-      rooms: Enum.map(rooms, fn r-> SwayWeb.RoomView.encode(r) end),
-      private_rooms: Enum.map(privateRooms, fn r -> SwayWeb.RoomView.encode(r) end),
-      focused_room_id: SwayWeb.Hashing.encode_room(status.room_id),
-      body_class: "app",
-       )
-    else
-      conn
-       |> put_status(:not_found)
-       |> json(%{error: "Not found"})
+      workspace ->
+        conn
+        |> put_status(:forbidden)
+        |> json(%{error: "Forbidden"})
+
+      true ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "Not found"})
     end
   end
 
-  def room(conn, %{ "workspace" => workspace, "room_slug" => room_slug }) do
+  def room(conn, %{"workspace" => workspace, "room_slug" => room_slug}) do
     user_id = conn.assigns.current_user.id
 
     [workspace, membership] = Sway.Workspaces.get_membership_and_workspace(user_id, workspace)
     [rooms, status, private_rooms] = fetchRoomData(workspace.id, user_id)
 
-     {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
+    {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
 
-    focused_room = Enum.find(rooms, fn el ->
-      el.slug == room_slug
-    end)
-
-    # FIXME:
-# Change the room
-    conn
-    |> put_resp_header("Service-Worker-Allowed", "/")
-    |> render("app_home.html",
-      user: SwayWeb.UserView.encode(conn.assigns.current_user),
-      membership: SwayWeb.WorkspaceMemberView.encode(membership),
-      workspace: SwayWeb.WorkspaceView.encode(workspace),
-      status: SwayWeb.StatusView.encode(status),
-      rooms: Enum.map(rooms, fn r-> SwayWeb.RoomView.encode(r) end),
-      private_rooms: Enum.map(private_rooms, fn r -> SwayWeb.RoomView.encode(r) end),
-      focused_room_id: SwayWeb.Hashing.encode_room(focused_room.id),
-      body_class: "app",
-      jwt: jwt,
-      fake_state: false,
-    )
-  end
-
-  def private_room(conn, %{ "workspace" => workspace, "room_id" => encoded_room_id, "room_slug" => room_slug }) do
-    user_id = conn.assigns.current_user.id
-
-    [workspace, membership] = Sway.Workspaces.get_membership_and_workspace(user_id, workspace)
-    [rooms, status, private_rooms] = fetchRoomData(workspace.id, user_id)
-    room_id = SwayWeb.Hashing.decode_room(encoded_room_id)
-
-     {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
-
-    focused_room = Enum.find(private_rooms, fn el ->
-      el.slug == room_slug && el.id == room_id
-    end)
+    focused_room =
+      Enum.find(rooms, fn el ->
+        el.slug == room_slug
+      end)
 
     # FIXME:
     # Change the room
@@ -85,12 +61,48 @@ defmodule SwayWeb.AppController do
       membership: SwayWeb.WorkspaceMemberView.encode(membership),
       workspace: SwayWeb.WorkspaceView.encode(workspace),
       status: SwayWeb.StatusView.encode(status),
-      rooms: Enum.map(rooms, fn r-> SwayWeb.RoomView.encode(r) end),
+      rooms: Enum.map(rooms, fn r -> SwayWeb.RoomView.encode(r) end),
       private_rooms: Enum.map(private_rooms, fn r -> SwayWeb.RoomView.encode(r) end),
       focused_room_id: SwayWeb.Hashing.encode_room(focused_room.id),
       body_class: "app",
       jwt: jwt,
-      fake_state: false,
+      fake_state: false
+    )
+  end
+
+  def private_room(conn, %{
+        "workspace" => workspace,
+        "room_id" => encoded_room_id,
+        "room_slug" => room_slug
+      }) do
+    user_id = conn.assigns.current_user.id
+
+    [workspace, membership] = Sway.Workspaces.get_membership_and_workspace(user_id, workspace)
+    [rooms, status, private_rooms] = fetchRoomData(workspace.id, user_id)
+    room_id = SwayWeb.Hashing.decode_room(encoded_room_id)
+
+    {:ok, jwt, _claims} = Guardian.encode_and_sign(conn.assigns.current_user, %{})
+
+    focused_room =
+      Enum.find(private_rooms, fn el ->
+        el.slug == room_slug && el.id == room_id
+      end)
+
+    # FIXME:
+    # Change the room
+    conn
+    |> put_resp_header("Service-Worker-Allowed", "/")
+    |> render("app_home.html",
+      user: SwayWeb.UserView.encode(conn.assigns.current_user),
+      membership: SwayWeb.WorkspaceMemberView.encode(membership),
+      workspace: SwayWeb.WorkspaceView.encode(workspace),
+      status: SwayWeb.StatusView.encode(status),
+      rooms: Enum.map(rooms, fn r -> SwayWeb.RoomView.encode(r) end),
+      private_rooms: Enum.map(private_rooms, fn r -> SwayWeb.RoomView.encode(r) end),
+      focused_room_id: SwayWeb.Hashing.encode_room(focused_room.id),
+      body_class: "app",
+      jwt: jwt,
+      fake_state: false
     )
   end
 
