@@ -1,0 +1,25 @@
+<SwayWeb.WebPageComponent.page>
+  <SwayWeb.WebPageComponent.header title="Blog" conn={@conn} />
+
+
+
+  <div class="blog">
+    <a href="/blog" class="back-button">← Back</a>
+       <div class="post">
+	 <div class="date"><%= format_date(@post.inserted_at) %></div>
+	 <h1><a href={url(@post.id, @post.title)}><%= @post.title %></a></h1>
+	 <div class="author">
+	   <img src={@post.author.profile_photo_url} />
+	   <%= @post.author.name %>
+	 </div>
+       <div class="post-content"><%= markdown_to_html(@post.body) %></div>
+       </div>
+ <%= if @conn.assigns.current_user && @conn.assigns.current_user.is_superuser do %>
+ <hr />
+ <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span> |
+<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+<% end %>
+
+</div>
+
+</SwayWeb.WebPageComponent.page>

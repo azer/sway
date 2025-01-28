@@ -1,0 +1,49 @@
+name: Build and Package for macOS
+
+on:
+  push:
+    tags:
+      - 'v*' # Build on new Git tag starting with 'v'
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+    - uses: actions/checkout@v2
+    - name: Install Node.js and NPM
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+    - name: Extract Certificate and Private Key
+      working-directory: electron
+      run: |
+        echo "${{ secrets.MAC_CERTIFICATE }}" | base64 --decode | tee certificate.p12
+    - name: Import Certificate and Private Key
+      working-directory: electron
+      run: |
+        security create-keychain -p '' build.keychain
+        security default-keychain -s build.keychain
+        security unlock-keychain -p '' build.keychain
+        security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }} -A
+    - name: Install Dependencies
+      working-directory: electron
+      run: npm install
+    - name: Build App
+      working-directory: electron
+      run: npm run build-mac
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          electron/dist/Sway-${{ steps.get_version.outputs.VERSION }}.dmg
+          electron/dist/Sway-${{ steps.get_version.outputs.VERSION }}.yml
+        tag_name: ${{ github.ref }}
+        name: ${{ github.ref }}
+        body: Release ${{ github.ref }}
+        draft: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

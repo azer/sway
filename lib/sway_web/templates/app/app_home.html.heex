@@ -1,0 +1,53 @@
+<div id="root"></div>
+<script type="text/javascript">
+  window.initialState = {
+    session: {
+      userId: "<%= @user.id %>",
+      token: "<%= assigns[:user_token] %>",
+      jwt: "<%= @jwt %>",
+    },
+    focus: {
+      roomId: "<%= @focused_room_id %>",
+      workspaceId: "<%= @status.workspace_id %>",
+    },
+    room: {
+      userIdsByRoom: {},
+      roomIdsByWorkspace: {
+	"<%= @workspace.id %>": [<%= raw(Enum.join(Enum.map(@rooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>],
+      },
+      privateRoomIdsByWorkspace: {
+	"<%= @workspace.id %>": [<%= raw(Enum.join(Enum.map(@private_rooms, fn (r) -> "\"#{r.id}\"" end), ", ")) %>],
+      }
+    },
+    userStatusMap: {
+      "<%= @status.user_id %>": "<%= @status.id %>"
+    },
+    entities: {
+      workspaces: [
+	  <%= raw(Jason.encode!(@workspace)) %>
+      ],
+      memberships: [
+	<%= raw(Jason.encode!(@membership)) %>
+      ],
+      users: [
+	<%= raw(Jason.encode!(@user)) %>
+
+      ],
+      rooms: [
+	  <%= for room <- @rooms do %><%= raw(Jason.encode!(room)) %>,
+	      <%= end %>
+	  <%= for room <- @private_rooms do %><%= raw(Jason.encode!(room)) %>,
+<%= end %>
+      ],
+      statuses: [
+	  <%= if @status != nil do %><%= raw(Jason.encode!(@status)) %><%= end %>
+      ]
+    }
+  }
+
+  <%= if assigns[:fake_state] && Mix.env == :dev do %>
+  <%= render "fake_state.html", assigns %>
+  <%= end %>
+
+</script>
+<script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>

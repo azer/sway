@@ -1,0 +1,11 @@
+import { Meta } from '@storybook/addon-docs';
+import { theme } from '../themes';
+import { Section, SpaceToken } from './elements';
+
+<Meta title="Design Tokens/Spacing" />
+
+# Spacing
+
+<Section title="Space Tokens" desc='Tokens for controlling inner/outer spacing of an element.'>
+	 {Object.keys(theme.space).map((key) => <SpaceToken token={key} value={theme.space[key].value} />)}
+</Section>

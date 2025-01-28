@@ -1,0 +1,100 @@
+<SwayWeb.WebPageComponent.page>
+  <SwayWeb.WebPageComponent.header title="Pricing" conn={@conn} />
+
+  <div class="pricing-page column">
+    <h1 class="pricing-title">Plans & Pricing</h1>
+    <h2 class="pricing-title">Choose the right plan for you and your team. Don't know what you need? <a href="mailto:azer@sway.so">Get in touch.</a></h2>
+
+    <div class="pricing-grid column">
+      <div class="pricing startup">
+	<h1>Startup</h1>
+	<h2><span>$7</span>per person / month</h2>
+	<a href="https://tally.so/r/w4JKWY" class="request-pricing">Get started</a>
+	<h4>Features include:</h4>
+	<ul class="pricing-feature-list">
+	  <li>Video/voice chat</li>
+	  <li>Status updates</li>
+	  <li>Unlimited message history</li>
+	  <li>Max. 12 users</li>
+	  <li>5GB Storage</li>
+	</ul>
+      </div>
+      <div class="pricing pro">
+	<h1>Pro</h1>
+	<h2><span>$12</span>per person / month</h2>
+	<a href="https://tally.so/r/w4JKWY" class="request-pricing">Get started</a>
+	<h4>Features include:</h4>
+	<ul class="pricing-feature-list">
+	  <li>Host & Join Meetings</li>
+	  <li>Guest Users</li>
+	  <li>Max. 48 users</li>
+	  <li>500GB Storage</li>
+	  <li>1:1 Onboarding</li>
+	</ul>
+      </div>
+      <div class="pricing unlimited">
+	<h1>Unlimited</h1>
+	<h2><span>Custom</span></h2>
+	<a href="mailto:azer@sway.so" class="request-pricing">Request Pricing</a>
+	<h4>Features include:</h4>
+	<ul class="pricing-feature-list">
+	  <li>Host & Join Meetings</li>
+	  <li>Guest Users</li>
+	  <li>Public Events & Rooms</li>
+	  <li>Unlimited users</li>
+	  <li>5TB Storage</li>
+	  <li>Priority Support</li>
+	  <li>1:1 Onboarding</li>
+	</ul>
+      </div>
+    </div>
+    <a name="faq"></a>
+    <div class="faq">
+      <h1 class="faq-title">FAQ</h1>
+      <div class="faq-item">
+	<h3>How does free trial work?</h3>
+	<p>
+	  Anyone can try Sway free for 30 days, no payment method required. At the end of your trial you can choose to continue on a paid plan. If you do nothing, your account will be paused without losing data.
+	</p>
+      </div>
+       <div class="faq-item">
+	<h3>How do I get access to Sway?</h3>
+	<p>
+	  Just pick a plan and pop your email onto our waitlist. We'll be in touch soon to arrange a call to get you started with personalized onboarding, ensuring you get the absolute best from our platform.
+	</p>
+       </div>
+       <div class="faq-item">
+	<h3>I haven't heard back after joining the waitlist. Why?</h3>
+	<p>
+	  If you know someone who's already a Sway user, feel free to ask them for an invite, or reach out on Twitter to find a friendly Sway user who might send you one.
+	</p>
+       </div>
+       <div class="faq-item">
+	<h3>Where can I download Sway desktop app?</h3>
+	<p>
+	  After you've logged into the app, hit Cmd+K and run the "Download desktop app" command.
+	</p>
+       </div>
+       <div class="faq-item last">
+	<h3>Do you offer discounts for non-profits?</h3>
+	<p>
+	  Absolutely! We're pleased to provide Sway for free to qualified non-profit organizations. Just drop a line to azer@sway.so for the details.
+	</p>
+      </div>
+      <div class="faq-contact">Can't find your answer here? <a href="mailto:azer@sway.so">Get in touch.</a></div>
+    </div>
+  </div>
+
+  <script>
+    var acc = document.getElementsByClassName("faq-item");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+
+      });
+    }
+</script>
+
+</SwayWeb.WebPageComponent.page>

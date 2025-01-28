@@ -1,0 +1,31 @@
+<SwayWeb.FormPageComponent.form>
+  <SwayWeb.FormPageComponent.header title="Reset Password" conn={@conn}  />
+
+<.form let={f} for={@changeset} action={Routes.user_reset_password_path(@conn, :update, @token)}>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+    <% end %>
+
+    <div class="fieldset">
+
+  <%= password_input f, :password, required: true, placeholder: "New password" %>
+  <%= error_tag f, :password %>
+
+  <%= password_input f, :password_confirmation, required: true, placeholder: "New password (confirm)" %>
+  <%= error_tag f, :password_confirmation %>
+
+  <div>
+    <%= submit "Reset password" %>
+  </div>
+  </div>
+</.form>
+
+   <footer>
+      <%= link "Sign up", to: Routes.user_registration_path(@conn, :new) %> —
+      <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+    </footer>
+
+
+</SwayWeb.FormPageComponent.form>
