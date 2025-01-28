@@ -2,7 +2,8 @@
 
 Sway is a video communication tool to replace meetings with more in-person like communication for remote teams.
 
-Read more: https://azerkoculu.com/posts/open-sourcing-sway.html
+* Read more: https://azerkoculu.com/posts/open-sourcing-sway.html
+* Watch video: https://www.youtube.com/watch?v=CAodlTKVt24
 
 ## Install & setup
 
